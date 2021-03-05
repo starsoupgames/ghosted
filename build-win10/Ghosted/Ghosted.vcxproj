@@ -188,12 +188,39 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\source\CollisionController.h" />
+    <ClInclude Include="..\..\source\GameEntities\BatteryCollectible.h" />
+    <ClInclude Include="..\..\source\GameEntities\BatterySlot.h" />
+    <ClInclude Include="..\..\source\GameEntities\Obstacle.h" />
+    <ClInclude Include="..\..\source\GameEntities\PlayerGhost.h" />
+    <ClInclude Include="..\..\source\GameEntities\PlayerPal.h" />
+    <ClInclude Include="..\..\source\GameEntities\Trap.h" />
+    <ClInclude Include="..\..\source\GameEntity.h" />
+    <ClInclude Include="..\..\source\GameMap.h" />
+    <ClInclude Include="..\..\source\GameRoom.h" />
+    <ClInclude Include="..\..\source\GameScene.h" />
     <ClInclude Include="..\..\source\GhostedApp.h" />
+    <ClInclude Include="..\..\source\InputController.h" />
+    <ClInclude Include="..\..\source\LoadingScene.h" />
+    <ClInclude Include="..\..\source\StartScene.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\source\CollisionController.cpp" />
+    <ClCompile Include="..\..\source\GameEntities\BatteryCollectible.cpp" />
+    <ClCompile Include="..\..\source\GameEntities\BatterySlot.cpp" />
+    <ClCompile Include="..\..\source\GameEntities\Obstacle.cpp" />
+    <ClCompile Include="..\..\source\GameEntities\PlayerGhost.cpp" />
+    <ClCompile Include="..\..\source\GameEntities\PlayerPal.cpp" />
+    <ClCompile Include="..\..\source\GameEntities\Trap.cpp" />
+    <ClCompile Include="..\..\source\GameEntity.cpp" />
+    <ClCompile Include="..\..\source\GameMap.cpp" />
+    <ClCompile Include="..\..\source\GameRoom.cpp" />
+    <ClCompile Include="..\..\source\GameScene.cpp" />
     <ClCompile Include="..\..\source\GhostedApp.cpp" />
+    <ClCompile Include="..\..\source\InputController.cpp" />
     <ClCompile Include="..\..\source\main.cpp" />
+    <ClCompile Include="..\..\source\StartScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Ghosted.rc" />

@@ -1,5 +1,4 @@
 //
-//  HelloApp.h
 //  Cornell University Game Library (CUGL)
 //
 //  This is the header for the custom application.  It is necessary so that
@@ -27,9 +26,10 @@
 //  Author: Walker White
 //  Version: 1/8/17
 //
-#ifndef __HELLO_APP_H__
-#define __HELLO_APP_H__
+#ifndef __GHOSTED_APP_H__
+#define __GHOSTED_APP_H__
 #include <cugl/cugl.h>
+#include "GameScene.h"
 
 /**
  * Class for a simple Hello World style application
@@ -45,12 +45,15 @@ protected:
     /** A scene graph, used to display our 2D scenes */
     std::shared_ptr<cugl::Scene2> _scene;
     /** A 3152 style SpriteBatch to render the scene */
-    std::shared_ptr<cugl::SpriteBatch>  _batch;
+    std::shared_ptr<cugl::SpriteBatch> _batch;
     /** A reference to the logo, so that we can move it around */
-    std::shared_ptr<cugl::scene2::SceneNode>  _logo;
+    std::shared_ptr<cugl::scene2::SceneNode> _logo;
 
-    /** A countdown used to move the logo */
-    int  _countdown;
+    // Player modes
+    /** The primary controller for the game world */
+    // LoadingScene _loading;
+    // StartScene _start;
+    // GameScene _gameplay;
     
     /** 
      * Internal helper to build the scene graph.
@@ -71,7 +74,7 @@ public:
      * of initialization from the constructor allows main.cpp to perform
      * advanced configuration of the application before it starts.
      */
-    GhostedApp() : Application(), _countdown(-1) {}
+    GhostedApp() : Application() {}
     
     /**
      * Disposes of this application, releasing all resources.

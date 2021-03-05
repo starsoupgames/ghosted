@@ -29,19 +29,9 @@
 //
 // Include the class header, which includes all of the CUGL classes
 #include "GhostedApp.h"
-#include <cugl/base/CUBase.h>
-
-// Add support for simple random number generation
-#include <cstdlib>
-#include <ctime>
 
 // This keeps us from having to write cugl:: all the time
 using namespace cugl;
-
-// The number of frames before moving the logo to a new position
-#define TIME_STEP 60
-// This is adjusted by screen aspect ratio to get the height
-#define GAME_WIDTH 1024
 
 /**
  * The method called after OpenGL is initialized, but before running the application.
@@ -55,13 +45,12 @@ using namespace cugl;
  */
 void GhostedApp::onStartup() {
     Size size = getDisplaySize();
-    size *= GAME_WIDTH/size.width;
     
     // Create a scene graph the same size as the window
     _scene = Scene2::alloc(size.width, size.height);
     // Create a sprite batch (and background color) to render the scene
     _batch = SpriteBatch::alloc();
-    setClearColor(Color4(229,229,229,255));
+    setClearColor(Color4::BLACK);
     
     // Create an asset manager to load all assets
     _assets = AssetManager::alloc();
@@ -75,29 +64,16 @@ void GhostedApp::onStartup() {
 
     // Activate mouse or touch screen input as appropriate
     // We have to do this BEFORE the scene, because the scene has a button
-#if defined (CU_TOUCH_SCREEN)
+#ifdef CU_TOUCH_SCREEN
     Input::activate<Touchscreen>();
 #else
+    Input::activate<Keyboard>();
     Input::activate<Mouse>();
 #endif
     
     // Build the scene from these assets
     buildScene();
     Application::onStartup();
-    
-    // Report the safe area
-    Rect bounds = Display::get()->getSafeBounds();
-    CULog("Safe Area %sx%s",bounds.origin.toString().c_str(),
-                            bounds.size.toString().c_str());
-
-    bounds = getSafeBounds();
-    CULog("Safe Area %sx%s",bounds.origin.toString().c_str(),
-                            bounds.size.toString().c_str());
-
-    bounds = getDisplayBounds();
-    CULog("Full Area %sx%s",bounds.origin.toString().c_str(),
-                            bounds.size.toString().c_str());
-
 }
 
 /**
@@ -117,11 +93,14 @@ void GhostedApp::onShutdown() {
     _scene = nullptr;
     _batch = nullptr;
     _assets = nullptr;
+
+    // _gameplay = nullptr;
     
     // Deativate input
 #if defined CU_TOUCH_SCREEN
     Input::deactivate<Touchscreen>();
 #else
+    Input::deactivate<Keyboard>();
     Input::deactivate<Mouse>();
 #endif
     Application::onShutdown();
@@ -139,17 +118,7 @@ void GhostedApp::onShutdown() {
  * @param timestep  The amount of time (in seconds) since the last frame
  */
 void GhostedApp::update(float timestep) {
-    if (_countdown == 0) {
-        // Move the logo about the screen
-        Size size = getDisplaySize();
-        size *= GAME_WIDTH/size.width;
-		float x = (float)(std::rand() % (int)(size.width/2))+size.width/4;
-		float y = (float)(std::rand() % (int)(size.height/2))+size.height/8;
-        _logo->setPosition(Vec2(x,y));
-        _countdown = TIME_STEP;
-    } else {
-        _countdown--;
-    }
+    CULog("%f", timestep);
 }
 
 /**
@@ -174,9 +143,8 @@ void GhostedApp::draw() {
  * have become standard in most game engines.
  */
 void GhostedApp::buildScene() {
+    /*
     Size  size  = getDisplaySize();
-    float scale = GAME_WIDTH/size.width;
-    size *= scale;
     
     // The logo is actually an image+label.  We need a parent node
     _logo = scene2::SceneNode::alloc();
@@ -228,8 +196,5 @@ void GhostedApp::buildScene() {
     
     // We can only activate a button AFTER it is added to a scene
     button->activate();
-
-    // Start the logo countdown and C-style random number generator
-    _countdown = TIME_STEP;
-    std::srand((int)std::time(0));
+    */
 }
