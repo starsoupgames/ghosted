@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:CUGL Demo.xcodeproj">
+      location = "self:/Users/crencricca/Desktop/SP21/4152/ghosted/build-apple/HelloWorld.xcodeproj">
    </FileRef>
 </Workspace>

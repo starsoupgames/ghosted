@@ -219,6 +219,7 @@
     <ClCompile Include="..\..\source\GameScene.cpp" />
     <ClCompile Include="..\..\source\GhostedApp.cpp" />
     <ClCompile Include="..\..\source\InputController.cpp" />
+    <ClCompile Include="..\..\source\LoadingScene.cpp" />
     <ClCompile Include="..\..\source\main.cpp" />
     <ClCompile Include="..\..\source\StartScene.cpp" />
   </ItemGroup>

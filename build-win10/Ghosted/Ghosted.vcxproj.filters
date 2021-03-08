@@ -63,11 +63,11 @@
     <ClInclude Include="..\..\source\GameEntities\Trap.h">
       <Filter>Header Files\GameEntities</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\source\LoadingScene.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="resource.h">
       <Filter>Resource Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\LoadingScene.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -115,6 +115,9 @@
     </ClCompile>
     <ClCompile Include="..\..\source\GameEntities\Trap.cpp">
       <Filter>Source Files\GameEntities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\LoadingScene.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

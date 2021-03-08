@@ -1,9 +1,9 @@
-package edu.cornell.gdiac.helloworld;
+package edu.cornell.starsoupgames.ghosted;
 
 import org.libsdl.app.*;
 import android.os.Bundle;
 
-public class HelloWorld extends SDLActivity {
+public class Ghosted extends SDLActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

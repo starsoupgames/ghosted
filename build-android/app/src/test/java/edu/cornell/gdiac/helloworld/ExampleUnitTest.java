@@ -1,4 +1,4 @@
-package edu.cornell.gdiac.helloworld;
+package edu.cornell.starsoupgames.ghosted;
 
 import org.junit.Test;
 

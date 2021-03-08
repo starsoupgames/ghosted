@@ -32,10 +32,7 @@
 #include "GameScene.h"
 
 /**
- * Class for a simple Hello World style application
- *
- * The application simply moves the CUGL logo across the screen.  It also
- * provides a button to quit the application.
+ * Class for the Ghosted application by Star Soup Games.
  */
 class GhostedApp : public cugl::Application {
 protected:
