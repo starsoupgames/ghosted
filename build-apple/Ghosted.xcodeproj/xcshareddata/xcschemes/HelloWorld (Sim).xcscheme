@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "EB22BF5D25D0E8BC002ACE41"
-               BuildableName = "HelloWorld (Sim).app"
-               BlueprintName = "HelloWorld (Sim)"
-               ReferencedContainer = "container:HelloWorld.xcodeproj">
+               BuildableName = "Ghosted (Sim).app"
+               BlueprintName = "Ghosted (Sim)"
+               ReferencedContainer = "container:Ghosted.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -45,9 +45,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "EB22BF5D25D0E8BC002ACE41"
-            BuildableName = "HelloWorld (Sim).app"
-            BlueprintName = "HelloWorld (Sim)"
-            ReferencedContainer = "container:HelloWorld.xcodeproj">
+            BuildableName = "Ghosted (Sim).app"
+            BlueprintName = "Ghosted (Sim)"
+            ReferencedContainer = "container:Ghosted.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -62,9 +62,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "EB22BF5D25D0E8BC002ACE41"
-            BuildableName = "HelloWorld (Sim).app"
-            BlueprintName = "HelloWorld (Sim)"
-            ReferencedContainer = "container:HelloWorld.xcodeproj">
+            BuildableName = "Ghosted (Sim).app"
+            BlueprintName = "Ghosted (Sim)"
+            ReferencedContainer = "container:Ghosted.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

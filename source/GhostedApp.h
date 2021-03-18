@@ -45,7 +45,7 @@ protected:
     std::shared_ptr<cugl::SpriteBatch> _batch;
     /** A reference to the logo, so that we can move it around */
     std::shared_ptr<cugl::scene2::SceneNode> _logo;
-
+    
     // Player modes
     /** The primary controller for the game world */
     // LoadingScene _loading;
@@ -133,4 +133,4 @@ public:
     
 };
 
-#endif /* __HELLO_APP_H__ */
+#endif /* __GHOSTED_APP_H__ */
