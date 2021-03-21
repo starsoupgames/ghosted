@@ -19,6 +19,12 @@
     <Filter Include="Source Files\GameEntities">
       <UniqueIdentifier>{ba1c5f71-c9b8-47d3-8f96-922f3844ef59}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\RoomEtities">
+      <UniqueIdentifier>{e883c338-782d-40e4-a6cb-a15d6435ff24}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\RoomEntities">
+      <UniqueIdentifier>{4cd33039-ad7d-4498-82e7-14d1f1165778}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\source\GhostedApp.h">
@@ -45,22 +51,10 @@
     <ClInclude Include="..\..\source\StartScene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\source\GameEntities\BatteryCollectible.h">
-      <Filter>Header Files\GameEntities</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\GameEntities\BatterySlot.h">
-      <Filter>Header Files\GameEntities</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\GameEntities\Obstacle.h">
-      <Filter>Header Files\GameEntities</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\source\GameEntities\PlayerGhost.h">
       <Filter>Header Files\GameEntities</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\GameEntities\PlayerPal.h">
-      <Filter>Header Files\GameEntities</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\GameEntities\Trap.h">
       <Filter>Header Files\GameEntities</Filter>
     </ClInclude>
     <ClInclude Include="resource.h">
@@ -68,6 +62,21 @@
     </ClInclude>
     <ClInclude Include="..\..\source\LoadingScene.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\RoomEntities\BatterySlot.h">
+      <Filter>Header Files\RoomEtities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\RoomEntities\Obstacle.h">
+      <Filter>Header Files\RoomEtities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\RoomEntity.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\RoomEntities\BatteryCollectible.h">
+      <Filter>Header Files\GameEntities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\GameEntities\Trap.h">
+      <Filter>Header Files\RoomEtities</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -98,26 +107,29 @@
     <ClCompile Include="..\..\source\StartScene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\source\GameEntities\BatteryCollectible.cpp">
-      <Filter>Source Files\GameEntities</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\GameEntities\BatterySlot.cpp">
-      <Filter>Source Files\GameEntities</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\GameEntities\Obstacle.cpp">
-      <Filter>Source Files\GameEntities</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\source\GameEntities\PlayerGhost.cpp">
       <Filter>Source Files\GameEntities</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\GameEntities\PlayerPal.cpp">
       <Filter>Source Files\GameEntities</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\source\GameEntities\Trap.cpp">
-      <Filter>Source Files\GameEntities</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\source\LoadingScene.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\RoomEntities\BatterySlot.cpp">
+      <Filter>Source Files\RoomEntities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\RoomEntities\Obstacle.cpp">
+      <Filter>Source Files\RoomEntities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\RoomEntity.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\RoomEntities\BatteryCollectible.cpp">
+      <Filter>Source Files\GameEntities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\GameEntities\Trap.cpp">
+      <Filter>Source Files\RoomEntities</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
