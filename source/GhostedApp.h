@@ -29,6 +29,8 @@
 #ifndef __GHOSTED_APP_H__
 #define __GHOSTED_APP_H__
 #include <cugl/cugl.h>
+#include "LoadingScene.h"
+#include "StartScene.h"
 #include "GameScene.h"
 
 /**

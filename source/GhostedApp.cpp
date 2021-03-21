@@ -1,5 +1,5 @@
 //
-//  HelloApp.cpp
+//  GhostedApp.cpp
 //  Cornell University Game Library (CUGL)
 //
 //  This is the implementation file for the custom application. This is the
