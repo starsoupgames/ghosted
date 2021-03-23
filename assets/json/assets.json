@@ -1,9 +1,57 @@
 {
-	"textures": {
-	},
-	"jsons": {
-		"basic-map": {
-			"file": "json/basic-map.json"
-		}
-	}
+  "textures": {
+    "logo": {
+      "file": "textures/logo.png",
+      "minfilter": "nearest",
+      "magfilter": "linear",
+      "wrapS": "clamp",
+      "wrapT": "clamp"
+    },
+    "pal_base": {
+      "file": "textures/Pal_Base_Body_Frames.png"
+    }
+  },
+  "fonts": {
+    "felt32": {
+      "file": "fonts/MarkerFelt.ttf",
+      "size": 32
+    }
+  },
+  "scene2s": {
+    "game": {
+      "type": "Node",
+      "format": {
+        "type": "Anchored"
+      },
+      "children": {
+        "field": {
+          "type": "Node",
+          "format": {
+            "type": "Anchored"
+          },
+          "data": {
+            "size": [ 2560, 2560 ],
+            "anchor": [ 0.5, 0.5 ]
+          },
+          "layout": {
+            "x_anchor": "center",
+            "y_anchor": "middle"
+          },
+          "children": {
+            "player_pal_base": {
+              "type": "Animation",
+              "data": {
+                "texture": "pal_base",
+                "span": 84,
+                "cols": 21,
+                "frame": 21,
+                "position": [ 1280, 1280 ],
+                "anchor": [ 0.5, 0.5 ]
+              }
+            }
+          }
+        }
+      }
+    }
+  }
 }

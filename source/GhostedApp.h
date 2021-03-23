@@ -50,9 +50,12 @@ protected:
     
     // Player modes
     /** The primary controller for the game world */
-    // LoadingScene _loading;
+    LoadingScene _loading;
     // StartScene _start;
-    // GameScene _gameplay;
+    GameScene _gameplay;
+
+    /** Whether or not we have finished loading all assets */
+    bool _loaded;
     
     /** 
      * Internal helper to build the scene graph.
@@ -73,7 +76,7 @@ public:
      * of initialization from the constructor allows main.cpp to perform
      * advanced configuration of the application before it starts.
      */
-    GhostedApp() : Application() {}
+    GhostedApp() : cugl::Application(), _loaded(false) {}
     
     /**
      * Disposes of this application, releasing all resources.

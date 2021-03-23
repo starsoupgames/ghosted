@@ -56,11 +56,11 @@ void GhostedApp::onStartup() {
     _assets = AssetManager::alloc();
     
     // You have to attach the individual loaders for each asset type
-    _assets->attach<Texture>(TextureLoader::alloc()->getHook());
-    _assets->attach<Font>(FontLoader::alloc()->getHook());
+    //_assets->attach<Texture>(TextureLoader::alloc()->getHook());
+    //_assets->attach<Font>(FontLoader::alloc()->getHook());
     
     // This reads the given JSON file and uses it to load all other assets
-    _assets->loadDirectory("json/assets.json");
+    //_assets->loadDirectory("json/assets.json");
 
     // Activate mouse or touch screen input as appropriate
     // We have to do this BEFORE the scene, because the scene has a button
@@ -118,7 +118,19 @@ void GhostedApp::onShutdown() {
  * @param timestep  The amount of time (in seconds) since the last frame
  */
 void GhostedApp::update(float timestep) {
-    CULog("%f", timestep);
+    if (!_loaded && _loading.isActive()) {
+        _loading.update(0.01f);
+    }
+    else if (!_loaded) {
+        _loading.dispose(); // Disables the input listeners in this mode
+        _gameplay.init(_assets);
+        _loaded = true;
+    }
+    else {
+        _gameplay.update(timestep);
+    }
+    // CULog("%f", timestep);
+    
 }
 
 /**
@@ -132,7 +144,12 @@ void GhostedApp::update(float timestep) {
  */
 void GhostedApp::draw() {
     // This takes care of begin/end
-    _scene->render(_batch);
+    if (!_loaded) {
+        _loading.render(_batch);
+    }
+    else {
+        _gameplay.render(_batch);
+    }
 }
 
 /**
@@ -142,4 +159,17 @@ void GhostedApp::draw() {
  * you do in 3152.  However, they greatly simplify scene management, and
  * have become standard in most game engines.
  */
-void GhostedApp::buildScene() {}
+void GhostedApp::buildScene() {
+    // Build the scene from these assets
+
+    _assets->attach<Font>(FontLoader::alloc()->getHook());
+    _assets->attach<Texture>(TextureLoader::alloc()->getHook());
+    _assets->attach<scene2::SceneNode>(Scene2Loader::alloc()->getHook());
+
+    // Create a "loading" screen
+    _loaded = false;
+    _loading.init(_assets);
+
+    // Queue up the other assets
+    _assets->loadDirectoryAsync("json/assets.json", nullptr);
+}
