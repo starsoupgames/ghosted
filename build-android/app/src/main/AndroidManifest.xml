@@ -9,6 +9,10 @@
 
     <!-- Haptic Features -->
     <uses-permission android:name="android.permission.VIBRATE" />
+	
+	<!-- Access internet for networking -->
+	<uses-permission android:name="android.permission.INTERNET" />
+	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application android:label="@string/app_name"
         android:icon="@mipmap/ic_launcher"

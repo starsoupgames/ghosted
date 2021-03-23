@@ -1,0 +1,8 @@
+# Visual Studio
+*.obj
+*.idb
+*.pdb
+*.lastbuildstate
+*.log
+*.tlog
+*.recipe
