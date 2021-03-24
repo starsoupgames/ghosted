@@ -7,19 +7,19 @@ and methods for the Ghost's actions
 */
 
 #include <cugl/cugl.h>
-#include "GameEntity.h"
+#include "../Player.h"
 using namespace std;
 using namespace cugl;
 
-/** Pal Frame Sprite numbers */
-//TODO: THESE VALUES MUST BE ADJUSTED TO PAL'S AND ALSO HAVE FRONT, BACK, LEFT, RIGHT FRAMES
+/** Ghost Frame Sprite numbers */
+//TODO: THESE VALUES MUST BE ADJUSTED TO GHOST'S AND ALSO HAVE FRONT, BACK, LEFT, RIGHT FRAMES
 #define GHOST_IMG_RIGHT   0   // Right idle frame
 #define GHOST_IMG_LEFT 21   // Left idle frame
 #define GHOST_IMG_FRONT 42      // Front idle frame
 #define GHOST_IMG_BACK 63      // Back idle frame
 #define GHOST_IMG_LAST 83
 
-class Ghost : public GameEntity {
+class Ghost : public Player {
 private:
 
 	/** Amount of Traps left */
@@ -27,9 +27,6 @@ private:
 
 	/** Speed of the Pal */
 	float speed;
-
-	/** Reference to the animation node */
-	shared_ptr<scene2::AnimationNode> _ghostNode;
 
 	/** Whether we are idle */
 	bool _idle;
@@ -43,12 +40,10 @@ private:
 	bool _front;
 	bool _back;
 
-private:
 	void advanceFrame();
+
 	void determineAction();
 
-
-protected:
 	/** Current ghost movement */
 	cugl::Vec2 _move;
 
@@ -64,10 +59,6 @@ public:
 		return _tagged;
 	}
 
-	const shared_ptr <scene2::AnimationNode> getNode() const {
-		return _ghostNode;
-	}
-
 	/** Sets the amount of traps left */
 	void setTraps(int num) {
 		_traps = num;
@@ -81,41 +72,31 @@ public:
 	void setTagged(float value) { _tagged = value; }
 
 	/** Creates a Ghost with the default values */
-	Ghost() : GameEntity(), speed(5) {};
+	Ghost() : Player(), speed(5) {};
 
 	/** Releaes all resources allocated with this Ghost */
-	~Ghost() { dispose(); }
-
-	/** Releases all resources allocated with this Ghost */
-	void dispose();
-
-	/** Initializes a new Ghost at the given location */
-	//bool init(int x, int y);
-
-	/** Initializes a new Ghost at the given location with the given id */
-	bool init(const cugl::Vec2& pos);
-
-	bool init() { return init(cugl::Vec2::ZERO); }
+	~Ghost() { }
 
 	/**
-	* Returns a newly allocated Pal at the origin
-	* @return a newly allocated Pal at the origin.
+	* @return a newly allocated Ghost at the origin.
 	*/
-	static std::shared_ptr<Ghost> alloc() {
-		std::shared_ptr<Ghost> result = std::make_shared<Ghost>();
-		return (result->init() ? result : nullptr);
+	static shared_ptr<Ghost> alloc() {
+		shared_ptr<Ghost> result = make_shared<Ghost>();
+		return (dynamic_pointer_cast<Player>(result)->init() ? result : nullptr);
 	}
 
-	static std::shared_ptr<Ghost> alloc(const cugl::Vec2& pos) {
-		std::shared_ptr<Ghost> result = std::make_shared<Ghost>();
-		return (result->init(pos) ? result : nullptr);
+	static shared_ptr<Ghost> alloc(const Vec2& pos) {
+		shared_ptr<Ghost> result = make_shared<Ghost>();
+		return (dynamic_pointer_cast<Player>(result)->init(pos) ? result : nullptr);
 	};
-
 
 	/** Moves the Ghost in the corresponding direction */
 	void move(Vec2 move) {
 		_move = move;
 	}
+
+	/** Triggers the nearest trap */
+	void trigger();
 
 	/**
 	 * Sets the film strip representing this ghosts.
@@ -124,7 +105,7 @@ public:
 	 *
 	 * @param value The ghost film strip.
 	 */
-	void setNode(const std::shared_ptr<cugl::scene2::AnimationNode>& value);
+	void setNode(const shared_ptr<scene2::AnimationNode>& value);
 
 	/**
 	 * Updates the state of the model
@@ -140,7 +121,4 @@ public:
 	 * Resets the ghost back to its original settings
 	 */
 	void reset();
-
-	/** Triggers the nearest trap */
-	void trigger();
 };

@@ -1,35 +1,7 @@
-// PlayerPalModel.cpp
-
 #include "PlayerPal.h"
 
 using namespace cugl;
 
-#pragma mark -
-#pragma mark Animation Constants and Functions
-
-/**
-* Returns a newly allocated Pal at the given location
-* @param loc Initial location in world coordinates
-*
-* @return a newly allocated Pal at the given location
-*/
-bool Pal::init(const Vec2& loc) {
-    _spooked = false;
-    _batteries = 0;
-    GameEntity::init(loc, 25);
-    return true;
-}
-
-
-/**
- * Disposes all resources and assets of this pal
- */
-void Pal::dispose() {
-    _palNode = nullptr;
-}
-
-#pragma mark -
-#pragma mark Animation
 /**
  * Sets the film strip representing this pal.
  *
@@ -38,15 +10,9 @@ void Pal::dispose() {
  * @param value The pal film strip.
  */
 void Pal::setNode(const std::shared_ptr<scene2::AnimationNode>& value) {
-    GameEntity::setNode(value);
-    _palNode = GameEntity::getSprite();
-    if (_palNode != nullptr) {
-        _palNode->setFrame(PAL_IMG_FRONT);
-        _idle = true;
-        _front = true;
-        _back = false;
-        _left = false;
-        _right = false;
+    Player::setNode(value);
+    if (_node != nullptr) {
+        _node->setFrame(PAL_IMG_FRONT);
     }
 }
 
@@ -60,20 +26,25 @@ void Pal::setNode(const std::shared_ptr<scene2::AnimationNode>& value) {
  */
 
 void Pal::update(float timestep) {
-    GameEntity::update(timestep);
-
-    determineAction();
+    Player::update(timestep);
 
     // Move the pal
     _loc += _move * speed;
     // CULog("x: %f, y : %f", _loc.x, _loc.y);
     
-    if (_palNode != nullptr) {
+    if (_node != nullptr) {
+        determineAction();
         advanceFrame();
-        _palNode->setPosition(_loc);
+        _node->setPosition(_loc);
     }
 }
 
+/**
+ * Determines the next animation frame for the pal and applies it to the sprite.
+ *
+ * This method includes some dampening of the turn, and should be called before
+ * moving the pal.
+ */
 void Pal::determineAction() {
     if (_move == Vec2::ZERO) {
         _idle = true;
@@ -99,16 +70,9 @@ void Pal::determineAction() {
         }
     }
 }
-
-/**
- * Determines the next animation frame for the pal and applies it to the sprite.
- *
- * This method includes some dampening of the turn, and should be called before
- * moving the pal.
- */
 void Pal::advanceFrame() {
     // Our animation depends on the current frame.
-    unsigned int frame = _palNode->getFrame();
+    unsigned int frame = _node->getFrame();
     if (_idle) {
         if (_front) {
             frame = PAL_IMG_FRONT;
@@ -170,21 +134,16 @@ void Pal::advanceFrame() {
         }
     }
     
-    _palNode->setFrame(frame);
+    _node->setFrame(frame);
 }
 
 /**
  * Resets the pal back to its original settings
  */
 void Pal::reset() {
-    GameEntity::reset();
+    Player::reset();
 
-    if (_palNode != nullptr) {
-        _palNode->setFrame(PAL_IMG_FRONT);
-        _idle = true;
-        _front = true;
-        _back = false;
-        _left = false;
-        _right = false;
+    if (_node != nullptr) {
+        _node->setFrame(PAL_IMG_FRONT);
     }
 }

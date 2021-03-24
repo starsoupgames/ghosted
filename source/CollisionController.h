@@ -3,8 +3,8 @@
 #define __COLLISION_CONTROLLER_H__
 #include <cugl/cugl.h>
 #include "GameEntity.h"
-#include "GameEntities/PlayerGhost.h"
-#include "GameEntities/PlayerPal.h"
+#include "GameEntities/Players/PlayerGhost.h"
+#include "GameEntities/Players/PlayerPal.h"
 #include "GameEntities/BatteryCollectible.h"
 
 /**

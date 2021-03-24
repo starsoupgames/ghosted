@@ -25,6 +25,12 @@
     <Filter Include="Header Files\RoomEntities">
       <UniqueIdentifier>{e883c338-782d-40e4-a6cb-a15d6435ff24}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\GameEntities\Players">
+      <UniqueIdentifier>{ab936a9c-1fc1-48fd-a1e6-b221b5258b6d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\GameEntities\Players">
+      <UniqueIdentifier>{52d776c6-2c91-4380-95ca-3d7aaac3e54f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\source\GhostedApp.h">
@@ -51,12 +57,6 @@
     <ClInclude Include="..\..\source\StartScene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\source\GameEntities\PlayerGhost.h">
-      <Filter>Header Files\GameEntities</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\GameEntities\PlayerPal.h">
-      <Filter>Header Files\GameEntities</Filter>
-    </ClInclude>
     <ClInclude Include="resource.h">
       <Filter>Resource Files</Filter>
     </ClInclude>
@@ -72,14 +72,26 @@
     <ClInclude Include="..\..\source\RoomEntity.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\source\GameEntities\Trap.h">
-      <Filter>Header Files\RoomEntities</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\source\NetworkController.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\GameEntities\BatteryCollectible.h">
       <Filter>Header Files\GameEntities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\NetworkData.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\RoomEntities\Trap.h">
+      <Filter>Header Files\RoomEntities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\GameEntities\Player.h">
+      <Filter>Header Files\GameEntities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\GameEntities\Players\PlayerPal.h">
+      <Filter>Header Files\GameEntities\Players</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\GameEntities\Players\PlayerGhost.h">
+      <Filter>Header Files\GameEntities\Players</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -110,12 +122,6 @@
     <ClCompile Include="..\..\source\StartScene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\source\GameEntities\PlayerGhost.cpp">
-      <Filter>Source Files\GameEntities</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\GameEntities\PlayerPal.cpp">
-      <Filter>Source Files\GameEntities</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\source\LoadingScene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -128,14 +134,26 @@
     <ClCompile Include="..\..\source\RoomEntity.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\source\GameEntities\Trap.cpp">
-      <Filter>Source Files\RoomEntities</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\source\NetworkController.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\GameEntities\BatteryCollectible.cpp">
       <Filter>Source Files\GameEntities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\NetworkData.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\RoomEntities\Trap.cpp">
+      <Filter>Source Files\RoomEntities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\GameEntities\Player.cpp">
+      <Filter>Source Files\GameEntities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\GameEntities\Players\PlayerPal.cpp">
+      <Filter>Source Files\GameEntities\Players</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\GameEntities\Players\PlayerGhost.cpp">
+      <Filter>Source Files\GameEntities\Players</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

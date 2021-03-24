@@ -191,9 +191,9 @@
   <ItemGroup>
     <ClInclude Include="..\..\source\CollisionController.h" />
     <ClInclude Include="..\..\source\GameEntities\BatteryCollectible.h" />
-    <ClInclude Include="..\..\source\GameEntities\PlayerGhost.h" />
-    <ClInclude Include="..\..\source\GameEntities\PlayerPal.h" />
-    <ClInclude Include="..\..\source\GameEntities\Trap.h" />
+    <ClInclude Include="..\..\source\GameEntities\Player.h" />
+    <ClInclude Include="..\..\source\GameEntities\Players\PlayerGhost.h" />
+    <ClInclude Include="..\..\source\GameEntities\Players\PlayerPal.h" />
     <ClInclude Include="..\..\source\GameEntity.h" />
     <ClInclude Include="..\..\source\GameMap.h" />
     <ClInclude Include="..\..\source\GameRoom.h" />
@@ -202,8 +202,10 @@
     <ClInclude Include="..\..\source\InputController.h" />
     <ClInclude Include="..\..\source\LoadingScene.h" />
     <ClInclude Include="..\..\source\NetworkController.h" />
+    <ClInclude Include="..\..\source\NetworkData.h" />
     <ClInclude Include="..\..\source\RoomEntities\BatterySlot.h" />
     <ClInclude Include="..\..\source\RoomEntities\Obstacle.h" />
+    <ClInclude Include="..\..\source\RoomEntities\Trap.h" />
     <ClInclude Include="..\..\source\RoomEntity.h" />
     <ClInclude Include="..\..\source\StartScene.h" />
     <ClInclude Include="resource.h" />
@@ -211,9 +213,9 @@
   <ItemGroup>
     <ClCompile Include="..\..\source\CollisionController.cpp" />
     <ClCompile Include="..\..\source\GameEntities\BatteryCollectible.cpp" />
-    <ClCompile Include="..\..\source\GameEntities\PlayerGhost.cpp" />
-    <ClCompile Include="..\..\source\GameEntities\PlayerPal.cpp" />
-    <ClCompile Include="..\..\source\GameEntities\Trap.cpp" />
+    <ClCompile Include="..\..\source\GameEntities\Player.cpp" />
+    <ClCompile Include="..\..\source\GameEntities\Players\PlayerGhost.cpp" />
+    <ClCompile Include="..\..\source\GameEntities\Players\PlayerPal.cpp" />
     <ClCompile Include="..\..\source\GameEntity.cpp" />
     <ClCompile Include="..\..\source\GameMap.cpp" />
     <ClCompile Include="..\..\source\GameRoom.cpp" />
@@ -223,8 +225,10 @@
     <ClCompile Include="..\..\source\LoadingScene.cpp" />
     <ClCompile Include="..\..\source\main.cpp" />
     <ClCompile Include="..\..\source\NetworkController.cpp" />
+    <ClCompile Include="..\..\source\NetworkData.cpp" />
     <ClCompile Include="..\..\source\RoomEntities\BatterySlot.cpp" />
     <ClCompile Include="..\..\source\RoomEntities\Obstacle.cpp" />
+    <ClCompile Include="..\..\source\RoomEntities\Trap.cpp" />
     <ClCompile Include="..\..\source\RoomEntity.cpp" />
     <ClCompile Include="..\..\source\StartScene.cpp" />
   </ItemGroup>

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <cugl/cugl.h>
-#include "Player.h"
+#include "../Player.h"
 using namespace std;
 using namespace cugl;
 

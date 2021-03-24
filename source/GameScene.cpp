@@ -4,14 +4,8 @@
 using namespace cugl;
 using namespace std;
 
-#pragma mark -
-#pragma mark Level Layout
-
 /** This is adjusted by screen aspect ratio to get the height */
 #define SCENE_WIDTH 1024
-
-#pragma mark -
-#pragma mark Constructors
 
 /**
  * Initializes the controller contents, and starts the game
@@ -60,15 +54,18 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
         _network.connect(_roomID);
     }
 
-    _palNode = dynamic_pointer_cast<scene2::AnimationNode>(_assets->get<scene2::SceneNode>("game_player_pal"));
-    //_palNode->setTexture(_assets->get<Texture>("pal_texture"));
-    _palModel = Pal::alloc(_palNode->getPosition());
-    _palModel->setNode(_palNode); 
-
-    _ghostNode = dynamic_pointer_cast<scene2::AnimationNode>(_assets->get<scene2::SceneNode>("game_player_ghost"));
-    //_ghostNode->setTexture(_assets->get<Texture>("ghost_texture"));
-    _ghostModel = Ghost::alloc(_ghostNode->getPosition());
-    _ghostModel->setNode(_ghostNode);
+    if (_host) {
+        _palNode = dynamic_pointer_cast<scene2::AnimationNode>(_assets->get<scene2::SceneNode>("game_player_pal"));
+        //_palNode->setTexture(_assets->get<Texture>("pal_texture"));
+        _palModel = Pal::alloc(_palNode->getPosition());
+        _palModel->setNode(_palNode);
+    }
+    else {
+        _ghostNode = dynamic_pointer_cast<scene2::AnimationNode>(_assets->get<scene2::SceneNode>("game_player_ghost"));
+        //_ghostedNode->setTexture(_assets->get<Texture>("ghost_texture"));
+        _ghostModel = Ghost::alloc(_ghostNode->getPosition());
+        _ghostModel->setNode(_ghostNode);
+    }
 
     return true;
 }
@@ -89,9 +86,6 @@ void GameScene::dispose() {
         _active = false;
     }
 }
-
-#pragma mark -
-#pragma mark Gameplay Handling
 
 /**
  * The method called to update the game mode.
@@ -126,10 +120,12 @@ void GameScene::update(float timestep) {
     }
 
     // Check win condition
-    if (_palModel->getSpooked()) {
-        // Ghost wins
-    }
-    else if (_palModel->getBatteries() == 3) {
-        // Pal wins
+    if (_host) {
+        if (_palModel->getSpooked()) {
+            // Ghost wins
+        }
+        else if (_palModel->getBatteries() == 3) {
+            // Pal wins
+        }
     }
 }

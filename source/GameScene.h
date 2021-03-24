@@ -4,8 +4,8 @@
 #include <vector>
 #include <iostream>
 #include <sstream>
-#include "GameEntities/PlayerPal.h"
-#include "GameEntities/PlayerGhost.h"
+#include "GameEntities/Players/PlayerPal.h"
+#include "GameEntities/Players/PlayerGhost.h"
 #include "InputController.h"
 #include "CollisionController.h"
 #include "NetworkController.h"

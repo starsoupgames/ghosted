@@ -1,33 +1,7 @@
-// PlayerPalModel.cpp
-
 #include "PlayerGhost.h"
 
 using namespace cugl;
 
-#pragma mark -
-#pragma mark Animation Constants and Functions
-
-/**
-* Returns a newly allocated Ghost at the given position
-* @param pos Initial position in world coordinates
-*
-* @return a newly allocated Ghost at the given position
-*/
-bool Ghost::init(const Vec2& pos) {
-    GameEntity::init(pos, 25);
-    return true;
-}
-
-
-/**
- * Disposes all resources and assets of this Ghost
- */
-void Ghost::dispose() {
-    _ghostNode = nullptr;
-}
-
-#pragma mark -
-#pragma mark Animation
 /**
  * Sets the film strip representing this Ghost.
  *
@@ -36,17 +10,9 @@ void Ghost::dispose() {
  * @param value The Ghost film strip.
  */
 void Ghost::setNode(const std::shared_ptr<scene2::AnimationNode>& value) {
-    GameEntity::setNode(value);
-    _ghostNode = GameEntity::getSprite();
-    if (_ghostNode != nullptr) {
-        _ghostNode->setFrame(GHOST_IMG_FRONT);
-        _idle = true;
-        _front = true;
-        _back = false;
-        _left = false;
-        _right = false;
-        //_palTexture->setPosition(_position);
-        //_palTexture->setAnchor(Vec2::ANCHOR_CENTER);
+    Player::setNode(value);
+    if (_node != nullptr) {
+        _node->setFrame(GHOST_IMG_FRONT);
     }
 }
 
@@ -60,19 +26,25 @@ void Ghost::setNode(const std::shared_ptr<scene2::AnimationNode>& value) {
  */
 
 void Ghost::update(float timestep) {
-    GameEntity::update(timestep);
+    Player::update(timestep);
 
-    determineAction();
-
-    // Move the pal
+    // Move the ghost
     _loc += _move * speed;
     // CULog("x: %f, y : %f", _loc.x, _loc.y);
 
-    if (_ghostNode != nullptr) {
+    if (_node != nullptr) {
+        determineAction();
         advanceFrame();
-        _ghostNode->setPosition(_loc);
+        _node->setPosition(_loc);
     }
 }
+
+/**
+ * Determines the next animation frame for the Ghost and applies it to the sprite.
+ *
+ * This method includes some dampening of the turn, and should be called before
+ * moving the Ghost.
+ */
 
 void Ghost::determineAction() {
     if (_move == Vec2::ZERO) {
@@ -99,16 +71,9 @@ void Ghost::determineAction() {
         }
     }
 }
-
-/**
- * Determines the next animation frame for the Ghost and applies it to the sprite.
- *
- * This method includes some dampening of the turn, and should be called before
- * moving the Ghost.
- */
 void Ghost::advanceFrame() {
     // Our animation depends on the current frame.
-    unsigned int frame = _ghostNode->getFrame();
+    unsigned int frame = _node->getFrame();
     if (_idle) {
         if (_front) {
             frame = GHOST_IMG_FRONT;
@@ -170,21 +135,16 @@ void Ghost::advanceFrame() {
         }
     }
 
-    _ghostNode->setFrame(frame);
+    _node->setFrame(frame);
 }
 
 /**
  * Resets the pal back to its original settings
  */
 void Ghost::reset() {
-    GameEntity::reset();
+    Player::reset();
 
-    if (_ghostNode != nullptr) {
-        _ghostNode->setFrame(GHOST_IMG_FRONT);
-        _idle = true;
-        _front = true;
-        _back = false;
-        _left = false;
-        _right = false;
+    if (_node != nullptr) {
+        _node->setFrame(GHOST_IMG_FRONT);
     }
 }
