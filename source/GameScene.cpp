@@ -42,29 +42,37 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
         return false;
     }
 
+    Vec2 center = Vec2(dimen.width / 2, dimen.height / 2);
+
     _mode = 2;
 
     // Init controllers
-    _input.init(1, bounds);
+    _input.init(bounds);
     _network.init();
+
+    _assets = assets;
+
+    _root = _assets->get<scene2::SceneNode>("game");
+    _root->setContentSize(dimen);
+    _root->doLayout();
+    addChild(_root);
+
     if (_roomID == "") {
         _network.connect();
+
+        _palNode = dynamic_pointer_cast<scene2::AnimationNode>(_assets->get<scene2::SceneNode>("game_player_pal"));
+        //_palNode->setTexture(_assets->get<Texture>("pal_base"));
+        _palModel = Pal::alloc(_palNode->getPosition());
+        _palModel->setNode(_palNode);
     }
     else {
         _network.connect(_roomID);
+
+        _palNode = dynamic_pointer_cast<scene2::AnimationNode>(_assets->get<scene2::SceneNode>("game_player_pal"));
+        //_palNode->setTexture(_assets->get<Texture>("pal_base"));
+        _palModel = Pal::alloc(_palNode->getPosition());
+        _palModel->setNode(_palNode);
     }
-
-    _assets = assets;
-    auto scene = _assets->get<scene2::SceneNode>("game");
-    scene->setContentSize(dimen);
-    scene->doLayout();
-    addChild(scene);
-
-    // Create the pal model
-    _palNode = dynamic_pointer_cast<scene2::AnimationNode>(_assets->get<scene2::SceneNode>("game_field_player_pal_base"));
-    Vec2 palPos = _palNode->getPosition();
-    _palModel = Pal::alloc(palPos);
-    _palModel->setNode(_palNode);
 
     return true;
 }
@@ -77,6 +85,7 @@ void GameScene::dispose() {
         removeAllChildren();
         _input.dispose();
         _network.dispose();
+        _root = nullptr;
         _palNode = nullptr;
         _palModel = nullptr;
         _active = false;
@@ -94,16 +103,21 @@ void GameScene::dispose() {
  * @param timestep  The amount of time (in seconds) since the last frame
  */
 void GameScene::update(float timestep) {
+    Size dimen = Application::get()->getDisplaySize();
+    dimen *= SCENE_WIDTH / dimen.width;
+    Vec2 center = Vec2(dimen.width / 2, dimen.height / 2);
+
     _input.update(timestep);
     _network.update(timestep);
 
     Vec2 move = _input.getMove();
     int turning = _input.getTurn();
 
-    // Move the pal (MODEL ONLY)
-    _palModel->setForward(move.y);
-    _palModel->setSide(move.x);
-    _palModel->processTurn(turning);
-    // _palModel->update(timestep);
+    if (_palModel != nullptr) {
+        _palModel->move(move);
+        _palModel->processTurn(turning);
+        _palModel->update(timestep);
 
+        _root->setPosition(center - _palModel->getLoc());
+    }
 }

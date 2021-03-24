@@ -63,7 +63,7 @@ void NetworkController::update(float timestep) {
 bool NetworkController::sendData() {
     vector<uint8_t> msg;
     char c = (char) rand() % 26 + 'a';
-    CULog("sending %c", c);
+    // CULog("sending %c", c);
     msg.push_back(c);
     connection->send(msg);
     return true;
@@ -78,7 +78,7 @@ bool NetworkController::receiveData(const std::vector<uint8_t>& msg) {
         received.push_back(m);
     }
     for (uint8_t r : received) {
-        CULog("received %c", r);
+        // CULog("received %c", r);
     }
     return true;
 }

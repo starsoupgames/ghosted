@@ -20,11 +20,12 @@ protected:
     NetworkController _network;
 
     // VIEW
-    /** Filmstrip representing the animated pal */
+    /** Root node */
+    std::shared_ptr<cugl::scene2::SceneNode> _root;
     std::shared_ptr<cugl::scene2::AnimationNode> _palNode;
 
     // MODEL
-    std::shared_ptr<Pal>  _palModel;
+    std::shared_ptr<Pal> _palModel;
 
     /** Room ID for networking */
     string _roomID;

@@ -40,12 +40,11 @@ private:
 	/** Whether a Pal is spooked or not */
 	bool _spooked;
 
-	/** Reference to the Pal's texture */
-  
-	//shared_ptr<Texture> _palTexture;
+	/** Speed of pal */
+	float speed;
 
-	/** Reference to the entity's sprite for drawing */
-	shared_ptr<scene2::AnimationNode> _palTexture;
+	/** Reference to the animation node */
+	shared_ptr<scene2::AnimationNode> _palNode;
 
 	/** Whether we are mid animation */
 	//bool _occupied;
@@ -66,16 +65,10 @@ private:
 
 
 protected:
-	/** Current forward movement */
-	float _forward;
-
-	/** Current sideways movement  */
-	float _side;
-
 	float _turn;
 
 	/** Current pal movement */
-	cugl::Vec2  _move;
+	Vec2 _move;
 
 public:
 
@@ -96,7 +89,7 @@ public:
 
 	/** Returns the reference to the battery's texture */
 	const shared_ptr <scene2::AnimationNode> getTexture() const {
-		return _palTexture;
+		return _palNode;
 	}
 
 	/** Sets the amount of traps left */
@@ -109,40 +102,11 @@ public:
 		_spooked = spooked;
 	}
 
-	/**
-	 * Returns the current forward force on the pal
-	 *
-	 * @return The current forward force on the pal
-	 */
-	float getForward() { return _forward; }
-
-	/**
-	 * Sets the current forward force on the pal
-	 *
-	 * @param value The pal forward force
-	 */
-	void setForward(float value) { _forward = value; }
-
-	/**
-	 * Returns the current forward force on the pal
-	 *
-	 * @return The current forward force on the pal
-	 */
-	float getSide() { return _side; }
-
-	/**
-	 * Sets the current forward force on the pal
-	 *
-	 * @param value The pal forward force
-	 */
-	void setSide(float value) { _side = value; }
-
-
 	/** Creates a Pal with the default values */
-	Pal(void) : GameEntity() {};
+	Pal() : GameEntity(), speed(5) {};
 
 	/** Releases all resources allocated with this Pal */
-	~Pal(void) { dispose(); }
+	~Pal() { dispose(); }
 
 	/** Releases all resources allocated with this Pal */
 	void dispose();
@@ -170,7 +134,9 @@ public:
 	void processTurn(float turn) { _turn = turn; };
 
 	/** Moves the Pal in the corresponding direction */
-	void move(Vec2 direction);
+	void move(Vec2 move) {
+		_move = move;
+	}
 
 	/** Places a battery in the nearby slot */
 	void placeBattery();

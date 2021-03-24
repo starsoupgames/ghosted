@@ -36,11 +36,8 @@ bool StartScene::init(const std::shared_ptr<AssetManager>& assets) {
     addChild(layer);
 
     _field = std::dynamic_pointer_cast<scene2::TextField>(assets->get<scene2::SceneNode>("textfield_action"));
-    _field->addTypeListener([=](const std::string& name, const std::string& value) {
-        CULog("Change to %s", value.c_str());
-        });
+    // _field->addTypeListener([=](const std::string& name, const std::string& value) {});
     _field->addExitListener([=](const std::string& name, const std::string& value) {
-        CULog("Finish to %s", value.c_str());
         roomID = value;
         _mode = 2;
         });

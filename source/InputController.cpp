@@ -25,7 +25,6 @@ using namespace cugl;
 
 InputController::InputController() :
 _active(false),
-_player(0),
 _movement(Vec2(0.0f,0.0f)),
 _turning(0),
 _keyLeft(false),
@@ -57,9 +56,8 @@ void InputController::dispose() {
     
 }
 
-bool InputController::init(int id, const Rect bounds) {
+bool InputController::init(const Rect bounds) {
     bool success = true;
-    _player = id;
     _sbounds = bounds;
     _tbounds = Application::get()->getDisplayBounds();
     
@@ -109,30 +107,27 @@ void InputController::update(float dt) {
     _keyTurnRight = keys->keyDown(KeyCode::D);
     _keyTurnLeft = keys->keyDown(KeyCode::A);
 
+    _movement = Vec2::ZERO;
+    _turning = 0;
+
 #endif
     if (_keyRight) {
         _movement.x += 1.0f;
-        CULog("RIGHT");
     }
     if (_keyLeft) {
         _movement.x -= 1.0f;
-        CULog("LEFT");
     }
     if (_keyTop) {
         _movement.y += 1.0f;
-        CULog("UP");
     }
     if (_keyBot) {
         _movement.y -= 1.0f;
-        CULog("DOWN");
     }
     if (_keyTurnRight) {
         _turning = 1;
-        CULog("TURN RIGHT");
     }
     else if (_keyTurnLeft) {
         _turning = -1;
-        CULog("TURN LEFT");
     } else {
         _turning = 0;
     }

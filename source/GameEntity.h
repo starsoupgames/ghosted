@@ -12,7 +12,7 @@ using namespace cugl;
 
 class GameEntity {
 
-private:
+protected:
 	/** Location of the entity */
 	Vec2 _loc;
 
@@ -22,7 +22,6 @@ private:
 	/** Reference to the entity's sprite for drawing */
 	shared_ptr<scene2::AnimationNode> _animationNode;
 
-private:
 	void advanceFrame();
 
 public:
@@ -57,7 +56,7 @@ public:
 	bool init() { return init(cugl::Vec2::ZERO); }
 
 	/** Initializes a new GameEntity at given location */
-	bool init(const cugl::Vec2& pos);
+	virtual bool init(const cugl::Vec2& pos);
 
 	/** Releases all resources allocated with this entity */
 	void dispose();

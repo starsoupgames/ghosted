@@ -24,7 +24,7 @@ bool Pal::init(const Vec2& pos) {
  * Disposes all resources and assets of this pal
  */
 void Pal::dispose() {
-    _palTexture = nullptr;
+    _palNode = nullptr;
 }
 
 #pragma mark -
@@ -38,16 +38,14 @@ void Pal::dispose() {
  */
 void Pal::setNode(const std::shared_ptr<scene2::AnimationNode>& value) {
     GameEntity::setNode(value);
-    _palTexture = GameEntity::getSprite();
-    if (_palTexture != nullptr) {
-        _palTexture->setFrame(PAL_IMG_FRONT);
+    _palNode = GameEntity::getSprite();
+    if (_palNode != nullptr) {
+        _palNode->setFrame(PAL_IMG_FRONT);
         _idle = true;
         _front = true;
         _back = false;
         _left = false;
         _right = false;
-        //_palTexture->setPosition(_position);
-        //_palTexture->setAnchor(Vec2::ANCHOR_CENTER);
     }
 }
 
@@ -61,30 +59,22 @@ void Pal::setNode(const std::shared_ptr<scene2::AnimationNode>& value) {
  */
 
 void Pal::update(float timestep) {
+    GameEntity::update(timestep);
+
     determineAction();
 
-    if (_palTexture != nullptr) {
-        advanceFrame();
-    }
-
-
     // Move the pal
-    Vec2 pos = GameEntity::getLoc() + _move;
-    CULog("x: %f y : %f", pos.x, pos.y);
-    GameEntity::setLoc(pos);
+    _loc += _move * speed;
+    // CULog("x: %f, y : %f", _loc.x, _loc.y);
+    
+    if (_palNode != nullptr) {
+        advanceFrame();
+        _palNode->setPosition(_loc);
+    }
 }
 
 void Pal::determineAction() {
-    CULog("forward %f side %f ", _forward, _side);
-    //nothing changes
-    if (_move.y == _forward && _move.x == _side) {
-        _idle = true;
-        return;
-    }
-
-    if (_forward == 0.0f && _side == 0.0f) {
-        _move.y = _forward;
-        _move.x = _side;
+    if (_move == Vec2::ZERO) {
         _idle = true;
         return;
     }
@@ -94,22 +84,19 @@ void Pal::determineAction() {
         _back = false;
         _left = false;
         _right = false;
-        if (_forward < _move.y) {
+        if (_move.y < 0) {
             _front = true;
         }
-        else if (_forward > _move.y) {
+        else if (_move.y > 0) {
             _back = true;
         }
-        else if (_side > _move.x) {
-            _right = true;
-        }
-        else {
+        else if (_move.x < 0) {
             _left = true;
         }
-        _move.y = _forward;
-        _move.x = _side;
+        else if (_move.x > 0) {
+            _right = true;
+        }
     }
-
 }
 
 /**
@@ -120,9 +107,8 @@ void Pal::determineAction() {
  */
 void Pal::advanceFrame() {
     // Our animation depends on the current frame.
-    unsigned int frame = _palTexture->getFrame();
+    unsigned int frame = _palNode->getFrame();
     if (_idle) {
-        CULog("idle");
         if (_front) {
             frame = PAL_IMG_FRONT;
         }
@@ -137,7 +123,6 @@ void Pal::advanceFrame() {
         }
     }
     else {
-        CULog("walking");
         if (_front) {
             if (frame >= PAL_IMG_FRONT && frame < PAL_IMG_BACK) {
                 frame += 1;
@@ -244,7 +229,7 @@ void Pal::advanceFrame() {
     }*/
 
     
-    _palTexture->setFrame(frame);
+    _palNode->setFrame(frame);
 }
 
 /**
@@ -253,8 +238,8 @@ void Pal::advanceFrame() {
 void Pal::reset() {
     GameEntity::reset();
 
-    if (_palTexture != nullptr) {
-        _palTexture->setFrame(PAL_IMG_FRONT);
+    if (_palNode != nullptr) {
+        _palNode->setFrame(PAL_IMG_FRONT);
         _idle = true;
         _front = true;
         _back = false;

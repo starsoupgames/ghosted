@@ -24,31 +24,14 @@
         "type": "Anchored"
       },
       "children": {
-        "field": {
-          "type": "Node",
-          "format": {
-            "type": "Anchored"
-          },
+        "player_pal": {
+          "type": "Animation",
           "data": {
-            "size": [ 2560, 2560 ],
+            "texture": "pal_base",
+            "span": 84,
+            "cols": 21,
+            "frame": 21,
             "anchor": [ 0.5, 0.5 ]
-          },
-          "layout": {
-            "x_anchor": "center",
-            "y_anchor": "middle"
-          },
-          "children": {
-            "player_pal_base": {
-              "type": "Animation",
-              "data": {
-                "texture": "pal_base",
-                "span": 84,
-                "cols": 21,
-                "frame": 21,
-                "position": [ 1280, 1280 ],
-                "anchor": [ 0.5, 0.5 ]
-              }
-            }
           }
         }
       }

@@ -111,16 +111,7 @@ protected:
      */
     cugl::Vec2 touch2Screen(const cugl::Vec2 pos) const;
 
-public:
-    /**
-     * Returns the player for this controller
-     *
-     * @return the player for this controller
-     */
-    int getPlayer() const {
-        return _player;
-    }
-    
+public:    
     /**
      * Returns the movement in X and Y directions
      *
@@ -162,12 +153,9 @@ public:
     /**
      * Initializes a new input controller for the specified player.
      *
-     * @param id Player id number (0..1)
      * @param bounds screen bounds
-     *
-     * @return true if the player was initialized correctly
      */
-    bool init(int id, const cugl::Rect bounds); 
+    bool init(const cugl::Rect bounds); 
 
 #pragma mark -
 #pragma mark Input Detection
