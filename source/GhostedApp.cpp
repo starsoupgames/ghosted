@@ -54,23 +54,16 @@ void GhostedApp::onStartup() {
     
     // Create an asset manager to load all assets
     _assets = AssetManager::alloc();
-    
-    // You have to attach the individual loaders for each asset type
-    //_assets->attach<Texture>(TextureLoader::alloc()->getHook());
-    //_assets->attach<Font>(FontLoader::alloc()->getHook());
-    
-    // This reads the given JSON file and uses it to load all other assets
-    //_assets->loadDirectory("json/assets.json");
 
     // Activate mouse or touch screen input as appropriate
     // We have to do this BEFORE the scene, because the scene has a button
 #ifdef CU_TOUCH_SCREEN
     Input::activate<Touchscreen>();
 #else
-    Input::activate<Keyboard>();
     Input::activate<Mouse>();
 #endif
-    
+    Input::activate<TextInput>();
+    Input::activate<Keyboard>();
     // Build the scene from these assets
     buildScene();
     Application::onStartup();
@@ -93,16 +86,15 @@ void GhostedApp::onShutdown() {
     _scene = nullptr;
     _batch = nullptr;
     _assets = nullptr;
-
-    // _gameplay = nullptr;
     
     // Deativate input
 #if defined CU_TOUCH_SCREEN
     Input::deactivate<Touchscreen>();
 #else
-    Input::deactivate<Keyboard>();
     Input::deactivate<Mouse>();
 #endif
+    Input::deactivate<TextInput>();
+    Input::deactivate<Keyboard>();
     Application::onShutdown();
 }
 
@@ -118,19 +110,61 @@ void GhostedApp::onShutdown() {
  * @param timestep  The amount of time (in seconds) since the last frame
  */
 void GhostedApp::update(float timestep) {
-    if (!_loaded && _loading.isActive()) {
-        _loading.update(0.01f);
+    unsigned mode = Mode::Loading;
+    if (_loading.isActive()) {
+        mode = Mode::Loading;
     }
-    else if (!_loaded) {
-        _loading.dispose(); // Disables the input listeners in this mode
-        _gameplay.init(_assets);
-        _loaded = true;
+    else if (_start.isActive()) {
+        mode = _start.getMode();
+    }
+    else if (_gameplay.isActive()) {
+        mode = _gameplay.getMode();
     }
     else {
-        _gameplay.update(timestep);
+        mode = Mode::Start;
     }
-    // CULog("%f", timestep);
-    
+
+    if (_mode != mode) {
+        string roomID = "";
+        switch (_mode) {
+        case Mode::Loading:
+            _loading.dispose();
+            break;
+        case Mode::Start:
+            roomID = _start.getRoomID();
+            _start.dispose();
+            break;
+        case Mode::Game:
+            _gameplay.dispose();
+            break;
+        }
+
+        switch (mode) {
+        case Mode::Start:
+            _start.init(_assets);
+            break;
+        case Mode::Game:
+            _gameplay.setRoomID(roomID);
+            _gameplay.init(_assets);
+            break;
+        }
+        _mode = mode;
+    }
+
+    switch (_mode) {
+    case Mode::Loading:
+        _loading.update(0.01f);
+        break;
+    case Mode::Start:
+        _start.update(timestep);
+        break;
+    case Mode::Game:
+        _gameplay.update(timestep);
+        break;
+    default:
+        CULogError("No corresponding mode.");
+        break;
+    }
 }
 
 /**
@@ -143,12 +177,16 @@ void GhostedApp::update(float timestep) {
  * at all. The default implmentation does nothing.
  */
 void GhostedApp::draw() {
-    // This takes care of begin/end
-    if (!_loaded) {
+    switch (_mode) {
+    case Mode::Loading:
         _loading.render(_batch);
-    }
-    else {
+        break;
+    case Mode::Start:
+        _start.render(_batch);
+        break;
+    case Mode::Game:
         _gameplay.render(_batch);
+        break;
     }
 }
 
@@ -166,9 +204,8 @@ void GhostedApp::buildScene() {
     _assets->attach<Texture>(TextureLoader::alloc()->getHook());
     _assets->attach<scene2::SceneNode>(Scene2Loader::alloc()->getHook());
 
-    // Create a "loading" screen
-    _loaded = false;
     _loading.init(_assets);
+    _mode = Mode::Loading;
 
     // Queue up the other assets
     _assets->loadDirectoryAsync("json/assets.json", nullptr);

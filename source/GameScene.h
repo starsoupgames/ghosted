@@ -2,8 +2,11 @@
 #define __GHOSTED_GAME_SCENE_H__
 #include <cugl/cugl.h>
 #include <vector>
+#include <iostream>
+#include <sstream>
 #include "GameEntities/PlayerPal.h"
 #include "InputController.h"
+#include "NetworkController.h"
 
 class GameScene : public cugl::Scene2 {
 protected:
@@ -13,15 +16,20 @@ protected:
     // CONTROLLERS
     /** Controller for abstracting out input across multiple platforms */
     InputController _input;
+    /** Controller for handling networking */
+    NetworkController _network;
 
     // VIEW
     /** Filmstrip representing the animated pal */
     std::shared_ptr<cugl::scene2::AnimationNode> _palNode;
 
     // MODEL
-    // A page-out could dispose of the view as long as it just has this.
-    /** The current coordinates of the ship */
     std::shared_ptr<Pal>  _palModel;
+
+    /** Room ID for networking */
+    string _roomID;
+
+    unsigned _mode;
 
 public:
 #pragma mark -
@@ -32,7 +40,7 @@ public:
      * This constructor does not allocate any objects or start the game.
      * This allows us to use the object without a heap pointer.
      */
-    GameScene() : cugl::Scene2() {}
+    GameScene() : cugl::Scene2(), _mode(2) {}
 
     /**
      * Disposes of all (non-static) resources allocated to this mode.
@@ -71,10 +79,13 @@ public:
      */
     void update(float timestep);
 
-    /**
-     * Resets the status of the game so that we can play again.
-     */
-    void reset();
+    unsigned getMode() {
+        return _mode;
+    };
+
+    void setRoomID(string roomID) {
+        _roomID = roomID;
+    }
 };
 
 #endif /* __GHOSTED_GAME_SCENE_H__ */

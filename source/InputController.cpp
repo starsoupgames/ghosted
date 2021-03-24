@@ -34,7 +34,8 @@ _keyTop(false),
 _keyBot(false),
 _keyTurnLeft(false),
 _keyTurnRight(false),
-_joystick(false) {}
+_joystick(false)
+{}
 
 /**
  * Deactivates this input controller, releasing all listeners.
@@ -107,6 +108,7 @@ void InputController::update(float dt) {
     _keyBot = keys->keyDown(KeyCode::ARROW_DOWN);
     _keyTurnRight = keys->keyDown(KeyCode::D);
     _keyTurnLeft = keys->keyDown(KeyCode::A);
+
 #endif
     if (_keyRight) {
         _movement.x += 1.0f;

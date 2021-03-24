@@ -200,6 +200,7 @@
     <ClInclude Include="..\..\source\GhostedApp.h" />
     <ClInclude Include="..\..\source\InputController.h" />
     <ClInclude Include="..\..\source\LoadingScene.h" />
+    <ClInclude Include="..\..\source\NetworkController.h" />
     <ClInclude Include="..\..\source\RoomEntities\BatteryCollectible.h" />
     <ClInclude Include="..\..\source\RoomEntities\BatterySlot.h" />
     <ClInclude Include="..\..\source\RoomEntities\Obstacle.h" />
@@ -220,6 +221,7 @@
     <ClCompile Include="..\..\source\InputController.cpp" />
     <ClCompile Include="..\..\source\LoadingScene.cpp" />
     <ClCompile Include="..\..\source\main.cpp" />
+    <ClCompile Include="..\..\source\NetworkController.cpp" />
     <ClCompile Include="..\..\source\RoomEntities\BatteryCollectible.cpp" />
     <ClCompile Include="..\..\source\RoomEntities\BatterySlot.cpp" />
     <ClCompile Include="..\..\source\RoomEntities\Obstacle.cpp" />

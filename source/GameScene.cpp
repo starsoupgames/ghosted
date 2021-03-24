@@ -1,10 +1,4 @@
-#include <cugl/cugl.h>
-#include <iostream>
-#include <sstream>
-
 #include "GameScene.h"
-#include "GameEntities/PlayerPal.h"
-#include "InputController.h"
 
 using namespace cugl;
 using namespace std;
@@ -14,9 +8,6 @@ using namespace std;
 
 /** This is adjusted by screen aspect ratio to get the height */
 #define SCENE_WIDTH 1024
-
-/** The parallax for each layer */
-#define PARALLAX_AMT 0.1f
 
 /** Pal Frame Sprite numbers */
 //TODO: REPLACE WITH APPROPRIATE PAL FRAME VALUES
@@ -42,32 +33,39 @@ using namespace std;
 bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
     // Initialize the scene to a locked width
     Size dimen = Application::get()->getDisplaySize();
-    Rect bounds = Application::get()->getDisplayBounds();
+    Rect bounds = Application::get()->getSafeBounds();
     dimen *= SCENE_WIDTH / dimen.width;
     if (assets == nullptr) {
         return false;
     }
-    else if (!Scene2::init(dimen)) {
+    if (!Scene2::init(dimen)) {
         return false;
     }
 
-    // Start up the input handler
-    _assets = assets;
-    _input.init(1, bounds);
+    _mode = 2;
 
+    // Init controllers
+    _input.init(1, bounds);
+    _network.init();
+    if (_roomID == "") {
+        _network.connect();
+    }
+    else {
+        _network.connect(_roomID);
+    }
+
+    _assets = assets;
     auto scene = _assets->get<scene2::SceneNode>("game");
     scene->setContentSize(dimen);
-    //scene->doLayout(); //possibly obsolute ship code
-
-    printf("testing \n");
-    _palNode = std::dynamic_pointer_cast<scene2::AnimationNode>(_assets->get<scene2::SceneNode>("game_field_player_pal_base"));
+    scene->doLayout();
+    addChild(scene);
 
     // Create the pal model
+    _palNode = dynamic_pointer_cast<scene2::AnimationNode>(_assets->get<scene2::SceneNode>("game_field_player_pal_base"));
     Vec2 palPos = _palNode->getPosition();
     _palModel = Pal::alloc(palPos);
     _palModel->setNode(_palNode);
 
-    addChild(scene);
     return true;
 }
 
@@ -78,6 +76,7 @@ void GameScene::dispose() {
     if (_active) {
         removeAllChildren();
         _input.dispose();
+        _network.dispose();
         _palNode = nullptr;
         _palModel = nullptr;
         _active = false;
@@ -88,15 +87,6 @@ void GameScene::dispose() {
 #pragma mark Gameplay Handling
 
 /**
- * Resets the status of the game so that we can play again.
- */
-void GameScene::reset() {
-    // Reset the ships and input
-    //_palModel->reset();
-    //_input.clear();
-}
-
-/**
  * The method called to update the game mode.
  *
  * This method contains any gameplay code that is not an OpenGL call.
@@ -105,10 +95,7 @@ void GameScene::reset() {
  */
 void GameScene::update(float timestep) {
     _input.update(timestep);
-    CULog("testinggg");
-
-    //resets the game if necessary
-    //if (_input.didReset()) { reset(); }
+    _network.update(timestep);
 
     Vec2 move = _input.getMove();
     int turning = _input.getTurn();
@@ -117,6 +104,6 @@ void GameScene::update(float timestep) {
     _palModel->setForward(move.y);
     _palModel->setSide(move.x);
     _palModel->processTurn(turning);
-    _palModel->update(timestep);
+    // _palModel->update(timestep);
 
 }
