@@ -1,4 +1,5 @@
 #include "GameScene.h"
+#include "CollisionController.h"
 
 using namespace cugl;
 using namespace std;
@@ -8,12 +9,6 @@ using namespace std;
 
 /** This is adjusted by screen aspect ratio to get the height */
 #define SCENE_WIDTH 1024
-
-/** Pal Frame Sprite numbers */
-//TODO: REPLACE WITH APPROPRIATE PAL FRAME VALUES
-#define PAL_IMG_LEFT   0   // Left bank frame
-#define PAL_IMG_FLAT   9   // Neutral frame
-#define PAL_IMG_RIGHT 17   // Right bank frame
 
 #pragma mark -
 #pragma mark Constructors
@@ -59,20 +54,21 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 
     if (_roomID == "") {
         _network.connect();
-
-        _palNode = dynamic_pointer_cast<scene2::AnimationNode>(_assets->get<scene2::SceneNode>("game_player_pal"));
-        //_palNode->setTexture(_assets->get<Texture>("pal_base"));
-        _palModel = Pal::alloc(_palNode->getPosition());
-        _palModel->setNode(_palNode);
+        _host = true;
     }
     else {
         _network.connect(_roomID);
-
-        _palNode = dynamic_pointer_cast<scene2::AnimationNode>(_assets->get<scene2::SceneNode>("game_player_pal"));
-        //_palNode->setTexture(_assets->get<Texture>("pal_base"));
-        _palModel = Pal::alloc(_palNode->getPosition());
-        _palModel->setNode(_palNode);
     }
+
+    _palNode = dynamic_pointer_cast<scene2::AnimationNode>(_assets->get<scene2::SceneNode>("game_player_pal"));
+    //_palNode->setTexture(_assets->get<Texture>("pal_texture"));
+    _palModel = Pal::alloc(_palNode->getPosition());
+    _palModel->setNode(_palNode); 
+
+    _ghostNode = dynamic_pointer_cast<scene2::AnimationNode>(_assets->get<scene2::SceneNode>("game_player_ghost"));
+    //_ghostNode->setTexture(_assets->get<Texture>("ghost_texture"));
+    _ghostModel = Ghost::alloc(_ghostNode->getPosition());
+    _ghostModel->setNode(_ghostNode);
 
     return true;
 }
@@ -88,6 +84,8 @@ void GameScene::dispose() {
         _root = nullptr;
         _palNode = nullptr;
         _palModel = nullptr;
+        _ghostNode = nullptr;
+        _ghostModel = nullptr;
         _active = false;
     }
 }
@@ -113,11 +111,25 @@ void GameScene::update(float timestep) {
     Vec2 move = _input.getMove();
     int turning = _input.getTurn();
 
-    if (_palModel != nullptr) {
+    if (_host) {
         _palModel->move(move);
         _palModel->processTurn(turning);
         _palModel->update(timestep);
 
         _root->setPosition(center - _palModel->getLoc());
+    }
+    else {
+        _ghostModel->move(move);
+        _ghostModel->update(timestep);
+
+        _root->setPosition(center - _ghostModel->getLoc());
+    }
+
+    // Check win condition
+    if (_palModel->getSpooked()) {
+        // Ghost wins
+    }
+    else if (_palModel->getBatteries() == 3) {
+        // Pal wins
     }
 }

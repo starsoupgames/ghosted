@@ -7,8 +7,14 @@
       "wrapS": "clamp",
       "wrapT": "clamp"
     },
-    "pal_base": {
+    "pal_texture": {
       "file": "textures/Pal_Base_Body_Frames.png"
+    },
+    "ghost_texture": {
+      "file": "textures/Ghost_Frames.png"
+    },
+    "light_cone": {
+      "file": "textures/light_cone.png"
     }
   },
   "fonts": {
@@ -24,14 +30,38 @@
         "type": "Anchored"
       },
       "children": {
+        "vision_cone": {
+          "type": "Image",
+          "data": {
+            "texture": "light_cone",
+            "scale": 1,
+            "layout": {
+              "priority": 1
+            }
+          }
+        },
         "player_pal": {
           "type": "Animation",
           "data": {
-            "texture": "pal_base",
+            "texture": "pal_texture",
             "span": 84,
             "cols": 21,
             "frame": 21,
-            "anchor": [ 0.5, 0.5 ]
+            "layout": {
+              "priority": 10
+            }
+          }
+        },
+        "player_ghost": {
+          "type": "Animation",
+          "data": {
+            "texture": "ghost_texture",
+            "span": 84,
+            "cols": 21,
+            "frame": 21,
+            "layout": {
+              "priority": 10
+            }
           }
         }
       }

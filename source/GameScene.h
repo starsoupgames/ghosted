@@ -5,7 +5,9 @@
 #include <iostream>
 #include <sstream>
 #include "GameEntities/PlayerPal.h"
+#include "GameEntities/PlayerGhost.h"
 #include "InputController.h"
+#include "CollisionController.h"
 #include "NetworkController.h"
 
 class GameScene : public cugl::Scene2 {
@@ -16,6 +18,8 @@ protected:
     // CONTROLLERS
     /** Controller for abstracting out input across multiple platforms */
     InputController _input;
+    /** Controller for handling collisions */
+    CollisionController _collision;
     /** Controller for handling networking */
     NetworkController _network;
 
@@ -23,12 +27,15 @@ protected:
     /** Root node */
     std::shared_ptr<cugl::scene2::SceneNode> _root;
     std::shared_ptr<cugl::scene2::AnimationNode> _palNode;
+    std::shared_ptr<cugl::scene2::AnimationNode> _ghostNode;
 
     // MODEL
     std::shared_ptr<Pal> _palModel;
+    std::shared_ptr<Ghost> _ghostModel;
 
     /** Room ID for networking */
     string _roomID;
+    bool _host;
 
     unsigned _mode;
 
@@ -41,7 +48,7 @@ public:
      * This constructor does not allocate any objects or start the game.
      * This allows us to use the object without a heap pointer.
      */
-    GameScene() : cugl::Scene2(), _mode(2) {}
+    GameScene() : cugl::Scene2(), _mode(2), _host(false) {}
 
     /**
      * Disposes of all (non-static) resources allocated to this mode.

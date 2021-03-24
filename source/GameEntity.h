@@ -19,6 +19,9 @@ protected:
 	/** Location of the entity */
 	Vec2 _initial;
 
+	/** Radius of the entity in pixels */
+	int _radius;
+
 	/** Reference to the entity's sprite for drawing */
 	shared_ptr<scene2::AnimationNode> _animationNode;
 
@@ -33,6 +36,10 @@ public:
 		return _loc;
 	}
 
+	/** Returns the Pal's radius */
+	int getRadius() const {
+		return _radius;
+	}
 
 	/**
 	Sets the position of the entity
@@ -50,13 +57,13 @@ public:
 	};
 
 	/**
-	* Initializes a new GameEnity at the origin
+	* Initializes a new GameEnity at the origin with radius 0
 	* @return true if the GameEntity is initialized properly, false otherwise
 	*/
-	bool init() { return init(cugl::Vec2::ZERO); }
+	bool init() { return init(cugl::Vec2::ZERO, 0); }
 
 	/** Initializes a new GameEntity at given location */
-	virtual bool init(const cugl::Vec2& pos);
+	bool init(const cugl::Vec2& pos, const int radius);
 
 	/** Releases all resources allocated with this entity */
 	void dispose();
@@ -81,9 +88,9 @@ public:
 	*
 	* @return a newly allocated Pal at the given position
 	*/
-	static std::shared_ptr<GameEntity> alloc(const cugl::Vec2& pos) {
+	static std::shared_ptr<GameEntity> alloc(const cugl::Vec2& pos, const int radius) {
 		std::shared_ptr<GameEntity> result = std::make_shared<GameEntity>();
-		return (result->init(pos) ? result : nullptr);
+		return (result->init(pos, radius) ? result : nullptr);
 	}
 
 #pragma mark -

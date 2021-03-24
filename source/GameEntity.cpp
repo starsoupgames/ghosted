@@ -10,12 +10,15 @@ using namespace cugl;
 
 
 /**
-* Returns a newly allocated Pal at the given position
+* Returns a newly allocated GameEntity at the given position with given radius
+* 
 * @param pos Initial position in world coordinates
+* @param radius The radius of the entity
 *
-* @return a newly allocated Pal at the given position
+* @return a newly allocated GameEntity at the given position with given radius
 */
-bool GameEntity::init(const Vec2& pos) {
+bool GameEntity::init(const Vec2& pos, const int radius) {
+    _radius = radius;
     _initial = pos;
     _loc = pos;
     return true;

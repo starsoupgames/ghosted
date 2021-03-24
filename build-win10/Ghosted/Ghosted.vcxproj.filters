@@ -72,14 +72,14 @@
     <ClInclude Include="..\..\source\RoomEntity.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\source\RoomEntities\BatteryCollectible.h">
-      <Filter>Header Files\GameEntities</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\source\GameEntities\Trap.h">
       <Filter>Header Files\RoomEntities</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\NetworkController.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\GameEntities\BatteryCollectible.h">
+      <Filter>Header Files\GameEntities</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -128,14 +128,14 @@
     <ClCompile Include="..\..\source\RoomEntity.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\source\RoomEntities\BatteryCollectible.cpp">
-      <Filter>Source Files\GameEntities</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\source\GameEntities\Trap.cpp">
       <Filter>Source Files\RoomEntities</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\NetworkController.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\GameEntities\BatteryCollectible.cpp">
+      <Filter>Source Files\GameEntities</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

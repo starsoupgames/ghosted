@@ -12,35 +12,21 @@ using namespace std;
 using namespace cugl;
 
 /** Pal Frame Sprite numbers */
-//TODO: THESE VALUES MUST BE ADJUSTED TO PAL'S AND ALSO HAVE FRONT, BACK, LEFT, RIGHT FRAMES
 #define PAL_IMG_RIGHT   0   // Right idle frame
 #define PAL_IMG_LEFT 21   // Left idle frame
 #define PAL_IMG_FRONT 42      // Front idle frame
 #define PAL_IMG_BACK 63      // Back idle frame
 #define PAL_IMG_LAST 83
 
-//TODO: THESE VALUES MUST BE ADJUSTED TO PAL'S AND ALSO HAVE FRONT, BACK, LEFT, RIGHT FRAMES
-/** Number of rows and cols in film strip */
-//number of cols in sheet
-#define PAL_IMG_ROWS   4
-//number of rows in sheet
-#define PAL_IMG_COLS   21
-//number of sprites in sheet
-#define PAL_IMG_SIZE  84
-
 class Pal : public GameEntity {
 private:
-
-	/** Which Pal this is */
-	int _id;
-
-	/** Amount of Traps left */
+	/** Amount of batteries left */
 	int _batteries;
 
 	/** Whether a Pal is spooked or not */
 	bool _spooked;
 
-	/** Speed of pal */
+	/** Speed of the Pal */
 	float speed;
 
 	/** Reference to the animation node */
@@ -71,19 +57,13 @@ protected:
 	Vec2 _move;
 
 public:
-
-	/** Returns the id of the Pal */
-	int getId() const {
-		return _id;
-	}
-
 	/** Returns the amount of batteries left */
 	int getBatteries() const {
 		return _batteries;
 	}
 
 	/** Returns whether or not a Pal is spooed */
-	int getSpooked() const {
+	bool getSpooked() const {
 		return _spooked;
 	}
 
@@ -101,6 +81,25 @@ public:
 	void setSpooked(bool spooked) {
 		_spooked = spooked;
 	}
+
+	/** Returns the current direction of the pal
+	 *
+	 * @return the current direction of the pal
+	 */
+	string getDirection() {
+		if (_left) {
+			return "left";
+		}
+		else if (_right) {
+			return "right";
+		}
+		else if (_front) {
+			return "front";
+		}
+		else {
+			return "back";
+		}
+	 }
 
 	/** Creates a Pal with the default values */
 	Pal() : GameEntity(), speed(5) {};
@@ -140,6 +139,11 @@ public:
 
 	/** Places a battery in the nearby slot */
 	void placeBattery();
+
+	/** Increments/decrements the battery counter */
+	void addBattery(int num) {
+		_batteries += num;
+	}
 
 	/**
 	 * Sets the film strip representing this pal.

@@ -8,14 +8,15 @@ using namespace cugl;
 #pragma mark Animation Constants and Functions
 
 /**
-* Returns a newly allocated Pal at the given position
-* @param pos Initial position in world coordinates
+* Returns a newly allocated Pal at the given location
+* @param loc Initial location in world coordinates
 *
-* @return a newly allocated Pal at the given position
+* @return a newly allocated Pal at the given location
 */
-bool Pal::init(const Vec2& pos) {
-    _id = 1;
-    GameEntity::init(pos);
+bool Pal::init(const Vec2& loc) {
+    _spooked = false;
+    _batteries = 0;
+    GameEntity::init(loc, 25);
     return true;
 }
 
@@ -168,66 +169,6 @@ void Pal::advanceFrame() {
             }
         }
     }
-
-    // Process the pal direction
-    //finishing up walking animation after stopping
-    /*if (_occupied && _forward == 0 && _side == 0) {
-        if (_front && frame < PAL_IMG_BACK) {
-            frame += 1;
-            if (frame == PAL_IMG_BACK) _occupied = false;
-        }
-        else if (_back && frame < PAL_IMG_LAST) {
-            frame += 1;
-            if (frame == PAL_IMG_LAST) _occupied = false;
-        }
-        else if (_right && frame < PAL_IMG_LEFT) {
-            frame += 1;
-            if (frame == PAL_IMG_LEFT) _occupied = false;
-        }
-        else if (_left && frame < PAL_IMG_FRONT) {
-            frame += 1;
-            if (frame == PAL_IMG_FRONT) _occupied = false;
-        }
-        if (!_occupied) _idle = true;
-
-    } else if (_idle && (_forward != 0.0f || _side != 0.0f)) {
-        _walking = true;
-        _occupied = true;
-        if (_forward > 0.0f) {
-            frame = PAL_IMG_FRONT + 1;
-            _front = true;
-            _back = false;
-            _left = false;
-            _right = false;
-        }
-        else if (_forward < 0.0f) {
-            frame = PAL_IMG_BACK + 1;
-            _front = false;
-            _back = true;
-            _left = false;
-            _right = false;
-            
-        }
-        else if (_side > 0.0f) {
-            frame = PAL_IMG_RIGHT + 1;
-            _front = false;
-            _back = false;
-            _left = false;
-            _right = true;
-            
-        }
-        else if (_side < 0.0f) {
-            frame = PAL_IMG_LEFT + 1;
-            _front = false;
-            _back = false;
-            _left = true;
-            _right = false;
-        }
-    }
-    else if (_walking) {
-
-    }*/
-
     
     _palNode->setFrame(frame);
 }
