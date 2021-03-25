@@ -35,6 +35,7 @@ protected:
 
     // MODEL
     shared_ptr<NetworkData> _networkData;
+    vector<shared_ptr<Player>> _players;
     shared_ptr<Pal> _palModel;
     shared_ptr<Ghost> _ghostModel;
 
@@ -42,7 +43,7 @@ protected:
     string _roomID;
     bool _host;
 
-    unsigned _mode;
+    uint8_t _mode;
 
 public:
 #pragma mark -
@@ -92,7 +93,7 @@ public:
      */
     void update(float timestep);
 
-    unsigned getMode() {
+    uint8_t getMode() {
         return _mode;
     };
 

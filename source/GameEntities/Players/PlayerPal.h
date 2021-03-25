@@ -42,9 +42,6 @@ private:
 
 	float _turn;
 
-	/** Current pal movement */
-	Vec2 _move;
-
 public:
 	/** Returns the amount of batteries left */
 	int getBatteries() const {
@@ -73,7 +70,7 @@ public:
 	~Pal() { }
 
 	/**
-	* @return a newly allocated Player at the origin.
+	* @return a newly allocated Pal at the origin.
 	*/
 	static shared_ptr<Pal> alloc() {
 		shared_ptr<Pal> result = make_shared<Pal>();
@@ -90,17 +87,17 @@ public:
 		_turn = turn; 
 	};
 
-	/** Moves the Pal in the corresponding direction */
-	void move(Vec2 move) {
-		_move = move;
-	}
-
 	/** Places a battery in the nearby slot */
 	void placeBattery();
 
 	/** Increments/decrements the battery counter */
 	void addBattery(int num) {
 		_batteries += num;
+	}
+
+	/** Get player type */
+	virtual uint8_t getType() override {
+		return Type::Pal;
 	}
 
 	/**
@@ -112,7 +109,6 @@ public:
 	 */
 	void setNode(const std::shared_ptr<cugl::scene2::AnimationNode>& value);
 
-
 	/**
 	 * Updates the state of the model
 	 *
@@ -121,7 +117,7 @@ public:
 	 *
 	 * @param timestep  Time elapsed since last called.
 	 */
-	void update(float timestep = 0.0f);
+	virtual void update(float timestep = 0.0f) override;
 
 	/**
 	 * Resets the pal back to its original settings

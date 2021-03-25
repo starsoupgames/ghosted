@@ -44,9 +44,6 @@ private:
 
 	void determineAction();
 
-	/** Current ghost movement */
-	cugl::Vec2 _move;
-
 public:
 
 	/** @return the amount of traps left */
@@ -69,7 +66,7 @@ public:
 	 *
 	 * @param value Whether or not the Ghost has been revealed recently
 	 */
-	void setTagged(float value) { _tagged = value; }
+	void setTagged(bool value) { _tagged = value; }
 
 	/** Creates a Ghost with the default values */
 	Ghost() : Player(), speed(5) {};
@@ -90,13 +87,13 @@ public:
 		return (dynamic_pointer_cast<Player>(result)->init(pos) ? result : nullptr);
 	};
 
-	/** Moves the Ghost in the corresponding direction */
-	void move(Vec2 move) {
-		_move = move;
-	}
-
 	/** Triggers the nearest trap */
 	void trigger();
+
+	/** Get player type */
+	virtual uint8_t getType() override {
+		return Type::Ghost;
+	}
 
 	/**
 	 * Sets the film strip representing this ghosts.
@@ -115,7 +112,7 @@ public:
 	 *
 	 * @param timestep  Time elapsed since last called.
 	 */
-	void update(float timestep = 0.0f);
+	virtual void update(float timestep = 0.0f) override;
 
 	/**
 	 * Resets the ghost back to its original settings

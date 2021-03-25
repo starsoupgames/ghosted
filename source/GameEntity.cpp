@@ -14,20 +14,19 @@ using namespace cugl;
 */
 bool GameEntity::init(const Vec2& pos, const int radius) {
     _radius = radius;
-    _initial = pos;
     _loc = pos;
     return true;
 }
 
 /**
- * Disposes all resources and assets of this pal
+ * Disposes all resources and assets of this entity
  */
 void GameEntity::dispose() {
     _animationNode = nullptr;
 }
 
 /**
- * Sets the film strip representing this pal.
+ * Sets the film strip representing this entity.
  *
  * Setting this to nullptr clears the value.
  *
@@ -44,34 +43,14 @@ void GameEntity::setNode(const std::shared_ptr<scene2::AnimationNode>& value) {
 /**
  * Updates the state of the model
  *
- * This method moves the pal forward, dampens the forces (if necessary)
- * and updates the sprite if it exists.
- *
  * @param timestep  Time elapsed since last called.
  */
 
 void GameEntity::update(float timestep) {
-    if (_animationNode != nullptr) {
-        advanceFrame();
-    }
-}
-
-/**
- * Determines the next animation frame for the pal and applies it to the sprite.
- *
- * This method includes some dampening of the turn, and should be called before
- * moving the pal.
- */
-void GameEntity::advanceFrame() {
-    // Our animation depends on the current frame.
-    unsigned int frame = _animationNode->getFrame();
-    frame++;
-    _animationNode->setFrame(frame);
 }
 
 /**
  * Resets the pal back to its original settings
  */
 void GameEntity::reset() {
-    _loc = _initial;
 }

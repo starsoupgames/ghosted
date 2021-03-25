@@ -15,7 +15,7 @@ protected:
 
     bool _startGame;
 
-    unsigned _mode;
+    uint8_t _mode;
 
 public:
 #pragma mark -
@@ -66,7 +66,7 @@ public:
      */
     virtual void setActive(bool value) override;
 
-    unsigned getMode() {
+    uint8_t getMode() {
         return _mode;
     };
 

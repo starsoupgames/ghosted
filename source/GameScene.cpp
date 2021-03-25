@@ -67,13 +67,14 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
     _ghostModel->setNode(_ghostNode);
 
     if (_host) {
-        _networkData->setPlayer(_palModel);
-        _networkData->setOtherPlayer(_ghostModel);
+        _players.push_back(_palModel);
+        _players.push_back(_ghostModel);
     }
     else {
-        _networkData->setPlayer(_ghostModel);
-        _networkData->setOtherPlayer(_palModel);
+        _players.push_back(_ghostModel);
+        _players.push_back(_palModel);
     }
+    _networkData->setPlayers(_players);
 
     return true;
 }
@@ -105,7 +106,7 @@ void GameScene::dispose() {
 void GameScene::update(float timestep) {
     Size dimen = Application::get()->getDisplaySize();
     dimen *= SCENE_WIDTH / dimen.width;
-    Vec2 center = Vec2(dimen.width / 2, dimen.height / 2);
+    Vec2 center(dimen.width / 2, dimen.height / 2);
 
     _input.update(timestep);
     _network.update(timestep);
@@ -113,20 +114,16 @@ void GameScene::update(float timestep) {
     Vec2 move = _input.getMove();
     int turning = _input.getTurn();
 
-    if (_host) {
-        _palModel->move(move);
-        _palModel->processTurn(turning);
-
-        _root->setPosition(center - _palModel->getLoc());
+    shared_ptr<Player> player = _players[0];
+    player->move(move);
+    if (player->getType() == Player::Type::Pal) {
+        dynamic_pointer_cast<Pal>(player)->processTurn(turning);
     }
-    else {
-        _ghostModel->move(move);
+    _root->setPosition(center - player->getLoc());
 
-        _root->setPosition(center - _ghostModel->getLoc());
+    for (auto& p : _players) {
+        p->update(timestep);
     }
-
-    _palModel->update(timestep);
-    _ghostModel->update(timestep);
 
     // Check win condition
     if (_host) {

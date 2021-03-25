@@ -15,8 +15,7 @@ class NetworkData {
 private:
     uint8_t _id;
 
-    shared_ptr<Player> _player; // NetworkData does not own this player
-    shared_ptr<Player> _otherPlayer; // NetworkData does not own this player
+    vector<shared_ptr<Player>> _players; // NetworkData does not own these players
 
     void encodeByte(uint8_t b, vector<uint8_t>& out); // 1 byte
     uint8_t decodeByte(const vector<uint8_t>& bytes);
@@ -62,18 +61,21 @@ public:
         _id = id;
     }
 
-    void setPlayer(const shared_ptr<Player>& player) {
-        _player = player;
-    }
-
-    // temp
-    void setOtherPlayer(const shared_ptr<Player>& otherPlayer) {
-        _otherPlayer = otherPlayer;
+    void setPlayers(const vector<shared_ptr<Player>>& players) {
+        _players = players;
     }
 
     vector<uint8_t> serializeData();
 
     void unserializeData(const vector<uint8_t>& msg);
 
+    enum MatchStatus {
+        Waiting = 0, // connected, waiting for players
+        InProgress = 1, // game is ongoing
+        Disconnected = 2, // player disconnected
+        Paused = 3, // game paused
+        WinState = 4, // pals or ghost won
+        Ended = 5 // game ended
+    };
 };
 #endif /** __NETWORK_DATA_H__ */

@@ -54,7 +54,7 @@ protected:
     StartScene _start;
     GameScene _gameplay;
 
-    unsigned _mode;
+    uint8_t _mode;
     
     /** 
      * Internal helper to build the scene graph.

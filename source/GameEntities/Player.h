@@ -72,6 +72,11 @@ public:
 		_move = move;
 	}
 
+	/** Get player type */
+	virtual uint8_t getType() {
+		return Type::Undefined;
+	}
+
 	/**
 	 * @param value The Player node.
 	 */
@@ -85,10 +90,16 @@ public:
 	 *
 	 * @param timestep  Time elapsed since last called.
 	 */
-	void update(float timestep = 0.0f);
+	virtual void update(float timestep = 0.0f);
 
 	/**
 	 * Resets the Player back to its original settings
 	 */
 	void reset();
+
+	enum Type {
+		Undefined = 0,
+		Pal = 1,
+		Ghost = 2
+	};
 };

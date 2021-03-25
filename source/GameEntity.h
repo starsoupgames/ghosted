@@ -16,9 +16,6 @@ protected:
 	/** Location of the entity */
 	Vec2 _loc;
 
-	/** Location of the entity */
-	Vec2 _initial;
-
 	/** Radius of the entity in pixels */
 	int _radius;
 

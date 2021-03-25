@@ -25,6 +25,10 @@ void NetworkController::connect(string roomID) {
 void NetworkController::update(float timestep) {
     if (!_connected) return;
 
+    if (_connection->getNumPlayers() < _connection->getTotalPlayers()) {
+        CULog("Player exited the game.");
+    }
+
     // update room id
     if (_roomID != _connection->getRoomID()) {
         _roomID = _connection->getRoomID();
