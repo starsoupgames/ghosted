@@ -125,13 +125,12 @@ void GhostedApp::update(float timestep) {
     }
 
     if (_mode != mode) {
-        string roomID = "";
         switch (_mode) {
         case Mode::Loading:
             _loading.dispose();
             break;
         case Mode::Start:
-            roomID = _start.getRoomID();
+            _gameplay.setRoomID(_start.getRoomID());
             _start.dispose();
             break;
         case Mode::Game:
@@ -144,7 +143,6 @@ void GhostedApp::update(float timestep) {
             _start.init(_assets);
             break;
         case Mode::Game:
-            _gameplay.setRoomID(roomID);
             _gameplay.init(_assets);
             break;
         }

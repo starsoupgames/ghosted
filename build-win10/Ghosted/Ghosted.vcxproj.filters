@@ -54,9 +54,6 @@
     <ClInclude Include="..\..\source\InputController.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\source\StartScene.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="resource.h">
       <Filter>Resource Files</Filter>
     </ClInclude>
@@ -93,6 +90,9 @@
     <ClInclude Include="..\..\source\GameEntities\Players\PlayerGhost.h">
       <Filter>Header Files\GameEntities\Players</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\source\StartScene.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\main.cpp">
@@ -111,9 +111,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\GameRoom.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\GameScene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\InputController.cpp">
@@ -154,6 +151,9 @@
     </ClCompile>
     <ClCompile Include="..\..\source\GameEntities\Players\PlayerGhost.cpp">
       <Filter>Source Files\GameEntities\Players</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\GameScene.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

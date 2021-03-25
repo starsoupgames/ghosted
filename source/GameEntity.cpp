@@ -4,11 +4,6 @@
 
 using namespace cugl;
 
-#pragma mark -
-#pragma mark Animation Constants and Functions
-
-
-
 /**
 * Returns a newly allocated GameEntity at the given position with given radius
 * 
@@ -31,8 +26,6 @@ void GameEntity::dispose() {
     _animationNode = nullptr;
 }
 
-#pragma mark -
-#pragma mark Animation
 /**
  * Sets the film strip representing this pal.
  *

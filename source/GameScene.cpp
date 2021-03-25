@@ -31,13 +31,15 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
         return false;
     }
 
-    Vec2 center = Vec2(dimen.width / 2, dimen.height / 2);
-
     _mode = 2;
+
+    // Init data models
+    _networkData = NetworkData::alloc();
+    CUAssertLog(_networkData != nullptr, "NetworkData failed allocation.");
 
     // Init controllers
     _input.init(bounds);
-    _network.init();
+    _network.init(_networkData);
 
     _assets = assets;
 
@@ -54,17 +56,23 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
         _network.connect(_roomID);
     }
 
+    _palNode = dynamic_pointer_cast<scene2::AnimationNode>(_assets->get<scene2::SceneNode>("game_player_pal"));
+    //_palNode->setTexture(_assets->get<Texture>("pal_texture"));
+    _palModel = Pal::alloc(_palNode->getPosition());
+    _palModel->setNode(_palNode);
+
+    _ghostNode = dynamic_pointer_cast<scene2::AnimationNode>(_assets->get<scene2::SceneNode>("game_player_ghost"));
+    //_ghostedNode->setTexture(_assets->get<Texture>("ghost_texture"));
+    _ghostModel = Ghost::alloc(_ghostNode->getPosition());
+    _ghostModel->setNode(_ghostNode);
+
     if (_host) {
-        _palNode = dynamic_pointer_cast<scene2::AnimationNode>(_assets->get<scene2::SceneNode>("game_player_pal"));
-        //_palNode->setTexture(_assets->get<Texture>("pal_texture"));
-        _palModel = Pal::alloc(_palNode->getPosition());
-        _palModel->setNode(_palNode);
+        _networkData->setPlayer(_palModel);
+        _networkData->setOtherPlayer(_ghostModel);
     }
     else {
-        _ghostNode = dynamic_pointer_cast<scene2::AnimationNode>(_assets->get<scene2::SceneNode>("game_player_ghost"));
-        //_ghostedNode->setTexture(_assets->get<Texture>("ghost_texture"));
-        _ghostModel = Ghost::alloc(_ghostNode->getPosition());
-        _ghostModel->setNode(_ghostNode);
+        _networkData->setPlayer(_ghostModel);
+        _networkData->setOtherPlayer(_palModel);
     }
 
     return true;
@@ -108,16 +116,17 @@ void GameScene::update(float timestep) {
     if (_host) {
         _palModel->move(move);
         _palModel->processTurn(turning);
-        _palModel->update(timestep);
 
         _root->setPosition(center - _palModel->getLoc());
     }
     else {
         _ghostModel->move(move);
-        _ghostModel->update(timestep);
 
         _root->setPosition(center - _ghostModel->getLoc());
     }
+
+    _palModel->update(timestep);
+    _ghostModel->update(timestep);
 
     // Check win condition
     if (_host) {

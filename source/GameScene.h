@@ -9,11 +9,15 @@
 #include "InputController.h"
 #include "CollisionController.h"
 #include "NetworkController.h"
+#include "NetworkData.h"
 
-class GameScene : public cugl::Scene2 {
+using namespace std;
+using namespace cugl;
+
+class GameScene : public Scene2 {
 protected:
     /** The asset manager for this game mode. */
-    std::shared_ptr<cugl::AssetManager> _assets;
+    shared_ptr<AssetManager> _assets;
 
     // CONTROLLERS
     /** Controller for abstracting out input across multiple platforms */
@@ -25,13 +29,14 @@ protected:
 
     // VIEW
     /** Root node */
-    std::shared_ptr<cugl::scene2::SceneNode> _root;
-    std::shared_ptr<cugl::scene2::AnimationNode> _palNode;
-    std::shared_ptr<cugl::scene2::AnimationNode> _ghostNode;
+    shared_ptr<scene2::SceneNode> _root;
+    shared_ptr<scene2::AnimationNode> _palNode;
+    shared_ptr<scene2::AnimationNode> _ghostNode;
 
     // MODEL
-    std::shared_ptr<Pal> _palModel;
-    std::shared_ptr<Ghost> _ghostModel;
+    shared_ptr<NetworkData> _networkData;
+    shared_ptr<Pal> _palModel;
+    shared_ptr<Ghost> _ghostModel;
 
     /** Room ID for networking */
     string _roomID;
@@ -48,7 +53,7 @@ public:
      * This constructor does not allocate any objects or start the game.
      * This allows us to use the object without a heap pointer.
      */
-    GameScene() : cugl::Scene2(), _mode(2), _host(false) {}
+    GameScene() : Scene2(), _host(false), _roomID(""), _mode(2) {}
 
     /**
      * Disposes of all (non-static) resources allocated to this mode.
@@ -61,7 +66,7 @@ public:
     /**
      * Disposes of all (non-static) resources allocated to this mode.
      */
-    void dispose();
+    virtual void dispose() override;
 
     /**
      * Initializes the controller contents, and starts the game
@@ -74,7 +79,7 @@ public:
      *
      * @return true if the controller is initialized properly, false otherwise.
      */
-    bool init(const std::shared_ptr<cugl::AssetManager>& assets);
+    bool init(const shared_ptr<AssetManager>& assets);
 
 #pragma mark -
 #pragma mark Gameplay Handling

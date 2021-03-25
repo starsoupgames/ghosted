@@ -11,7 +11,7 @@ protected:
 
     std::shared_ptr<cugl::scene2::TextField> _field;
 
-    string roomID;
+    string _roomID;
 
     bool _startGame;
 
@@ -26,7 +26,7 @@ public:
      * This constructor does not allocate any objects or start the controller.
      * This allows us to use a controller without a heap pointer.
      */
-    StartScene() : _startGame(false), _mode(1) {}
+    StartScene() : Scene2(), _startGame(false), _mode(1), _roomID("") {}
 
     /**
      * Disposes of all (non-static) resources allocated to this mode.
@@ -71,7 +71,7 @@ public:
     };
 
     string getRoomID() {
-        return roomID;
+        return _roomID;
     };
 };
 

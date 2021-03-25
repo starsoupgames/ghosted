@@ -3,82 +3,80 @@
 using namespace cugl;
 using namespace std;
 
-void NetworkController::init() {
+void NetworkController::init(const shared_ptr<NetworkData>& data) {
+    _data = data;
 }
 
 void NetworkController::connect() {
-    if (connected) return;
+    if (_connected) return;
     const auto config = CUNetworkConnection::ConnectionConfig(SERVER_ADDRESS, SERVER_PORT, MAX_PLAYERS, API_VERSION);
-    connection = make_shared<CUNetworkConnection>(config);
-    connected = true;
+    _connection = make_shared<CUNetworkConnection>(config);
+    _connected = true;
 }
 
 void NetworkController::connect(string roomID) {
-    if (connected) return;
+    if (_connected) return;
     const auto config = CUNetworkConnection::ConnectionConfig(SERVER_ADDRESS, SERVER_PORT, MAX_PLAYERS, API_VERSION);
-    connection = make_shared<CUNetworkConnection>(config, roomID);
-    connected = true;
+    _connection = make_shared<CUNetworkConnection>(config, roomID);
+    _roomID = roomID;
+    _connected = true;
 }
 
 void NetworkController::update(float timestep) {
-    if (!connected) return;
+    if (!_connected) return;
 
     // update room id
-    if (roomID != connection->getRoomID()) {
-        roomID = connection->getRoomID();
-        // temp benshen
-        // const auto config = CUNetworkConnection::ConnectionConfig(SERVER_ADDRESS, SERVER_PORT, MAX_PLAYERS, API_VERSION);
-        // c2 = make_shared<CUNetworkConnection>(config, roomID);
+    if (_roomID != _connection->getRoomID()) {
+        _roomID = _connection->getRoomID();
+        // TODO temp
+        /*
+        const auto config = CUNetworkConnection::ConnectionConfig(SERVER_ADDRESS, SERVER_PORT, MAX_PLAYERS, API_VERSION);
+        c2 = make_shared<CUNetworkConnection>(config, _roomID);
+        */
     }
 
     // update player id
-    if (playerID < 0 && connection->getPlayerID()) playerID = connection->getPlayerID().value();
+    if (_connection->getPlayerID()) _data->setID(_connection->getPlayerID().value());
 
     // send data
-    if (connected && ++tick >= NETWORK_TICKS) {
-        if (!sendData()) CULog("Error sending data.");
-        tick = 0;
+    if (_connected && ++_tick >= NETWORK_TICKS) {
+        sendData();
+        _tick = 0;
     }
     // receive data
-    if (connection == nullptr) {
+    if (_connection == nullptr) {
         CULog("Null network connection.");
         return;
     }
-    connection->receive([this](const std::vector<uint8_t>& msg) {
+    _connection->receive([this](const vector<uint8_t>& msg) {
         receiveData(msg);
         });
 
-    // temp benshen
+    // TODO temp
     /*
     if (c2 == nullptr) {
-        CULog("Null network connection.");
+        CULog("Null network connection C2.");
         return;
     }
-    c2->receive([this](const std::vector<uint8_t>& msg) {
+    c2->receive([this](const vector<uint8_t>& msg) {
         receiveData(msg);
         });
     */
 }
 
 bool NetworkController::sendData() {
-    vector<uint8_t> msg;
-    char c = (char) rand() % 26 + 'a';
-    // CULog("sending %c", c);
-    msg.push_back(c);
-    connection->send(msg);
+    if (_data->getID() < 0) {
+        CULog("No id attached to network data.");
+        return false;
+    }
+    _connection->send(_data->serializeData());
     return true;
 }
 
-bool NetworkController::receiveData(const std::vector<uint8_t>& msg) {
+bool NetworkController::receiveData(const vector<uint8_t>& msg) {
     if (msg.empty()) {
         return false;
     }
-    vector<uint8_t> received;
-    for (uint8_t m : msg) {
-        received.push_back(m);
-    }
-    for (uint8_t r : received) {
-        // CULog("received %c", r);
-    }
+    _data->unserializeData(msg);
     return true;
 }
