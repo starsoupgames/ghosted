@@ -7,15 +7,33 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		A468B74D260A752800F0E184 /* PlayerGhost.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A468B748260A752800F0E184 /* PlayerGhost.cpp */; };
-		A468B74E260A752800F0E184 /* PlayerGhost.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A468B748260A752800F0E184 /* PlayerGhost.cpp */; };
-		A468B74F260A752800F0E184 /* PlayerGhost.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A468B748260A752800F0E184 /* PlayerGhost.cpp */; };
-		A468B750260A752800F0E184 /* Trap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A468B749260A752800F0E184 /* Trap.cpp */; };
-		A468B751260A752800F0E184 /* Trap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A468B749260A752800F0E184 /* Trap.cpp */; };
-		A468B752260A752800F0E184 /* Trap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A468B749260A752800F0E184 /* Trap.cpp */; };
-		A468B753260A752800F0E184 /* PlayerPal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A468B74C260A752800F0E184 /* PlayerPal.cpp */; };
-		A468B754260A752800F0E184 /* PlayerPal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A468B74C260A752800F0E184 /* PlayerPal.cpp */; };
-		A468B755260A752800F0E184 /* PlayerPal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A468B74C260A752800F0E184 /* PlayerPal.cpp */; };
+		A468737A260BF2F500F0E184 /* Player.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4687370260BF2F300F0E184 /* Player.cpp */; };
+		A468737B260BF2F500F0E184 /* Player.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4687370260BF2F300F0E184 /* Player.cpp */; };
+		A468737C260BF2F500F0E184 /* Player.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4687370260BF2F300F0E184 /* Player.cpp */; };
+		A468737D260BF2F500F0E184 /* BatteryCollectible.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4687373260BF2F400F0E184 /* BatteryCollectible.cpp */; };
+		A468737E260BF2F500F0E184 /* BatteryCollectible.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4687373260BF2F400F0E184 /* BatteryCollectible.cpp */; };
+		A468737F260BF2F500F0E184 /* BatteryCollectible.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4687373260BF2F400F0E184 /* BatteryCollectible.cpp */; };
+		A4687380260BF2F500F0E184 /* PlayerGhost.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4687376260BF2F400F0E184 /* PlayerGhost.cpp */; };
+		A4687381260BF2F500F0E184 /* PlayerGhost.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4687376260BF2F400F0E184 /* PlayerGhost.cpp */; };
+		A4687382260BF2F500F0E184 /* PlayerGhost.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4687376260BF2F400F0E184 /* PlayerGhost.cpp */; };
+		A4687383260BF2F500F0E184 /* PlayerPal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4687379260BF2F400F0E184 /* PlayerPal.cpp */; };
+		A4687384260BF2F500F0E184 /* PlayerPal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4687379260BF2F400F0E184 /* PlayerPal.cpp */; };
+		A4687385260BF2F500F0E184 /* PlayerPal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4687379260BF2F400F0E184 /* PlayerPal.cpp */; };
+		A4687393260BF31900F0E184 /* NetworkData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4687389260BF31800F0E184 /* NetworkData.cpp */; };
+		A4687394260BF31900F0E184 /* NetworkData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4687389260BF31800F0E184 /* NetworkData.cpp */; };
+		A4687395260BF31900F0E184 /* NetworkData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4687389260BF31800F0E184 /* NetworkData.cpp */; };
+		A4687396260BF31900F0E184 /* Obstacle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A468738D260BF31900F0E184 /* Obstacle.cpp */; };
+		A4687397260BF31900F0E184 /* Obstacle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A468738D260BF31900F0E184 /* Obstacle.cpp */; };
+		A4687398260BF31900F0E184 /* Obstacle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A468738D260BF31900F0E184 /* Obstacle.cpp */; };
+		A4687399260BF31900F0E184 /* BatterySlot.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4687390260BF31900F0E184 /* BatterySlot.cpp */; };
+		A468739A260BF31900F0E184 /* BatterySlot.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4687390260BF31900F0E184 /* BatterySlot.cpp */; };
+		A468739B260BF31900F0E184 /* BatterySlot.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4687390260BF31900F0E184 /* BatterySlot.cpp */; };
+		A468739C260BF31900F0E184 /* Trap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4687392260BF31900F0E184 /* Trap.cpp */; };
+		A468739D260BF31900F0E184 /* Trap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4687392260BF31900F0E184 /* Trap.cpp */; };
+		A468739E260BF31900F0E184 /* Trap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4687392260BF31900F0E184 /* Trap.cpp */; };
+		A46873AD260BF3CF00F0E184 /* NetworkController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A46873AC260BF3CF00F0E184 /* NetworkController.cpp */; };
+		A46873AE260BF3CF00F0E184 /* NetworkController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A46873AC260BF3CF00F0E184 /* NetworkController.cpp */; };
+		A46873AF260BF3CF00F0E184 /* NetworkController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A46873AC260BF3CF00F0E184 /* NetworkController.cpp */; };
 		A468B75A260A763E00F0E184 /* fonts in Resources */ = {isa = PBXBuildFile; fileRef = A468B759260A763E00F0E184 /* fonts */; };
 		A468B75B260A763E00F0E184 /* fonts in Resources */ = {isa = PBXBuildFile; fileRef = A468B759260A763E00F0E184 /* fonts */; };
 		A468B75C260A763E00F0E184 /* fonts in Resources */ = {isa = PBXBuildFile; fileRef = A468B759260A763E00F0E184 /* fonts */; };
@@ -138,12 +156,25 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		A468B747260A752800F0E184 /* Trap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Trap.h; sourceTree = "<group>"; };
-		A468B748260A752800F0E184 /* PlayerGhost.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PlayerGhost.cpp; sourceTree = "<group>"; };
-		A468B749260A752800F0E184 /* Trap.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Trap.cpp; sourceTree = "<group>"; };
-		A468B74A260A752800F0E184 /* PlayerGhost.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayerGhost.h; sourceTree = "<group>"; };
-		A468B74B260A752800F0E184 /* PlayerPal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayerPal.h; sourceTree = "<group>"; };
-		A468B74C260A752800F0E184 /* PlayerPal.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PlayerPal.cpp; sourceTree = "<group>"; };
+		A4687370260BF2F300F0E184 /* Player.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Player.cpp; sourceTree = "<group>"; };
+		A4687371260BF2F300F0E184 /* Player.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Player.h; sourceTree = "<group>"; };
+		A4687372260BF2F400F0E184 /* BatteryCollectible.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BatteryCollectible.h; sourceTree = "<group>"; };
+		A4687373260BF2F400F0E184 /* BatteryCollectible.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BatteryCollectible.cpp; sourceTree = "<group>"; };
+		A4687374260BF2F400F0E184 /* PlayerPal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayerPal.h; sourceTree = "<group>"; };
+		A4687376260BF2F400F0E184 /* PlayerGhost.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PlayerGhost.cpp; sourceTree = "<group>"; };
+		A4687377260BF2F400F0E184 /* PlayerPal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayerPal.h; sourceTree = "<group>"; };
+		A4687378260BF2F400F0E184 /* PlayerGhost.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayerGhost.h; sourceTree = "<group>"; };
+		A4687379260BF2F400F0E184 /* PlayerPal.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PlayerPal.cpp; sourceTree = "<group>"; };
+		A4687389260BF31800F0E184 /* NetworkData.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NetworkData.cpp; sourceTree = "<group>"; };
+		A468738A260BF31800F0E184 /* NetworkData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetworkData.h; sourceTree = "<group>"; };
+		A468738B260BF31900F0E184 /* NetworkController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetworkController.h; sourceTree = "<group>"; };
+		A468738D260BF31900F0E184 /* Obstacle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Obstacle.cpp; sourceTree = "<group>"; };
+		A468738E260BF31900F0E184 /* Trap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Trap.h; sourceTree = "<group>"; };
+		A468738F260BF31900F0E184 /* BatterySlot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BatterySlot.h; sourceTree = "<group>"; };
+		A4687390260BF31900F0E184 /* BatterySlot.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BatterySlot.cpp; sourceTree = "<group>"; };
+		A4687391260BF31900F0E184 /* Obstacle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Obstacle.h; sourceTree = "<group>"; };
+		A4687392260BF31900F0E184 /* Trap.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Trap.cpp; sourceTree = "<group>"; };
+		A46873AC260BF3CF00F0E184 /* NetworkController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NetworkController.cpp; sourceTree = "<group>"; };
 		A468B759260A763E00F0E184 /* fonts */ = {isa = PBXFileReference; lastKnownFileType = folder; path = fonts; sourceTree = "<group>"; };
 		A4BD18F425F44EB700FBD403 /* CollisionController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CollisionController.h; sourceTree = "<group>"; };
 		A4BD18F825F44EB700FBD403 /* StartScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StartScene.cpp; sourceTree = "<group>"; };
@@ -280,15 +311,39 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		A4687375260BF2F400F0E184 /* Players */ = {
+			isa = PBXGroup;
+			children = (
+				A4687376260BF2F400F0E184 /* PlayerGhost.cpp */,
+				A4687377260BF2F400F0E184 /* PlayerPal.h */,
+				A4687378260BF2F400F0E184 /* PlayerGhost.h */,
+				A4687379260BF2F400F0E184 /* PlayerPal.cpp */,
+			);
+			path = Players;
+			sourceTree = "<group>";
+		};
+		A468738C260BF31900F0E184 /* RoomEntities */ = {
+			isa = PBXGroup;
+			children = (
+				A468738D260BF31900F0E184 /* Obstacle.cpp */,
+				A468738E260BF31900F0E184 /* Trap.h */,
+				A468738F260BF31900F0E184 /* BatterySlot.h */,
+				A4687390260BF31900F0E184 /* BatterySlot.cpp */,
+				A4687391260BF31900F0E184 /* Obstacle.h */,
+				A4687392260BF31900F0E184 /* Trap.cpp */,
+			);
+			path = RoomEntities;
+			sourceTree = "<group>";
+		};
 		A468B746260A74E300F0E184 /* GameEntities */ = {
 			isa = PBXGroup;
 			children = (
-				A468B748260A752800F0E184 /* PlayerGhost.cpp */,
-				A468B74A260A752800F0E184 /* PlayerGhost.h */,
-				A468B74C260A752800F0E184 /* PlayerPal.cpp */,
-				A468B74B260A752800F0E184 /* PlayerPal.h */,
-				A468B749260A752800F0E184 /* Trap.cpp */,
-				A468B747260A752800F0E184 /* Trap.h */,
+				A4687373260BF2F400F0E184 /* BatteryCollectible.cpp */,
+				A4687372260BF2F400F0E184 /* BatteryCollectible.h */,
+				A4687370260BF2F300F0E184 /* Player.cpp */,
+				A4687371260BF2F300F0E184 /* Player.h */,
+				A4687374260BF2F400F0E184 /* PlayerPal.h */,
+				A4687375260BF2F400F0E184 /* Players */,
 			);
 			path = GameEntities;
 			sourceTree = "<group>";
@@ -405,6 +460,11 @@
 		EBBF18B11D749176008E2001 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				A46873AC260BF3CF00F0E184 /* NetworkController.cpp */,
+				A468738B260BF31900F0E184 /* NetworkController.h */,
+				A4687389260BF31800F0E184 /* NetworkData.cpp */,
+				A468738A260BF31800F0E184 /* NetworkData.h */,
+				A468738C260BF31900F0E184 /* RoomEntities */,
 				A468B746260A74E300F0E184 /* GameEntities */,
 				A4BD190525F44EBA00FBD403 /* CollisionController.cpp */,
 				A4BD18F425F44EB700FBD403 /* CollisionController.h */,
@@ -605,19 +665,25 @@
 			buildActionMask = 2147483647;
 			files = (
 				A4BD191B25F44EBB00FBD403 /* InputController.cpp in Sources */,
+				A468739B260BF31900F0E184 /* BatterySlot.cpp in Sources */,
 				A4BD190C25F44EBB00FBD403 /* StartScene.cpp in Sources */,
 				EB9CDA3925D0EAB100EE1A09 /* main.cpp in Sources */,
+				A46873AF260BF3CF00F0E184 /* NetworkController.cpp in Sources */,
 				A4BD191225F44EBB00FBD403 /* GameEntity.cpp in Sources */,
-				A468B755260A752800F0E184 /* PlayerPal.cpp in Sources */,
+				A4687395260BF31900F0E184 /* NetworkData.cpp in Sources */,
 				A4BD192125F44EBB00FBD403 /* GameMap.cpp in Sources */,
 				A4BD191525F44EBB00FBD403 /* LoadingScene.cpp in Sources */,
-				A468B752260A752800F0E184 /* Trap.cpp in Sources */,
-				A468B74F260A752800F0E184 /* PlayerGhost.cpp in Sources */,
+				A4687382260BF2F500F0E184 /* PlayerGhost.cpp in Sources */,
 				A4BD191825F44EBB00FBD403 /* GameScene.cpp in Sources */,
 				A4BD191E25F44EBB00FBD403 /* GameRoom.cpp in Sources */,
+				A468739E260BF31900F0E184 /* Trap.cpp in Sources */,
+				A4687385260BF2F500F0E184 /* PlayerPal.cpp in Sources */,
+				A468737F260BF2F500F0E184 /* BatteryCollectible.cpp in Sources */,
+				A468737C260BF2F500F0E184 /* Player.cpp in Sources */,
 				A4BD192425F44EBB00FBD403 /* CollisionController.cpp in Sources */,
 				A4BD190F25F44EBB00FBD403 /* GhostedApp.cpp in Sources */,
 				EB9CDA3925D0EAB100EE1A09 /* main.cpp in Sources */,
+				A4687398260BF31900F0E184 /* Obstacle.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -626,19 +692,25 @@
 			buildActionMask = 2147483647;
 			files = (
 				A4BD191A25F44EBB00FBD403 /* InputController.cpp in Sources */,
+				A468739A260BF31900F0E184 /* BatterySlot.cpp in Sources */,
 				A4BD190B25F44EBB00FBD403 /* StartScene.cpp in Sources */,
 				EB7454AE1D74D891002FBAE6 /* main.cpp in Sources */,
+				A46873AE260BF3CF00F0E184 /* NetworkController.cpp in Sources */,
 				A4BD191125F44EBB00FBD403 /* GameEntity.cpp in Sources */,
-				A468B754260A752800F0E184 /* PlayerPal.cpp in Sources */,
+				A4687394260BF31900F0E184 /* NetworkData.cpp in Sources */,
 				A4BD192025F44EBB00FBD403 /* GameMap.cpp in Sources */,
 				A4BD191425F44EBB00FBD403 /* LoadingScene.cpp in Sources */,
-				A468B751260A752800F0E184 /* Trap.cpp in Sources */,
-				A468B74E260A752800F0E184 /* PlayerGhost.cpp in Sources */,
+				A4687381260BF2F500F0E184 /* PlayerGhost.cpp in Sources */,
 				A4BD191725F44EBB00FBD403 /* GameScene.cpp in Sources */,
 				A4BD191D25F44EBB00FBD403 /* GameRoom.cpp in Sources */,
+				A468739D260BF31900F0E184 /* Trap.cpp in Sources */,
+				A4687384260BF2F500F0E184 /* PlayerPal.cpp in Sources */,
+				A468737E260BF2F500F0E184 /* BatteryCollectible.cpp in Sources */,
+				A468737B260BF2F500F0E184 /* Player.cpp in Sources */,
 				A4BD192325F44EBB00FBD403 /* CollisionController.cpp in Sources */,
 				A4BD190E25F44EBB00FBD403 /* GhostedApp.cpp in Sources */,
 				EB7454AE1D74D891002FBAE6 /* main.cpp in Sources */,
+				A4687397260BF31900F0E184 /* Obstacle.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -647,19 +719,25 @@
 			buildActionMask = 2147483647;
 			files = (
 				A4BD191925F44EBB00FBD403 /* InputController.cpp in Sources */,
+				A4687399260BF31900F0E184 /* BatterySlot.cpp in Sources */,
 				A4BD190A25F44EBB00FBD403 /* StartScene.cpp in Sources */,
 				EB2BE9B61D74952A002FE78B /* main.cpp in Sources */,
+				A46873AD260BF3CF00F0E184 /* NetworkController.cpp in Sources */,
 				A4BD191025F44EBB00FBD403 /* GameEntity.cpp in Sources */,
-				A468B753260A752800F0E184 /* PlayerPal.cpp in Sources */,
+				A4687393260BF31900F0E184 /* NetworkData.cpp in Sources */,
 				A4BD191F25F44EBB00FBD403 /* GameMap.cpp in Sources */,
 				A4BD191325F44EBB00FBD403 /* LoadingScene.cpp in Sources */,
-				A468B750260A752800F0E184 /* Trap.cpp in Sources */,
-				A468B74D260A752800F0E184 /* PlayerGhost.cpp in Sources */,
+				A4687380260BF2F500F0E184 /* PlayerGhost.cpp in Sources */,
 				A4BD191625F44EBB00FBD403 /* GameScene.cpp in Sources */,
 				A4BD191C25F44EBB00FBD403 /* GameRoom.cpp in Sources */,
+				A468739C260BF31900F0E184 /* Trap.cpp in Sources */,
+				A4687383260BF2F500F0E184 /* PlayerPal.cpp in Sources */,
+				A468737D260BF2F500F0E184 /* BatteryCollectible.cpp in Sources */,
+				A468737A260BF2F500F0E184 /* Player.cpp in Sources */,
 				A4BD192225F44EBB00FBD403 /* CollisionController.cpp in Sources */,
 				A4BD190D25F44EBB00FBD403 /* GhostedApp.cpp in Sources */,
 				EB2BE9B61D74952A002FE78B /* main.cpp in Sources */,
+				A4687396260BF31900F0E184 /* Obstacle.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -831,8 +909,8 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "$(CUGL_INCLUDES)";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.4;
-				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
@@ -887,8 +965,8 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "$(CUGL_INCLUDES)";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.4;
-				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = macosx;
 				VALIDATE_WORKSPACE_SKIPPED_SDK_FRAMEWORKS = "OpenGL OpenGLES";
