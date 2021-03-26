@@ -39,8 +39,12 @@ private:
 	void advanceFrame();
 
 	void determineAction();
+    
+    void determineDirection();
 
-	float _turn;
+	Vec2 _turn;
+    
+    string _facing;
 
 public:
 	/** Returns the amount of batteries left */
@@ -52,6 +56,15 @@ public:
 	bool getSpooked() const {
 		return _spooked;
 	}
+    
+    /** Returns an int representing which direction the player is currently facing
+        *                 2
+        *        1                 3
+        *                 0
+     */
+    string getDirection() {
+        return _facing;
+    }
 
 	/** Sets the amount of batteries */
 	void setBatteries(int num) {
@@ -64,7 +77,7 @@ public:
 	}
 
 	/** Creates a Pal with the default values */
-	Pal() : Player(), speed(5) {};
+	Pal() : Player(), speed(5), _facing("front") {};
 
 	/** Releases all resources allocated with this Pal */
 	~Pal() { }
@@ -83,7 +96,7 @@ public:
 	};
 
 	/** Processes the animation and vision cone to process a turn */
-	void processTurn(float turn) { 
+	void processTurn(Vec2 turn) {
 		_turn = turn; 
 	};
 

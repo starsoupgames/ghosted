@@ -58,9 +58,6 @@
 		A4BD191C25F44EBB00FBD403 /* GameRoom.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4BD190225F44EB900FBD403 /* GameRoom.cpp */; };
 		A4BD191D25F44EBB00FBD403 /* GameRoom.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4BD190225F44EB900FBD403 /* GameRoom.cpp */; };
 		A4BD191E25F44EBB00FBD403 /* GameRoom.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4BD190225F44EB900FBD403 /* GameRoom.cpp */; };
-		A4BD191F25F44EBB00FBD403 /* GameMap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4BD190325F44EB900FBD403 /* GameMap.cpp */; };
-		A4BD192025F44EBB00FBD403 /* GameMap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4BD190325F44EB900FBD403 /* GameMap.cpp */; };
-		A4BD192125F44EBB00FBD403 /* GameMap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4BD190325F44EB900FBD403 /* GameMap.cpp */; };
 		A4BD192225F44EBB00FBD403 /* CollisionController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4BD190525F44EBA00FBD403 /* CollisionController.cpp */; };
 		A4BD192325F44EBB00FBD403 /* CollisionController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4BD190525F44EBA00FBD403 /* CollisionController.cpp */; };
 		A4BD192425F44EBB00FBD403 /* CollisionController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4BD190525F44EBA00FBD403 /* CollisionController.cpp */; };
@@ -160,7 +157,6 @@
 		A4687371260BF2F300F0E184 /* Player.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Player.h; sourceTree = "<group>"; };
 		A4687372260BF2F400F0E184 /* BatteryCollectible.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BatteryCollectible.h; sourceTree = "<group>"; };
 		A4687373260BF2F400F0E184 /* BatteryCollectible.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BatteryCollectible.cpp; sourceTree = "<group>"; };
-		A4687374260BF2F400F0E184 /* PlayerPal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayerPal.h; sourceTree = "<group>"; };
 		A4687376260BF2F400F0E184 /* PlayerGhost.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PlayerGhost.cpp; sourceTree = "<group>"; };
 		A4687377260BF2F400F0E184 /* PlayerPal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayerPal.h; sourceTree = "<group>"; };
 		A4687378260BF2F400F0E184 /* PlayerGhost.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayerGhost.h; sourceTree = "<group>"; };
@@ -188,7 +184,6 @@
 		A4BD190025F44EB900FBD403 /* InputController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InputController.h; sourceTree = "<group>"; };
 		A4BD190125F44EB900FBD403 /* GameEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameEntity.h; sourceTree = "<group>"; };
 		A4BD190225F44EB900FBD403 /* GameRoom.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GameRoom.cpp; sourceTree = "<group>"; };
-		A4BD190325F44EB900FBD403 /* GameMap.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GameMap.cpp; sourceTree = "<group>"; };
 		A4BD190425F44EBA00FBD403 /* GameScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameScene.h; sourceTree = "<group>"; };
 		A4BD190525F44EBA00FBD403 /* CollisionController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CollisionController.cpp; sourceTree = "<group>"; };
 		A4BD190625F44EBA00FBD403 /* GameRoom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameRoom.h; sourceTree = "<group>"; };
@@ -342,7 +337,6 @@
 				A4687372260BF2F400F0E184 /* BatteryCollectible.h */,
 				A4687370260BF2F300F0E184 /* Player.cpp */,
 				A4687371260BF2F300F0E184 /* Player.h */,
-				A4687374260BF2F400F0E184 /* PlayerPal.h */,
 				A4687375260BF2F400F0E184 /* Players */,
 			);
 			path = GameEntities;
@@ -470,7 +464,6 @@
 				A4BD18F425F44EB700FBD403 /* CollisionController.h */,
 				A4BD18FA25F44EB800FBD403 /* GameEntity.cpp */,
 				A4BD190125F44EB900FBD403 /* GameEntity.h */,
-				A4BD190325F44EB900FBD403 /* GameMap.cpp */,
 				A4BD190925F44EBB00FBD403 /* GameMap.h */,
 				A4BD190225F44EB900FBD403 /* GameRoom.cpp */,
 				A4BD190625F44EBA00FBD403 /* GameRoom.h */,
@@ -671,7 +664,6 @@
 				A46873AF260BF3CF00F0E184 /* NetworkController.cpp in Sources */,
 				A4BD191225F44EBB00FBD403 /* GameEntity.cpp in Sources */,
 				A4687395260BF31900F0E184 /* NetworkData.cpp in Sources */,
-				A4BD192125F44EBB00FBD403 /* GameMap.cpp in Sources */,
 				A4BD191525F44EBB00FBD403 /* LoadingScene.cpp in Sources */,
 				A4687382260BF2F500F0E184 /* PlayerGhost.cpp in Sources */,
 				A4BD191825F44EBB00FBD403 /* GameScene.cpp in Sources */,
@@ -698,7 +690,6 @@
 				A46873AE260BF3CF00F0E184 /* NetworkController.cpp in Sources */,
 				A4BD191125F44EBB00FBD403 /* GameEntity.cpp in Sources */,
 				A4687394260BF31900F0E184 /* NetworkData.cpp in Sources */,
-				A4BD192025F44EBB00FBD403 /* GameMap.cpp in Sources */,
 				A4BD191425F44EBB00FBD403 /* LoadingScene.cpp in Sources */,
 				A4687381260BF2F500F0E184 /* PlayerGhost.cpp in Sources */,
 				A4BD191725F44EBB00FBD403 /* GameScene.cpp in Sources */,
@@ -725,7 +716,6 @@
 				A46873AD260BF3CF00F0E184 /* NetworkController.cpp in Sources */,
 				A4BD191025F44EBB00FBD403 /* GameEntity.cpp in Sources */,
 				A4687393260BF31900F0E184 /* NetworkData.cpp in Sources */,
-				A4BD191F25F44EBB00FBD403 /* GameMap.cpp in Sources */,
 				A4BD191325F44EBB00FBD403 /* LoadingScene.cpp in Sources */,
 				A4687380260BF2F500F0E184 /* PlayerGhost.cpp in Sources */,
 				A4BD191625F44EBB00FBD403 /* GameScene.cpp in Sources */,

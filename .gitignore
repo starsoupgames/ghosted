@@ -9,3 +9,6 @@
 
 # XCode
 *.DS_Store
+
+# IDE
+*~

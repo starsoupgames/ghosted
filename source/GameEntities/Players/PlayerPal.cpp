@@ -52,28 +52,73 @@ void Pal::determineAction() {
     }
     else {
         _idle = false;
-        _front = false;
-        _back = false;
-        _left = false;
-        _right = false;
-        if (_move.y < 0) {
+        if (_turn.y < 0) {
             _front = true;
+            _back = false;
+            _left = false;
+            _right = false;
+            _facing = "front";
         }
-        else if (_move.y > 0) {
+        else if (_turn.y > 0) {
+            _front = false;
             _back = true;
+            _left = false;
+            _right = false;
+            _facing = "back";
         }
-        else if (_move.x < 0) {
+        else if (_turn.x < 0) {
+            _front = false;
+            _back = false;
             _left = true;
+            _right = false;
+            _facing = "left";
         }
-        else if (_move.x > 0) {
+        else if (_turn.x > 0) {
+            _front = false;
+            _back = false;
+            _left = false;
             _right = true;
+            _facing = "right";
         }
     }
 }
+
+void Pal::determineDirection() {
+    if (_turn.y < 0) {
+        _front = true;
+        _back = false;
+        _left = false;
+        _right = false;
+        _facing = "front";
+    }
+    else if (_turn.y > 0) {
+        _front = false;
+        _back = true;
+        _left = false;
+        _right = false;
+        _facing = "back";
+    }
+    else if (_turn.x < 0) {
+        _front = false;
+        _back = false;
+        _left = true;
+        _right = false;
+        _facing = "left";
+    }
+    else if (_turn.x > 0) {
+        _front = false;
+        _back = false;
+        _left = false;
+        _right = true;
+        _facing = "right";
+    }
+}
+
 void Pal::advanceFrame() {
     // Our animation depends on the current frame.
     unsigned int frame = _node->getFrame();
     if (_idle) {
+        determineDirection();
         if (_front) {
             frame = PAL_IMG_FRONT;
         }

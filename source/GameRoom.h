@@ -21,34 +21,44 @@ private:
 	Vec2 _origin;
 
 	// doors lead to connected rooms
-	set<GameRoom> _connectedRooms;
+	set<shared_ptr<GameRoom>> _connectedRooms;
 
 	bool assertValidRoom();
 
-	bool assertRoomIsAdjacent(GameRoom& room);
+	bool assertRoomIsAdjacent(const shared_ptr<GameRoom>& room);
 
 public:
-	GameRoom(Vec2& origin) : _origin(origin) { }
+	GameRoom() { }
 
 	~GameRoom() { }
 
-	bool init();
+	bool init(const Vec2& origin);
+
+	static shared_ptr<GameRoom> alloc() {
+		shared_ptr<GameRoom> result = make_shared<GameRoom>();
+		return (result->init(Vec2(0,0)) ? result : nullptr);
+	}
+
+	static shared_ptr<GameRoom> alloc(const Vec2& origin) {
+		shared_ptr<GameRoom> result = make_shared<GameRoom>();
+		return (result->init(origin) ? result : nullptr);
+	}
 
 	// set tile and wall textures of the room
 	bool setTextures();
 
 	Vec2 getOrigin() { return _origin; }
 
-	set<GameRoom>& getConnectedRooms() { return _connectedRooms; };
+	set<shared_ptr<GameRoom>> getConnectedRooms() { return _connectedRooms; };
 
-	bool setConnectedRoom(GameRoom& room);
+	bool setConnectedRoom(const shared_ptr<GameRoom>& room);
 
-	friend bool operator<(const GameRoom& l, const GameRoom& r) {
-		if (l._origin.x != r._origin.x) {
-			return l._origin.x < r._origin.x;
+	friend bool operator<(const shared_ptr<GameRoom>& l, const shared_ptr<GameRoom>& r) {
+		if (l->_origin.x != r->_origin.x) {
+			return l->_origin.x < r->_origin.x;
 		}
-		else if (l._origin.y != r._origin.y) {
-			return l._origin.y < r._origin.y;
+		else if (l->_origin.y != r->_origin.y) {
+			return l->_origin.y < r->_origin.y;
 		}
 		return false;
 	}

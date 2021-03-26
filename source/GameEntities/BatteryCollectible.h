@@ -8,7 +8,7 @@ collection phase
 */
 
 #include <cugl/cugl.h>
-#include "GameEntity.h"
+#include "../GameEntity.h"
 using namespace std;
 using namespace cugl;
 

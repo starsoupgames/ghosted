@@ -7,6 +7,9 @@ using namespace std;
 /** This is adjusted by screen aspect ratio to get the height */
 #define SCENE_WIDTH 1024
 
+#define CONE_WIDTH 75
+#define CONE_LENGTH 200
+
 /**
  * Initializes the controller contents, and starts the game
  *
@@ -23,6 +26,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
     // Initialize the scene to a locked width
     Size dimen = Application::get()->getDisplaySize();
     Rect bounds = Application::get()->getSafeBounds();
+    Application::get()->setClearColor(Color4f::BLACK);
     dimen *= SCENE_WIDTH / dimen.width;
     if (assets == nullptr) {
         return false;
@@ -60,11 +64,24 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
     //_palNode->setTexture(_assets->get<Texture>("pal_texture"));
     _palModel = Pal::alloc(_palNode->getPosition());
     _palModel->setNode(_palNode);
+    
+    // VISION CONE
+    std::vector<Vec2> coneShape;
+    Vec2 tl = Vec2(-CONE_WIDTH, CONE_LENGTH);
+    Vec2 tr = Vec2(CONE_WIDTH, CONE_LENGTH);
+    Vec2 bl = Vec2(-CONE_WIDTH/8, 0);
+    Vec2 br = Vec2(CONE_WIDTH/8, 0);
+    
+    coneShape.push_back(tl);
+    coneShape.push_back(tr);
+    coneShape.push_back(br);
+    coneShape.push_back(bl);
 
     _ghostNode = dynamic_pointer_cast<scene2::AnimationNode>(_assets->get<scene2::SceneNode>("game_player_ghost"));
     //_ghostedNode->setTexture(_assets->get<Texture>("ghost_texture"));
     _ghostModel = Ghost::alloc(_ghostNode->getPosition());
     _ghostModel->setNode(_ghostNode);
+    
 
     if (_host) {
         _players.push_back(_palModel);
@@ -75,7 +92,15 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
         _players.push_back(_palModel);
     }
     _networkData->setPlayers(_players);
-
+    
+    _visionNode = scene2::PolygonNode::alloc(coneShape);
+    _visionNode->setColor(Color4f(1, 1, 1, .2));
+    _visionNode->setAnchor(cugl::Vec2::ANCHOR_BOTTOM_CENTER);
+    
+    _root->addChild(_visionNode);
+    
+    updateVision(_players[0]);
+    
     return true;
 }
 
@@ -90,6 +115,7 @@ void GameScene::dispose() {
         _root = nullptr;
         _palNode = nullptr;
         _palModel = nullptr;
+        _visionNode = nullptr;
         _ghostNode = nullptr;
         _ghostModel = nullptr;
         _active = false;
@@ -112,7 +138,7 @@ void GameScene::update(float timestep) {
     _network.update(timestep);
 
     Vec2 move = _input.getMove();
-    int turning = _input.getTurn();
+    Vec2 turning = _input.getTurn();
 
     shared_ptr<Player> player = _players[0];
     player->move(move);
@@ -123,6 +149,7 @@ void GameScene::update(float timestep) {
 
     for (auto& p : _players) {
         p->update(timestep);
+        updateVision(player);
     }
 
     // Check win condition
@@ -134,4 +161,22 @@ void GameScene::update(float timestep) {
             // Pal wins
         }
     }
+}
+
+void GameScene::updateVision(const std::shared_ptr<Player>& pal) {
+    std::string dir = dynamic_pointer_cast<Pal>(pal)->getDirection();
+        
+    if (dir == "front") {
+        _visionNode->setAngle(M_PI);
+    } else if (dir == "back") {
+        _visionNode->setAngle(0);
+    } else if (dir == "right") {
+        _visionNode->setAngle(-M_PI_2);
+    } else {
+        _visionNode->setAngle(M_PI_2);
+    }
+
+    _visionNode->setPosition(pal->getLoc());
+//    CULog("PLAYER POSITION: %f", _palNode->getPosition());
+//    CULog("CONE POSITION: %f", _visionNode->getPosition());
 }

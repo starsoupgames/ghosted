@@ -32,6 +32,7 @@ protected:
     shared_ptr<scene2::SceneNode> _root;
     shared_ptr<scene2::AnimationNode> _palNode;
     shared_ptr<scene2::AnimationNode> _ghostNode;
+    shared_ptr<scene2::PolygonNode> _visionNode;
 
     // MODEL
     shared_ptr<NetworkData> _networkData;
@@ -91,7 +92,12 @@ public:
      *
      * @param timestep  The amount of time (in seconds) since the last frame
      */
-    void update(float timestep);
+    void update(float timestep) override;
+    
+    /**
+     * Sets the cone position based on player direction
+     */
+    void updateVision(const std::shared_ptr<Player>& player);
 
     uint8_t getMode() {
         return _mode;

@@ -31,6 +31,9 @@
     <Filter Include="Source Files\GameEntities\Players">
       <UniqueIdentifier>{52d776c6-2c91-4380-95ca-3d7aaac3e54f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Assets">
+      <UniqueIdentifier>{1cd2bc0c-5cf0-451b-925c-e37697e6f5bc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\source\GhostedApp.h">
@@ -165,5 +168,10 @@
     <ResourceCompile Include="Ghosted.rc">
       <Filter>Resource Files</Filter>
     </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\assets\json\assets.json">
+      <Filter>Assets</Filter>
+    </None>
   </ItemGroup>
 </Project>

@@ -18,7 +18,7 @@ private:
 	shared_ptr<Texture> _wallTexture;
 
 	// all the rooms in the map
-	vector<GameRoom> _rooms;
+	vector<shared_ptr<GameRoom>> _rooms;
 
 	bool assertValidMap();
 

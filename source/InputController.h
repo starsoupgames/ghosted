@@ -13,7 +13,10 @@ private:
     cugl::Vec2 _movement;
     
     /** Player turn input */
-    float _turning;
+    cugl::Vec2 _turning;
+    
+    /** Player tried to pick something up? */
+    bool _pickup;
     
     /** Whether the left arrow key is down */
     bool  _keyLeft;
@@ -27,6 +30,13 @@ private:
     bool _keyTurnLeft;
     /** Whether the D (right turn) key is down */
     bool _keyTurnRight;
+    /** Whether the A (left turn) key is down */
+    bool _keyTurnTop;
+    /** Whether the D (right turn) key is down */
+    bool _keyTurnBot;
+    
+    /** Whether the Space (pick up) key is down */
+    bool _keyPickUp;
     
 protected:
     // The screen is divided into four zones: Left, Bottom, Right and Main/
@@ -73,11 +83,15 @@ protected:
     TouchInstance _ltouch;
     /** The current touch location on the right side */
     TouchInstance _rtouch;
+    /** Timestamp for double tap*/
+    cugl::Timestamp _rtime;
     
     /** Whether the virtual joystick is active */
-    bool _joystick;
+    bool _ljoystick;
+    bool _rjoystick;
     /** The position of the virtual joystick */
-    cugl::Vec2 _joycenter;
+    cugl::Vec2 _ljoycenter;
+    cugl::Vec2 _rjoycenter;
     
     /**
      * Defines the zone boundaries, so we can quickly categorize touches.
@@ -111,7 +125,7 @@ protected:
      */
     cugl::Vec2 touch2Screen(const cugl::Vec2 pos) const;
 
-public:    
+public:
     /**
      * Returns the movement in X and Y directions
      *
@@ -126,7 +140,7 @@ public:
      *
      * @return the turning value for this controller (-1, 0, or 1)
      */
-    int getTurn() const {
+    cugl::Vec2 getTurn() const {
         return _turning;
     }
     
@@ -155,7 +169,7 @@ public:
      *
      * @param bounds screen bounds
      */
-    bool init(const cugl::Rect bounds); 
+    bool init(const cugl::Rect bounds);
 
 #pragma mark -
 #pragma mark Input Detection
@@ -184,21 +198,21 @@ public:
     void clear();
     
     /**
-     * Reads the movement input for a gesture on the left side of the screen.
+     * Reads the movement joystick input for the left side of the screen.
      *
-     *@param pos the current position of the joystick
+     *@param pos the current position of the movement joystick
      *
      */
-    void readMove(const cugl::Vec2 pos);
+    void readLeft(const cugl::Vec2 pos);
     
     /**
-     * Reads a turn input for this player on the right side of the screen.
+     * Reads a the turn/pickup input for this player on the right side of the screen.
      *
      * @param  start    the start position of the candidate swipe
      * @param  stop     the end position of the candidate swipe
      * @param  current  the current timestamp of the gesture
      */
-    void readTurn(const cugl::Vec2 start, const cugl::Vec2 stop, cugl::Timestamp current);
+    void readRight(const cugl::Vec2 start, const cugl::Vec2 stop, cugl::Timestamp current);
     
 #pragma mark -
 #pragma mark Touch and Mouse Callbacks

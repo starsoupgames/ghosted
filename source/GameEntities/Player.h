@@ -1,7 +1,7 @@
 #pragma once
 
 #include <cugl/cugl.h>
-#include "GameEntity.h"
+#include "../GameEntity.h"
 using namespace std;
 using namespace cugl;
 
@@ -57,7 +57,7 @@ public:
 	Player() : GameEntity() {};
 
 	/** Releases all resources allocated with this Player */
-	virtual ~Player() { dispose(); }
+	~Player() { dispose(); }
 
 	/** Releases all resources allocated with this Player */
 	void dispose();
@@ -69,7 +69,7 @@ public:
 
 	/** Moves the Player */
 	void move(Vec2 move) {
-		_move = move;
+		_move = move.normalize();
 	}
 
 	/** Get player type */

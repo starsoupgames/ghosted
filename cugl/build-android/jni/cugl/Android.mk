@@ -45,8 +45,8 @@ LOCAL_SRC_FILES := \
 	$(wildcard $(CUGL_PATH)/external/Box2D/Dynamics/*.cpp) \
 	$(wildcard $(CUGL_PATH)/external/Box2D/Dynamics/Contacts/*.cpp) \
 	$(wildcard $(CUGL_PATH)/external/Box2D/Dynamics/Joints/*.cpp) \
-	$(wildcard $(CUGL_PATH)/external/Box2D/Rope/*.cpp)) \
-	$(CUGL_PATH)/external/slikenet/Source/src/*.cpp)
+	$(wildcard $(CUGL_PATH)/external/Box2D/Rope/*.cpp) \
+	$(wildcard $(CUGL_PATH)/external/slikenet/Source/src/*.cpp))
 
 LOCAL_CFLAGS += -DGL_GLEXT_PROTOTYPES
 

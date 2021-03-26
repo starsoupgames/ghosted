@@ -30,16 +30,6 @@
         "type": "Anchored"
       },
       "children": {
-        "vision_cone": {
-          "type": "Image",
-          "data": {
-            "texture": "light_cone",
-            "scale": 1,
-            "layout": {
-              "priority": 1
-            }
-          }
-        },
         "player_pal": {
           "type": "Animation",
           "data": {

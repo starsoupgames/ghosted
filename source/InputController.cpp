@@ -13,6 +13,8 @@ using namespace cugl;
 #define JSTICK_OFFSET    80
 /** Necessary length to register a swipe gesture */
 #define SWIPE_LENGTH    50
+/** How fast a double click must be in milliseconds */
+#define DOUBLE_CLICK    400
 
 
 /** The portion of the screen used for the left zone */
@@ -26,14 +28,19 @@ using namespace cugl;
 InputController::InputController() :
 _active(false),
 _movement(Vec2(0.0f,0.0f)),
-_turning(0),
+_turning(Vec2(0.0f,0.0f)),
+_pickup(false),
 _keyLeft(false),
 _keyRight(false),
 _keyTop(false),
 _keyBot(false),
 _keyTurnLeft(false),
 _keyTurnRight(false),
-_joystick(false)
+_keyTurnTop(false),
+_keyTurnBot(false),
+_keyPickUp(false),
+_ljoystick(false),
+_rjoystick(false)
 {}
 
 /**
@@ -104,13 +111,17 @@ void InputController::update(float dt) {
     _keyRight = keys->keyDown(KeyCode::ARROW_RIGHT);
     _keyTop = keys->keyDown(KeyCode::ARROW_UP);
     _keyBot = keys->keyDown(KeyCode::ARROW_DOWN);
+    
     _keyTurnRight = keys->keyDown(KeyCode::D);
     _keyTurnLeft = keys->keyDown(KeyCode::A);
-
-    _movement = Vec2::ZERO;
-    _turning = 0;
+    _keyTurnTop = keys->keyDown(KeyCode::W);
+    _keyTurnBot = keys->keyDown(KeyCode::S);
 
 #endif
+    _movement = Vec2::ZERO;
+    _turning = Vec2::ZERO;
+    
+    // MOVEMENT
     if (_keyRight) {
         _movement.x += 1.0f;
     }
@@ -123,13 +134,26 @@ void InputController::update(float dt) {
     if (_keyBot) {
         _movement.y -= 1.0f;
     }
+    
+    // TURNING
     if (_keyTurnRight) {
-        _turning = 1;
+        _turning.x = 1.0f;
     }
     else if (_keyTurnLeft) {
-        _turning = -1;
+        _turning.x = -1.0f;
+    }
+    else if (_keyTurnTop) {
+        _turning.y = 1.0f;
+    }
+    else if (_keyTurnBot) {
+        _turning.y = -1.0f;
+    }
+    
+    // PICKUPS
+    if (_keyPickUp) {
+        _pickup = true;
     } else {
-        _turning = 0;
+        _pickup = false;
     }
 }
 
@@ -200,7 +224,7 @@ Vec2 InputController::touch2Screen(const Vec2 pos) const {
  *
  * @param  pos  the current joystick position
  */
-void InputController::readMove(const cugl::Vec2 pos) {
+void InputController::readLeft(const cugl::Vec2 pos) {
     Vec2 diff =  _ltouch.position-pos;
 
     // Reset the anchor if we drifted too far
@@ -210,37 +234,48 @@ void InputController::readMove(const cugl::Vec2 pos) {
         _ltouch.position = pos+diff;
     }
     _ltouch.position.y = pos.y;
-    _joycenter = this->touch2Screen(_ltouch.position);
-    _joycenter.y += JSTICK_OFFSET;
+    _ljoycenter = this->touch2Screen(_ltouch.position);
+    _ljoycenter.y += JSTICK_OFFSET;
     
-    if (std::fabsf(diff.x) > JSTICK_DEADZONE) {
-        _joystick = true;
-        if (diff.x > 0) {
-            _keyLeft = true;
+    int horizontal = 0;
+    
+    if (std::fabsf(diff.x) > std::fabsf(diff.y)) {
+        horizontal = 1;
+    }
+    
+    if (horizontal) {
+        if (std::fabsf(diff.x) > JSTICK_DEADZONE) {
+            _ljoystick = true;
+            if (diff.x > 0) {
+                _keyLeft = true;
+                _keyRight = false;
+            }
+            else if (diff.x < 0) {
+                _keyLeft = false;
+                _keyRight = true;
+            }
+        } else {
+            _keyLeft = false;
             _keyRight = false;
         }
-        else if (diff.x < 0) {
-            _keyLeft = false;
-            _keyRight = true;
-        }
     } else {
-        _joystick = false;
-        _keyLeft = false;
-        _keyRight = false;
-    }
-    if (std::fabsf(diff.y) > JSTICK_DEADZONE) {
-        if (diff.y > 0) {
-            _keyTop = true;
+        if (std::fabsf(diff.y) > JSTICK_DEADZONE/3) {
+            if (diff.y > 0) {
+                _keyTop = true;
+                _keyBot = false;
+            }
+            else if (diff.y < 0) {
+                _keyTop = false;
+                _keyBot = true;
+            }
+        } else {
+            _keyTop = false;
             _keyBot = false;
         }
-        else if (diff.y < 0) {
-            _keyTop = false;
-            _keyBot = true;
-        }
-    } else {
-        _joystick = false;
-        _keyTop = false;
-        _keyBot = false;
+    }
+    
+    if (!(_keyLeft && _keyRight && _keyTop && _keyBot)) {
+        _ljoystick = false;
     }
 }
 
@@ -253,17 +288,70 @@ void InputController::readMove(const cugl::Vec2 pos) {
  * @param  stop     the end position of the candidate swipe
  * @param  current  the current timestamp of the gesture
  */
-void InputController::readTurn(const Vec2 start, const Vec2 stop, Timestamp current) {
+void InputController::readRight(const Vec2 start, const Vec2 stop, Timestamp current) {
     // Look for swipes up that are "long enough"
-    float xdiff = (stop.x-start.x);
-    float thresh = SWIPE_LENGTH;
-    if (xdiff > thresh) {
-        _keyTurnRight = true;
-    } else if (xdiff < thresh * -1) {
-        _keyTurnLeft = true;
-    } else {
-        _keyTurnRight = false;
-        _keyTurnLeft = false;
+    Vec2 diff = _rtouch.position-stop;
+
+    // Reset the anchor if we drifted too far
+    if (diff.lengthSquared() > JSTICK_RADIUS*JSTICK_RADIUS) {
+        diff.normalize();
+        diff *= (JSTICK_RADIUS+JSTICK_DEADZONE)/2;
+        _rtouch.position = stop+diff;
+    }
+    _rtouch.position.y = stop.y;
+    _rjoycenter = this->touch2Screen(_rtouch.position);
+    _rjoycenter.y += JSTICK_OFFSET;
+    
+    int horizontal = 0;
+    
+    if (std::fabsf(diff.x) > std::fabsf(diff.y)) {
+        horizontal = 1;
+    }
+    
+    if (horizontal) {
+        if (std::fabsf(diff.x) > JSTICK_DEADZONE) {
+            _rjoystick = true;
+            if (diff.x < 0) {
+                _keyTurnLeft = false;
+                _keyTurnRight = true;
+                _keyTurnTop = false;
+                _keyTurnBot = false;
+            }
+            else if (diff.x > 0) {
+                _keyTurnLeft = true;
+                _keyTurnRight = false;
+                _keyTurnTop = false;
+                _keyTurnBot = false;
+            }
+        } else {
+            _keyTurnLeft = false;
+            _keyTurnRight = false;
+            _keyTurnTop = false;
+            _keyTurnBot = false;
+            _rjoystick = false;
+        }
+    } else  {
+        if (std::fabsf(diff.y) > JSTICK_DEADZONE) {
+            _rjoystick = true;
+            if (diff.y > 0) {
+                _keyTurnTop = true;
+                _keyTurnBot = false;
+                _keyTurnLeft = false;
+                _keyTurnRight = false;
+            }
+            else if (diff.y < 0) {
+                _keyTurnTop = false;
+                _keyTurnBot = true;
+                _keyTurnLeft = false;
+                _keyTurnRight = false;
+            }
+        } else {
+            _keyTurnLeft = false;
+            _keyTurnRight = false;
+            _keyTurnTop = false;
+            _keyTurnBot = false;
+            _rjoystick = false;
+        }
     }
 }
 
@@ -288,18 +376,23 @@ void InputController::touchBeganCB(const TouchEvent& event, bool focus) {
                 _ltouch.timestamp.mark();
                 _ltouch.touchids.insert(event.touch);
 
-                _joystick = true;
-                _joycenter = touch2Screen(event.position);
-                _joycenter.y += JSTICK_OFFSET;
+                _ljoystick = true;
+                _ljoycenter = touch2Screen(event.position);
+                _ljoycenter.y += JSTICK_OFFSET;
             }
             break;
         case Zone::RIGHT:
             // Only process if no touch in zone
             if (_rtouch.touchids.empty()) {
                 // Right is turning controls
+                _keyPickUp = (event.timestamp.ellapsedMillis(_rtime) <= DOUBLE_CLICK);
                 _rtouch.position = event.position;
                 _rtouch.timestamp.mark();
                 _rtouch.touchids.insert(event.touch);
+                
+                _rjoystick = true;
+                _rjoycenter = touch2Screen(event.position);
+                _rjoycenter.y += JSTICK_OFFSET;
             }
             break;
         default:
@@ -323,13 +416,18 @@ void InputController::touchEndedCB(const TouchEvent& event, bool focus) {
         _keyRight = false;
         _keyBot = false;
         _keyTop = false;
-        _joystick = false;
+        _ljoystick = false;
     }
     else if (_rtouch.touchids.find(event.touch) !=
         _rtouch.touchids.end()) {
+        _rtime = event.timestamp;
         _rtouch.touchids.clear();
         _keyTurnRight = false;
         _keyTurnLeft = false;
+        _keyTurnTop = false;
+        _keyTurnBot = false;
+        _keyPickUp = false;
+        _rjoystick = false;
     }
 }
 
@@ -344,9 +442,9 @@ void InputController::touchEndedCB(const TouchEvent& event, bool focus) {
 void InputController::touchesMovedCB(const TouchEvent& event, const Vec2& previous, bool focus) {
     Vec2 pos = event.position;
     if (_ltouch.touchids.find(event.touch) != _ltouch.touchids.end()) {
-        readMove(pos);
+        readLeft(pos);
     }
     if (_rtouch.touchids.find(event.touch) != _rtouch.touchids.end()) {
-        readTurn(previous, pos, _rtouch.timestamp);
+        readRight(previous, pos, _rtouch.timestamp);
     }
 }
