@@ -62,24 +62,13 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 
     _palNode = dynamic_pointer_cast<scene2::AnimationNode>(_assets->get<scene2::SceneNode>("game_player_pal"));
     //_palNode->setTexture(_assets->get<Texture>("pal_texture"));
-    _palModel = Pal::alloc(_palNode->getPosition());
+    _palModel = Pal::alloc(Vec2(-100, 0));
     _palModel->setNode(_palNode);
     
-    // VISION CONE
-    std::vector<Vec2> coneShape;
-    Vec2 tl = Vec2(-CONE_WIDTH, CONE_LENGTH);
-    Vec2 tr = Vec2(CONE_WIDTH, CONE_LENGTH);
-    Vec2 bl = Vec2(-CONE_WIDTH/8, 0);
-    Vec2 br = Vec2(CONE_WIDTH/8, 0);
-    
-    coneShape.push_back(tl);
-    coneShape.push_back(tr);
-    coneShape.push_back(br);
-    coneShape.push_back(bl);
 
     _ghostNode = dynamic_pointer_cast<scene2::AnimationNode>(_assets->get<scene2::SceneNode>("game_player_ghost"));
     //_ghostedNode->setTexture(_assets->get<Texture>("ghost_texture"));
-    _ghostModel = Ghost::alloc(_ghostNode->getPosition());
+    _ghostModel = Ghost::alloc(Vec2(100,0));
     _ghostModel->setNode(_ghostNode);
     
 
@@ -92,14 +81,30 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
         _players.push_back(_palModel);
     }
     _networkData->setPlayers(_players);
-    
-    _visionNode = scene2::PolygonNode::alloc(coneShape);
-    _visionNode->setColor(Color4f(1, 1, 1, .2));
-    _visionNode->setAnchor(cugl::Vec2::ANCHOR_BOTTOM_CENTER);
-    
-    _root->addChild(_visionNode);
-    
-    updateVision(_players[0]);
+
+    if (_players[0]->getType() == Player::Type::Pal) {
+        // VISION CONE
+        vector<Vec2> coneShape;
+        Vec2 tl(-CONE_WIDTH, CONE_LENGTH);
+        Vec2 tr(CONE_WIDTH, CONE_LENGTH);
+        Vec2 bl(-CONE_WIDTH / 8, 0);
+        Vec2 br(CONE_WIDTH / 8, 0);
+
+        coneShape.push_back(tl);
+        coneShape.push_back(tr);
+        coneShape.push_back(br);
+        coneShape.push_back(bl);
+
+        _visionNode = scene2::PolygonNode::alloc(coneShape);
+        _visionNode->setColor(Color4f(1, 1, 1, .2));
+        _visionNode->setAnchor(Vec2::ANCHOR_BOTTOM_CENTER);
+
+        _root->addChild(_visionNode);
+    }
+
+    for (auto& p : _players) {
+        p->getNode()->setAnchor(Vec2::ANCHOR_CENTER);
+    }
     
     return true;
 }
@@ -163,8 +168,10 @@ void GameScene::update(float timestep) {
     }
 }
 
-void GameScene::updateVision(const std::shared_ptr<Player>& pal) {
-    std::string dir = dynamic_pointer_cast<Pal>(pal)->getDirection();
+void GameScene::updateVision(const std::shared_ptr<Player>& player) {
+    if (player->getType() != Player::Type::Pal) return;
+
+    string dir = dynamic_pointer_cast<Pal>(player)->getDirection();
         
     if (dir == "front") {
         _visionNode->setAngle(M_PI);
@@ -176,7 +183,5 @@ void GameScene::updateVision(const std::shared_ptr<Player>& pal) {
         _visionNode->setAngle(M_PI_2);
     }
 
-    _visionNode->setPosition(pal->getLoc());
-//    CULog("PLAYER POSITION: %f", _palNode->getPosition());
-//    CULog("CONE POSITION: %f", _visionNode->getPosition());
+    _visionNode->setPosition(player->getLoc());
 }
