@@ -36,6 +36,9 @@ void Ghost::update(float timestep) {
         determineAction();
         advanceFrame();
         _node->setPosition(_loc);
+        CULog("ghost y %f", _loc.y);
+        _node->setPriority(-_loc.y);
+        CULog("ghost priority %f", _node->getPriority());
     }
 }
 

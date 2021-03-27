@@ -39,9 +39,6 @@
     <Filter Include="Header Files\util">
       <UniqueIdentifier>{6b01080a-199d-44ba-aebc-d39cfca059d0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\assets">
-      <UniqueIdentifier>{0b2faaba-ca88-4e31-86c0-d7e83248ab53}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\audio">
       <UniqueIdentifier>{4d335f28-d050-4e1a-b61a-b31d8c1bdcd3}</UniqueIdentifier>
     </Filter>
@@ -54,9 +51,6 @@
     <Filter Include="Source Files\io">
       <UniqueIdentifier>{8e28ba13-f745-473f-a510-769166c07b78}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\math">
-      <UniqueIdentifier>{a62b38ba-28f9-492a-a81c-027f7eff5d23}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\util">
       <UniqueIdentifier>{7c454f68-cc77-483c-98b8-5b63ca202bcd}</UniqueIdentifier>
     </Filter>
@@ -65,9 +59,6 @@
     </Filter>
     <Filter Include="Source Files\input\gestures">
       <UniqueIdentifier>{1a13cd1f-ebdb-4da6-8441-f77086999c12}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\math\polygon">
-      <UniqueIdentifier>{5645eb08-ab3d-4bb1-bdec-cacde703d9b6}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\external">
       <UniqueIdentifier>{43c0328b-d80f-43a8-90f8-bf8f67e57d9e}</UniqueIdentifier>
@@ -89,9 +80,6 @@
     </Filter>
     <Filter Include="Source Files\audio\codecs">
       <UniqueIdentifier>{7c1c3138-cca5-4d58-86fe-579b6d26b983}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\math\dsp">
-      <UniqueIdentifier>{fe025e73-b39c-437a-8ab6-9e9f87200c68}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\scene2">
       <UniqueIdentifier>{30d5b104-2690-4739-9bba-e4e2059904e1}</UniqueIdentifier>
@@ -152,6 +140,18 @@
     </Filter>
     <Filter Include="Source Files\external\poly2tri">
       <UniqueIdentifier>{777a4f99-2747-4176-a9c9-9c9fc52b0633}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\assets">
+      <UniqueIdentifier>{0b2faaba-ca88-4e31-86c0-d7e83248ab53}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\io\math">
+      <UniqueIdentifier>{a62b38ba-28f9-492a-a81c-027f7eff5d23}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\io\math\polygon">
+      <UniqueIdentifier>{5645eb08-ab3d-4bb1-bdec-cacde703d9b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\io\math\dsp">
+      <UniqueIdentifier>{fe025e73-b39c-437a-8ab6-9e9f87200c68}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -653,6 +653,9 @@
     <ClInclude Include="..\..\include\cugl\net\CUNetworkConnection.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\cugl\scene2\graph\CUOrderedNode.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\external\cJSON\cJSON.c">
@@ -1056,6 +1059,9 @@
     </ClCompile>
     <ClCompile Include="..\..\lib\net\CUNetworkConnection.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\scene2\graph\CUOrderedNode.cpp">
+      <Filter>Source Files\scene2\graph</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -47,7 +47,8 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 
     _assets = assets;
 
-    _root = _assets->get<scene2::SceneNode>("game");
+    _root = scene2::OrderedNode::allocWithOrder(scene2::OrderedNode::Order::ASCEND);
+    _root->addChild(_assets->get<scene2::SceneNode>("game"));
     _root->setContentSize(dimen);
     _root->doLayout();
     addChild(_root);
@@ -60,17 +61,19 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
         _network.connect(_roomID);
     }
 
-    _palNode = dynamic_pointer_cast<scene2::AnimationNode>(_assets->get<scene2::SceneNode>("game_player_pal"));
-    //_palNode->setTexture(_assets->get<Texture>("pal_texture"));
+
+    _palNode = scene2::AnimationNode::alloc(_assets->get<Texture>("pal_texture"), 4, 21);
+    _root->addChild(_palNode);
     _palModel = Pal::alloc(Vec2(-100, 0));
     _palModel->setNode(_palNode);
-    
+    _palNode->setPriority(_palModel->getLoc().y);
 
-    _ghostNode = dynamic_pointer_cast<scene2::AnimationNode>(_assets->get<scene2::SceneNode>("game_player_ghost"));
-    //_ghostedNode->setTexture(_assets->get<Texture>("ghost_texture"));
-    _ghostModel = Ghost::alloc(Vec2(100,0));
+    _ghostNode = scene2::AnimationNode::alloc(_assets->get<Texture>("ghost_texture"), 4, 21);
+    _root->addChild(_ghostNode);
+    _ghostModel = Ghost::alloc(Vec2(100, 0));
     _ghostModel->setNode(_ghostNode);
-    
+    _ghostNode->setPriority(_ghostModel->getLoc().y);
+
 
     if (_host) {
         _players.push_back(_palModel);
@@ -156,6 +159,8 @@ void GameScene::update(float timestep) {
         p->update(timestep);
         updateVision(player);
     }
+    //scene2::FloatLayout::prioritize();
+    
 
     // Check win condition
     if (_host) {

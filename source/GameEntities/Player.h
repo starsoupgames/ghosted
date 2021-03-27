@@ -68,9 +68,8 @@ public:
 	bool init() { return init(Vec2::ZERO); }
 
 	/** Moves the Player */
-	void move(Vec2 move) {
-		_move = move.normalize();
-	}
+	void move(Vec2 move);
+
 
 	/** Get player type */
 	virtual uint8_t getType() {

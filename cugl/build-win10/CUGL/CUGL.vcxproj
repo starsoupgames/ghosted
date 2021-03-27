@@ -160,6 +160,7 @@
     <ClInclude Include="..\..\include\cugl\scene2\CUScene2Texture.h" />
     <ClInclude Include="..\..\include\cugl\scene2\cu_scene2.h" />
     <ClInclude Include="..\..\include\cugl\scene2\graph\CUAnimationNode.h" />
+    <ClInclude Include="..\..\include\cugl\scene2\graph\CUOrderedNode.h" />
     <ClInclude Include="..\..\include\cugl\scene2\graph\CUPathNode.h" />
     <ClInclude Include="..\..\include\cugl\scene2\graph\CUPolygonNode.h" />
     <ClInclude Include="..\..\include\cugl\scene2\graph\CUSceneNode.h" />
@@ -310,6 +311,7 @@
     <ClCompile Include="..\..\lib\scene2\CUScene2.cpp" />
     <ClCompile Include="..\..\lib\scene2\CUScene2Texture.cpp" />
     <ClCompile Include="..\..\lib\scene2\graph\CUAnimationNode.cpp" />
+    <ClCompile Include="..\..\lib\scene2\graph\CUOrderedNode.cpp" />
     <ClCompile Include="..\..\lib\scene2\graph\CUPathNode.cpp" />
     <ClCompile Include="..\..\lib\scene2\graph\CUPolygonNode.cpp" />
     <ClCompile Include="..\..\lib\scene2\graph\CUSceneNode.cpp" />

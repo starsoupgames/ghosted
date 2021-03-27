@@ -28,6 +28,8 @@
       "type": "Node",
       "format": {
         "type": "Anchored"
+<<<<<<< HEAD
+=======
       },
       "children": {
         "player_pal": {
@@ -54,6 +56,7 @@
             }
           }
         }
+>>>>>>> 20bc56843f00fa0bd323c7d5e5ad067cd9d44bb0
       }
     },
     "textfield": {
