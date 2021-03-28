@@ -16,13 +16,8 @@ protected:
 	/** Whether we are idle */
 	bool _idle;
 
-	/** Direction currently in */
-	bool _left;
-	bool _right;
-	bool _front;
-	bool _back;
-
-	float _turn;
+    /** Current player direction */
+	Vec2 _direction;
 
 	/** Current Player movement */
 	Vec2 _move;
@@ -33,25 +28,19 @@ public:
 	const shared_ptr <scene2::AnimationNode> getNode() const {
 		return _node;
 	}
-
-	/** Returns the current direction of the Player
-	 *
-	 * @return the current direction of the Player
-	 */
-	string getDirection() {
-		if (_left) {
-			return "left";
-		}
-		else if (_right) {
-			return "right";
-		}
-		else if (_front) {
-			return "front";
-		}
-		else {
-			return "back";
-		}
-	}
+    
+    /** Returns the current direction VECTOR of the Player
+     *
+     * @return the current direction vector for the Player
+     */
+    Vec2 getDir() {
+        return _direction;
+    };
+    
+    /** Sets the Player direction */
+    void setDir(Vec2 dir) {
+        _direction = dir.normalize();
+    };
 
 	/** Creates a Player with the default values */
 	Player() : GameEntity() {};
@@ -70,8 +59,7 @@ public:
 	/** Moves the Player */
 	void move(Vec2 move) {
 		_move = move.normalize();
-	};
-
+    }
 
 	/** Get player type */
 	virtual uint8_t getType() {

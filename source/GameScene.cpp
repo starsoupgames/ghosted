@@ -98,25 +98,24 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
         _players.push_back(_palModel);
     }
     _networkData->setPlayers(_players);
+    
+    vector<Vec2> coneShape;
+    Vec2 tl(-CONE_WIDTH, CONE_LENGTH);
+    Vec2 tr(CONE_WIDTH, CONE_LENGTH);
+    Vec2 bl(-CONE_WIDTH / 8, 0);
+    Vec2 br(CONE_WIDTH / 8, 0);
 
-    // if (_players[0]->getType() == Player::Type::Pal) {
-        // VISION CONE
-        vector<Vec2> coneShape;
-        Vec2 tl(-CONE_WIDTH, CONE_LENGTH);
-        Vec2 tr(CONE_WIDTH, CONE_LENGTH);
-        Vec2 bl(-CONE_WIDTH / 8, 0);
-        Vec2 br(CONE_WIDTH / 8, 0);
+    coneShape.push_back(br);
+    coneShape.push_back(bl);
+    coneShape.push_back(tl);
+    coneShape.push_back(tr);
 
-        coneShape.push_back(tl);
-        coneShape.push_back(tr);
-        coneShape.push_back(br);
-        coneShape.push_back(bl);
+    _visionNode = scene2::PolygonNode::alloc(coneShape);
+    _visionNode->setColor(Color4f(1, 1, 1, .2));
+    _visionNode->setAnchor(Vec2::ANCHOR_BOTTOM_CENTER);
+//    _visionNode->setAngle(M_PI);
 
-        _visionNode = scene2::PolygonNode::alloc(coneShape);
-        _visionNode->setColor(Color4f(1, 1, 1, .2));
-        _visionNode->setAnchor(Vec2::ANCHOR_BOTTOM_CENTER);
-
-        _root->addChild(_visionNode);
+    _root->addChild(_visionNode);
     // }
 
     for (auto& p : _players) {
@@ -160,18 +159,21 @@ void GameScene::update(float timestep) {
     _network.update(timestep);
 
     Vec2 move = _input.getMove();
-    Vec2 turning = _input.getTurn();
+    Vec2 direction = _input.getDirection();
 
     shared_ptr<Player> player = _players[0];
     if (player->getType() == Player::Type::Pal) {
         if (!_palModel->getSpooked()) {
             player->move(move);
+            if (direction != Vec2::ZERO) {
+                player->setDir(direction);
+            }
         }
-        dynamic_pointer_cast<Pal>(player)->processTurn(turning);
     }
     else {
         player->move(move);
     }
+
     _root->setPosition(center - player->getLoc());
 
     for (auto& p : _players) {
@@ -240,22 +242,40 @@ void GameScene::update(float timestep) {
     else if (_countdown == 0) {
         reset();
     }
+    // Ghost case
+    else {
+        if (_palModel->getSpooked() && _complete == false) {
+            // Player wins
+            _complete = true;
+            _winNode->setVisible(true);
+            _countdown = 120;
+        }
+        else if (_palModel->getBatteries() == 3 && _complete == false) {
+            // Player loses
+            _complete = true;
+            _loseNode->setVisible(true);
+            _countdown = 120;
+        }
+    }
+
+    // Reset the game if a win condition is reached
+    if (_countdown > 0) {
+        _countdown--;
+    }
+    else if (_countdown == 0) {
+        reset();
+    }
 }
 
 void GameScene::updateVision(const std::shared_ptr<Player>& player) {
     if (player->getType() != Player::Type::Pal) return;
+    
+    Vec2 dir = player->getDir();
+    // convert degrees to radians
+    float angle = atan2(dir.y, dir.x);
+    angle = fmod(angle - M_PI_2, 2*M_PI);
+    if (angle < 0) angle += 2 * M_PI;
 
-    string dir = dynamic_pointer_cast<Pal>(player)->getDirection();
-        
-    if (dir == "front") {
-        _visionNode->setAngle(M_PI);
-    } else if (dir == "back") {
-        _visionNode->setAngle(0);
-    } else if (dir == "right") {
-        _visionNode->setAngle(-M_PI_2);
-    } else {
-        _visionNode->setAngle(M_PI_2);
-    }
-
+    _visionNode->setAngle(angle);
     _visionNode->setPosition(player->getLoc());
 }

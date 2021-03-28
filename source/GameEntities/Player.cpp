@@ -13,7 +13,7 @@ bool Player::init(const Vec2& pos) {
 }
 
 /**
- * Disposes all resources and assets of this Ghost
+ * Disposes all resources and assets of this Player
  */
 void Player::dispose() {
     _node = nullptr;
@@ -31,10 +31,6 @@ void Player::setNode(const std::shared_ptr<scene2::AnimationNode>& value) {
     _node = GameEntity::getSprite();
     if (_node != nullptr) {
         _idle = true;
-        _front = true;
-        _back = false;
-        _left = false;
-        _right = false;
     }
 }
 
@@ -48,7 +44,6 @@ void Player::update(float timestep) {
     GameEntity::update(timestep);
 }
 
-
 /**
  * Resets the pal back to its original settings
  */
@@ -57,9 +52,7 @@ void Player::reset() {
 
     if (_node != nullptr) {
         _idle = true;
-        _front = true;
-        _back = false;
-        _left = false;
-        _right = false;
     }
 }
+
+

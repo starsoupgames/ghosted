@@ -30,22 +30,6 @@ private:
 	/** Whether we are idle */
 	bool _idle;
 
-	/** Direction currently in */
-	bool _left;
-	bool _right;
-	bool _front;
-	bool _back;
-
-	void advanceFrame();
-
-	void determineAction();
-    
-    void determineDirection();
-
-	Vec2 _turn;
-    
-    string _facing;
-
 public:
 	/** Returns the amount of batteries left */
 	int getBatteries() const {
@@ -57,14 +41,10 @@ public:
 		return _spooked;
 	}
     
-    /** Returns an int representing which direction the player is currently facing
-        *                 2
-        *        1                 3
-        *                 0
-     */
-    string getDirection() {
-        return _facing;
-    }
+//    /** Returns a Vec2 representing which direction the player is currently facing */
+//    Vec2 getDirection() {
+//        return _direction;
+//    }
 
 	/** Sets the amount of batteries */
 	void setBatteries(int num) {
@@ -77,10 +57,10 @@ public:
 	}
 
 	/** Creates a Pal with the default values */
-	Pal() : Player(), speed(5), _facing("front"), _spooked(false) {};
+	Pal() : Player(), speed(5), _spooked(false) {};
 
 	/** Releases all resources allocated with this Pal */
-	~Pal() { }
+    ~Pal() { }
 
 	/**
 	* @return a newly allocated Pal at the origin.
@@ -96,9 +76,29 @@ public:
 	};
 
 	/** Processes the animation and vision cone to process a turn */
-	void processTurn(Vec2 turn) {
-		_turn = turn; 
-	};
+	void processDirection();
+    
+    /** Returns the current direction ENUM of the Player
+     *
+     * @return the current direction of the Player
+     */
+    uint8_t isDirection() {
+        Direction dir = Direction::Bottom;
+        float minDist = _direction.distance(Vec2(0, -1));
+        
+        if (_direction.distance(Vec2(0, 1)) < minDist) {
+            dir = Direction::Top;
+            minDist = _direction.distance(Vec2(0, 1));
+        }
+        if (_direction.distance(Vec2(1, 0)) < minDist) {
+            dir = Direction::Right;
+            minDist = _direction.distance(Vec2(1, 0));
+        }
+        if (_direction.distance(Vec2(-1, 0)) < minDist) {
+            dir = Direction::Left;
+        }
+        return dir;
+    }
 
 	/** Places a battery in the nearby slot */
 	void placeBattery();
@@ -136,5 +136,13 @@ public:
 	 * Resets the pal back to its original settings
 	 */
 	void reset();
+    
+    enum Direction {
+        Keep = 0,
+        Top = 1,
+        Bottom = 2,
+        Right = 3,
+        Left = 4
+    };
 
 };

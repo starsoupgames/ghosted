@@ -12,11 +12,11 @@ using namespace std;
 *  @param Pal         The Pal in the collision
 */
 bool CollisionController::checkSpooked(const shared_ptr<Ghost>& ghost, const shared_ptr<Pal>& pal) {
-	string dir = pal->getDirection();
-	return (dir == "right" && (pal->getLoc().x > ghost->getLoc().x) && (!ghost->getTagged())) ||
-		(dir == "left" && (pal->getLoc().x < ghost->getLoc().x) && (!ghost->getTagged())) ||
-		(dir == "front" && (pal->getLoc().y < ghost->getLoc().y) && (!ghost->getTagged())) ||
-		(dir == "back" && (pal->getLoc().y < ghost->getLoc().y) && (!ghost->getTagged()));
+	int dir = pal->isDirection();
+	return (dir == Pal::Direction::Right && (pal->getLoc().x > ghost->getLoc().x) && (!ghost->getTagged())) ||
+		(dir == Pal::Direction::Left && (pal->getLoc().x < ghost->getLoc().x) && (!ghost->getTagged())) ||
+		(dir == Pal::Direction::Bottom && (pal->getLoc().y < ghost->getLoc().y) && (!ghost->getTagged())) ||
+		(dir == Pal::Direction::Top && (pal->getLoc().y < ghost->getLoc().y) && (!ghost->getTagged()));
 }
 
 /**

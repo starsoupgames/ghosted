@@ -32,10 +32,13 @@ protected:
     shared_ptr<scene2::OrderedNode> _root;
     shared_ptr<scene2::AnimationNode> _palNode;
     shared_ptr<scene2::AnimationNode> _ghostNode;
-    shared_ptr<scene2::PolygonNode> _visionNode;
+    
 
     std::shared_ptr<cugl::scene2::Label> _winNode;
     std::shared_ptr<cugl::scene2::Label> _loseNode;
+    
+    /** The polygon node representing the vision cone */
+    shared_ptr<scene2::PolygonNode> _visionNode;
 
     // MODEL
     shared_ptr<NetworkData> _networkData;

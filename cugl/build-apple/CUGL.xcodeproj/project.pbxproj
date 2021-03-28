@@ -346,6 +346,9 @@
 		A4687210260BF05E00F0E184 /* RakMemoryOverride.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A46870B6260BF05B00F0E184 /* RakMemoryOverride.cpp */; };
 		A4687211260BF05E00F0E184 /* RakMemoryOverride.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A46870B6260BF05B00F0E184 /* RakMemoryOverride.cpp */; };
 		A4687212260BF05E00F0E184 /* RakMemoryOverride.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A46870B6260BF05B00F0E184 /* RakMemoryOverride.cpp */; };
+		A48F366A2610143500E71793 /* CUOrderedNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A48F36672610143400E71793 /* CUOrderedNode.cpp */; };
+		A48F366B2610143500E71793 /* CUOrderedNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A48F36672610143400E71793 /* CUOrderedNode.cpp */; };
+		A48F366C2610143600E71793 /* CUOrderedNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A48F36672610143400E71793 /* CUOrderedNode.cpp */; };
 		EB035D8D20C0D34D0001EAE3 /* CUFIRFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EB035D8C20C0D34D0001EAE3 /* CUFIRFilter.cpp */; };
 		EB035D8E20C0D34D0001EAE3 /* CUFIRFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EB035D8C20C0D34D0001EAE3 /* CUFIRFilter.cpp */; };
 		EB035D9020C0D3B20001EAE3 /* CUOneZeroFIR.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EB035D8F20C0D3B20001EAE3 /* CUOneZeroFIR.cpp */; };
@@ -1068,6 +1071,8 @@
 		A468735E260BF11300F0E184 /* string.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = string.h; sourceTree = "<group>"; };
 		A468735F260BF11300F0E184 /* TableSerializer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TableSerializer.h; sourceTree = "<group>"; };
 		A4687360260BF11300F0E184 /* CheckSum.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CheckSum.h; sourceTree = "<group>"; };
+		A48F36672610143400E71793 /* CUOrderedNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CUOrderedNode.cpp; sourceTree = "<group>"; };
+		A48F36702610144500E71793 /* CUOrderedNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CUOrderedNode.h; sourceTree = "<group>"; };
 		EB035D7A20C0D0F80001EAE3 /* CUFIRFilter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CUFIRFilter.h; sourceTree = "<group>"; };
 		EB035D8920C0D1590001EAE3 /* CUOneZeroFIR.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CUOneZeroFIR.h; sourceTree = "<group>"; };
 		EB035D8C20C0D34D0001EAE3 /* CUFIRFilter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CUFIRFilter.cpp; sourceTree = "<group>"; };
@@ -1851,6 +1856,7 @@
 		EB45FD9525B3978600974097 /* graph */ = {
 			isa = PBXGroup;
 			children = (
+				A48F36702610144500E71793 /* CUOrderedNode.h */,
 				EB45FD9F25B398A000974097 /* CUSceneNode.h */,
 				EB45FDA125B398A000974097 /* CUTexturedNode.h */,
 				EB45FD9E25B398A000974097 /* CUPolygonNode.h */,
@@ -1864,6 +1870,7 @@
 		EB45FDB225B3ADD100974097 /* graph */ = {
 			isa = PBXGroup;
 			children = (
+				A48F36672610143400E71793 /* CUOrderedNode.cpp */,
 				EB45FDB325B3ADE600974097 /* CUSceneNode.cpp */,
 				EB45FDB825B3ADE600974097 /* CUTexturedNode.cpp */,
 				EB45FDB625B3ADE600974097 /* CUPolygonNode.cpp */,
@@ -2836,6 +2843,7 @@
 				EB22BEDE25D0E643002ACE41 /* CUJsonLoader.cpp in Sources */,
 				A468717C260BF05D00F0E184 /* ConsoleServer.cpp in Sources */,
 				EB22BF0525D0E660002ACE41 /* CUTwoZeroFIR.cpp in Sources */,
+				A48F366C2610143600E71793 /* CUOrderedNode.cpp in Sources */,
 				EB22BF0C25D0E666002ACE41 /* CUPolySplineFactory.cpp in Sources */,
 				A46871E2260BF05E00F0E184 /* Itoa.cpp in Sources */,
 				A46871A6260BF05D00F0E184 /* VariableListDeltaTracker.cpp in Sources */,
@@ -3089,6 +3097,7 @@
 				EB035D9120C0D3B20001EAE3 /* CUOneZeroFIR.cpp in Sources */,
 				A468717B260BF05D00F0E184 /* ConsoleServer.cpp in Sources */,
 				EBE91E291DCFE7D300F80D62 /* CUSimpleObstacle.cpp in Sources */,
+				A48F366B2610143500E71793 /* CUOrderedNode.cpp in Sources */,
 				EBDD164B25C35BEF00154533 /* CUFiletools.cpp in Sources */,
 				A46871E1260BF05E00F0E184 /* Itoa.cpp in Sources */,
 				A46871A5260BF05D00F0E184 /* VariableListDeltaTracker.cpp in Sources */,
@@ -3342,6 +3351,7 @@
 				EBBF182E1D7486EA008E2001 /* CUVec3.cpp in Sources */,
 				A468717A260BF05D00F0E184 /* ConsoleServer.cpp in Sources */,
 				EBDB28D420CE740C00ADC9AB /* CUBiquadIIR.cpp in Sources */,
+				A48F366A2610143500E71793 /* CUOrderedNode.cpp in Sources */,
 				EBBF182F1D7486EA008E2001 /* CUVec4.cpp in Sources */,
 				A46871E0260BF05E00F0E184 /* Itoa.cpp in Sources */,
 				A46871A4260BF05D00F0E184 /* VariableListDeltaTracker.cpp in Sources */,

@@ -1,6 +1,7 @@
 #ifndef __INPUT_CONTROLLER_H__
 #define __INPUT_CONTROLLER_H__
 #include <cugl/cugl.h>
+#include <cmath>
 
 class InputController {
 private:
@@ -13,28 +14,12 @@ private:
     cugl::Vec2 _movement;
     
     /** Player turn input */
-    cugl::Vec2 _turning;
+    cugl::Vec2 _direction;
+    
+    float _turnAngle;
     
     /** Player tried to pick something up? */
     bool _pickup;
-    
-    /** Whether the left arrow key is down */
-    bool  _keyLeft;
-    /** Whether the right arrow key is down */
-    bool  _keyRight;
-    /** Whether the up arrow key is down */
-    bool  _keyTop;
-    /** Whether the down arrow key is down */
-    bool  _keyBot;
-    /** Whether the A (left turn) key is down */
-    bool _keyTurnLeft;
-    /** Whether the D (right turn) key is down */
-    bool _keyTurnRight;
-    /** Whether the A (left turn) key is down */
-    bool _keyTurnTop;
-    /** Whether the D (right turn) key is down */
-    bool _keyTurnBot;
-    
     /** Whether the Space (pick up) key is down */
     bool _keyPickUp;
     
@@ -127,8 +112,6 @@ protected:
 
 public:
     /**
-     * Returns the movement in X and Y directions
-     *
      * @return the movement vector for this controller
      */
     cugl::Vec2 getMove() const {
@@ -136,12 +119,19 @@ public:
     }
     
     /**
-     * Returns the turning direction
-     *
-     * @return the turning value for this controller (-1, 0, or 1)
+     * @return the direction vector for this controller
      */
-    cugl::Vec2 getTurn() const {
-        return _turning;
+    cugl::Vec2 getDirection() const {
+        return _direction;
+    }
+    
+    /**
+     * Returns the turning angle
+     *
+     * @return the turning angle for this controller
+     */
+    float getTurnAngle() {
+        return _turnAngle;
     }
     
     /**
@@ -213,6 +203,15 @@ public:
      * @param  current  the current timestamp of the gesture
      */
     void readRight(const cugl::Vec2 start, const cugl::Vec2 stop, cugl::Timestamp current);
+    
+    /**
+     * Reads a the turn/pickup input for this player on the right side of the screen.
+     *
+     * @param  start    the start position of the candidate swipe
+     * @param  stop     the end position of the candidate swipe
+     * @param  current  the current timestamp of the gesture
+     */
+    void readJoystick(const cugl::Vec2 start, const cugl::Vec2 stop, cugl::Timestamp current);
     
 #pragma mark -
 #pragma mark Touch and Mouse Callbacks
