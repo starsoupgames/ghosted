@@ -28,35 +28,6 @@
       "type": "Node",
       "format": {
         "type": "Anchored"
-<<<<<<< HEAD
-=======
-      },
-      "children": {
-        "player_pal": {
-          "type": "Animation",
-          "data": {
-            "texture": "pal_texture",
-            "span": 84,
-            "cols": 21,
-            "frame": 21,
-            "layout": {
-              "priority": 10
-            }
-          }
-        },
-        "player_ghost": {
-          "type": "Animation",
-          "data": {
-            "texture": "ghost_texture",
-            "span": 84,
-            "cols": 21,
-            "frame": 21,
-            "layout": {
-              "priority": 10
-            }
-          }
-        }
->>>>>>> 20bc56843f00fa0bd323c7d5e5ad067cd9d44bb0
       }
     },
     "textfield": {

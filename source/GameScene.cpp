@@ -159,7 +159,6 @@ void GameScene::update(float timestep) {
         p->update(timestep);
         updateVision(player);
     }
-    //scene2::FloatLayout::prioritize();
     
 
     // Check win condition

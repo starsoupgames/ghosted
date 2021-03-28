@@ -30,15 +30,12 @@ void Ghost::update(float timestep) {
 
     // Move the ghost
     _loc += _move * speed;
-    // CULog("x: %f, y : %f", _loc.x, _loc.y);
 
     if (_node != nullptr) {
         determineAction();
         advanceFrame();
         _node->setPosition(_loc);
-        CULog("ghost y %f", _loc.y);
         _node->setPriority(-_loc.y);
-        CULog("ghost priority %f", _node->getPriority());
     }
 }
 

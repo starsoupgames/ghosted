@@ -48,10 +48,6 @@ void Player::update(float timestep) {
     GameEntity::update(timestep);
 }
 
-void Player::move(Vec2 move) {
-    _move = move;
-    _loc = _loc + move;
-}
 
 /**
  * Resets the pal back to its original settings
