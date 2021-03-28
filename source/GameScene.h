@@ -34,6 +34,9 @@ protected:
     shared_ptr<scene2::AnimationNode> _ghostNode;
     shared_ptr<scene2::PolygonNode> _visionNode;
 
+    std::shared_ptr<cugl::scene2::Label> _winNode;
+    std::shared_ptr<cugl::scene2::Label> _loseNode;
+
     // MODEL
     shared_ptr<NetworkData> _networkData;
     vector<shared_ptr<Player>> _players;
@@ -44,7 +47,9 @@ protected:
     string _roomID;
     bool _host;
 
-    uint8_t _mode;
+    bool _complete;
+    int _countdown;
+    unsigned _mode;
 
 public:
 #pragma mark -

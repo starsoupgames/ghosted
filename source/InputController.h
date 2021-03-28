@@ -152,7 +152,7 @@ public:
     InputController();
 
     /**
-     * Disposses this input controller, releasing all resources.
+     * Disposes this input controller, releasing all resources.
      */
     ~InputController() { dispose(); }
     

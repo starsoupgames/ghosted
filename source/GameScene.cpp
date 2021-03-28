@@ -1,5 +1,4 @@
 #include "GameScene.h"
-#include "CollisionController.h"
 
 using namespace cugl;
 using namespace std;
@@ -44,6 +43,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
     // Init controllers
     _input.init(bounds);
     _network.init(_networkData);
+    _collision.init();
 
     _assets = assets;
 
@@ -52,6 +52,20 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
     _root->setContentSize(dimen);
     _root->doLayout();
     addChild(_root);
+
+    // Initialize the countdown
+    _countdown = 0;
+
+    // Initialize ending messages
+    _winNode = scene2::Label::alloc("You win!", _assets->get<Font>("felt32"));
+    _winNode->setAnchor(Vec2::ANCHOR_CENTER);
+    _winNode->setPosition(dimen.width / 2.0f, dimen.height / 2.0f);
+    _winNode->setForeground(Color4::YELLOW);
+
+    _loseNode = scene2::Label::alloc("You lose!", _assets->get<Font>("felt32"));
+    _loseNode->setAnchor(Vec2::ANCHOR_CENTER);
+    _loseNode->setPosition(dimen.width / 2.0f, dimen.height / 2.0f);
+    _loseNode->setForeground(Color4::YELLOW);
 
     if (_roomID == "") {
         _network.connect();
@@ -85,7 +99,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
     }
     _networkData->setPlayers(_players);
 
-    if (_players[0]->getType() == Player::Type::Pal) {
+    // if (_players[0]->getType() == Player::Type::Pal) {
         // VISION CONE
         vector<Vec2> coneShape;
         Vec2 tl(-CONE_WIDTH, CONE_LENGTH);
@@ -103,7 +117,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
         _visionNode->setAnchor(Vec2::ANCHOR_BOTTOM_CENTER);
 
         _root->addChild(_visionNode);
-    }
+    // }
 
     for (auto& p : _players) {
         p->getNode()->setAnchor(Vec2::ANCHOR_CENTER);
@@ -149,26 +163,82 @@ void GameScene::update(float timestep) {
     Vec2 turning = _input.getTurn();
 
     shared_ptr<Player> player = _players[0];
-    player->move(move);
     if (player->getType() == Player::Type::Pal) {
+        if (!_palModel->getSpooked()) {
+            player->move(move);
+        }
         dynamic_pointer_cast<Pal>(player)->processTurn(turning);
+    }
+    else {
+        player->move(move);
     }
     _root->setPosition(center - player->getLoc());
 
     for (auto& p : _players) {
         p->update(timestep);
-        updateVision(player);
+        updateVision(p);
+    }
+
+    // Check collisions
+    _collision.checkForCollision(_ghostModel, _palModel);
+    _collision.checkForCollision(_ghostModel, _visionNode);
+    // TODO: Implement checking battery collisions
+    // _collision.checkInBounds(_ghostModel, bounds);    need to define bounds
+
+
+    // If ghost is tagged, lower tag timer
+    int tagTimer = _ghostModel->getTimer();
+    if (tagTimer > 0) {
+        _ghostModel->setTimer(tagTimer - 1);
+    }
+    if (_ghostModel->getTimer() == 0) {
+        _ghostModel->setTagged(false);
     }
     
 
-    // Check win condition
+    // Pal case
     if (_host) {
-        if (_palModel->getSpooked()) {
-            // Ghost wins
+        if (_palModel->getSpooked() && _complete == false) {
+            // Player loses
+            _complete = true;
+            _loseNode->setVisible(true);
+            _countdown = 120;
         }
-        else if (_palModel->getBatteries() == 3) {
-            // Pal wins
+        else if (_palModel->getBatteries() == 3 && _complete == false) {
+            // Player wins
+            _complete = true;
+            _winNode->setVisible(true);
+            _countdown = 120;
         }
+
+        if (tagTimer == 0) {
+            _ghostNode->setVisible(false);
+        }
+    }
+    // Ghost case
+    else {
+        if (_palModel->getSpooked() && _complete == false) {
+            // Player wins
+            _complete = true;
+            _winNode->setVisible(true);
+            _countdown = 120;
+        }
+        else if (_palModel->getBatteries() == 3 && _complete == false) {
+            // Player loses
+            _complete = true;
+            _loseNode->setVisible(true);
+            _countdown = 120;
+        }
+
+
+    }
+
+    // Reset the game if a win condition is reached
+    if (_countdown > 0) {
+        _countdown--;
+    }
+    else if (_countdown == 0) {
+        reset();
     }
 }
 

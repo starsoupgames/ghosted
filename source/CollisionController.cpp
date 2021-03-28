@@ -34,10 +34,27 @@ void CollisionController::checkForCollision(const shared_ptr<Ghost>& ghost, cons
 	float distance = norm.length();
 	float impactDistance = (ghost->getRadius() + pal->getRadius());
 
-	if (distance < impactDistance && CollisionController::checkSpooked(ghost, pal)) {
+	if (!ghost->getTagged() && distance < impactDistance && CollisionController::checkSpooked(ghost, pal)) {
 		pal->setSpooked(true);
 		CULog("Spooked");
 	}
+}
+
+/**
+*  Checks for collisions between the Ghost and the Pal's vision, tagging the Ghost if
+*  such a collision occurs.
+*
+*  This method should be called only once per collision.
+*
+*  @param Ghost       The Ghost in the collision
+*  @param vision      The Pal's vision in the collision
+*/
+void CollisionController::checkForCollision(const shared_ptr<Ghost>& ghost, const shared_ptr<scene2::PolygonNode>& vision) {
+	 Poly2 node = vision->getPolygon();
+	 if (node.contains(ghost->getLoc())) {
+		 ghost->setTagged(true);
+		 ghost->setTimer(180);
+	 }
 }
 
 /**

@@ -34,6 +34,9 @@ private:
 	/** Whether the Ghost has been revealed recently */
 	bool _tagged;
 
+	/** Amount of frames before the Ghost is untagged */
+	int _tagTimer;
+
 	/** Direction currently in */
 	bool _left;
 	bool _right;
@@ -55,6 +58,14 @@ public:
 	bool getTagged() const {
 		return _tagged;
 	}
+
+	/** @return the amount of frames before the Ghost is untagged */
+	int getTimer() const {
+		return _tagTimer;
+	}
+
+	/** Sets the amount of frames before the Ghost is untagged */
+	void setTimer(int value) { _tagTimer = value; }
 
 	/** Sets the amount of traps left */
 	void setTraps(int num) {

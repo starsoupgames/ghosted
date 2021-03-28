@@ -77,7 +77,7 @@ public:
 	}
 
 	/** Creates a Pal with the default values */
-	Pal() : Player(), speed(5), _facing("front") {};
+	Pal() : Player(), speed(5), _facing("front"), _spooked(false) {};
 
 	/** Releases all resources allocated with this Pal */
 	~Pal() { }
