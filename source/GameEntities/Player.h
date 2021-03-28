@@ -43,7 +43,7 @@ public:
     };
 
 	/** Creates a Player with the default values */
-	Player() : GameEntity() {};
+	Player() : GameEntity(), _direction(Vec2(0.0f, -1.0f)) {};
 
 	/** Releases all resources allocated with this Player */
 	~Player() { dispose(); }
@@ -91,4 +91,35 @@ public:
 		Pal = 1,
 		Ghost = 2
 	};
+    
+    /** Returns the current direction ENUM of the Player
+     *
+     * @return the current direction of the Player
+     */
+    uint8_t isDirection() {
+        Direction dir = Direction::Bottom;
+        float minDist = _direction.distance(Vec2(0, -1));
+        
+        if (_direction.distance(Vec2(0, 1)) < minDist) {
+            dir = Direction::Top;
+            minDist = _direction.distance(Vec2(0, 1));
+        }
+        if (_direction.distance(Vec2(1, 0)) < minDist) {
+            dir = Direction::Right;
+            minDist = _direction.distance(Vec2(1, 0));
+        }
+        if (_direction.distance(Vec2(-1, 0)) < minDist) {
+            dir = Direction::Left;
+        }
+        return dir;
+    }
+    
+    enum Direction {
+        Keep = 0,
+        Top = 1,
+        Bottom = 2,
+        Right = 3,
+        Left = 4
+    };
+    
 };

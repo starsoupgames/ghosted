@@ -28,113 +28,83 @@ void Ghost::setNode(const std::shared_ptr<scene2::AnimationNode>& value) {
 void Ghost::update(float timestep) {
     Player::update(timestep);
 
+    if (_move == Vec2::ZERO) {
+        _idle = true;
+    } else {
+        _idle = false;
+    }
+    
     // Move the ghost
     _loc += _move * speed;
+    
+    processDirection();
 
     if (_node != nullptr) {
-        determineAction();
-        advanceFrame();
         _node->setPosition(_loc);
         _node->setPriority(-_loc.y);
     }
 }
 
-/**
- * Determines the next animation frame for the Ghost and applies it to the sprite.
- *
- * This method includes some dampening of the turn, and should be called before
- * moving the Ghost.
- */
-
-void Ghost::determineAction() {
-    if (_move == Vec2::ZERO) {
-        _idle = true;
-        return;
-    }
-    else {
-        _idle = false;
-        _front = false;
-        _back = false;
-        _left = false;
-        _right = false;
-        if (_move.y < 0) {
-            _front = true;
-        }
-        else if (_move.y > 0) {
-            _back = true;
-        }
-        else if (_move.x < 0) {
-            _left = true;
-        }
-        else if (_move.x > 0) {
-            _right = true;
-        }
-    }
-}
-void Ghost::advanceFrame() {
-    // Our animation depends on the current frame.
+void Ghost::processDirection() {
     unsigned int frame = _node->getFrame();
-    if (_idle) {
-        if (_front) {
-            frame = GHOST_IMG_FRONT;
-        }
-        else if (_back) {
-            frame = GHOST_IMG_BACK;
-        }
-        else if (_right) {
-            frame = GHOST_IMG_RIGHT;
-        }
-        else {
-            frame = GHOST_IMG_LEFT;
-        }
-    }
-    else {
-        if (_front) {
-            if (frame >= GHOST_IMG_FRONT && frame < GHOST_IMG_BACK) {
-                frame += 1;
-                if (frame == GHOST_IMG_BACK) {
-                    frame = GHOST_IMG_FRONT + 1;
-                }
+    switch (isDirection()) {
+        case Direction::Top:
+            if (_idle && frame != GHOST_IMG_BACK) {
+                frame = GHOST_IMG_BACK;
             }
-            else {
-                frame = GHOST_IMG_FRONT + 1;
-            }
-        }
-        else if (_back) {
-            if (frame >= GHOST_IMG_BACK && frame < GHOST_IMG_LAST) {
+            if (!_idle && frame >= GHOST_IMG_BACK && frame < GHOST_IMG_LAST) {
                 frame += 1;
                 if (frame == GHOST_IMG_LAST) {
                     frame = GHOST_IMG_BACK + 1;
                 }
             }
-            else {
-                frame = GHOST_IMG_BACK + 1;
+            else if (!_idle) {
+                frame = GHOST_IMG_BACK+ 1;
             }
-        }
-        else if (_right) {
-            if (frame >= GHOST_IMG_RIGHT && frame < GHOST_IMG_LEFT) {
+            break;
+        case Direction::Bottom:
+            if (_idle && frame != GHOST_IMG_FRONT) {
+                frame = GHOST_IMG_FRONT;
+            }
+            if (!_idle && frame >= GHOST_IMG_FRONT && frame < GHOST_IMG_BACK) {
+                frame += 1;
+                if (frame == GHOST_IMG_BACK) {
+                    frame = GHOST_IMG_FRONT + 1;
+                }
+            }
+            else if (!_idle) {
+                frame = GHOST_IMG_FRONT + 1;
+            }
+            break;
+        case Direction::Right:
+            if (_idle && frame != GHOST_IMG_RIGHT) {
+                frame = GHOST_IMG_RIGHT;
+            }
+            if (!_idle && frame >= GHOST_IMG_RIGHT && frame < GHOST_IMG_LEFT) {
                 frame += 1;
                 if (frame == GHOST_IMG_LEFT) {
                     frame = GHOST_IMG_RIGHT + 1;
                 }
             }
-            else {
+            else if (!_idle) {
                 frame = GHOST_IMG_RIGHT + 1;
             }
-        }
-        else {
-            if (frame >= GHOST_IMG_LEFT && frame < GHOST_IMG_FRONT) {
+            break;
+        case Direction::Left:
+            if (_idle && frame != GHOST_IMG_LEFT) {
+                frame = GHOST_IMG_LEFT;
+            }
+            else if (!_idle && frame >= GHOST_IMG_LEFT && frame < GHOST_IMG_FRONT) {
                 frame += 1;
                 if (frame == GHOST_IMG_FRONT) {
                     frame = GHOST_IMG_LEFT + 1;
                 }
             }
-            else {
+            else if (!_idle) {
                 frame = GHOST_IMG_LEFT + 1;
             }
-        }
+            break;
     }
-
     _node->setFrame(frame);
 }
 

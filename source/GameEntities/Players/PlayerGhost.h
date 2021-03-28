@@ -37,15 +37,7 @@ private:
 	/** Amount of frames before the Ghost is untagged */
 	int _tagTimer;
 
-	/** Direction currently in */
-	bool _left;
-	bool _right;
-	bool _front;
-	bool _back;
-
-	void advanceFrame();
-
-	void determineAction();
+    void processDirection();
 
 public:
 

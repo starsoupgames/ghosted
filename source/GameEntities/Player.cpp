@@ -54,5 +54,3 @@ void Player::reset() {
         _idle = true;
     }
 }
-
-

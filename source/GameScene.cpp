@@ -172,6 +172,9 @@ void GameScene::update(float timestep) {
     }
     else {
         player->move(move);
+        if (direction != Vec2::ZERO) {
+            player->setDir(direction);
+        }
     }
 
     _root->setPosition(center - player->getLoc());
