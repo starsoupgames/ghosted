@@ -42,7 +42,8 @@ protected:
 
     // MODEL
     shared_ptr<NetworkData> _networkData;
-    vector<shared_ptr<Player>> _players;
+    shared_ptr<Player> _player;
+    vector<shared_ptr<Player>> _otherPlayers;
     shared_ptr<Pal> _palModel;
     shared_ptr<Ghost> _ghostModel;
 

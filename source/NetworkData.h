@@ -3,6 +3,7 @@
 #ifndef __NETWORK_DATA_H__
 #define __NETWORK_DATA_H__
 #include <cugl/cugl.h>
+#include "Constants.h"
 #include "GameEntities/Player.h"
 
 /** The precision to multiply floating point numbers by */
@@ -15,7 +16,13 @@ class NetworkData {
 private:
     uint8_t _id;
 
-    vector<shared_ptr<Player>> _players; // NetworkData does not own these players
+    // NetworkData does not own these players
+    shared_ptr<Player> _player;
+    vector<shared_ptr<Player>> _otherPlayers;
+    // for position interpolation
+    vector<unsigned> _ticksSinceReceived;
+    vector<Vec2> _otherPlayersOldPositions;
+    vector<Vec2> _otherPlayersNewPositions;
 
     void encodeByte(uint8_t b, vector<uint8_t>& out); // 1 byte
     uint8_t decodeByte(const vector<uint8_t>& bytes);
@@ -24,7 +31,7 @@ private:
     void encodeFloat(float f, vector<uint8_t>& out); // 4 bytes
     float decodeFloat(const vector<uint8_t>& bytes);
 
-    void encodeVector(Vec2 v, vector<uint8_t>& out); // 8 bytes
+    void encodeVector(const Vec2& v, vector<uint8_t>& out); // 8 bytes
     Vec2 decodeVector(const vector<uint8_t>& bytes);
 
     /** Split byte vector at certain points */
@@ -61,13 +68,24 @@ public:
         _id = id;
     }
 
-    void setPlayers(const vector<shared_ptr<Player>>& players) {
-        _players = players;
+    void setPlayer(const shared_ptr<Player>& player) {
+        _player = player;
+    }
+
+    void setOtherPlayers(const vector<shared_ptr<Player>>& players) {
+        _otherPlayers = players;
+        for (unsigned i = 0; i < _otherPlayers.size(); ++i) {
+            _ticksSinceReceived.push_back(0);
+            _otherPlayersOldPositions.push_back(_otherPlayers[i]->getLoc());
+            _otherPlayersNewPositions.push_back(_otherPlayers[i]->getLoc());
+        }
     }
 
     vector<uint8_t> serializeData();
 
     void unserializeData(const vector<uint8_t>& msg);
+
+    void interpolatePlayerData();
 
     enum MatchStatus {
         Waiting = 0, // connected, waiting for players

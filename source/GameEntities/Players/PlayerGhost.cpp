@@ -35,7 +35,7 @@ void Ghost::update(float timestep) {
     }
     
     // Move the ghost
-    _loc += _move * speed;
+    _loc += _move * _speed;
     
     processDirection();
 

@@ -18,101 +18,98 @@ and methods for its actions
 */
 class Pal : public Player {
 private:
-	/** Amount of batteries left */
-	int _batteries;
+    /** Amount of batteries left */
+    int _batteries;
 
-	/** Whether a Pal is spooked or not */
-	bool _spooked;
+    /** Whether a Pal is spooked or not */
+    bool _spooked;
 
-	/** Speed of the Pal */
-	float speed;
-	
-	/** Whether we are idle */
-	bool _idle;
+    /** Speed of the Pal */
+    float _speed;
 
 public:
-	/** Returns the amount of batteries left */
-	int getBatteries() const {
-		return _batteries;
-	}
+    /** Returns the amount of batteries left */
+    int getBatteries() const {
+        return _batteries;
+    }
 
-	/** Returns whether or not a Pal is spooed */
-	bool getSpooked() const {
-		return _spooked;
-	}
+    /** Returns whether or not a Pal is spooed */
+    bool getSpooked() const {
+        return _spooked;
+    }
     
 //    /** Returns a Vec2 representing which direction the player is currently facing */
 //    Vec2 getDirection() {
 //        return _direction;
 //    }
 
-	/** Sets the amount of batteries */
-	void setBatteries(int num) {
-		_batteries = num;
-	}
+    /** Sets the amount of batteries */
+    void setBatteries(int num) {
+        _batteries = num;
+    }
 
-	/** Sets whether or not a Pal is spooked */
-	void setSpooked(bool spooked) {
-		_spooked = spooked;
-	}
+    /** Sets whether or not a Pal is spooked */
+    void setSpooked(bool spooked) {
+        _spooked = spooked;
+    }
 
-	/** Creates a Pal with the default values */
-	Pal() : Player(), speed(5), _spooked(false) {};
+    /** Creates a Pal with the default values */
+    Pal() : Player(), _speed(5), _spooked(false) {};
 
-	/** Releases all resources allocated with this Pal */
+    /** Releases all resources allocated with this Pal */
     ~Pal() { }
 
-	/**
-	* @return a newly allocated Pal at the origin.
-	*/
-	static shared_ptr<Pal> alloc() {
-		shared_ptr<Pal> result = make_shared<Pal>();
-		return (dynamic_pointer_cast<Player>(result)->init() ? result : nullptr);
-	}
+    /**
+    * @return a newly allocated Pal at the origin.
+    */
+    static shared_ptr<Pal> alloc() {
+        shared_ptr<Pal> result = make_shared<Pal>();
+        return (dynamic_pointer_cast<Player>(result)->init() ? result : nullptr);
+    }
 
-	static shared_ptr<Pal> alloc(const Vec2& pos) {
-		shared_ptr<Pal> result = make_shared<Pal>();
-		return (dynamic_pointer_cast<Player>(result)->init(pos) ? result : nullptr);
-	};
+    static shared_ptr<Pal> alloc(const Vec2& pos) {
+        shared_ptr<Pal> result = make_shared<Pal>();
+        return (dynamic_pointer_cast<Player>(result)->init(pos) ? result : nullptr);
+    };
 
-	/** Processes the animation and vision cone to process a turn */
-	void processDirection();
+    /** Processes the animation and vision cone to process a turn */
+    void processDirection();
 
-	/** Places a battery in the nearby slot */
-	void placeBattery();
+    /** Places a battery in the nearby slot */
+    void placeBattery();
 
-	/** Increments/decrements the battery counter */
-	void addBattery(int num) {
-		_batteries += num;
-	}
+    /** Increments/decrements the battery counter */
+    void addBattery(int num) {
+        _batteries += num;
+    }
 
-	/** Get player type */
-	virtual uint8_t getType() override {
-		return Type::Pal;
-	}
+    /** Get player type */
+    virtual uint8_t getType() override {
+        return Type::Pal;
+    }
 
-	/**
-	 * Sets the film strip representing this pal.
-	 *
-	 * Setting this to nullptr clears the value.
-	 *
-	 * @param value The pal film strip.
-	 */
-	void setNode(const std::shared_ptr<cugl::scene2::AnimationNode>& value);
+    /**
+     * Sets the film strip representing this pal.
+     *
+     * Setting this to nullptr clears the value.
+     *
+     * @param value The pal film strip.
+     */
+    void setNode(const std::shared_ptr<cugl::scene2::AnimationNode>& value);
 
-	/**
-	 * Updates the state of the model
-	 *
-	 * This method moves the pal forward, dampens the forces (if necessary)
-	 * and updates the sprite if it exists.
-	 *
-	 * @param timestep  Time elapsed since last called.
-	 */
-	virtual void update(float timestep = 0.0f) override;
+    /**
+     * Updates the state of the model
+     *
+     * This method moves the pal forward, dampens the forces (if necessary)
+     * and updates the sprite if it exists.
+     *
+     * @param timestep  Time elapsed since last called.
+     */
+    virtual void update(float timestep = 0.0f) override;
 
-	/**
-	 * Resets the pal back to its original settings
-	 */
-	void reset();
+    /**
+     * Resets the pal back to its original settings
+     */
+    void reset();
 
 };

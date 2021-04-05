@@ -44,7 +44,7 @@ float NetworkData::decodeFloat(const vector<uint8_t>& bytes) {
     return static_cast<float>(marshall(i)) / FLOAT_PRECISION;
 }
 
-void NetworkData::encodeVector(Vec2 v, vector<uint8_t>& out) {
+void NetworkData::encodeVector(const Vec2& v, vector<uint8_t>& out) {
     encodeFloat(v.x, out);
     encodeFloat(v.y, out);
 }
@@ -68,34 +68,47 @@ vector<uint8_t> NetworkData::convertMetadata() {
     return result;
 }
 
-
 vector<uint8_t> NetworkData::convertPlayerData() {
     vector<uint8_t> result;
-    if (_players[0] == nullptr) {
+    if (_player == nullptr) {
         CULog("Player is null.");
         return result;
     }
 
     // player location
-    encodeVector(_players[0]->getLoc(), result);
+    encodeVector(_player->getLoc(), result);
+
+    // player direction
+    encodeVector(_player->getDir(), result);
 
     return result;
 }
 
 void NetworkData::interpretPlayerData(const vector<uint8_t>& metadata, const vector<uint8_t>& playerData) {
-    if (_players[0] == nullptr) {
+    if (_player == nullptr) {
         CULog("Player is null.");
         return;
     }
 
     vector<vector<uint8_t>> splitMetadata = split(metadata, { 1 });
     uint8_t id = decodeByte(splitMetadata[0]);
+    // CULog("%d", id);
 
-    vector<vector<uint8_t>> splitPlayerData = split(playerData, { 8 });
+    vector<vector<uint8_t>> splitPlayerData = split(playerData, { 8, 8 });
     Vec2 location = decodeVector(splitPlayerData[0]);
+    Vec2 direction = decodeVector(splitPlayerData[1]);
 
-    if (_players.size() >= 2 && _players[1] != nullptr) {
-        _players[1]->setLoc(location);
+    if (_otherPlayers.size() >= 1 && _otherPlayers[0] != nullptr) {
+        _otherPlayers[0]->setDir(direction);
+    }
+
+    CUAssertLog(_otherPlayers.size() == _otherPlayersOldPositions.size(), "_otherPlayers.size() != _otherPlayersOldPositions.size()");
+    CUAssertLog(_otherPlayers.size() == _otherPlayersNewPositions.size(), "_otherPlayers.size() != _otherPlayersNewPositions.size()");
+    for (unsigned i = 0; i < _otherPlayers.size(); ++i) {
+        // TODO check otherPlayer id
+        _ticksSinceReceived[i] = 0;
+        _otherPlayersOldPositions[i] = _otherPlayers[i]->getLoc();
+        _otherPlayersNewPositions[i] = location;
     }
 }
 
@@ -124,7 +137,20 @@ vector<uint8_t> NetworkData::serializeData() {
 }
 
 void NetworkData::unserializeData(const vector<uint8_t>& msg) {
-    vector<vector<uint8_t>> splitMsg = split(msg, { 1, 8, 0 });
+    vector<vector<uint8_t>> splitMsg = split(msg, { 1, 16, 0 });
     interpretPlayerData(splitMsg[0], splitMsg[1]);
     interpretMapData(splitMsg[2]);
+}
+
+void NetworkData::interpolatePlayerData() {
+    CUAssertLog(_otherPlayers.size() == _otherPlayersOldPositions.size(), "_otherPlayers.size() != _otherPlayersOldPositions.size()");
+    CUAssertLog(_otherPlayers.size() == _otherPlayersNewPositions.size(), "_otherPlayers.size() != _otherPlayersNewPositions.size()");
+    for (unsigned i = 0; i < _otherPlayers.size(); ++i) {
+        shared_ptr<Player> otherPlayer = _otherPlayers[i];
+        float progress = min((float)_ticksSinceReceived[i] / constants::NETWORK_TICKS, 1.f);
+        Vec2 interpolatedPosition = _otherPlayersOldPositions[i] * (1 - progress) + _otherPlayersNewPositions[i] * progress;
+        otherPlayer->setLoc(interpolatedPosition);
+
+        ++_ticksSinceReceived[i];
+    }
 }

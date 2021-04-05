@@ -90,14 +90,15 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 
 
     if (_host) {
-        _players.push_back(_palModel);
-        _players.push_back(_ghostModel);
+        _player = _palModel;
+        _otherPlayers.push_back(_ghostModel);
     }
     else {
-        _players.push_back(_ghostModel);
-        _players.push_back(_palModel);
+        _player =_ghostModel;
+        _otherPlayers.push_back(_palModel);
     }
-    _networkData->setPlayers(_players);
+    _networkData->setPlayer(_player);
+    _networkData->setOtherPlayers(_otherPlayers);
     
     vector<Vec2> coneShape;
     Vec2 tl(-CONE_WIDTH, CONE_LENGTH);
@@ -118,7 +119,8 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
     _root->addChild(_visionNode);
     // }
 
-    for (auto& p : _players) {
+    _player->getNode()->setAnchor(Vec2::ANCHOR_CENTER);
+    for (auto& p : _otherPlayers) {
         p->getNode()->setAnchor(Vec2::ANCHOR_CENTER);
     }
     
@@ -156,30 +158,30 @@ void GameScene::update(float timestep) {
     Vec2 center(dimen.width / 2, dimen.height / 2);
 
     _input.update(timestep);
-    _network.update(timestep);
 
     Vec2 move = _input.getMove();
     Vec2 direction = _input.getDirection();
 
-    shared_ptr<Player> player = _players[0];
-    if (player->getType() == Player::Type::Pal) {
+    if (_player->getType() == Player::Type::Pal) {
         if (!_palModel->getSpooked()) {
-            player->move(move);
+            _player->move(move);
             if (direction != Vec2::ZERO) {
-                player->setDir(direction);
+                _player->setDir(direction);
             }
         }
     }
     else {
-        player->move(move);
+        _player->move(move);
         if (direction != Vec2::ZERO) {
-            player->setDir(direction);
+            _player->setDir(direction);
         }
     }
 
-    _root->setPosition(center - player->getLoc());
+    _root->setPosition(center - _player->getLoc());
 
-    for (auto& p : _players) {
+    _player->update(timestep);
+    updateVision(_player);
+    for (auto& p : _otherPlayers) {
         p->update(timestep);
         updateVision(p);
     }
@@ -199,7 +201,7 @@ void GameScene::update(float timestep) {
     if (_ghostModel->getTimer() == 0) {
         _ghostModel->setTagged(false);
     }
-    
+
 
     // Pal case
     if (_host) {
@@ -234,8 +236,6 @@ void GameScene::update(float timestep) {
             _loseNode->setVisible(true);
             _countdown = 120;
         }
-
-
     }
 
     // Reset the game if a win condition is reached
@@ -268,6 +268,8 @@ void GameScene::update(float timestep) {
     else if (_countdown == 0) {
         reset();
     }
+
+    _network.update(timestep);
 }
 
 void GameScene::updateVision(const std::shared_ptr<Player>& player) {

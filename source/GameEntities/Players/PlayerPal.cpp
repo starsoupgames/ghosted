@@ -35,7 +35,7 @@ void Pal::update(float timestep) {
     }
     
     // Move the pal
-    _loc += _move * speed;
+    _loc += _move * _speed;
     processDirection();
     
     if (_node != nullptr) {

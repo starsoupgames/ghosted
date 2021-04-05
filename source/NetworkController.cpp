@@ -23,8 +23,17 @@ void NetworkController::connect(string roomID) {
 }
 
 void NetworkController::update(float timestep) {
-    if (!_connected) return;
+    if (!_connected || _connection == nullptr) return;
 
+    // receive data
+    _connection->receive([this](const vector<uint8_t>& msg) {
+        receiveData(msg);
+        });
+
+    // interpolate data
+    _data->interpolatePlayerData();
+
+    // handle dropped player
     if (_connection->getNumPlayers() < _connection->getTotalPlayers()) {
         CULog("Player exited the game.");
     }
@@ -32,40 +41,19 @@ void NetworkController::update(float timestep) {
     // update room id
     if (_roomID != _connection->getRoomID()) {
         _roomID = _connection->getRoomID();
-        // TODO temp
-        /*
-        const auto config = CUNetworkConnection::ConnectionConfig(SERVER_ADDRESS, SERVER_PORT, MAX_PLAYERS, API_VERSION);
-        c2 = make_shared<CUNetworkConnection>(config, _roomID);
-        */
     }
 
     // update player id
-    if (_connection->getPlayerID()) _data->setID(_connection->getPlayerID().value());
+    if (_connection->getPlayerID()) {
+        _data->setID(_connection->getPlayerID().value());
+    }
+    else return;
 
     // send data
-    if (_connected && ++_tick >= NETWORK_TICKS) {
+    if (_connected && ++_tick >= constants::NETWORK_TICKS) {
         sendData();
         _tick = 0;
     }
-    // receive data
-    if (_connection == nullptr) {
-        CULog("Null network connection.");
-        return;
-    }
-    _connection->receive([this](const vector<uint8_t>& msg) {
-        receiveData(msg);
-        });
-
-    // TODO temp
-    /*
-    if (c2 == nullptr) {
-        CULog("Null network connection C2.");
-        return;
-    }
-    c2->receive([this](const vector<uint8_t>& msg) {
-        receiveData(msg);
-        });
-    */
 }
 
 bool NetworkController::sendData() {
