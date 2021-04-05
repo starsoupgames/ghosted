@@ -5,6 +5,13 @@
 using namespace std;
 using namespace cugl;
 
+/** Player Frame Sprite numbers */
+#define IMG_RIGHT 0   // Right idle frame
+#define IMG_LEFT 21   // Left idle frame
+#define IMG_FRONT 42  // Front idle frame
+#define IMG_BACK 63   // Back idle frame
+#define IMG_LAST 83
+
 /**
 This class contains information about the Player.
 */
@@ -22,15 +29,22 @@ protected:
     /** Current Player movement */
     Vec2 _move;
 
+    /** Player id */
+    unsigned id;
+
 public:
 
     /** Returns the reference to the animation node */
     const shared_ptr <scene2::AnimationNode> getNode() const {
         return _node;
     }
+
+    /** Sets whether the Player is idle */
+    void setIdle(bool idle) {
+        _idle = idle;
+    }
     
-    /** Returns the current direction VECTOR of the Player
-     *
+    /**
      * @return the current direction vector for the Player
      */
     Vec2 getDir() {
@@ -42,8 +56,13 @@ public:
         _direction = dir.normalize();
     };
 
+    /** Sets the Player movement */
+    void setMove(Vec2 move) {
+        _move = move.normalize();
+    }
+
     /** Creates a Player with the default values */
-    Player() : GameEntity(), _direction(Vec2(0.0f, -1.0f)) {};
+    Player() : GameEntity(), id(-1), _direction(Vec2(0.0f, -1.0f)) {};
 
     /** Releases all resources allocated with this Player */
     ~Player() { dispose(); }
@@ -55,11 +74,6 @@ public:
     bool init(const Vec2& pos);
 
     bool init() { return init(Vec2::ZERO); }
-
-    /** Moves the Player */
-    void move(Vec2 move) {
-        _move = move.normalize();
-    }
 
     /** Get player type */
     virtual uint8_t getType() {
@@ -113,6 +127,9 @@ public:
         }
         return dir;
     }
+
+    /** Processes the direction for the animation and vision cone */
+    virtual void processDirection();
     
     enum Direction {
         Keep = 0,

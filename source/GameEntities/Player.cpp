@@ -31,6 +31,7 @@ void Player::setNode(const std::shared_ptr<scene2::AnimationNode>& value) {
     _node = GameEntity::getSprite();
     if (_node != nullptr) {
         _idle = true;
+        _node->setFrame(IMG_FRONT);
     }
 }
 
@@ -39,10 +40,70 @@ void Player::setNode(const std::shared_ptr<scene2::AnimationNode>& value) {
  *
  * @param timestep  Time elapsed since last called.
  */
-
 void Player::update(float timestep) {
     GameEntity::update(timestep);
 }
+
+/** Processes the direction for the animation and vision cone */
+void Player::processDirection() {
+    unsigned int frame = _node->getFrame();
+    switch (isDirection()) {
+    case Direction::Top:
+        if (_idle) {
+            frame = IMG_BACK;
+        }
+        else {
+            if (frame >= IMG_BACK && frame < IMG_LAST - 1) {
+                ++frame;
+            }
+            else {
+                frame = IMG_BACK + 1;
+            }
+        }
+        break;
+    case Direction::Bottom:
+        if (_idle) {
+            frame = IMG_FRONT;
+        }
+        else {
+            if (frame >= IMG_FRONT && frame < IMG_BACK - 1) {
+                ++frame;
+            }
+            else {
+                frame = IMG_FRONT + 1;
+            }
+        }
+        break;
+    case Direction::Right:
+        if (_idle) {
+            frame = IMG_RIGHT;
+        }
+        else {
+            if (frame >= IMG_RIGHT && frame < IMG_LEFT - 1) {
+                ++frame;
+            }
+            else {
+                frame = IMG_RIGHT + 1;
+            }
+        }
+        break;
+    case Direction::Left:
+        if (_idle) {
+            frame = IMG_LEFT;
+        }
+        else {
+            if (frame >= IMG_LEFT && frame < IMG_FRONT - 1) {
+                ++frame;
+            }
+            else {
+                frame = IMG_LEFT + 1;
+            }
+        }
+        break;
+    }
+    CUAssertLog(frame < IMG_LAST, "Frame out of range.");
+    _node->setFrame(frame);
+};
 
 /**
  * Resets the pal back to its original settings

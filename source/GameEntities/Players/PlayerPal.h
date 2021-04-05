@@ -5,12 +5,6 @@
 using namespace std;
 using namespace cugl;
 
-/** Pal Frame Sprite numbers */
-#define PAL_IMG_RIGHT   0   // Right idle frame
-#define PAL_IMG_LEFT 21   // Left idle frame
-#define PAL_IMG_FRONT 42      // Front idle frame
-#define PAL_IMG_BACK 63      // Back idle frame
-#define PAL_IMG_LAST 83
 
 /**
 This PlayerPal class contains information about the Pal's texture, the amount of batteries it has,
@@ -37,11 +31,6 @@ public:
     bool getSpooked() const {
         return _spooked;
     }
-    
-//    /** Returns a Vec2 representing which direction the player is currently facing */
-//    Vec2 getDirection() {
-//        return _direction;
-//    }
 
     /** Sets the amount of batteries */
     void setBatteries(int num) {
@@ -54,7 +43,7 @@ public:
     }
 
     /** Creates a Pal with the default values */
-    Pal() : Player(), _speed(5), _spooked(false) {};
+    Pal() : Player(), _batteries(0), _speed(5), _spooked(false) {};
 
     /** Releases all resources allocated with this Pal */
     ~Pal() { }
@@ -72,8 +61,8 @@ public:
         return (dynamic_pointer_cast<Player>(result)->init(pos) ? result : nullptr);
     };
 
-    /** Processes the animation and vision cone to process a turn */
-    void processDirection();
+    /** Processes the direction for the animation and vision cone */
+    virtual void processDirection() override;
 
     /** Places a battery in the nearby slot */
     void placeBattery();
@@ -87,15 +76,6 @@ public:
     virtual uint8_t getType() override {
         return Type::Pal;
     }
-
-    /**
-     * Sets the film strip representing this pal.
-     *
-     * Setting this to nullptr clears the value.
-     *
-     * @param value The pal film strip.
-     */
-    void setNode(const std::shared_ptr<cugl::scene2::AnimationNode>& value);
 
     /**
      * Updates the state of the model

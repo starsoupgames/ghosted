@@ -11,13 +11,6 @@ and methods for the Ghost's actions
 using namespace std;
 using namespace cugl;
 
-/** Ghost Frame Sprite numbers */
-//TODO: THESE VALUES MUST BE ADJUSTED TO GHOST'S AND ALSO HAVE FRONT, BACK, LEFT, RIGHT FRAMES
-#define GHOST_IMG_RIGHT   0   // Right idle frame
-#define GHOST_IMG_LEFT 21   // Left idle frame
-#define GHOST_IMG_FRONT 42      // Front idle frame
-#define GHOST_IMG_BACK 63      // Back idle frame
-#define GHOST_IMG_LAST 83
 
 class Ghost : public Player {
 private:
@@ -33,8 +26,6 @@ private:
 
     /** Amount of frames before the Ghost is untagged */
     int _tagTimer;
-
-    void processDirection();
 
 public:
 
@@ -94,15 +85,6 @@ public:
     virtual uint8_t getType() override {
         return Type::Ghost;
     }
-
-    /**
-     * Sets the film strip representing this ghosts.
-     *
-     * Setting this to nullptr clears the value.
-     *
-     * @param value The ghost film strip.
-     */
-    void setNode(const shared_ptr<scene2::AnimationNode>& value);
 
     /**
      * Updates the state of the model

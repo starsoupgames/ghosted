@@ -105,10 +105,12 @@ void NetworkData::interpretPlayerData(const vector<uint8_t>& metadata, const vec
     CUAssertLog(_otherPlayers.size() == _otherPlayersOldPositions.size(), "_otherPlayers.size() != _otherPlayersOldPositions.size()");
     CUAssertLog(_otherPlayers.size() == _otherPlayersNewPositions.size(), "_otherPlayers.size() != _otherPlayersNewPositions.size()");
     for (unsigned i = 0; i < _otherPlayers.size(); ++i) {
+        shared_ptr<Player> otherPlayer = _otherPlayers[i];
         // TODO check otherPlayer id
         _ticksSinceReceived[i] = 0;
-        _otherPlayersOldPositions[i] = _otherPlayers[i]->getLoc();
+        _otherPlayersOldPositions[i] = otherPlayer->getLoc();
         _otherPlayersNewPositions[i] = location;
+        otherPlayer->setIdle((_otherPlayersNewPositions[i] - _otherPlayersOldPositions[i]).length() < 1.f);
     }
 }
 
@@ -150,6 +152,7 @@ void NetworkData::interpolatePlayerData() {
         float progress = min((float)_ticksSinceReceived[i] / constants::NETWORK_TICKS, 1.f);
         Vec2 interpolatedPosition = _otherPlayersOldPositions[i] * (1 - progress) + _otherPlayersNewPositions[i] * progress;
         otherPlayer->setLoc(interpolatedPosition);
+        if (progress >= 1.f) otherPlayer->setIdle(true);
 
         ++_ticksSinceReceived[i];
     }

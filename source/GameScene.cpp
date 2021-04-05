@@ -157,27 +157,17 @@ void GameScene::update(float timestep) {
     dimen *= SCENE_WIDTH / dimen.width;
     Vec2 center(dimen.width / 2, dimen.height / 2);
 
+    // Process input and update player states
     _input.update(timestep);
 
     Vec2 move = _input.getMove();
     Vec2 direction = _input.getDirection();
 
-    if (_player->getType() == Player::Type::Pal) {
-        if (!_palModel->getSpooked()) {
-            _player->move(move);
-            if (direction != Vec2::ZERO) {
-                _player->setDir(direction);
-            }
-        }
+    _player->setMove(move);
+    _player->setIdle(move == Vec2::ZERO);
+    if (direction != Vec2::ZERO) {
+        _player->setDir(direction);
     }
-    else {
-        _player->move(move);
-        if (direction != Vec2::ZERO) {
-            _player->setDir(direction);
-        }
-    }
-
-    _root->setPosition(center - _player->getLoc());
 
     _player->update(timestep);
     updateVision(_player);
@@ -185,6 +175,9 @@ void GameScene::update(float timestep) {
         p->update(timestep);
         updateVision(p);
     }
+
+    // Update camera
+    _root->setPosition(center - _player->getLoc());
 
     // Check collisions
     _collision.checkForCollision(_ghostModel, _palModel);
