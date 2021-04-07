@@ -317,6 +317,9 @@ void GameScene::update(float timestep) {
         if (tagTimer == 0) {
             _ghostNode->setVisible(false);
         }
+        else {
+            _ghostNode->setVisible(true);
+        }
     }
     // Ghost case
     else {
