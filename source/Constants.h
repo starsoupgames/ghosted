@@ -12,9 +12,7 @@ namespace constants {
     constexpr unsigned SCENE_WIDTH = 1024;
     constexpr uint8_t NETWORK_TICKS = 5;
 
-    /**
-     * Game modes
-     */
+    /** Game modes */
     enum GameMode {
         None = 0,
         Loading = 1,
@@ -22,6 +20,15 @@ namespace constants {
         CreateGame = 11,
         JoinGame = 12,
         Game = 20
+    };
+
+    /** Node priority levels */
+    constexpr unsigned PRIORITY_RANGE = 100;
+    enum Priority {
+        Background = 0,
+        Room = 100, // 100-199
+        RoomEntity = 200, // 200-299
+        Player = 300, // 300-399
     };
 }
 

@@ -81,13 +81,13 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
     _root->addChild(_palNode);
     _palModel = Pal::alloc(Vec2(-100, 0));
     _palModel->setNode(_palNode);
-    _palNode->setPriority(_palModel->getLoc().y);
+    _palNode->setPriority(constants::Priority::Player);
 
     _ghostNode = scene2::AnimationNode::alloc(_assets->get<Texture>("ghost_texture"), 4, 21);
     _root->addChild(_ghostNode);
     _ghostModel = Ghost::alloc(Vec2(100, 0));
     _ghostModel->setNode(_ghostNode);
-    _ghostNode->setPriority(_ghostModel->getLoc().y);
+    _palNode->setPriority(constants::Priority::Player);
 
 
     if (_host) {
@@ -115,6 +115,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
     _visionNode = scene2::PolygonNode::alloc(coneShape);
     _visionNode->setColor(Color4f(1, 1, 1, .2));
     _visionNode->setAnchor(Vec2::ANCHOR_BOTTOM_CENTER);
+    _visionNode->setPriority(constants::Priority::Player);
     
     _root->addChild(_visionNode);
 
@@ -150,6 +151,11 @@ void GameScene::dispose() {
         _visionNode = nullptr;
         _active = false;
     }
+}
+
+/** Function to sort player node priorities */
+bool comparePlayerPriority(const shared_ptr<Player>& p1, const shared_ptr<Player>& p2) {
+    return p1->getLoc().y > p2->getLoc().y;
 }
 
 /**
@@ -251,13 +257,20 @@ void GameScene::update(float timestep) {
         }
     }
 
-    _root->setPosition(center - _player->getLoc());
-
     _player->update(timestep);
     updateVision(_player);
     for (auto& p : _otherPlayers) {
         p->update(timestep);
         updateVision(p);
+    }
+
+    vector<shared_ptr<Player>> allPlayers;
+    copy(_otherPlayers.begin(), _otherPlayers.end(), back_inserter(allPlayers));
+    allPlayers.push_back(_player);
+    sort(allPlayers.begin(), allPlayers.end(), &comparePlayerPriority);
+    CUAssertLog(allPlayers.size() < constants::PRIORITY_RANGE, "Number of players exceeds priority range.");
+    for (unsigned i = 0; i < allPlayers.size(); ++i) {
+        allPlayers[i]->getNode()->setPriority(constants::Priority::Player + 1 + i);
     }
 
     // Update camera
