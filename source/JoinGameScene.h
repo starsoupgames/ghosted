@@ -1,6 +1,6 @@
 #pragma once
-#ifndef __START_SCENE_H__
-#define __START_SCENE_H__
+#ifndef __JOIN_GAME_SCENE_H__
+#define __JOIN_GAME_SCENE_H__
 
 #include <cugl/cugl.h>
 #include "GameMode.h"
@@ -8,10 +8,18 @@
 using namespace std;
 using namespace cugl;
 
-class StartScene : public GameMode {
+class JoinGameScene : public GameMode {
 private:
-    shared_ptr<scene2::Button> _create;
-    shared_ptr<scene2::Button> _join;
+    /** Text field */
+    shared_ptr<scene2::TextField> _field;
+
+    /** Room ID to connect to */
+    string _roomID;
+
+public:
+    string getRoomID() {
+        return _roomID;
+    }
 
 public:
     /**
@@ -20,7 +28,7 @@ public:
      * This constructor does not allocate any objects or start the controller.
      * This allows us to use a controller without a heap pointer.
      */
-    StartScene() : GameMode(constants::GameMode::Start) {}
+    JoinGameScene() : GameMode(constants::GameMode::JoinGame) {}
 
     /**
      * Disposes of all (non-static) resources allocated to this mode.
@@ -28,7 +36,7 @@ public:
      * This method is different from dispose() in that it ALSO shuts off any
      * static resources, like the input controller.
      */
-    ~StartScene() { dispose(); }
+    ~JoinGameScene() { dispose(); }
 
     /**
      * Initializes the controller contents, and starts the game
@@ -51,4 +59,4 @@ public:
     virtual void setActive(bool value) override;
 };
 
-#endif /* __START_SCENE_H__ */
+#endif /* __JOIN_GAME_SCENE_H__ */

@@ -6,6 +6,7 @@
 *.log
 *.tlog
 *.recipe
+.vs/
 
 # XCode
 *.DS_Store

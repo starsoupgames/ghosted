@@ -31,7 +31,7 @@
     <Filter Include="Source Files\GameEntities\Players">
       <UniqueIdentifier>{52d776c6-2c91-4380-95ca-3d7aaac3e54f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Assets">
+    <Filter Include="JSON Assets">
       <UniqueIdentifier>{1cd2bc0c-5cf0-451b-925c-e37697e6f5bc}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -102,6 +102,15 @@
     <ClInclude Include="..\..\source\Constants.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\source\CreateGameScene.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\JoinGameScene.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\GameMode.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\main.cpp">
@@ -164,6 +173,15 @@
     <ClCompile Include="..\..\source\GameScene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\source\CreateGameScene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\JoinGameScene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\GameMode.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="RoomParser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -180,7 +198,19 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\assets\json\assets.json">
-      <Filter>Assets</Filter>
+      <Filter>JSON Assets</Filter>
+    </None>
+    <None Include="..\..\assets\json\game.json">
+      <Filter>JSON Assets</Filter>
+    </None>
+    <None Include="..\..\assets\json\start.json">
+      <Filter>JSON Assets</Filter>
+    </None>
+    <None Include="..\..\assets\json\loading.json">
+      <Filter>JSON Assets</Filter>
+    </None>
+    <None Include="..\..\assets\json\join.json">
+      <Filter>JSON Assets</Filter>
     </None>
   </ItemGroup>
 </Project>

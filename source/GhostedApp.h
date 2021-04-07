@@ -28,9 +28,14 @@
 //
 #ifndef __GHOSTED_APP_H__
 #define __GHOSTED_APP_H__
+
 #include <cugl/cugl.h>
+#include "Constants.h"
+
+#include "GameMode.h"
 #include "LoadingScene.h"
 #include "StartScene.h"
+#include "JoinGameScene.h"
 #include "GameScene.h"
 
 /**
@@ -52,6 +57,7 @@ protected:
     /** The primary controller for the game world */
     LoadingScene _loading;
     StartScene _start;
+    JoinGameScene _join;
     GameScene _gameplay;
 
     uint8_t _mode;
@@ -134,15 +140,6 @@ public:
      * at all. The default implmentation does nothing.
      */
     virtual void draw() override;
-    
-    /**
-     * Game Mode
-     */
-    enum Mode {
-        Loading = 0,
-        Start = 1,
-        Game = 2
-    };
 };
 
 #endif /* __GHOSTED_APP_H__ */

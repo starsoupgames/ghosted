@@ -110,53 +110,67 @@ void GhostedApp::onShutdown() {
  * @param timestep  The amount of time (in seconds) since the last frame
  */
 void GhostedApp::update(float timestep) {
-    unsigned mode = Mode::Loading;
+    uint8_t mode = constants::GameMode::Loading;
     if (_loading.isActive()) {
-        mode = Mode::Loading;
+        mode = constants::GameMode::Loading;
     }
     else if (_start.isActive()) {
         mode = _start.getMode();
+    }
+    else if (_join.isActive()) {
+        mode = _join.getMode();
     }
     else if (_gameplay.isActive()) {
         mode = _gameplay.getMode();
     }
     else {
-        mode = Mode::Start;
+        mode = constants::GameMode::Start;
     }
 
     if (_mode != mode) {
         switch (_mode) {
-        case Mode::Loading:
+        case constants::GameMode::Loading:
             _loading.dispose();
             break;
-        case Mode::Start:
-            _gameplay.setRoomID(_start.getRoomID());
+        case constants::GameMode::Start:
+            _start.setActive(false);
             _start.dispose();
             break;
-        case Mode::Game:
+        case constants::GameMode::JoinGame:
+            _gameplay.setRoomID(_join.getRoomID());
+            _join.dispose();
+            break;
+        case constants::GameMode::Game:
             _gameplay.dispose();
             break;
         }
 
         switch (mode) {
-        case Mode::Start:
+        case constants::GameMode::Start:
             _start.init(_assets);
             break;
-        case Mode::Game:
+        case constants::GameMode::JoinGame:
+            _join.init(_assets);
+            break;
+        case constants::GameMode::Game:
             _gameplay.init(_assets);
             break;
         }
+
         _mode = mode;
     }
 
     switch (_mode) {
-    case Mode::Loading:
+    case constants::GameMode::Loading:
         _loading.update(0.01f);
         break;
-    case Mode::Start:
+    case constants::GameMode::Start:
         _start.update(timestep);
         break;
-    case Mode::Game:
+    case constants::GameMode::JoinGame:
+        _join.update(timestep);
+        break;
+    case constants::GameMode::Game:
         _gameplay.update(timestep);
         break;
     default:
@@ -176,13 +190,16 @@ void GhostedApp::update(float timestep) {
  */
 void GhostedApp::draw() {
     switch (_mode) {
-    case Mode::Loading:
+    case constants::GameMode::Loading:
         _loading.render(_batch);
         break;
-    case Mode::Start:
+    case constants::GameMode::Start:
         _start.render(_batch);
         break;
-    case Mode::Game:
+    case constants::GameMode::JoinGame:
+        _join.render(_batch);
+        break;
+    case constants::GameMode::Game:
         _gameplay.render(_batch);
         break;
     }
@@ -203,8 +220,11 @@ void GhostedApp::buildScene() {
     _assets->attach<scene2::SceneNode>(Scene2Loader::alloc()->getHook());
 
     _loading.init(_assets);
-    _mode = Mode::Loading;
+    _mode = constants::GameMode::Loading;
 
     // Queue up the other assets
     _assets->loadDirectoryAsync("json/assets.json", nullptr);
+    _assets->loadDirectoryAsync("json/start.json", nullptr);
+    _assets->loadDirectoryAsync("json/join.json", nullptr);
+    _assets->loadDirectoryAsync("json/game.json", nullptr);
 }

@@ -6,71 +6,14 @@
       "magfilter": "linear",
       "wrapS": "clamp",
       "wrapT": "clamp"
-    },
-    "pal_texture": {
-      "file": "textures/Pal_Base_Body_Frames.png"
-    },
-    "ghost_texture": {
-      "file": "textures/Ghost_Frames.png"
-    },
-    "light_cone": {
-      "file": "textures/light_cone.png"
-    },
-    "dim_floor_texture": {
-      "file": "textures/game/dim_floor.png"
-    },
-    "lit_floor_texture": {
-      "file": "textures/game/lit_floor.png"
-    },
-    "dim_wall_texture": {
-      "file": "textures/game/dim_wall.png"
-    },
-    "lit_wall_texture": {
-      "file": "textures/game/lit_wall.png"
-    },
-    "dim_door_texture": {
-      "file": "textures/game/dim_door.png"
-    },
-    "lit_door_texture": {
-      "file": "textures/game/lit_door.png"
     }
   },
   "fonts": {
-    "felt32": {
-      "file": "fonts/MarkerFelt.ttf",
-      "size": 32
+    "gyparody": {
+      "file": "fonts/gyparody-hv.ttf",
+      "size": 48
     }
   },
   "scene2s": {
-    "game": {
-      "type": "Node",
-      "format": {
-        "type": "Anchored"
-      }
-    },
-    "textfield": {
-      "type": "Node",
-      "format": {
-        "type": "Anchored"
-      },
-      "children": {
-        "action": {
-          "type": "TextField",
-          "data": {
-            "font": "felt32",
-            "text": "",
-            "foreground": [ 255, 255, 255, 255 ],
-            "background": [ 0, 0, 0, 255 ],
-            "size": [ 600, 80 ],
-            "anchor": [ 0.5, 0.5 ]
-          },
-          "layout": {
-            "x_anchor": "center",
-            "y_anchor": "top",
-            "y_offset": -0.3
-          }
-        }
-      }
-    }
   }
 }

@@ -1,0 +1,162 @@
+{
+  "textures": {
+    "background": {
+      "file": "textures/start/background1.png"
+    },
+    "menubutton": {
+      "file": "textures/start/ninepatch.png"
+    },
+    "ghosted_logo": {
+      "file": "textures/start/ghosted_logo.png"
+    },
+    "settings": {
+      "file": "textures/start/settings.png"
+    },
+    "information": {
+      "file": "textures/start/information.png"
+    },
+    "create": {
+      "file": "textures/start/create.png"
+    },
+    "invite": {
+      "file": "textures/start/invite.png"
+    }
+  },
+  "fonts": {
+  },
+  "scene2s": {
+    "start": {
+      "type": "Node",
+      "comment": "Start mode root node",
+      "format": {
+        "type": "Anchored"
+      },
+      "children": {
+        "backdrop": {
+          "type": "Image",
+          "data": {
+            "texture": "background",
+            "anchor": [ 0, 0.5 ]
+          },
+          "layout": {
+            "x_anchor": "left",
+            "y_anchor": "fill"
+          }
+        },
+        "logo": {
+          "type": "Image",
+          "format": {
+            "type": "Anchored"
+          },
+          "data": {
+            "texture": "ghosted_logo",
+            "anchor": [ 0.5, 0.7 ],
+            "scale": 0.75
+          },
+          "layout": {
+            "x_anchor": "center",
+            "y_anchor": "middle",
+            "y_offset": 115,
+            "absolute": true
+          }
+        },
+        "settings": {
+          "type": "Button",
+          "format": {
+            "type": "Anchored"
+          },
+          "data": {
+            "upnode": "up",
+            "anchor": [ 0, 1 ],
+            "scale": 0.75
+          },
+          "children": {
+            "up": {
+              "type": "Image",
+              "data": {
+                "texture": "settings"
+              }
+            }
+          },
+          "layout": {
+            "x_anchor": "right",
+            "y_anchor": "top",
+            "y_offset": -0.1,
+            "x_offset": -0.1
+          }
+        },
+        "information": {
+          "type": "Button",
+          "format": {
+            "type": "Anchored"
+          },
+          "data": {
+            "upnode": "up",
+            "anchor": [ 0, 2.5 ],
+            "scale": 0.75
+          },
+          "children": {
+            "up": {
+              "type": "Image",
+              "data": {
+                "texture": "information"
+              }
+            }
+          },
+          "layout": {
+            "x_anchor": "right",
+            "y_anchor": "top",
+            "y_offset": -0.1,
+            "x_offset": -0.1
+          }
+        },
+        "create": {
+          "type": "Button",
+          "format": {
+            "type": "Anchored"
+          },
+          "data": {
+            "upnode": "up",
+            "anchor": [ 1.2, 1 ],
+            "scale": 0.75
+          },
+          "children": {
+            "up": {
+              "type": "Image",
+              "data": {
+                "texture": "create"
+              }
+            }
+          },
+          "layout": {
+            "x_anchor": "center",
+            "y_anchor": "center"
+          }
+        },
+        "invite": {
+          "type": "Button",
+          "format": {
+            "type": "Anchored"
+          },
+          "data": {
+            "upnode": "up",
+            "anchor": [ -0.2, 1 ],
+            "scale": 0.75
+          },
+          "children": {
+            "up": {
+              "type": "Image",
+              "data": {
+                "texture": "invite"
+              }
+            }
+          },
+          "layout": {
+            "x_anchor": "center",
+            "y_anchor": "center"
+          }
+        }
+      }
+    }
+  }
+}

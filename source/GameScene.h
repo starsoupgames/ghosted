@@ -1,9 +1,11 @@
-#ifndef __GHOSTED_GAME_SCENE_H__
-#define __GHOSTED_GAME_SCENE_H__
+#ifndef __GAME_SCENE_H__
+#define __GAME_SCENE_H__
+
 #include <cugl/cugl.h>
-#include <vector>
 #include <iostream>
 #include <sstream>
+#include "GameMode.h"
+#include "GameMap.h"
 #include "GameEntities/Players/PlayerPal.h"
 #include "GameEntities/Players/PlayerGhost.h"
 #include "InputController.h"
@@ -14,11 +16,8 @@
 using namespace std;
 using namespace cugl;
 
-class GameScene : public Scene2 {
+class GameScene : public GameMode {
 protected:
-    /** The asset manager for this game mode. */
-    shared_ptr<AssetManager> _assets;
-
     // CONTROLLERS
     /** Controller for abstracting out input across multiple platforms */
     InputController _input;
@@ -32,10 +31,11 @@ protected:
     shared_ptr<scene2::OrderedNode> _root;
     shared_ptr<scene2::AnimationNode> _palNode;
     shared_ptr<scene2::AnimationNode> _ghostNode;
-    
 
-    std::shared_ptr<cugl::scene2::Label> _winNode;
-    std::shared_ptr<cugl::scene2::Label> _loseNode;
+    shared_ptr<cugl::scene2::Label> _roomIDText;
+
+    shared_ptr<cugl::scene2::Label> _winNode;
+    shared_ptr<cugl::scene2::Label> _loseNode;
     
     /** The polygon node representing the vision cone */
     shared_ptr<scene2::PolygonNode> _visionNode;
@@ -53,18 +53,15 @@ protected:
 
     bool _complete;
     int _countdown;
-    unsigned _mode;
 
 public:
-#pragma mark -
-#pragma mark Constructors
     /**
      * Creates a new game mode with the default values.
      *
      * This constructor does not allocate any objects or start the game.
      * This allows us to use the object without a heap pointer.
      */
-    GameScene() : Scene2(), _host(false), _roomID(""), _mode(2) {}
+    GameScene() : GameMode(constants::GameMode::Game), _host(false), _roomID("") {}
 
     /**
      * Disposes of all (non-static) resources allocated to this mode.
@@ -92,8 +89,6 @@ public:
      */
     bool init(const shared_ptr<AssetManager>& assets);
 
-#pragma mark -
-#pragma mark Gameplay Handling
     /**
      * The method called to update the game mode.
      *
@@ -108,13 +103,9 @@ public:
      */
     void updateVision(const std::shared_ptr<Player>& player);
 
-    uint8_t getMode() {
-        return _mode;
-    };
-
     void setRoomID(string roomID) {
         _roomID = roomID;
     }
 };
 
-#endif /* __GHOSTED_GAME_SCENE_H__ */
+#endif /* __GAME_SCENE_H__ */

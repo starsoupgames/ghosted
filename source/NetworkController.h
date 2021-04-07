@@ -35,8 +35,8 @@ public:
 
     ~NetworkController() { };
 
-    shared_ptr<CUNetworkConnection> getConnection() {
-        return _connection;
+    string getRoomID() {
+        return _roomID;
     }
 
     void init(const shared_ptr<NetworkData>& data);

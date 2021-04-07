@@ -197,10 +197,12 @@
     <ClInclude Include="..\..\source\GameEntities\Players\PlayerPal.h" />
     <ClInclude Include="..\..\source\GameEntity.h" />
     <ClInclude Include="..\..\source\GameMap.h" />
+    <ClInclude Include="..\..\source\GameMode.h" />
     <ClInclude Include="..\..\source\GameRoom.h" />
     <ClInclude Include="..\..\source\GameScene.h" />
     <ClInclude Include="..\..\source\GhostedApp.h" />
     <ClInclude Include="..\..\source\InputController.h" />
+    <ClInclude Include="..\..\source\JoinGameScene.h" />
     <ClInclude Include="..\..\source\LoadingScene.h" />
     <ClInclude Include="..\..\source\NetworkController.h" />
     <ClInclude Include="..\..\source\NetworkData.h" />
@@ -209,21 +211,25 @@
     <ClInclude Include="..\..\source\RoomEntities\Trap.h" />
     <ClInclude Include="..\..\source\RoomEntity.h" />
     <ClInclude Include="..\..\source\RoomParser.h" />
+    <ClInclude Include="..\..\source\CreateGameScene.h" />
     <ClInclude Include="..\..\source\StartScene.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\CollisionController.cpp" />
+    <ClCompile Include="..\..\source\CreateGameScene.cpp" />
     <ClCompile Include="..\..\source\GameEntities\BatteryCollectible.cpp" />
     <ClCompile Include="..\..\source\GameEntities\Player.cpp" />
     <ClCompile Include="..\..\source\GameEntities\Players\PlayerGhost.cpp" />
     <ClCompile Include="..\..\source\GameEntities\Players\PlayerPal.cpp" />
     <ClCompile Include="..\..\source\GameEntity.cpp" />
     <ClCompile Include="..\..\source\GameMap.cpp" />
+    <ClCompile Include="..\..\source\GameMode.cpp" />
     <ClCompile Include="..\..\source\GameRoom.cpp" />
     <ClCompile Include="..\..\source\GameScene.cpp" />
     <ClCompile Include="..\..\source\GhostedApp.cpp" />
     <ClCompile Include="..\..\source\InputController.cpp" />
+    <ClCompile Include="..\..\source\JoinGameScene.cpp" />
     <ClCompile Include="..\..\source\LoadingScene.cpp" />
     <ClCompile Include="..\..\source\main.cpp" />
     <ClCompile Include="..\..\source\NetworkController.cpp" />
@@ -248,6 +254,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\assets\json\assets.json" />
+    <None Include="..\..\assets\json\game.json" />
+    <None Include="..\..\assets\json\join.json" />
+    <None Include="..\..\assets\json\loading.json" />
+    <None Include="..\..\assets\json\start.json" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

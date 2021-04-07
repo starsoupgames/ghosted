@@ -1,11 +1,7 @@
 #include "GameScene.h"
-#include "GameMap.h"
 
 using namespace cugl;
 using namespace std;
-
-/** This is adjusted by screen aspect ratio to get the height */
-#define SCENE_WIDTH 1024
 
 #define CONE_WIDTH 75
 #define CONE_LENGTH 200
@@ -23,19 +19,13 @@ using namespace std;
  */
 
 bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
-    // Initialize the scene to a locked width
-    Size dimen = Application::get()->getDisplaySize();
-    Rect bounds = Application::get()->getSafeBounds();
-    Application::get()->setClearColor(Color4f::BLACK);
-    dimen *= SCENE_WIDTH / dimen.width;
-    if (assets == nullptr) {
-        return false;
-    }
-    if (!Scene2::init(dimen)) {
-        return false;
-    }
+    GameMode::init(assets);
 
-    _mode = 2;
+    Size dimen = Application::get()->getDisplaySize();
+    dimen *= constants::SCENE_WIDTH / dimen.width;
+    Rect bounds = Application::get()->getSafeBounds();
+
+    Application::get()->setClearColor(Color4f::BLACK);
 
     // Init data models
     _networkData = NetworkData::alloc();
@@ -46,7 +36,6 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
     _network.init(_networkData);
     _collision.init();
 
-    _assets = assets;
     _root = scene2::OrderedNode::allocWithOrder(scene2::OrderedNode::Order::ASCEND);
     _root->addChild(_assets->get<scene2::SceneNode>("game"));
     _root->setContentSize(dimen);
@@ -69,12 +58,12 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
     _countdown = 0;
 
     // Initialize ending messages
-    _winNode = scene2::Label::alloc("You win!", _assets->get<Font>("felt32"));
+    _winNode = scene2::Label::alloc("You win!", _assets->get<Font>("gyparody"));
     _winNode->setAnchor(Vec2::ANCHOR_CENTER);
     _winNode->setPosition(dimen.width / 2.0f, dimen.height / 2.0f);
     _winNode->setForeground(Color4::YELLOW);
 
-    _loseNode = scene2::Label::alloc("You lose!", _assets->get<Font>("felt32"));
+    _loseNode = scene2::Label::alloc("You lose!", _assets->get<Font>("gyparody"));
     _loseNode->setAnchor(Vec2::ANCHOR_CENTER);
     _loseNode->setPosition(dimen.width / 2.0f, dimen.height / 2.0f);
     _loseNode->setForeground(Color4::YELLOW);
@@ -86,7 +75,6 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
     else {
         _network.connect(_roomID);
     }
-
 
     _palNode = scene2::AnimationNode::alloc(_assets->get<Texture>("pal_texture"), 4, 21);
     _root->addChild(_palNode);
@@ -126,10 +114,15 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
     _visionNode = scene2::PolygonNode::alloc(coneShape);
     _visionNode->setColor(Color4f(1, 1, 1, .2));
     _visionNode->setAnchor(Vec2::ANCHOR_BOTTOM_CENTER);
-//    _visionNode->setAngle(M_PI);
-
     _root->addChild(_visionNode);
-    // }
+
+    if (!_host) {
+        _roomIDText = scene2::Label::alloc("Room ID: " + _roomID, _assets->get<Font>("gyparody"));
+        _roomIDText->setForeground(Color4::WHITE);
+        _roomIDText->setAnchor(Vec2::ANCHOR_TOP_LEFT);
+        _roomIDText->setPosition(-dimen.width / 2, dimen.height / 2);
+        _root->addChild(_roomIDText);
+    }
 
     _player->getNode()->setAnchor(Vec2::ANCHOR_CENTER);
     for (auto& p : _otherPlayers) {
@@ -150,9 +143,9 @@ void GameScene::dispose() {
         _root = nullptr;
         _palNode = nullptr;
         _palModel = nullptr;
-        _visionNode = nullptr;
         _ghostNode = nullptr;
         _ghostModel = nullptr;
+        _visionNode = nullptr;
         _active = false;
     }
 }
@@ -166,8 +159,17 @@ void GameScene::dispose() {
  */
 void GameScene::update(float timestep) {
     Size dimen = Application::get()->getDisplaySize();
-    dimen *= SCENE_WIDTH / dimen.width;
+    dimen *= constants::SCENE_WIDTH / dimen.width;
     Vec2 center(dimen.width / 2, dimen.height / 2);
+
+    if (_host && _roomID == "" && _network.getRoomID() != "") {
+        _roomID = _network.getRoomID();
+        _roomIDText = scene2::Label::alloc("Room ID: " + _roomID, _assets->get<Font>("gyparody"));
+        _roomIDText->setForeground(Color4::WHITE);
+        _roomIDText->setAnchor(Vec2::ANCHOR_TOP_LEFT);
+        _root->addChild(_roomIDText);
+        CULog(_roomID.c_str());
+    }
 
     // Process input and update player states
     _input.update(timestep);
@@ -190,6 +192,11 @@ void GameScene::update(float timestep) {
 
     // Update camera
     _root->setPosition(center - _player->getLoc());
+    
+    // Update UI
+    if (_roomIDText != nullptr) {
+        _roomIDText->setPosition(Vec2(-dimen.width / 2 + 10, dimen.height / 2) + _player->getLoc());
+    }
 
     // Check collisions
     _collision.checkForCollision(_ghostModel, _palModel);
@@ -206,7 +213,6 @@ void GameScene::update(float timestep) {
     if (_ghostModel->getTimer() == 0) {
         _ghostModel->setTagged(false);
     }
-
 
     // Pal case
     if (_host) {
@@ -226,29 +232,6 @@ void GameScene::update(float timestep) {
         if (tagTimer == 0) {
             _ghostNode->setVisible(false);
         }
-    }
-    // Ghost case
-    else {
-        if (_palModel->getSpooked() && _complete == false) {
-            // Player wins
-            _complete = true;
-            _winNode->setVisible(true);
-            _countdown = 120;
-        }
-        else if (_palModel->getBatteries() == 3 && _complete == false) {
-            // Player loses
-            _complete = true;
-            _loseNode->setVisible(true);
-            _countdown = 120;
-        }
-    }
-
-    // Reset the game if a win condition is reached
-    if (_countdown > 0) {
-        _countdown--;
-    }
-    else if (_countdown == 0) {
-        reset();
     }
     // Ghost case
     else {

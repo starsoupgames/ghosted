@@ -1,17 +1,19 @@
 #pragma once
-#ifndef __START_SCENE_H__
-#define __START_SCENE_H__
+#ifndef __GAME_MODE_H__
+#define __GAME_MODE_H__
 
 #include <cugl/cugl.h>
-#include "GameMode.h"
+#include "Constants.h"
 
-using namespace std;
 using namespace cugl;
 
-class StartScene : public GameMode {
-private:
-    shared_ptr<scene2::Button> _create;
-    shared_ptr<scene2::Button> _join;
+class GameMode : public Scene2 {
+protected:
+    /** The asset manager for this game mode. */
+    shared_ptr<AssetManager> _assets;
+
+    /** The game mode enum value. */
+    uint8_t _mode;
 
 public:
     /**
@@ -20,7 +22,9 @@ public:
      * This constructor does not allocate any objects or start the controller.
      * This allows us to use a controller without a heap pointer.
      */
-    StartScene() : GameMode(constants::GameMode::Start) {}
+    GameMode() : GameMode(constants::GameMode::None) {}
+
+    GameMode(uint8_t mode) : Scene2(), _mode(mode) {}
 
     /**
      * Disposes of all (non-static) resources allocated to this mode.
@@ -28,7 +32,12 @@ public:
      * This method is different from dispose() in that it ALSO shuts off any
      * static resources, like the input controller.
      */
-    ~StartScene() { dispose(); }
+    ~GameMode() { dispose(); }
+
+    /**
+     * Disposes of all (non-static) resources allocated to this mode.
+     */
+    virtual void dispose() override;
 
     /**
      * Initializes the controller contents, and starts the game
@@ -43,12 +52,11 @@ public:
      */
     bool init(const shared_ptr<AssetManager>& assets);
 
-    /**
-     * Sets whether the scene is currently active
-     *
-     * @param value whether the scene is currently active
-     */
-    virtual void setActive(bool value) override;
+    bool init(const shared_ptr<AssetManager>& assets, const string node);
+
+    uint8_t getMode() {
+        return _mode;
+    };
 };
 
-#endif /* __START_SCENE_H__ */
+#endif /* __GAME_MODE_H__ */
