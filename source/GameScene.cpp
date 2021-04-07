@@ -87,7 +87,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
     _root->addChild(_ghostNode);
     _ghostModel = Ghost::alloc(Vec2(100, 0));
     _ghostModel->setNode(_ghostNode);
-    _palNode->setPriority(constants::Priority::Player);
+    _ghostNode->setPriority(constants::Priority::Player);
 
 
     if (_host) {
@@ -186,6 +186,12 @@ void GameScene::update(float timestep) {
     Vec2 move = _input.getMove();
     Vec2 direction = _input.getDirection();
 
+    _player->setMove(move);
+    _player->setIdle(move == Vec2::ZERO);
+    if (direction != Vec2::ZERO) {
+        _player->setDir(direction);
+    }
+
     bool interact = _input.getInteraction();
     
     shared_ptr<Trap> trap = nullptr;
@@ -196,11 +202,6 @@ void GameScene::update(float timestep) {
     
     if (_player->getType() == Player::Type::Pal) {
         if (!_palModel->getSpooked()) {
-            _player->setMove(move);
-            _player->setIdle(move == Vec2::ZERO);
-            if (direction != Vec2::ZERO) {
-                _player->setDir(direction);
-            }
             if (interact) {
                 auto slotTexture = _assets->get<Texture>("slot");
                 shared_ptr<BatterySlot> slot = BatterySlot::alloc(Vec2(0, 100));
@@ -216,11 +217,6 @@ void GameScene::update(float timestep) {
         }
     }
     else {
-        _player->setMove(move);
-        _player->setIdle(move == Vec2::ZERO);
-        if (direction != Vec2::ZERO) {
-            _player->setDir(direction);
-        }
         if (interact) {
             if (_traps.size() != 0) {
                 float distance = ROOM_SIZE/2;

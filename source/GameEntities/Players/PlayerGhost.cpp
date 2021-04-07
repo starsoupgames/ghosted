@@ -21,7 +21,6 @@ void Ghost::update(float timestep) {
 
     if (_node != nullptr) {
         _node->setPosition(_loc);
-        _node->setPriority(-_loc.y);
     }
 }
 

@@ -15,13 +15,14 @@ void Pal::update(float timestep) {
     Player::update(timestep);
     
     // Move the pal
-    _loc += _move * _speed;
+    if (!_spooked) {
+        _loc += _move * _speed;
+    }
 
     processDirection();
     
     if (_node != nullptr) {
         _node->setPosition(_loc);
-        _node->setPriority(-_loc.y);
     }
 }
 
