@@ -20,7 +20,7 @@ public:
 	~RoomParser() {};
 
 	/** Initializes a new Parser */
-	bool init() {};
+    bool init() {return true;};
 
 	/** Takes in a json file and creates a room object */
 	shared_ptr<GameRoom> parse(string file, const Vec2& origin);

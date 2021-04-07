@@ -15,7 +15,7 @@ private:
 	shared_ptr<Texture> _slotTexture;
 
 	/** Level of charge remaining */
-	int _charge;
+	float _charge;
 
 public:
 
@@ -26,19 +26,43 @@ public:
 	}
 
 	/** Returns the amount of charge the battery has */
-	int getCharge() const {
+	float getCharge() const {
 		return _charge;
 	}
+    
+    /** Returns the amount of charge the battery has */
+    void setCharge() {
+        _charge = 5;
+    }
 
 	/** Updates the battery slot's charge */
-	void update();
+	void update(float timestep);
 
 	/** Creates a BatterySlot with the default values */
-	BatterySlot() : RoomEntity() {}
+	BatterySlot() : RoomEntity(), _charge(0) {}
 
 	/** Releases all resources allocated with this Battery Slot */
 	~BatterySlot() { dispose(); }
 
 	/** Initializes a new BatterySlot at the given position */
 	bool init(const Vec2 position);
+    
+    void setTextures(const std::shared_ptr<Texture>& trap, Size size);
+    
+    /**
+    * @return a newly allocated Trap at the origin.
+    */
+    static shared_ptr<BatterySlot> alloc() {
+        shared_ptr<BatterySlot> result = make_shared<BatterySlot>();
+        return (dynamic_pointer_cast<RoomEntity>(result)->init() ? result : nullptr);
+    }
+
+    static shared_ptr<BatterySlot> alloc(const Vec2& pos) {
+        shared_ptr<BatterySlot> result = make_shared<BatterySlot>();
+        return (dynamic_pointer_cast<RoomEntity>(result)->init(pos, 3) ? result : nullptr);
+    };
+    
+    void dispose();
+    
+    void reset();
 };

@@ -14,7 +14,7 @@ using namespace cugl;
 /** Necessary length to register a swipe gesture */
 #define SWIPE_LENGTH    50
 /** How fast a double click must be in milliseconds */
-#define DOUBLE_CLICK    400
+#define DOUBLE_CLICK    200
 
 
 /** The portion of the screen used for the left zone */
@@ -30,8 +30,9 @@ _active(false),
 _movement(Vec2(0.0f,0.0f)),
 _direction(Vec2(0.0f,-1.0f)),
 _turnAngle(0.0f),
-_pickup(false),
-_keyPickUp(false),
+_interact(false),
+_keyInteract(false),
+_spaceReleased(true),
 _ljoystick(false),
 _rjoystick(false)
 {}
@@ -110,6 +111,14 @@ void InputController::update(float dt) {
     bool _keyTop = keys->keyDown(KeyCode::W);
     bool _keyBot = keys->keyDown(KeyCode::S);
     
+    if (keys->keyDown(KeyCode::SPACE)) {
+        _keyInteract = true;
+    } else {
+        _keyInteract = false;
+        _spaceReleased = true;
+    }
+    
+    
     _movement = Vec2::ZERO;
     _direction = Vec2::ZERO;
 
@@ -143,13 +152,13 @@ void InputController::update(float dt) {
     }
     
 #endif
-    
-    // PICKUPS
-    if (_keyPickUp) {
-        _pickup = true;
-    } else {
-        _pickup = false;
-    }
+    //INTERACTIONS (BATTERIES/TRAPS)
+    _interact = false;
+    if (_keyInteract && _spaceReleased) {
+        _interact = true;
+        _spaceReleased = false;
+        _keyInteract = false;
+    } 
 }
 
 #pragma mark -
@@ -307,10 +316,11 @@ void InputController::touchBeganCB(const TouchEvent& event, bool focus) {
             // Only process if no touch in zone
             if (_rtouch.touchids.empty()) {
                 // Right is turning controls
-                _keyPickUp = (event.timestamp.ellapsedMillis(_rtime) <= DOUBLE_CLICK);
                 _rtouch.position = event.position;
                 _rtouch.timestamp.mark();
                 _rtouch.touchids.insert(event.touch);
+                
+                _keyInteract = (event.timestamp.ellapsedMillis(_rtime) <= DOUBLE_CLICK);
                 
                 _rjoystick = true;
                 _rjoycenter = touch2Screen(event.position);
@@ -341,8 +351,9 @@ void InputController::touchEndedCB(const TouchEvent& event, bool focus) {
         _rtouch.touchids.end()) {
         _rtime = event.timestamp;
         _rtouch.touchids.clear();
-        _keyPickUp = false;
         _rjoystick = false;
+        _keyInteract = false;
+        _interact = false;
     }
 }
 

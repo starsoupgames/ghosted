@@ -37,6 +37,24 @@
 		A468B75A260A763E00F0E184 /* fonts in Resources */ = {isa = PBXBuildFile; fileRef = A468B759260A763E00F0E184 /* fonts */; };
 		A468B75B260A763E00F0E184 /* fonts in Resources */ = {isa = PBXBuildFile; fileRef = A468B759260A763E00F0E184 /* fonts */; };
 		A468B75C260A763E00F0E184 /* fonts in Resources */ = {isa = PBXBuildFile; fileRef = A468B759260A763E00F0E184 /* fonts */; };
+		A4B30875261A47D000563226 /* RoomEntity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4B30870261A47CF00563226 /* RoomEntity.cpp */; };
+		A4B30876261A47D000563226 /* RoomEntity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4B30870261A47CF00563226 /* RoomEntity.cpp */; };
+		A4B30877261A47D000563226 /* RoomEntity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4B30870261A47CF00563226 /* RoomEntity.cpp */; };
+		A4B308F4261D98CC00563226 /* GameMap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4B308F2261D98CC00563226 /* GameMap.cpp */; };
+		A4B308F5261D98CC00563226 /* GameMap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4B308F2261D98CC00563226 /* GameMap.cpp */; };
+		A4B308F6261D98CC00563226 /* GameMap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4B308F2261D98CC00563226 /* GameMap.cpp */; };
+		A4B308F7261D98CC00563226 /* RoomParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4B308F3261D98CC00563226 /* RoomParser.cpp */; };
+		A4B308F8261D98CC00563226 /* RoomParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4B308F3261D98CC00563226 /* RoomParser.cpp */; };
+		A4B308F9261D98CC00563226 /* RoomParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4B308F3261D98CC00563226 /* RoomParser.cpp */; };
+		A4B30903261D9B6500563226 /* GameMode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4B308FD261D9B6500563226 /* GameMode.cpp */; };
+		A4B30904261D9B6600563226 /* GameMode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4B308FD261D9B6500563226 /* GameMode.cpp */; };
+		A4B30905261D9B6600563226 /* GameMode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4B308FD261D9B6500563226 /* GameMode.cpp */; };
+		A4B30906261D9B6600563226 /* JoinGameScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4B308FF261D9B6500563226 /* JoinGameScene.cpp */; };
+		A4B30907261D9B6600563226 /* JoinGameScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4B308FF261D9B6500563226 /* JoinGameScene.cpp */; };
+		A4B30908261D9B6600563226 /* JoinGameScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4B308FF261D9B6500563226 /* JoinGameScene.cpp */; };
+		A4B30909261D9B6600563226 /* CreateGameScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4B30902261D9B6500563226 /* CreateGameScene.cpp */; };
+		A4B3090A261D9B6600563226 /* CreateGameScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4B30902261D9B6500563226 /* CreateGameScene.cpp */; };
+		A4B3090B261D9B6600563226 /* CreateGameScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4B30902261D9B6500563226 /* CreateGameScene.cpp */; };
 		A4BD190A25F44EBB00FBD403 /* StartScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4BD18F825F44EB700FBD403 /* StartScene.cpp */; };
 		A4BD190B25F44EBB00FBD403 /* StartScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4BD18F825F44EB700FBD403 /* StartScene.cpp */; };
 		A4BD190C25F44EBB00FBD403 /* StartScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4BD18F825F44EB700FBD403 /* StartScene.cpp */; };
@@ -172,6 +190,18 @@
 		A4687392260BF31900F0E184 /* Trap.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Trap.cpp; sourceTree = "<group>"; };
 		A46873AC260BF3CF00F0E184 /* NetworkController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NetworkController.cpp; sourceTree = "<group>"; };
 		A468B759260A763E00F0E184 /* fonts */ = {isa = PBXFileReference; lastKnownFileType = folder; path = fonts; sourceTree = "<group>"; };
+		A4B30870261A47CF00563226 /* RoomEntity.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RoomEntity.cpp; sourceTree = "<group>"; };
+		A4B30874261A47CF00563226 /* RoomEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RoomEntity.h; sourceTree = "<group>"; };
+		A4B308F0261D98CC00563226 /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
+		A4B308F1261D98CC00563226 /* RoomParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RoomParser.h; sourceTree = "<group>"; };
+		A4B308F2261D98CC00563226 /* GameMap.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GameMap.cpp; sourceTree = "<group>"; };
+		A4B308F3261D98CC00563226 /* RoomParser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RoomParser.cpp; sourceTree = "<group>"; };
+		A4B308FD261D9B6500563226 /* GameMode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GameMode.cpp; sourceTree = "<group>"; };
+		A4B308FE261D9B6500563226 /* CreateGameScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CreateGameScene.h; sourceTree = "<group>"; };
+		A4B308FF261D9B6500563226 /* JoinGameScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = JoinGameScene.cpp; sourceTree = "<group>"; };
+		A4B30900261D9B6500563226 /* JoinGameScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JoinGameScene.h; sourceTree = "<group>"; };
+		A4B30901261D9B6500563226 /* GameMode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameMode.h; sourceTree = "<group>"; };
+		A4B30902261D9B6500563226 /* CreateGameScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CreateGameScene.cpp; sourceTree = "<group>"; };
 		A4BD18F425F44EB700FBD403 /* CollisionController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CollisionController.h; sourceTree = "<group>"; };
 		A4BD18F825F44EB700FBD403 /* StartScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StartScene.cpp; sourceTree = "<group>"; };
 		A4BD18F925F44EB800FBD403 /* GhostedApp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GhostedApp.cpp; sourceTree = "<group>"; };
@@ -454,6 +484,18 @@
 		EBBF18B11D749176008E2001 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				A4B30902261D9B6500563226 /* CreateGameScene.cpp */,
+				A4B308FE261D9B6500563226 /* CreateGameScene.h */,
+				A4B308FD261D9B6500563226 /* GameMode.cpp */,
+				A4B30901261D9B6500563226 /* GameMode.h */,
+				A4B308FF261D9B6500563226 /* JoinGameScene.cpp */,
+				A4B30900261D9B6500563226 /* JoinGameScene.h */,
+				A4B308F0261D98CC00563226 /* Constants.h */,
+				A4B308F2261D98CC00563226 /* GameMap.cpp */,
+				A4B308F3261D98CC00563226 /* RoomParser.cpp */,
+				A4B308F1261D98CC00563226 /* RoomParser.h */,
+				A4B30870261A47CF00563226 /* RoomEntity.cpp */,
+				A4B30874261A47CF00563226 /* RoomEntity.h */,
 				A46873AC260BF3CF00F0E184 /* NetworkController.cpp */,
 				A468738B260BF31900F0E184 /* NetworkController.h */,
 				A4687389260BF31800F0E184 /* NetworkData.cpp */,
@@ -658,14 +700,20 @@
 			buildActionMask = 2147483647;
 			files = (
 				A4BD191B25F44EBB00FBD403 /* InputController.cpp in Sources */,
+				A4B30877261A47D000563226 /* RoomEntity.cpp in Sources */,
+				A4B30908261D9B6600563226 /* JoinGameScene.cpp in Sources */,
 				A468739B260BF31900F0E184 /* BatterySlot.cpp in Sources */,
 				A4BD190C25F44EBB00FBD403 /* StartScene.cpp in Sources */,
 				EB9CDA3925D0EAB100EE1A09 /* main.cpp in Sources */,
+				A4B308F9261D98CC00563226 /* RoomParser.cpp in Sources */,
+				A4B30905261D9B6600563226 /* GameMode.cpp in Sources */,
 				A46873AF260BF3CF00F0E184 /* NetworkController.cpp in Sources */,
 				A4BD191225F44EBB00FBD403 /* GameEntity.cpp in Sources */,
 				A4687395260BF31900F0E184 /* NetworkData.cpp in Sources */,
 				A4BD191525F44EBB00FBD403 /* LoadingScene.cpp in Sources */,
 				A4687382260BF2F500F0E184 /* PlayerGhost.cpp in Sources */,
+				A4B308F6261D98CC00563226 /* GameMap.cpp in Sources */,
+				A4B3090B261D9B6600563226 /* CreateGameScene.cpp in Sources */,
 				A4BD191825F44EBB00FBD403 /* GameScene.cpp in Sources */,
 				A4BD191E25F44EBB00FBD403 /* GameRoom.cpp in Sources */,
 				A468739E260BF31900F0E184 /* Trap.cpp in Sources */,
@@ -684,14 +732,20 @@
 			buildActionMask = 2147483647;
 			files = (
 				A4BD191A25F44EBB00FBD403 /* InputController.cpp in Sources */,
+				A4B30876261A47D000563226 /* RoomEntity.cpp in Sources */,
+				A4B30907261D9B6600563226 /* JoinGameScene.cpp in Sources */,
 				A468739A260BF31900F0E184 /* BatterySlot.cpp in Sources */,
 				A4BD190B25F44EBB00FBD403 /* StartScene.cpp in Sources */,
 				EB7454AE1D74D891002FBAE6 /* main.cpp in Sources */,
+				A4B308F8261D98CC00563226 /* RoomParser.cpp in Sources */,
+				A4B30904261D9B6600563226 /* GameMode.cpp in Sources */,
 				A46873AE260BF3CF00F0E184 /* NetworkController.cpp in Sources */,
 				A4BD191125F44EBB00FBD403 /* GameEntity.cpp in Sources */,
 				A4687394260BF31900F0E184 /* NetworkData.cpp in Sources */,
 				A4BD191425F44EBB00FBD403 /* LoadingScene.cpp in Sources */,
 				A4687381260BF2F500F0E184 /* PlayerGhost.cpp in Sources */,
+				A4B308F5261D98CC00563226 /* GameMap.cpp in Sources */,
+				A4B3090A261D9B6600563226 /* CreateGameScene.cpp in Sources */,
 				A4BD191725F44EBB00FBD403 /* GameScene.cpp in Sources */,
 				A4BD191D25F44EBB00FBD403 /* GameRoom.cpp in Sources */,
 				A468739D260BF31900F0E184 /* Trap.cpp in Sources */,
@@ -710,14 +764,20 @@
 			buildActionMask = 2147483647;
 			files = (
 				A4BD191925F44EBB00FBD403 /* InputController.cpp in Sources */,
+				A4B30875261A47D000563226 /* RoomEntity.cpp in Sources */,
+				A4B30906261D9B6600563226 /* JoinGameScene.cpp in Sources */,
 				A4687399260BF31900F0E184 /* BatterySlot.cpp in Sources */,
 				A4BD190A25F44EBB00FBD403 /* StartScene.cpp in Sources */,
 				EB2BE9B61D74952A002FE78B /* main.cpp in Sources */,
+				A4B308F7261D98CC00563226 /* RoomParser.cpp in Sources */,
+				A4B30903261D9B6500563226 /* GameMode.cpp in Sources */,
 				A46873AD260BF3CF00F0E184 /* NetworkController.cpp in Sources */,
 				A4BD191025F44EBB00FBD403 /* GameEntity.cpp in Sources */,
 				A4687393260BF31900F0E184 /* NetworkData.cpp in Sources */,
 				A4BD191325F44EBB00FBD403 /* LoadingScene.cpp in Sources */,
 				A4687380260BF2F500F0E184 /* PlayerGhost.cpp in Sources */,
+				A4B308F4261D98CC00563226 /* GameMap.cpp in Sources */,
+				A4B30909261D9B6600563226 /* CreateGameScene.cpp in Sources */,
 				A4BD191625F44EBB00FBD403 /* GameScene.cpp in Sources */,
 				A4BD191C25F44EBB00FBD403 /* GameRoom.cpp in Sources */,
 				A468739C260BF31900F0E184 /* Trap.cpp in Sources */,
@@ -812,7 +872,7 @@
 					"@executable_path/Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
-				PRODUCT_BUNDLE_IDENTIFIER = edu.cornell.gdiac.ios.Ghosted;
+				PRODUCT_BUNDLE_IDENTIFIER = edu.cornell.gdiac.ios.SSGGhosted;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -838,7 +898,7 @@
 					"@executable_path/Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
-				PRODUCT_BUNDLE_IDENTIFIER = edu.cornell.gdiac.ios.Ghosted;
+				PRODUCT_BUNDLE_IDENTIFIER = edu.cornell.gdiac.ios.SSGGhosted;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";

@@ -6,6 +6,12 @@
     "ghost_texture": {
       "file": "textures/player/ghost.png"
     },
+    "trap": {
+      "file": "textures/play.png"
+    },
+    "slot": {
+        "file": "textures/logo.png"
+    },
     "dim_floor_texture": {
       "file": "textures/game/dim_floor.png"
     },

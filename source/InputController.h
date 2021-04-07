@@ -19,9 +19,12 @@ private:
     float _turnAngle;
     
     /** Player tried to pick something up? */
-    bool _pickup;
-    /** Whether the Space (pick up) key is down */
-    bool _keyPickUp;
+    bool _interact;
+    /** Whether the Space (interact) key is down */
+    bool _keyInteract;
+    
+    /** Whether space key has been released since last press (DESKTOP ONLY */
+    bool _spaceReleased;
     
 protected:
     // The screen is divided into four zones: Left, Bottom, Right and Main/
@@ -126,6 +129,13 @@ public:
     }
     
     /**
+     * @return the interaction key status
+     */
+    bool getInteraction() const {
+        return _interact;
+    }
+    
+    /**
      * Returns the turning angle
      *
      * @return the turning angle for this controller
@@ -196,7 +206,7 @@ public:
     void readLeft(const cugl::Vec2 pos);
     
     /**
-     * Reads a the turn/pickup input for this player on the right side of the screen.
+     * Reads a the turn/interaction input for this player on the right side of the screen.
      *
      * @param  start    the start position of the candidate swipe
      * @param  stop     the end position of the candidate swipe
@@ -205,7 +215,7 @@ public:
     void readRight(const cugl::Vec2 start, const cugl::Vec2 stop, cugl::Timestamp current);
     
     /**
-     * Reads a the turn/pickup input for this player on the right side of the screen.
+     * Reads a the turn/interaction input for this player on the right side of the screen.
      *
      * @param  start    the start position of the candidate swipe
      * @param  stop     the end position of the candidate swipe

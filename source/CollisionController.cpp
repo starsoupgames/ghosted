@@ -36,7 +36,7 @@ void CollisionController::checkForCollision(const shared_ptr<Ghost>& ghost, cons
 
 	if (!ghost->getTagged() && distance < impactDistance && CollisionController::checkSpooked(ghost, pal)) {
 		pal->setSpooked(true);
-		CULog("Spooked");
+//		CULog("Spooked");
 	}
 }
 
@@ -78,6 +78,25 @@ void CollisionController::checkForCollision(const shared_ptr<Pal>& pal, const sh
 		battery->dispose();
 		pal->addBattery(1);
 	}
+}
+
+/**
+ *  Handles collisions between a Pal and a Trap, prompting the Trap to spook the pal if requirements are fulfilled
+ *
+ *  This method should be called only once per collision.
+ *
+ *  @param Pal        The Pal in the collision
+ *  @param Battery    The Trap in the collision
+ */
+void CollisionController::checkForCollision(const shared_ptr<Pal>& pal, const shared_ptr<Trap>& trap) {
+    Vec2 norm = trap->getLoc() - pal->getLoc();
+    float distance = norm.length();    
+    float thresh = 200;
+
+    if (distance < thresh) {
+        pal->setSpooked(true);
+//        CULog("TRAP SPOOK");
+    }
 }
 
 /**

@@ -22,8 +22,6 @@ protected:
 	/** Reference to the entity's sprite for drawing */
 	shared_ptr<scene2::AnimationNode> _animationNode;
 
-	void advanceFrame();
-
 public:
 
 	/**

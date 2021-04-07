@@ -5,6 +5,7 @@ using namespace std;
 
 #define CONE_WIDTH 75
 #define CONE_LENGTH 200
+#define ROOM_SIZE 960
 
 /**
  * Initializes the controller contents, and starts the game
@@ -114,6 +115,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
     _visionNode = scene2::PolygonNode::alloc(coneShape);
     _visionNode->setColor(Color4f(1, 1, 1, .2));
     _visionNode->setAnchor(Vec2::ANCHOR_BOTTOM_CENTER);
+    
     _root->addChild(_visionNode);
 
     if (!_host) {
@@ -173,15 +175,83 @@ void GameScene::update(float timestep) {
 
     // Process input and update player states
     _input.update(timestep);
+//    _slot->update(timestep);
 
     Vec2 move = _input.getMove();
     Vec2 direction = _input.getDirection();
 
-    _player->setMove(move);
-    _player->setIdle(move == Vec2::ZERO);
-    if (direction != Vec2::ZERO) {
-        _player->setDir(direction);
+    bool interact = _input.getInteraction();
+    
+    shared_ptr<Trap> trap = nullptr;
+    
+    for (shared_ptr s : _slots) {
+        s->update(timestep);
     }
+    
+    if (_player->getType() == Player::Type::Pal) {
+        if (!_palModel->getSpooked()) {
+            _player->setMove(move);
+            _player->setIdle(move == Vec2::ZERO);
+            if (direction != Vec2::ZERO) {
+                _player->setDir(direction);
+            }
+            if (interact) {
+                auto slotTexture = _assets->get<Texture>("slot");
+                shared_ptr<BatterySlot> slot = BatterySlot::alloc(Vec2(0, 100));
+                slot->setTextures(slotTexture, _root->getContentSize());
+                slot->getNode()->setScale(0.05f);
+                slot->setLoc(_player->getLoc());
+                _root->addChild(slot->getNode());
+                slot->setCharge();
+                slot->getNode()->setColor(Color4f::GREEN);
+                _slots.push_back(slot);
+//                CULog("ACTIVATE SLOT");
+            }
+        }
+    }
+    else {
+        _player->setMove(move);
+        _player->setIdle(move == Vec2::ZERO);
+        if (direction != Vec2::ZERO) {
+            _player->setDir(direction);
+        }
+        if (interact) {
+            if (_traps.size() != 0) {
+                float distance = ROOM_SIZE/2;
+                shared_ptr<Trap> tPtr = nullptr;
+                
+                for (shared_ptr<Trap> t : _traps) {
+                    Vec2 n = t->getLoc() -_player->getLoc();
+                    float d = n.length();
+                    if (d < distance && !t->getTriggered()) {
+                        tPtr = t;
+                    }
+                }
+                trap = tPtr;
+            }
+            if (trap == nullptr || _traps.size() == 0) {
+                auto trapTexture = _assets->get<Texture>("trap");
+                shared_ptr<Trap> t = Trap::alloc(Vec2(0, 0));
+                t->setTextures(trapTexture, _root->getContentSize());
+                t->getNode()->setScale(0.25f);
+                _root->addChild(t->getNode());
+                _traps.push_back(t);
+                trap = t;
+            }
+            
+            if (!trap->getArmed() && !trap->getTriggered()) {
+                trap->setArmed(true);
+                trap->setLoc(_player->getLoc());
+//                CULog("SET TRAP");
+            } else if (!trap->getTriggered()) {
+                trap->setTriggered(true);
+                trap->getNode()->setColor(Color4f::RED);
+//                CULog("TRIGGER TRAP");
+            }
+        }
+    }
+
+    _root->setPosition(center - _player->getLoc());
 
     _player->update(timestep);
     updateVision(_player);
@@ -201,6 +271,12 @@ void GameScene::update(float timestep) {
     // Check collisions
     _collision.checkForCollision(_ghostModel, _palModel);
     _collision.checkForCollision(_ghostModel, _visionNode);
+    
+    if (trap != nullptr && (trap->getTriggered() && trap->getArmed())) {
+        _collision.checkForCollision(_palModel, trap);
+        trap->setArmed(false);
+    }
+    
     // TODO: Implement checking battery collisions
     // _collision.checkInBounds(_ghostModel, bounds);    need to define bounds
 

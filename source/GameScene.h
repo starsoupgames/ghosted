@@ -12,6 +12,8 @@
 #include "CollisionController.h"
 #include "NetworkController.h"
 #include "NetworkData.h"
+#include "RoomEntities/Trap.h"
+#include "RoomEntities/BatterySlot.h"
 
 using namespace std;
 using namespace cugl;
@@ -39,6 +41,11 @@ protected:
     
     /** The polygon node representing the vision cone */
     shared_ptr<scene2::PolygonNode> _visionNode;
+    
+    /** The vector of trap pointers currently in the scene */
+    std::vector<shared_ptr<Trap>> _traps;
+    
+    std::vector<shared_ptr<BatterySlot>> _slots;
 
     // MODEL
     shared_ptr<NetworkData> _networkData;

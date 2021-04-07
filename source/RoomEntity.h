@@ -12,9 +12,12 @@ using namespace cugl;
 
 class RoomEntity {
 
-private:
-	/** Position of the entity */
-	Vec2 _pos;
+protected:
+	/** Location of the entity */
+	Vec2 _loc;
+    
+    /** Radius of the entity in pixels */
+    int _radius;
 
 	/** Reference to the entity's sprite for drawing */
 	shared_ptr<scene2::AnimationNode> _animationNode;
@@ -24,9 +27,13 @@ public:
 	/**
 	Returns the position of the entity
 	*/
-	Vec2 getPos() const {
-		return _pos;
+	Vec2 getLoc() const {
+		return _loc;
 	}
+    
+    float getRadius() const {
+        return _radius;
+    }
 
 	/** 
 	Returns the entity's animation node
@@ -38,8 +45,11 @@ public:
 	/**
 	Sets the position of the entity
 	*/
-	void setPos(Vec2 position) {
-		_pos = position;
+	void setLoc(Vec2 position) {
+		_loc = position;
+        if (_animationNode != nullptr) {
+            _animationNode->setPosition(_loc);
+        }
 	}
 
 	/**
@@ -50,11 +60,41 @@ public:
 	}
 
 	/** Creates a RoomEntity with the default values */
-	RoomEntity();
+    RoomEntity() {};
+    
+    ~RoomEntity() {
+        dispose();
+    }
 
-	/** Initializes a new RoomEntity at given position */
-	bool init(scene2::AnimationNode node, Vec2 pos);
+    /**
+    * Initializes a new GameEnity at the origin with radius 0
+    * @return true if the GameEntity is initialized properly, false otherwise
+    */
+    bool init() { return init(cugl::Vec2::ZERO, 0); }
+
+    /** Initializes a new GameEntity at given location */
+    bool init(const cugl::Vec2& loc, const int radius);
 
 	/** Releases all resources allocated with this entity */
 	void dispose();
+    
+    static std::shared_ptr<RoomEntity> alloc() {
+        std::shared_ptr<RoomEntity> result = std::make_shared<RoomEntity>();
+        return (result->init() ? result : nullptr);
+    }
+
+    /**
+    * Returns a newly allocated Pal at the given position
+    * @param pos Initial position in world coordinates
+    *
+    * @return a newly allocated Pal at the given position
+    */
+    static std::shared_ptr<RoomEntity> alloc(const cugl::Vec2& loc, const int radius) {
+        std::shared_ptr<RoomEntity> result = std::make_shared<RoomEntity>();
+        return (result->init(loc, radius) ? result : nullptr);
+    }
+    
+    void update(float timestep);
+    
+    void reset();
 };

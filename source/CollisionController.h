@@ -6,6 +6,7 @@
 #include "GameEntities/Players/PlayerGhost.h"
 #include "GameEntities/Players/PlayerPal.h"
 #include "GameEntities/BatteryCollectible.h"
+#include "RoomEntities/Trap.h"
 
 /**
  * Namespace of functions implementing simple game physics.
@@ -50,6 +51,16 @@ public:
 	 *  @param Battery    The Battery in the collision
 	 */
 	void checkForCollision(const shared_ptr<Pal>& pal, const shared_ptr<Battery>& battery);
+    
+    /**
+     *  Handles collisions between a Pal and a Trap, prompting the Trap to spook the pal if requirements are fulfilled
+     *
+     *  This method should be called only once per collision.
+     *
+     *  @param Pal        The Pal in the collision
+     *  @param Battery    The Trap in the collision
+     */
+    void checkForCollision(const shared_ptr<Pal>& pal, const shared_ptr<Trap>& trap);
 
 
 	/**
