@@ -1,4 +1,5 @@
 #include "GameScene.h"
+#include "GameMap.h"
 
 using namespace cugl;
 using namespace std;
@@ -46,12 +47,23 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
     _collision.init();
 
     _assets = assets;
-
     _root = scene2::OrderedNode::allocWithOrder(scene2::OrderedNode::Order::ASCEND);
     _root->addChild(_assets->get<scene2::SceneNode>("game"));
     _root->setContentSize(dimen);
     _root->doLayout();
     addChild(_root);
+
+
+    GameMap _gameMap = GameMap();
+    _gameMap.generateRandomMap();
+    vector<shared_ptr<Texture>> textures;
+    textures.push_back(_assets->get<Texture>("dim_floor_texture"));
+    textures.push_back(_assets->get<Texture>("dim_door_texture"));
+    _gameMap.setTextures(textures);
+    for (auto& node : _gameMap.getNodes()) {
+        _root->addChild(node);
+    }
+
 
     // Initialize the countdown
     _countdown = 0;

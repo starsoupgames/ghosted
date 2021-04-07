@@ -4,6 +4,8 @@
 #define __GAME_ROOM_H__
 #include <cugl/cugl.h>
 
+using namespace cugl;
+
 constexpr int ROOM_DIMENSION = 600;
 
 using namespace std;
@@ -17,6 +19,8 @@ private:
 	shared_ptr<Texture> _tileTexture;
 	shared_ptr<Texture> _wallTexture;
 
+	shared_ptr<scene2::PolygonNode> _node;
+
 	// (0,0) at bottom left of map
 	Vec2 _origin;
 
@@ -28,7 +32,7 @@ private:
 	bool assertRoomIsAdjacent(const shared_ptr<GameRoom>& room);
 
 public:
-	GameRoom() { }
+	GameRoom() {}
 
 	~GameRoom() { }
 
@@ -46,6 +50,12 @@ public:
 
 	// set tile and wall textures of the room
 	bool setTextures();
+
+	// Gets the animation node
+	shared_ptr<scene2::PolygonNode> getNode() { return _node; };
+
+	// Sets the animation node
+	void setNode(const shared_ptr<scene2::PolygonNode>& value) { _node = value; };
 
 	Vec2 getOrigin() { return _origin; }
 

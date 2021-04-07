@@ -24,7 +24,8 @@ private:
 
 	bool generateBasicMap();
 
-	bool generateRandomMap();
+	// all the nodes for the rooms
+	vector<shared_ptr<scene2::PolygonNode>> _nodes;
 
 public:
 	GameMap() { }
@@ -35,6 +36,11 @@ public:
 
 	void reset() { _rooms.clear(); }
 
+	bool generateRandomMap();
+
+	vector<shared_ptr<scene2::PolygonNode>> getNodes() { return _nodes; }
+
+	bool setTextures(vector<shared_ptr<Texture>> textures);
 };
 
 #endif /** __GAME_MAP_H__ */

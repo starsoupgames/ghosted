@@ -15,6 +15,24 @@
     },
     "light_cone": {
       "file": "textures/light_cone.png"
+    },
+    "dim_floor_texture": {
+      "file": "textures/game/dim_floor.png"
+    },
+    "lit_floor_texture": {
+      "file": "textures/game/lit_floor.png"
+    },
+    "dim_wall_texture": {
+      "file": "textures/game/dim_wall.png"
+    },
+    "lit_wall_texture": {
+      "file": "textures/game/lit_wall.png"
+    },
+    "dim_door_texture": {
+      "file": "textures/game/dim_door.png"
+    },
+    "lit_door_texture": {
+      "file": "textures/game/lit_door.png"
     }
   },
   "fonts": {

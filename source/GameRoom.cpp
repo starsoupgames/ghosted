@@ -23,6 +23,7 @@ bool GameRoom::assertRoomIsAdjacent(const shared_ptr<GameRoom>& room) {
 	return false;
 };
 
+
 bool GameRoom::setConnectedRoom(const shared_ptr<GameRoom>& room) {
 	if (!GameRoom::assertRoomIsAdjacent(room)) return false;
 	if (_connectedRooms.size() >= 4) return false;

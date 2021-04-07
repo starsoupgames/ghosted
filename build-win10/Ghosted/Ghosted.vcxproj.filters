@@ -96,6 +96,9 @@
     <ClInclude Include="..\..\source\StartScene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\source\RoomParser.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\source\Constants.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -159,6 +162,9 @@
       <Filter>Source Files\GameEntities\Players</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\GameScene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RoomParser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

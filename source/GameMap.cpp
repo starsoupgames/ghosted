@@ -1,4 +1,5 @@
 #include "GameMap.h"
+#include "RoomParser.h"
 
 bool GameMap::assertValidMap() {
 	// make sure there are no overlapping rooms
@@ -38,3 +39,43 @@ bool GameMap::generateBasicMap() {
 	room3->setConnectedRoom(room2);
 	return assertValidMap();
 };
+
+void makeConnection(shared_ptr<GameRoom> room1, shared_ptr<GameRoom> room2) {
+	room1->setConnectedRoom(room2);
+	room2->setConnectedRoom(room1);
+}
+
+bool GameMap::generateRandomMap() {
+	RoomParser parser = RoomParser();
+	for (int i = 0; i < 3; i++) {
+		for (int j = 0; j < 3; j++) {
+			shared_ptr<GameRoom> room = parser.parse("json/room.json", Vec2(i * 375, j * 375));
+			_rooms.push_back(room);
+		}
+	}
+	makeConnection(_rooms[0], _rooms[1]);
+	makeConnection(_rooms[0], _rooms[3]);
+	makeConnection(_rooms[1], _rooms[4]);
+	makeConnection(_rooms[1], _rooms[2]);
+	makeConnection(_rooms[2], _rooms[5]);
+	makeConnection(_rooms[3], _rooms[4]);
+	makeConnection(_rooms[3], _rooms[6]);
+	makeConnection(_rooms[4], _rooms[7]);
+	makeConnection(_rooms[4], _rooms[5]);
+	makeConnection(_rooms[5], _rooms[8]);
+	makeConnection(_rooms[6], _rooms[7]);
+	makeConnection(_rooms[7], _rooms[8]);
+	return true;
+}
+
+bool GameMap::setTextures(vector<shared_ptr<Texture>> textures) {
+	shared_ptr<Texture> floor_texture = textures[0];
+	shared_ptr<Texture> door_texture = textures[1];
+	for (auto& room : _rooms) {
+		shared_ptr<scene2::PolygonNode> node = scene2::PolygonNode::allocWithTexture(floor_texture);
+		node->setPosition(room->getOrigin());
+		node->addChild(scene2::PolygonNode::allocWithTexture(door_texture));
+		_nodes.push_back(node);
+	}
+	return true;
+}
