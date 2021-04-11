@@ -78,6 +78,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
     _root->addChild(_ghostNode);
     _ghostModel = Ghost::alloc(Vec2(100, 0));
     _ghostModel->setNode(_ghostNode);
+    _ghostModel->setTimer(0);
     _ghostNode->setPriority(constants::Priority::Player);
 
     if (_network->isHost()) {
@@ -253,7 +254,7 @@ void GameScene::update(float timestep) {
 
     // Check collisions
     _collision.checkForCollision(_ghostModel, _palModel);
-    _collision.checkForCollision(_ghostModel, _visionNode);
+    _collision.checkForCollision(_ghostModel, _palModel, _visionNode);
     
     if (trap != nullptr && (trap->getTriggered() && trap->getArmed())) {
         _collision.checkForCollision(_palModel, trap);
@@ -266,6 +267,7 @@ void GameScene::update(float timestep) {
 
     // If ghost is tagged, lower tag timer
     int tagTimer = _ghostModel->getTimer();
+    //CULog("%d", tagTimer);
     if (tagTimer > 0) {
         _ghostModel->setTimer(tagTimer - 1);
     }

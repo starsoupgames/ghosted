@@ -37,7 +37,7 @@ public:
 	*  @param Ghost       The Ghost in the collision
 	*  @param vision      The Pal's vision in the collision
 	*/
-	void checkForCollision(const shared_ptr<Ghost>& ghost, const shared_ptr<scene2::PolygonNode>& vision);
+	void checkForCollision(const shared_ptr<Ghost>& ghost, const shared_ptr<Pal>& pal, const shared_ptr<scene2::PolygonNode>& vision);
 
 	/**
 	 *  Handles collisions between a Pal and a Battery, prompting the Pal to pick up the

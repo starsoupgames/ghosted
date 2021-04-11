@@ -4,22 +4,6 @@ using namespace cugl;
 using namespace std;
 
 /**
-*  Helper function to determine if the Pal should be spooked
-*
-*  This method should be called only once per collision.
-*
-*  @param Ghost       The Ghost in the collision
-*  @param Pal         The Pal in the collision
-*/
-bool CollisionController::checkSpooked(const shared_ptr<Ghost>& ghost, const shared_ptr<Pal>& pal) {
-	int dir = pal->isDirection();
-	return (dir == Pal::Direction::Right && (pal->getLoc().x > ghost->getLoc().x) && (!ghost->getTagged())) ||
-		(dir == Pal::Direction::Left && (pal->getLoc().x < ghost->getLoc().x) && (!ghost->getTagged())) ||
-		(dir == Pal::Direction::Bottom && (pal->getLoc().y < ghost->getLoc().y) && (!ghost->getTagged())) ||
-		(dir == Pal::Direction::Top && (pal->getLoc().y < ghost->getLoc().y) && (!ghost->getTagged()));
-}
-
-/**
 *  Handles collisions between a Pal and a Ghost, spooking the Pal if requirements for
 *  spooking are fulfilled.
 *
@@ -34,7 +18,7 @@ void CollisionController::checkForCollision(const shared_ptr<Ghost>& ghost, cons
 	float distance = norm.length();
 	float impactDistance = (ghost->getRadius() + pal->getRadius());
 
-	if (!ghost->getTagged() && distance < impactDistance && CollisionController::checkSpooked(ghost, pal)) {
+	if (!ghost->getTagged() && distance < impactDistance) {
 		pal->setSpooked(true);
 //		CULog("Spooked");
 	}
@@ -49,9 +33,14 @@ void CollisionController::checkForCollision(const shared_ptr<Ghost>& ghost, cons
 *  @param Ghost       The Ghost in the collision
 *  @param vision      The Pal's vision in the collision
 */
-void CollisionController::checkForCollision(const shared_ptr<Ghost>& ghost, const shared_ptr<scene2::PolygonNode>& vision) {
-	 Poly2 node = vision->getPolygon();
+void CollisionController::checkForCollision(const shared_ptr<Ghost>& ghost, const shared_ptr<Pal>& pal, const shared_ptr<scene2::PolygonNode>& vision) {
+	 Poly2 node = vision->getPolygon() * vision->getTransform();
+	 auto M = vision->getTransform();
+	 //CULog("%f, %f", (vision->getBoundingRect() * M).getMidX(), (vision->getBoundingRect() * M).getMidY());
+
+
 	 if (node.contains(ghost->getLoc())) {
+		 //CULog("success");
 		 ghost->setTagged(true);
 		 ghost->setTimer(180);
 	 }

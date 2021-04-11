@@ -707,6 +707,15 @@ public:
     std::vector<int> asIntArray(int defaultValue=0) const;
     
     /**
+    * Returns the children of this value as a vector of Vec2<int>
+    *
+    * @param json the JsonValue beign converted
+    *
+    * @return the children of this value as a vector of bools
+    */
+    std::vector<std::vector<int>> asVecArray(JsonValue json);
+
+    /**
      * Returns the children of this value as a vector of bools
      *
      * This method will fail if the node is not an array or object.  For each

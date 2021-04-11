@@ -24,8 +24,14 @@ private:
 	// (0,0) at bottom left of map
 	Vec2 _origin;
 
+	// List of possible spawn rooms
+	vector<vector<int>> _batterySpawns;
+
 	// doors lead to connected rooms
 	set<shared_ptr<GameRoom>> _connectedRooms;
+
+	// List of bools that represent which side has a door and which doesn't. In order of North, South, East, and West
+	vector<bool> _doors;
 
 	bool assertValidRoom();
 
@@ -48,19 +54,34 @@ public:
 		return (result->init(origin) ? result : nullptr);
 	}
 
-	// set tile and wall textures of the room
-	bool setTextures();
+	// Gets the coordinates of the origin of this room
+	Vec2 getOrigin() { return _origin; }
+	
+	// Gets the set of rooms connected to the current room
+	set<shared_ptr<GameRoom>> getConnectedRooms() { return _connectedRooms; };
 
 	// Gets the animation node
 	shared_ptr<scene2::PolygonNode> getNode() { return _node; };
 
+	// Gets the list of battery spawns
+	vector<vector<int>> getBatterySpawns() { return _batterySpawns; };
+
+	// Gets the list of doors
+	vector<bool> getDoors() { return _doors; };
+
+	// Sets the list of doors
+	void setDoors(vector<bool> doors) { _doors = doors; };
+
 	// Sets the animation node
 	void setNode(const shared_ptr<scene2::PolygonNode>& value) { _node = value; };
 
-	Vec2 getOrigin() { return _origin; }
+	// Sets tile and wall textures of the room
+	bool setTextures();
 
-	set<shared_ptr<GameRoom>> getConnectedRooms() { return _connectedRooms; };
+	// Sets the list of battery spawns
+	void setBatterySpawns(vector<vector<int>> spawns) { _batterySpawns = spawns; };
 
+	// Sets the inputted room as a room connected to the current one
 	bool setConnectedRoom(const shared_ptr<GameRoom>& room);
 
 	friend bool operator<(const shared_ptr<GameRoom>& l, const shared_ptr<GameRoom>& r) {

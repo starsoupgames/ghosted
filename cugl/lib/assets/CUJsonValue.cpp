@@ -685,6 +685,27 @@ std::vector<int> JsonValue::asIntArray(int defaultValue) const {
 }
 
 /**
+ * Returns the children of this value as a vector of Vec2<int>
+ *
+ * @param json the JsonValue beign converted
+ *
+ * @return the children of this value as a vector of bools
+ */
+std::vector<std::vector<int>> JsonValue::asVecArray(JsonValue json) {
+    std::vector<std::vector<int>> result;
+    
+    for (auto it = json._children.begin(); it != json._children.end(); it++) {
+        std::vector<std::shared_ptr<JsonValue>> children = (*it)->_children;
+        std::vector<int> coords;
+        for (auto& element : children) {
+            coords.push_back(element->_longValue);
+        }
+        result.push_back(coords);
+    }
+    return result;
+}
+
+/**
  * Returns the children of this value as a vector of bools
  *
  * This method will fail if the node is not an array or object.  For each
