@@ -3,11 +3,6 @@
 using namespace std;
 using namespace cugl;
 
-// https://stackoverflow.com/questions/4654636/how-to-determine-if-a-string-is-a-number-with-c
-bool is_numeric(const string& s) {
-    return !s.empty() && s.find_first_not_of("0123456789") == string::npos;
-}
-
 /**
  * Initializes the controller contents, and starts the game
  *
@@ -20,14 +15,14 @@ bool is_numeric(const string& s) {
  * @return true if the controller is initialized properly, false otherwise.
  */
 bool JoinGameScene::init(const shared_ptr<AssetManager>& assets) {
-    GameMode::init(assets, "join");
+    GameMode::init(assets, constants::GameMode::JoinGame, "join");
 
     _field = dynamic_pointer_cast<scene2::TextField>(assets->get<scene2::SceneNode>("join_textfield"));
     if (_field == nullptr) {
         return false;
     }
     _field->addExitListener([=](const string& name, const string& value) {
-        if (is_numeric(value)) {
+        if (utils::isNumeric(value)) {
             _roomID = value;
             _mode = constants::GameMode::Lobby;
         }
@@ -41,6 +36,14 @@ bool JoinGameScene::init(const shared_ptr<AssetManager>& assets) {
     }
 
     return true;
+}
+
+/**
+ * Disposes of all (non-static) resources allocated to this mode.
+ */
+void JoinGameScene::dispose() {
+    GameMode::dispose();
+    _field = nullptr;
 }
 
 /**

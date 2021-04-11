@@ -13,7 +13,7 @@ protected:
     shared_ptr<AssetManager> _assets;
 
     /** The game mode enum value. */
-    uint8_t _mode;
+    constants::GameMode _mode;
 
     /** The game mode's root node. */
     shared_ptr<scene2::SceneNode> _root;
@@ -27,7 +27,7 @@ public:
      */
     GameMode() : GameMode(constants::GameMode::None) {}
 
-    GameMode(uint8_t mode) : Scene2(), _mode(mode) {}
+    GameMode(constants::GameMode mode) : Scene2(), _mode(mode) {}
 
     /**
      * Disposes of all (non-static) resources allocated to this mode.
@@ -55,9 +55,11 @@ public:
      */
     bool init(const shared_ptr<AssetManager>& assets);
 
-    bool init(const shared_ptr<AssetManager>& assets, const string node);
+    bool init(const shared_ptr<AssetManager>& assets, constants::GameMode mode);
 
-    uint8_t getMode() {
+    bool init(const shared_ptr<AssetManager>& assets, constants::GameMode mode, const string node);
+
+    constants::GameMode getMode() {
         return _mode;
     };
 };

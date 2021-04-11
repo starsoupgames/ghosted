@@ -65,7 +65,7 @@ protected:
     LobbyScene _lobby;
     GameScene _gameplay;
 
-    uint8_t _mode;
+    constants::GameMode _mode;
     
     /** 
      * Internal helper to build the scene graph.
@@ -86,7 +86,7 @@ public:
      * of initialization from the constructor allows main.cpp to perform
      * advanced configuration of the application before it starts.
      */
-    GhostedApp() : cugl::Application() {}
+    GhostedApp() : cugl::Application(), _mode(constants::GameMode::None) {}
     
     /**
      * Disposes of this application, releasing all resources.

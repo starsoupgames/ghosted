@@ -10,8 +10,6 @@ using namespace cugl;
 
 class CreateGameScene : public GameMode {
 private:
-    // shared_ptr<scene2::Button> _create;
-    // shared_ptr<scene2::Button> _join;
 
 public:
     /**
@@ -42,6 +40,11 @@ public:
      * @return true if the controller is initialized properly, false otherwise.
      */
     bool init(const shared_ptr<AssetManager>& assets);
+
+    /**
+     * Disposes of all (non-static) resources allocated to this mode.
+     */
+    virtual void dispose() override;
 
     /**
      * Sets whether the scene is currently active

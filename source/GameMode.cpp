@@ -29,9 +29,13 @@ bool GameMode::init(const shared_ptr<AssetManager>& assets) {
     _assets = assets;
     return true;
 }
+bool GameMode::init(const shared_ptr<AssetManager>& assets, constants::GameMode mode) {
+    _mode = mode;
+    return init(assets);
+}
 
-bool GameMode::init(const std::shared_ptr<AssetManager>& assets, const string node) {
-    if (!init(assets)) return false;
+bool GameMode::init(const std::shared_ptr<AssetManager>& assets, constants::GameMode mode, const string node) {
+    if (!init(assets, mode)) return false;
 
     // Initialize the scene to a locked width
     Size dimen = Application::get()->getDisplaySize();

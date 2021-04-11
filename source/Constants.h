@@ -13,14 +13,14 @@ namespace constants {
     constexpr uint8_t NETWORK_TICKS = 5;
 
     /** Game modes */
-    enum GameMode {
-        None = 0,
-        Loading = 1,
-        Start = 10,
-        CreateGame = 11,
-        JoinGame = 12,
-        Lobby = 20,
-        Game = 21
+    enum class GameMode {
+        None,
+        Loading,
+        Start,
+        CreateGame,
+        JoinGame,
+        Lobby,
+        Game
     };
 
     /** Node priority levels */

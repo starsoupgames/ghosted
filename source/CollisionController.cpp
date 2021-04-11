@@ -13,15 +13,15 @@ using namespace std;
 *  @param Pal         The Pal in the collision
 */
 void CollisionController::checkForCollision(const shared_ptr<Ghost>& ghost, const shared_ptr<Pal>& pal) {
-	// Calculate the normal of the (possible) point of collision
-	Vec2 norm = ghost->getLoc() - pal->getLoc();
-	float distance = norm.length();
-	float impactDistance = (ghost->getRadius() + pal->getRadius());
+    // Calculate the normal of the (possible) point of collision
+    Vec2 norm = ghost->getLoc() - pal->getLoc();
+    float distance = norm.length();
+    float impactDistance = (ghost->getRadius() + pal->getRadius());
 
-	if (!ghost->getTagged() && distance < impactDistance) {
-		pal->setSpooked(true);
+    if (!ghost->getTagged() && distance < impactDistance) {
+        pal->setSpooked(true);
 //		CULog("Spooked");
-	}
+    }
 }
 
 /**
@@ -34,16 +34,16 @@ void CollisionController::checkForCollision(const shared_ptr<Ghost>& ghost, cons
 *  @param vision      The Pal's vision in the collision
 */
 void CollisionController::checkForCollision(const shared_ptr<Ghost>& ghost, const shared_ptr<Pal>& pal, const shared_ptr<scene2::PolygonNode>& vision) {
-	 Poly2 node = vision->getPolygon() * vision->getTransform();
-	 auto M = vision->getTransform();
-	 //CULog("%f, %f", (vision->getBoundingRect() * M).getMidX(), (vision->getBoundingRect() * M).getMidY());
+     Poly2 node = vision->getPolygon() * vision->getTransform();
+     auto M = vision->getTransform();
+     //CULog("%f, %f", (vision->getBoundingRect() * M).getMidX(), (vision->getBoundingRect() * M).getMidY());
 
 
-	 if (node.contains(ghost->getLoc())) {
-		 //CULog("success");
-		 ghost->setTagged(true);
-		 ghost->setTimer(180);
-	 }
+     if (node.contains(ghost->getLoc())) {
+         //CULog("success");
+         ghost->setTagged(true);
+         ghost->setTimer(180);
+     }
 }
 
 /**
@@ -58,15 +58,15 @@ void CollisionController::checkForCollision(const shared_ptr<Ghost>& ghost, cons
  *  @param Battery    The Battery in the collision
  */
 void CollisionController::checkForCollision(const shared_ptr<Pal>& pal, const shared_ptr<Battery>& battery) {
-	// Calculate the normal of the (possible) point of collision
-	Vec2 norm = battery->getLoc() - pal->getLoc();
-	float distance = norm.length();
-	float impactDistance = (battery->getRadius() + pal->getRadius());
+    // Calculate the normal of the (possible) point of collision
+    Vec2 norm = battery->getLoc() - pal->getLoc();
+    float distance = norm.length();
+    float impactDistance = (battery->getRadius() + pal->getRadius());
 
-	if (distance < impactDistance) {
-		battery->dispose();
-		pal->addBattery(1);
-	}
+    if (distance < impactDistance) {
+        battery->dispose();
+        pal->addBattery(1);
+    }
 }
 
 /**
@@ -95,21 +95,21 @@ void CollisionController::checkForCollision(const shared_ptr<Pal>& pal, const sh
 * @param bounds    The rectangular bounds of the playing field
 */
 void CollisionController::checkInBounds(const std::shared_ptr<GameEntity>& entity, const cugl::Rect bounds) {
-	Vec2 loc = entity->getLoc();
-	// Turn this into referencing the entity's speed
-	int adjust = 1;
+    Vec2 loc = entity->getLoc();
+    // Turn this into referencing the entity's speed
+    int adjust = 1;
 
-	if (loc.x <= bounds.origin.x) {
-		loc.x += adjust;
-	}
-	if (loc.x >= bounds.size.width + bounds.origin.x) {
-		loc.x -= adjust;
-	}
-	if (loc.y <= bounds.origin.y) {
-		loc.y += adjust;
-	}
-	if (loc.y >= bounds.size.height + bounds.origin.y) {
-		loc.y -= adjust;
-	}
-	entity->setLoc(loc);
+    if (loc.x <= bounds.origin.x) {
+        loc.x += adjust;
+    }
+    if (loc.x >= bounds.size.width + bounds.origin.x) {
+        loc.x -= adjust;
+    }
+    if (loc.y <= bounds.origin.y) {
+        loc.y += adjust;
+    }
+    if (loc.y >= bounds.size.height + bounds.origin.y) {
+        loc.y -= adjust;
+    }
+    entity->setLoc(loc);
 }

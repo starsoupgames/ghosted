@@ -20,7 +20,7 @@ using namespace std;
  */
 
 bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
-    GameMode::init(assets);
+    GameMode::init(assets, constants::GameMode::Game);
 
     Size dimen = Application::get()->getDisplaySize();
     dimen *= constants::SCENE_WIDTH / dimen.width;
@@ -34,7 +34,6 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 
     // Init controllers
     _input.init(bounds);
-    _collision.init();
 
     _root = scene2::OrderedNode::allocWithOrder(scene2::OrderedNode::Order::ASCEND);
     _root->addChild(_assets->get<scene2::SceneNode>("game"));
@@ -125,7 +124,6 @@ void GameScene::dispose() {
     GameMode::dispose();
 
     _input.dispose();
-    // _collision.dispose()
 
     _network = nullptr;
     _networkData = nullptr;

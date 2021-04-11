@@ -214,6 +214,7 @@
     <ClInclude Include="..\..\source\RoomParser.h" />
     <ClInclude Include="..\..\source\CreateGameScene.h" />
     <ClInclude Include="..\..\source\StartScene.h" />
+    <ClInclude Include="..\..\source\Utils.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>

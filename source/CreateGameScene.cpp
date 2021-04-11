@@ -15,11 +15,18 @@ using namespace cugl;
  * @return true if the controller is initialized properly, false otherwise.
  */
 bool CreateGameScene::init(const shared_ptr<AssetManager>& assets) {
-    GameMode::init(assets, "create");
+    GameMode::init(assets, constants::GameMode::CreateGame, "create");
 
     _mode = constants::GameMode::Lobby;
 
     return true;
+}
+
+/**
+ * Disposes of all (non-static) resources allocated to this mode.
+ */
+void CreateGameScene::dispose() {
+    GameMode::dispose();
 }
 
 /**

@@ -4,6 +4,7 @@
 
 #include <cugl/cugl.h>
 #include "GameMode.h"
+#include "Utils.h"
 
 using namespace std;
 using namespace cugl;
@@ -50,6 +51,11 @@ public:
      * @return true if the controller is initialized properly, false otherwise.
      */
     bool init(const shared_ptr<AssetManager>& assets);
+
+    /**
+     * Disposes of all (non-static) resources allocated to this mode.
+     */
+    virtual void dispose() override;
 
     /**
      * Sets whether the scene is currently active

@@ -106,7 +106,7 @@ void GhostedApp::onShutdown() {
  * @param timestep  The amount of time (in seconds) since the last frame
  */
 void GhostedApp::update(float timestep) {
-    uint8_t mode = constants::GameMode::Loading;
+    constants::GameMode mode = constants::GameMode::Loading;
     if (_loading.isActive()) {
         mode = constants::GameMode::Loading;
     }
@@ -132,8 +132,9 @@ void GhostedApp::update(float timestep) {
     if (_mode != mode) {
         // leaving mode
         switch (_mode) {
+        case constants::GameMode::None:
+            break;
         case constants::GameMode::Loading:
-            _loading.dispose();
             break;
         case constants::GameMode::Start:
             _start.dispose();
@@ -156,6 +157,10 @@ void GhostedApp::update(float timestep) {
 
         // entering mode
         switch (mode) {
+        case constants::GameMode::None:
+            break;
+        case constants::GameMode::Loading:
+            break;
         case constants::GameMode::Start:
             _network = make_shared<NetworkController>(); // reset network controller
             _start.init(_assets);

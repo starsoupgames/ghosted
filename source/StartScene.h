@@ -44,6 +44,11 @@ public:
     bool init(const shared_ptr<AssetManager>& assets);
 
     /**
+     * Disposes of all (non-static) resources allocated to this mode.
+     */
+    virtual void dispose() override;
+
+    /**
      * Sets whether the scene is currently active
      *
      * @param value whether the scene is currently active

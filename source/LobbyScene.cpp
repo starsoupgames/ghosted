@@ -15,7 +15,7 @@ using namespace cugl;
  * @return true if the controller is initialized properly, false otherwise.
  */
 bool LobbyScene::init(const shared_ptr<AssetManager>& assets) {
-    GameMode::init(assets, "lobby");
+    GameMode::init(assets, constants::GameMode::Lobby, "lobby");
 
     _start = dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("lobby_create"));
     if (_start == nullptr) {
