@@ -26,15 +26,13 @@ protected:
     /** Controller for handling collisions */
     CollisionController _collision;
     /** Controller for handling networking */
-    NetworkController _network;
+    shared_ptr<NetworkController> _network;
 
     // VIEW
     /** Root node */
     shared_ptr<scene2::OrderedNode> _root;
     shared_ptr<scene2::AnimationNode> _palNode;
     shared_ptr<scene2::AnimationNode> _ghostNode;
-
-    shared_ptr<cugl::scene2::Label> _roomIDText;
 
     shared_ptr<cugl::scene2::Label> _winNode;
     shared_ptr<cugl::scene2::Label> _loseNode;
@@ -54,10 +52,6 @@ protected:
     shared_ptr<Pal> _palModel;
     shared_ptr<Ghost> _ghostModel;
 
-    /** Room ID for networking */
-    string _roomID;
-    bool _host;
-
     bool _complete;
     int _countdown;
 
@@ -68,7 +62,7 @@ public:
      * This constructor does not allocate any objects or start the game.
      * This allows us to use the object without a heap pointer.
      */
-    GameScene() : GameMode(constants::GameMode::Game), _host(false), _roomID("") {}
+    GameScene() : GameMode(constants::GameMode::Game) {}
 
     /**
      * Disposes of all (non-static) resources allocated to this mode.
@@ -110,8 +104,11 @@ public:
      */
     void updateVision(const std::shared_ptr<Player>& player);
 
-    void setRoomID(string roomID) {
-        _roomID = roomID;
+    /**
+     * Sets the pointer to the network.
+     */
+    void setNetwork(shared_ptr<NetworkController> network) {
+        _network = network;
     }
 };
 

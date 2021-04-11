@@ -8,11 +8,17 @@ bool NetworkData::init() {
     return true;
 }
 
-vector<vector<uint8_t>> NetworkData::split(const vector<uint8_t>& bytes, const vector<uint8_t>& sizes) {
+/** Split byte vector at certain points */
+vector<vector<uint8_t>> split(const vector<uint8_t>& bytes, const vector<uint8_t>& sizes) {
     vector<vector<uint8_t>> result;
     uint8_t index = 0;
     for (auto& size : sizes) {
-        CUAssertLog(bytes.size() >= index + size, "Byte vector is too small.");
+        if (bytes.size() < index + size) {
+            CULogError("Byte vector is too small.");
+            return result;
+        }
+    }
+    for (auto& size : sizes) {
         result.push_back(vector(bytes.begin() + index, bytes.begin() + index + size));
         index += size;
     }
@@ -140,6 +146,7 @@ vector<uint8_t> NetworkData::serializeData() {
 
 void NetworkData::unserializeData(const vector<uint8_t>& msg) {
     vector<vector<uint8_t>> splitMsg = split(msg, { 1, 16, 0 });
+    if (splitMsg.empty()) return;
     interpretPlayerData(splitMsg[0], splitMsg[1]);
     interpretMapData(splitMsg[2]);
 }

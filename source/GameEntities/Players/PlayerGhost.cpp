@@ -10,7 +10,6 @@ using namespace cugl;
  *
  * @param timestep  Time elapsed since last called.
  */
-
 void Ghost::update(float timestep) {
     Player::update(timestep);
     

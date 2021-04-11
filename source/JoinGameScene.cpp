@@ -29,7 +29,7 @@ bool JoinGameScene::init(const shared_ptr<AssetManager>& assets) {
     _field->addExitListener([=](const string& name, const string& value) {
         if (is_numeric(value)) {
             _roomID = value;
-            _mode = constants::GameMode::Game;
+            _mode = constants::GameMode::Lobby;
         }
         else {
             CULog("%s is not numeric.", value.c_str());

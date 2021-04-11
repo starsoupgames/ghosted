@@ -30,11 +30,10 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 
     // Init data models
     _networkData = NetworkData::alloc();
-    CUAssertLog(_networkData != nullptr, "NetworkData failed allocation.");
+    _network->attachData(_networkData);
 
     // Init controllers
     _input.init(bounds);
-    _network.init(_networkData);
     _collision.init();
 
     _root = scene2::OrderedNode::allocWithOrder(scene2::OrderedNode::Order::ASCEND);
@@ -69,14 +68,6 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
     _loseNode->setPosition(dimen.width / 2.0f, dimen.height / 2.0f);
     _loseNode->setForeground(Color4::YELLOW);
 
-    if (_roomID == "") {
-        _network.connect();
-        _host = true;
-    }
-    else {
-        _network.connect(_roomID);
-    }
-
     _palNode = scene2::AnimationNode::alloc(_assets->get<Texture>("pal_texture"), 4, 21);
     _root->addChild(_palNode);
     _palModel = Pal::alloc(Vec2(-100, 0));
@@ -89,8 +80,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
     _ghostModel->setNode(_ghostNode);
     _ghostNode->setPriority(constants::Priority::Player);
 
-
-    if (_host) {
+    if (_network->isHost()) {
         _player = _palModel;
         _otherPlayers.push_back(_ghostModel);
     }
@@ -119,14 +109,6 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
     
     _root->addChild(_visionNode);
 
-    if (!_host) {
-        _roomIDText = scene2::Label::alloc("Room ID: " + _roomID, _assets->get<Font>("gyparody"));
-        _roomIDText->setForeground(Color4::WHITE);
-        _roomIDText->setAnchor(Vec2::ANCHOR_TOP_LEFT);
-        _roomIDText->setPosition(-dimen.width / 2, dimen.height / 2);
-        _root->addChild(_roomIDText);
-    }
-
     _player->getNode()->setAnchor(Vec2::ANCHOR_CENTER);
     for (auto& p : _otherPlayers) {
         p->getNode()->setAnchor(Vec2::ANCHOR_CENTER);
@@ -136,19 +118,25 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 }
 
 /**
-*Disposes of all(non - static) resources allocated to this mode.
-*/
+ * Disposes of all(non - static) resources allocated to this mode.
+ */
 void GameScene::dispose() {
     if (_active) {
         removeAllChildren();
+
         _input.dispose();
-        _network.dispose();
+        // _collision.dispose()
+
+        _network = nullptr;
+        _networkData = nullptr;
+
         _root = nullptr;
         _palNode = nullptr;
         _palModel = nullptr;
         _ghostNode = nullptr;
         _ghostModel = nullptr;
         _visionNode = nullptr;
+
         _active = false;
     }
 }
@@ -169,15 +157,6 @@ void GameScene::update(float timestep) {
     Size dimen = Application::get()->getDisplaySize();
     dimen *= constants::SCENE_WIDTH / dimen.width;
     Vec2 center(dimen.width / 2, dimen.height / 2);
-
-    if (_host && _roomID == "" && _network.getRoomID() != "") {
-        _roomID = _network.getRoomID();
-        _roomIDText = scene2::Label::alloc("Room ID: " + _roomID, _assets->get<Font>("gyparody"));
-        _roomIDText->setForeground(Color4::WHITE);
-        _roomIDText->setAnchor(Vec2::ANCHOR_TOP_LEFT);
-        _root->addChild(_roomIDText);
-        CULog(_roomID.c_str());
-    }
 
     // Process input and update player states
     _input.update(timestep);
@@ -271,11 +250,6 @@ void GameScene::update(float timestep) {
 
     // Update camera
     _root->setPosition(center - _player->getLoc());
-    
-    // Update UI
-    if (_roomIDText != nullptr) {
-        _roomIDText->setPosition(Vec2(-dimen.width / 2 + 10, dimen.height / 2) + _player->getLoc());
-    }
 
     // Check collisions
     _collision.checkForCollision(_ghostModel, _palModel);
@@ -300,7 +274,7 @@ void GameScene::update(float timestep) {
     }
 
     // Pal case
-    if (_host) {
+    if (_network->isHost()) {
         if (_palModel->getSpooked() && _complete == false) {
             // Player loses
             _complete = true;
@@ -344,8 +318,6 @@ void GameScene::update(float timestep) {
     else if (_countdown == 0) {
         reset();
     }
-
-    _network.update(timestep);
 }
 
 void GameScene::updateVision(const std::shared_ptr<Player>& player) {

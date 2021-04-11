@@ -15,6 +15,9 @@ protected:
     /** The game mode enum value. */
     uint8_t _mode;
 
+    /** The game mode's root node. */
+    shared_ptr<scene2::SceneNode> _root;
+
 public:
     /**
      * Creates a new scene with the default values.

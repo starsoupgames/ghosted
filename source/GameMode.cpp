@@ -37,13 +37,13 @@ bool GameMode::init(const std::shared_ptr<AssetManager>& assets, const string no
     Size dimen = Application::get()->getDisplaySize();
     dimen *= constants::SCENE_WIDTH / dimen.width; // Lock the game to a reasonable resolution
 
-    auto layer = assets->get<scene2::SceneNode>(node);
-    if (layer == nullptr) {
+    _root = assets->get<scene2::SceneNode>(node);
+    if (_root == nullptr) {
         return false;
     }
-    layer->setContentSize(dimen);
-    layer->doLayout(); // This rearranges the children to fit the screen
-    addChild(layer);
+    _root->setContentSize(dimen);
+    _root->doLayout(); // This rearranges the children to fit the screen
+    addChild(_root);
 
     return true;
 }

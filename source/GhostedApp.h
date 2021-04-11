@@ -32,10 +32,14 @@
 #include <cugl/cugl.h>
 #include "Constants.h"
 
+#include "NetworkController.h"
+
 #include "GameMode.h"
 #include "LoadingScene.h"
 #include "StartScene.h"
+#include "CreateGameScene.h"
 #include "JoinGameScene.h"
+#include "LobbyScene.h"
 #include "GameScene.h"
 
 /**
@@ -46,18 +50,19 @@ protected:
     /** The loaders to (synchronously) load in assets */
     std::shared_ptr<cugl::AssetManager> _assets;
 
-    /** A scene graph, used to display our 2D scenes */
-    std::shared_ptr<cugl::Scene2> _scene;
     /** A 3152 style SpriteBatch to render the scene */
     std::shared_ptr<cugl::SpriteBatch> _batch;
-    /** A reference to the logo, so that we can move it around */
-    std::shared_ptr<cugl::scene2::SceneNode> _logo;
+
+    /** Controller for handling networking */
+    shared_ptr<NetworkController> _network;
     
     // Player modes
     /** The primary controller for the game world */
     LoadingScene _loading;
     StartScene _start;
+    CreateGameScene _create;
     JoinGameScene _join;
+    LobbyScene _lobby;
     GameScene _gameplay;
 
     uint8_t _mode;

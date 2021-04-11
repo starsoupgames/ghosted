@@ -111,6 +111,9 @@
     <ClInclude Include="..\..\source\GameMode.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\source\LobbyScene.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\main.cpp">
@@ -185,6 +188,9 @@
     <ClCompile Include="RoomParser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\source\LobbyScene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="icon1.ico">
@@ -210,6 +216,9 @@
       <Filter>JSON Assets</Filter>
     </None>
     <None Include="..\..\assets\json\join.json">
+      <Filter>JSON Assets</Filter>
+    </None>
+    <None Include="..\..\assets\json\lobby.json">
       <Filter>JSON Assets</Filter>
     </None>
   </ItemGroup>

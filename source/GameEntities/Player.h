@@ -71,9 +71,10 @@ public:
     void dispose();
 
     /** Initializes a new Player at the given location */
-    bool init(const Vec2& pos);
+    virtual bool init(const Vec2& pos);
 
-    bool init() { return init(Vec2::ZERO); }
+    /** Initializes a new Player at the origin */
+    virtual bool init() { return init(Vec2::ZERO); }
 
     /** Get player type */
     virtual uint8_t getType() {
@@ -110,23 +111,7 @@ public:
      *
      * @return the current direction of the Player
      */
-    uint8_t isDirection() {
-        uint8_t dir = Direction::Bottom;
-        float minDist = _direction.distance(Vec2(0, -1));
-        
-        if (_direction.distance(Vec2(0, 1)) < minDist) {
-            dir = Direction::Top;
-            minDist = _direction.distance(Vec2(0, 1));
-        }
-        if (_direction.distance(Vec2(1, 0)) < minDist) {
-            dir = Direction::Right;
-            minDist = _direction.distance(Vec2(1, 0));
-        }
-        if (_direction.distance(Vec2(-1, 0)) < minDist) {
-            dir = Direction::Left;
-        }
-        return dir;
-    }
+    uint8_t isDirection();
 
     /** Processes the direction for the animation and vision cone */
     virtual void processDirection();

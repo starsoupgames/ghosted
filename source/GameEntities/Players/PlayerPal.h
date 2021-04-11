@@ -53,12 +53,12 @@ public:
     */
     static shared_ptr<Pal> alloc() {
         shared_ptr<Pal> result = make_shared<Pal>();
-        return (dynamic_pointer_cast<Player>(result)->init() ? result : nullptr);
+        return (result->init() ? result : nullptr);
     }
 
     static shared_ptr<Pal> alloc(const Vec2& pos) {
         shared_ptr<Pal> result = make_shared<Pal>();
-        return (dynamic_pointer_cast<Player>(result)->init(pos) ? result : nullptr);
+        return (result->init(pos) ? result : nullptr);
     };
 
     /** Processes the direction for the animation and vision cone */

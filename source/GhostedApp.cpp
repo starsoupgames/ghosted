@@ -44,10 +44,6 @@ using namespace cugl;
  * causing the application to run.
  */
 void GhostedApp::onStartup() {
-    Size size = getDisplaySize();
-    
-    // Create a scene graph the same size as the window
-    _scene = Scene2::alloc(size.width, size.height);
     // Create a sprite batch (and background color) to render the scene
     _batch = SpriteBatch::alloc();
     setClearColor(Color4::BLACK);
@@ -82,10 +78,10 @@ void GhostedApp::onStartup() {
  */
 void GhostedApp::onShutdown() {
     // Delete all smart pointers
-    _logo = nullptr;
-    _scene = nullptr;
     _batch = nullptr;
     _assets = nullptr;
+
+    _network = nullptr;
     
     // Deativate input
 #if defined CU_TOUCH_SCREEN
@@ -117,8 +113,14 @@ void GhostedApp::update(float timestep) {
     else if (_start.isActive()) {
         mode = _start.getMode();
     }
+    else if (_create.isActive()) {
+        mode = _create.getMode();
+    }
     else if (_join.isActive()) {
         mode = _join.getMode();
+    }
+    else if (_lobby.isActive()) {
+        mode = _lobby.getMode();
     }
     else if (_gameplay.isActive()) {
         mode = _gameplay.getMode();
@@ -128,31 +130,48 @@ void GhostedApp::update(float timestep) {
     }
 
     if (_mode != mode) {
+        // leaving mode
         switch (_mode) {
         case constants::GameMode::Loading:
             _loading.dispose();
             break;
         case constants::GameMode::Start:
-            _start.setActive(false);
             _start.dispose();
             break;
+        case constants::GameMode::CreateGame:
+            _lobby.setRoomID("");
+            _create.dispose();
+            break;
         case constants::GameMode::JoinGame:
-            _gameplay.setRoomID(_join.getRoomID());
+            _lobby.setRoomID(_join.getRoomID());
             _join.dispose();
+            break;
+        case constants::GameMode::Lobby:
+            _lobby.dispose();
             break;
         case constants::GameMode::Game:
             _gameplay.dispose();
             break;
         }
 
+        // entering mode
         switch (mode) {
         case constants::GameMode::Start:
+            _network = make_shared<NetworkController>(); // reset network controller
             _start.init(_assets);
+            break;
+        case constants::GameMode::CreateGame:
+            _create.init(_assets);
             break;
         case constants::GameMode::JoinGame:
             _join.init(_assets);
             break;
+        case constants::GameMode::Lobby:
+            _lobby.setNetwork(_network);
+            _lobby.init(_assets);
+            break;
         case constants::GameMode::Game:
+            _gameplay.setNetwork(_network);
             _gameplay.init(_assets);
             break;
         }
@@ -167,11 +186,19 @@ void GhostedApp::update(float timestep) {
     case constants::GameMode::Start:
         _start.update(timestep);
         break;
+    case constants::GameMode::CreateGame:
+        _create.update(timestep);
+        break;
     case constants::GameMode::JoinGame:
         _join.update(timestep);
         break;
+    case constants::GameMode::Lobby:
+        _lobby.update(timestep);
+        _network->update(timestep);
+        break;
     case constants::GameMode::Game:
         _gameplay.update(timestep);
+        _network->update(timestep);
         break;
     default:
         CULogError("No corresponding mode.");
@@ -196,8 +223,14 @@ void GhostedApp::draw() {
     case constants::GameMode::Start:
         _start.render(_batch);
         break;
+    case constants::GameMode::CreateGame:
+        _create.render(_batch);
+        break;
     case constants::GameMode::JoinGame:
         _join.render(_batch);
+        break;
+    case constants::GameMode::Lobby:
+        _lobby.render(_batch);
         break;
     case constants::GameMode::Game:
         _gameplay.render(_batch);
@@ -227,4 +260,5 @@ void GhostedApp::buildScene() {
     _assets->loadDirectoryAsync("json/start.json", nullptr);
     _assets->loadDirectoryAsync("json/join.json", nullptr);
     _assets->loadDirectoryAsync("json/game.json", nullptr);
+    _assets->loadDirectoryAsync("json/lobby.json", nullptr);
 }

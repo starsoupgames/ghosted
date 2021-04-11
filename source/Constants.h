@@ -19,7 +19,8 @@ namespace constants {
         Start = 10,
         CreateGame = 11,
         JoinGame = 12,
-        Game = 20
+        Lobby = 20,
+        Game = 21
     };
 
     /** Node priority levels */

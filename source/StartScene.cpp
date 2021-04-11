@@ -23,7 +23,7 @@ bool StartScene::init(const shared_ptr<AssetManager>& assets) {
     }
     _create->addListener([=](const string& name, bool down) {
         if (!down) {
-            _mode = constants::GameMode::Game;
+            _mode = constants::GameMode::CreateGame;
         }
         });
 

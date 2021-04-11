@@ -19,6 +19,7 @@ private:
     // NetworkData does not own these players
     shared_ptr<Player> _player;
     vector<shared_ptr<Player>> _otherPlayers;
+
     // for position interpolation
     vector<unsigned> _ticksSinceReceived;
     vector<Vec2> _otherPlayersOldPositions;
@@ -33,9 +34,6 @@ private:
 
     void encodeVector(const Vec2& v, vector<uint8_t>& out); // 8 bytes
     Vec2 decodeVector(const vector<uint8_t>& bytes);
-
-    /** Split byte vector at certain points */
-    vector<vector<uint8_t>> split(const vector<uint8_t>& bytes, const vector<uint8_t>& indices);
 
     /** Metadata */
     vector<uint8_t> convertMetadata();

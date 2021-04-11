@@ -44,6 +44,28 @@ void Player::update(float timestep) {
     GameEntity::update(timestep);
 }
 
+/** Returns the current direction ENUM of the Player
+ *
+ * @return the current direction of the Player
+ */
+uint8_t Player::isDirection() {
+  uint8_t dir = Direction::Bottom;
+  float minDist = _direction.distance(Vec2(0, -1));
+
+  if (_direction.distance(Vec2(0, 1)) < minDist) {
+    dir = Direction::Top;
+    minDist = _direction.distance(Vec2(0, 1));
+  }
+  if (_direction.distance(Vec2(1, 0)) <= minDist) {
+    dir = Direction::Right;
+    minDist = _direction.distance(Vec2(1, 0));
+  }
+  if (_direction.distance(Vec2(-1, 0)) <= minDist) {
+    dir = Direction::Left;
+  }
+  return dir;
+}
+
 /** Processes the direction for the animation and vision cone */
 void Player::processDirection() {
     unsigned int frame = _node->getFrame();

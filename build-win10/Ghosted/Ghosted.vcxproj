@@ -204,6 +204,7 @@
     <ClInclude Include="..\..\source\InputController.h" />
     <ClInclude Include="..\..\source\JoinGameScene.h" />
     <ClInclude Include="..\..\source\LoadingScene.h" />
+    <ClInclude Include="..\..\source\LobbyScene.h" />
     <ClInclude Include="..\..\source\NetworkController.h" />
     <ClInclude Include="..\..\source\NetworkData.h" />
     <ClInclude Include="..\..\source\RoomEntities\BatterySlot.h" />
@@ -231,6 +232,7 @@
     <ClCompile Include="..\..\source\InputController.cpp" />
     <ClCompile Include="..\..\source\JoinGameScene.cpp" />
     <ClCompile Include="..\..\source\LoadingScene.cpp" />
+    <ClCompile Include="..\..\source\LobbyScene.cpp" />
     <ClCompile Include="..\..\source\main.cpp" />
     <ClCompile Include="..\..\source\NetworkController.cpp" />
     <ClCompile Include="..\..\source\NetworkData.cpp" />
@@ -257,6 +259,7 @@
     <None Include="..\..\assets\json\game.json" />
     <None Include="..\..\assets\json\join.json" />
     <None Include="..\..\assets\json\loading.json" />
+    <None Include="..\..\assets\json\lobby.json" />
     <None Include="..\..\assets\json\start.json" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

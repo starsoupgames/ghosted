@@ -18,7 +18,7 @@ private:
     /** Amount of Traps left */
     int _traps;
 
-    /** Speed of the Pal */
+    /** Speed of the Ghost */
     float _speed;
 
     /** Whether the Ghost has been revealed recently */
@@ -70,12 +70,12 @@ public:
     */
     static shared_ptr<Ghost> alloc() {
         shared_ptr<Ghost> result = make_shared<Ghost>();
-        return (dynamic_pointer_cast<Player>(result)->init() ? result : nullptr);
+        return (result->init() ? result : nullptr);
     }
 
     static shared_ptr<Ghost> alloc(const Vec2& pos) {
         shared_ptr<Ghost> result = make_shared<Ghost>();
-        return (dynamic_pointer_cast<Player>(result)->init(pos) ? result : nullptr);
+        return (result->init(pos) ? result : nullptr);
     };
 
     /** Triggers the nearest trap */

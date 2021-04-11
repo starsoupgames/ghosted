@@ -17,6 +17,8 @@ using namespace cugl;
 bool CreateGameScene::init(const shared_ptr<AssetManager>& assets) {
     GameMode::init(assets, "create");
 
+    _mode = constants::GameMode::Lobby;
+
     return true;
 }
 
