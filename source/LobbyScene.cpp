@@ -96,6 +96,7 @@ void LobbyScene::update(float timestep) {
  * Disposes of all (non-static) resources allocated to this mode.
  */
 void LobbyScene::dispose() {
+    GameMode::dispose();
     _network = nullptr;
 }
 

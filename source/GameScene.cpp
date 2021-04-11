@@ -122,24 +122,20 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
  * Disposes of all(non - static) resources allocated to this mode.
  */
 void GameScene::dispose() {
-    if (_active) {
-        removeAllChildren();
+    GameMode::dispose();
 
-        _input.dispose();
-        // _collision.dispose()
+    _input.dispose();
+    // _collision.dispose()
 
-        _network = nullptr;
-        _networkData = nullptr;
+    _network = nullptr;
+    _networkData = nullptr;
 
-        _root = nullptr;
-        _palNode = nullptr;
-        _palModel = nullptr;
-        _ghostNode = nullptr;
-        _ghostModel = nullptr;
-        _visionNode = nullptr;
-
-        _active = false;
-    }
+    _root = nullptr;
+    _palNode = nullptr;
+    _palModel = nullptr;
+    _ghostNode = nullptr;
+    _ghostModel = nullptr;
+    _visionNode = nullptr;
 }
 
 /** Function to sort player node priorities */

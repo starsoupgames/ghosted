@@ -4,7 +4,7 @@ This Trap class contains information about the Trap's texture, whether or not it
 */
 
 #include <cugl/cugl.h>
-#include "RoomEntity.h"
+#include "../RoomEntity.h"
 
 #define TRAP_RADIUS 5
 

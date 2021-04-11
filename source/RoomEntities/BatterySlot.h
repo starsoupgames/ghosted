@@ -4,7 +4,7 @@ This BatterySlot class contains information about the BatterySlot's texture and 
 */
 
 #include <cugl/cugl.h>
-#include "RoomEntity.h"
+#include "../RoomEntity.h"
 using namespace std;
 using namespace cugl;
 
