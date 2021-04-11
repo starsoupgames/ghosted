@@ -38,14 +38,14 @@ private:
     bool receiveData(const vector<uint8_t>& msg);
 
 public:
-    NetworkController() : _tick(0), _status(CUNetworkConnection::NetStatus::Disconnected), _connected(false), _host(true), _roomID("") { };
+    NetworkController() : _tick(0), _status(CUNetworkConnection::NetStatus::Disconnected), _connected(false), _host(true), _playerID(0), _roomID("") { };
 
     ~NetworkController() { dispose(); };
 
     void attachData(const shared_ptr<NetworkData>& data);
 
     void startGame() {
-        if (_host) _connection->startGame();
+        if (_host && _connection != nullptr) _connection->startGame();
     }
 
     void connect();
