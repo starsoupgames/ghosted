@@ -45,7 +45,7 @@ public:
     void attachData(const shared_ptr<NetworkData>& data);
 
     void startGame() {
-        if (_host && _connection != nullptr) _connection->startGame();
+        // if (_host && _connection != nullptr) _connection->startGame();
     }
 
     void connect();
