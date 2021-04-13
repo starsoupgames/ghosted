@@ -15,6 +15,9 @@ using namespace cugl;
  * @return true if the controller is initialized properly, false otherwise.
  */
 bool GameMode::init(const shared_ptr<AssetManager>& assets) {
+    // Set default background color to black
+    Application::get()->setClearColor(Color4::BLACK);
+
     // Initialize the scene to a locked width
     Size dimen = Application::get()->getDisplaySize();
     dimen *= constants::SCENE_WIDTH / dimen.width; // Lock the game to a reasonable resolution
@@ -58,4 +61,5 @@ bool GameMode::init(const std::shared_ptr<AssetManager>& assets, constants::Game
 void GameMode::dispose() {
     _assets = nullptr;
     Scene2::dispose();
+    setActive(false);
 }

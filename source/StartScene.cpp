@@ -15,7 +15,7 @@ using namespace cugl;
  * @return true if the controller is initialized properly, false otherwise.
  */
 bool StartScene::init(const shared_ptr<AssetManager>& assets) {
-    GameMode::init(assets, constants::GameMode::Start, "start");
+    if (!GameMode::init(assets, constants::GameMode::Start, "start")) return false;
 
     _create = dynamic_pointer_cast<scene2::Button>(assets->get<scene2::SceneNode>("start_create"));
     if (_create == nullptr) {
@@ -41,7 +41,7 @@ bool StartScene::init(const shared_ptr<AssetManager>& assets) {
         _create->activate();
         _join->activate();
     }
-
+    _mode = constants::GameMode::Start;
     return true;
 }
 
@@ -50,6 +50,7 @@ bool StartScene::init(const shared_ptr<AssetManager>& assets) {
  */
 void StartScene::dispose() {
     GameMode::dispose();
+    setActive(false);
     _create = nullptr;
     _join = nullptr;
 }

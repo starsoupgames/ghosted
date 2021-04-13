@@ -79,6 +79,9 @@
 		A4BD192225F44EBB00FBD403 /* CollisionController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4BD190525F44EBA00FBD403 /* CollisionController.cpp */; };
 		A4BD192325F44EBB00FBD403 /* CollisionController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4BD190525F44EBA00FBD403 /* CollisionController.cpp */; };
 		A4BD192425F44EBB00FBD403 /* CollisionController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4BD190525F44EBA00FBD403 /* CollisionController.cpp */; };
+		A4F120C92623936200D621BB /* LobbyScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4F120C32623936200D621BB /* LobbyScene.cpp */; };
+		A4F120CA2623936200D621BB /* LobbyScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4F120C32623936200D621BB /* LobbyScene.cpp */; };
+		A4F120CB2623936200D621BB /* LobbyScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4F120C32623936200D621BB /* LobbyScene.cpp */; };
 		EB07CFB621EFF3F8000CB3A3 /* DeviceMargins.plist in Resources */ = {isa = PBXBuildFile; fileRef = EB07CFB021EFF3EF000CB3A3 /* DeviceMargins.plist */; };
 		EB22BDE025D0E00A002ACE41 /* libcugl-mac.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EB22BDC825D0DE75002ACE41 /* libcugl-mac.a */; };
 		EB22BDFC25D0E0E2002ACE41 /* libcugl-ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EB22BDCA25D0DE75002ACE41 /* libcugl-ios.a */; };
@@ -219,6 +222,9 @@
 		A4BD190625F44EBA00FBD403 /* GameRoom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameRoom.h; sourceTree = "<group>"; };
 		A4BD190825F44EBA00FBD403 /* LoadingScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoadingScene.h; sourceTree = "<group>"; };
 		A4BD190925F44EBB00FBD403 /* GameMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameMap.h; sourceTree = "<group>"; };
+		A4F120C32623936200D621BB /* LobbyScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LobbyScene.cpp; sourceTree = "<group>"; };
+		A4F120C72623936200D621BB /* LobbyScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LobbyScene.h; sourceTree = "<group>"; };
+		A4F120C82623936200D621BB /* Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Utils.h; sourceTree = "<group>"; };
 		EB07CFB021EFF3EF000CB3A3 /* DeviceMargins.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = DeviceMargins.plist; sourceTree = "<group>"; };
 		EB22BF5E25D0E8BC002ACE41 /* Ghosted (Sim).app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Ghosted (Sim).app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		EB2BE9B41D74952A002FE78B /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
@@ -484,6 +490,9 @@
 		EBBF18B11D749176008E2001 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				A4F120C32623936200D621BB /* LobbyScene.cpp */,
+				A4F120C72623936200D621BB /* LobbyScene.h */,
+				A4F120C82623936200D621BB /* Utils.h */,
 				A4B30902261D9B6500563226 /* CreateGameScene.cpp */,
 				A4B308FE261D9B6500563226 /* CreateGameScene.h */,
 				A4B308FD261D9B6500563226 /* GameMode.cpp */,
@@ -724,6 +733,7 @@
 				A4BD190F25F44EBB00FBD403 /* GhostedApp.cpp in Sources */,
 				EB9CDA3925D0EAB100EE1A09 /* main.cpp in Sources */,
 				A4687398260BF31900F0E184 /* Obstacle.cpp in Sources */,
+				A4F120CB2623936200D621BB /* LobbyScene.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -756,6 +766,7 @@
 				A4BD190E25F44EBB00FBD403 /* GhostedApp.cpp in Sources */,
 				EB7454AE1D74D891002FBAE6 /* main.cpp in Sources */,
 				A4687397260BF31900F0E184 /* Obstacle.cpp in Sources */,
+				A4F120CA2623936200D621BB /* LobbyScene.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -788,6 +799,7 @@
 				A4BD190D25F44EBB00FBD403 /* GhostedApp.cpp in Sources */,
 				EB2BE9B61D74952A002FE78B /* main.cpp in Sources */,
 				A4687396260BF31900F0E184 /* Obstacle.cpp in Sources */,
+				A4F120C92623936200D621BB /* LobbyScene.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

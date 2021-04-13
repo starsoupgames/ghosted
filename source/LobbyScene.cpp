@@ -68,7 +68,7 @@ void LobbyScene::update(float timestep) {
 
         if (_roomID != _network->getRoomID() && _network->getRoomID() != "") {
             _roomID = _network->getRoomID();
-
+            
             auto roomIDText = scene2::Label::alloc("Room ID: " + _roomID, _assets->get<Font>("gyparody"));
             roomIDText->setForeground(Color4::WHITE);
             roomIDText->setAnchor(Vec2::ANCHOR_TOP_CENTER);
@@ -97,7 +97,9 @@ void LobbyScene::update(float timestep) {
  */
 void LobbyScene::dispose() {
     GameMode::dispose();
+    setActive(false);
     _network = nullptr;
+    _root->removeChildByName("roomIDText");
 }
 
 /**

@@ -26,6 +26,10 @@ private:
     /** Whether space key has been released since last press (DESKTOP ONLY */
     bool _spaceReleased;
     
+    bool _resetPressed;
+    
+    bool _escapePressed;
+    
 protected:
     // The screen is divided into four zones: Left, Bottom, Right and Main/
     // These are all shown in the diagram below.
@@ -133,6 +137,14 @@ public:
      */
     bool getInteraction() const {
         return _interact;
+    }
+    
+    bool getReset() const {
+        return _resetPressed;
+    }
+    
+    bool getEscape() const {
+        return _escapePressed;
     }
     
     /**

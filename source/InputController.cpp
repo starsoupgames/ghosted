@@ -33,6 +33,8 @@ _turnAngle(0.0f),
 _interact(false),
 _keyInteract(false),
 _spaceReleased(true),
+_resetPressed(false),
+_escapePressed(false),
 _ljoystick(false),
 _rjoystick(false)
 {}
@@ -118,6 +120,8 @@ void InputController::update(float dt) {
         _spaceReleased = true;
     }
     
+    _resetPressed = keys->keyDown(KeyCode::R);
+    _escapePressed = keys->keyDown(KeyCode::ESCAPE);
     
     _movement = Vec2::ZERO;
     _direction = Vec2::ZERO;

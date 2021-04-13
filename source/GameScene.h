@@ -22,7 +22,7 @@ class GameScene : public GameMode {
 protected:
     // CONTROLLERS
     /** Controller for abstracting out input across multiple platforms */
-    InputController _input;
+    shared_ptr<InputController> _input;
     /** Controller for handling collisions */
     CollisionController _collision;
     /** Controller for handling networking */
@@ -110,6 +110,15 @@ public:
     void setNetwork(shared_ptr<NetworkController> network) {
         _network = network;
     }
+    
+    /**
+     * Sets the pointer to the input controller.
+     */
+    void setInput(shared_ptr<InputController> input) {
+        _input = input;
+    }
+    
+    void reset();
 };
 
 #endif /* __GAME_SCENE_H__ */

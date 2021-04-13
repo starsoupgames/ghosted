@@ -56,6 +56,9 @@ protected:
     /** Controller for handling networking */
     shared_ptr<NetworkController> _network;
     
+    /** Controller for handling input */
+    shared_ptr<InputController> _input;
+    
     // Player modes
     /** The primary controller for the game world */
     LoadingScene _loading;
@@ -66,6 +69,9 @@ protected:
     GameScene _gameplay;
 
     constants::GameMode _mode;
+    
+    bool _loadKeys;
+    bool _resetPressed;
     
     /** 
      * Internal helper to build the scene graph.

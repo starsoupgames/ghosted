@@ -50,6 +50,8 @@ void GhostedApp::onStartup() {
     
     // Create an asset manager to load all assets
     _assets = AssetManager::alloc();
+    _mode = constants::GameMode::Loading;
+    _resetPressed = false;
 
     // Activate mouse or touch screen input as appropriate
     // We have to do this BEFORE the scene, because the scene has a button
@@ -60,6 +62,8 @@ void GhostedApp::onStartup() {
 #endif
     Input::activate<TextInput>();
     Input::activate<Keyboard>();
+    _input = make_shared<InputController>();
+    _input->init(Application::get()->getSafeBounds());
     // Build the scene from these assets
     buildScene();
     Application::onStartup();
@@ -82,6 +86,9 @@ void GhostedApp::onShutdown() {
     _assets = nullptr;
 
     _network = nullptr;
+    _input = nullptr;
+    
+    _loadKeys = false;
     
     // Deativate input
 #if defined CU_TOUCH_SCREEN
@@ -128,6 +135,10 @@ void GhostedApp::update(float timestep) {
     else {
         mode = constants::GameMode::Start;
     }
+    
+    if (_input->getEscape()) {
+        mode = constants::GameMode::Start;
+    }
 
     if (_mode != mode) {
         // leaving mode
@@ -135,6 +146,7 @@ void GhostedApp::update(float timestep) {
         case constants::GameMode::None:
             break;
         case constants::GameMode::Loading:
+            _loading.dispose();
             break;
         case constants::GameMode::Start:
             _start.dispose();
@@ -177,13 +189,16 @@ void GhostedApp::update(float timestep) {
             break;
         case constants::GameMode::Game:
             _gameplay.setNetwork(_network);
+            _gameplay.setInput(_input);
             _gameplay.init(_assets);
             break;
         }
 
         _mode = mode;
     }
-
+    
+    _input->update(timestep);
+    
     switch (_mode) {
     case constants::GameMode::Loading:
         _loading.update(0.01f);
@@ -198,12 +213,18 @@ void GhostedApp::update(float timestep) {
         _join.update(timestep);
         break;
     case constants::GameMode::Lobby:
-        _lobby.update(timestep);
         _network->update(timestep);
+        _lobby.update(timestep);
         break;
     case constants::GameMode::Game:
-        _gameplay.update(timestep);
+        if (_input->getReset()) {
+            _gameplay.dispose();
+            _gameplay.setNetwork(_network);
+            _gameplay.setInput(_input);
+            _gameplay.init(_assets);
+        }
         _network->update(timestep);
+        _gameplay.update(timestep);
         break;
     default:
         CULogError("No corresponding mode.");
@@ -258,7 +279,6 @@ void GhostedApp::buildScene() {
     _assets->attach<scene2::SceneNode>(Scene2Loader::alloc()->getHook());
 
     _loading.init(_assets);
-    _mode = constants::GameMode::Loading;
 
     // Queue up the other assets
     _assets->loadDirectoryAsync("json/assets.json", nullptr);

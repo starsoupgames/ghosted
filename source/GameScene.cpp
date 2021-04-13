@@ -20,7 +20,7 @@ using namespace std;
  */
 
 bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
-    GameMode::init(assets, constants::GameMode::Game);
+    if (!GameMode::init(assets, constants::GameMode::Game)) return false;
 
     Size dimen = Application::get()->getDisplaySize();
     dimen *= constants::SCENE_WIDTH / dimen.width;
@@ -31,9 +31,6 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
     // Init data models
     _networkData = NetworkData::alloc();
     _network->attachData(_networkData);
-
-    // Init controllers
-    _input.init(bounds);
 
     _root = scene2::OrderedNode::allocWithOrder(scene2::OrderedNode::Order::ASCEND);
     _root->addChild(_assets->get<scene2::SceneNode>("game"));
@@ -122,8 +119,9 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
  */
 void GameScene::dispose() {
     GameMode::dispose();
+    setActive(false);
 
-    _input.dispose();
+//    _input->dispose();
 
     _network = nullptr;
     _networkData = nullptr;
@@ -153,12 +151,8 @@ void GameScene::update(float timestep) {
     dimen *= constants::SCENE_WIDTH / dimen.width;
     Vec2 center(dimen.width / 2, dimen.height / 2);
 
-    // Process input and update player states
-    _input.update(timestep);
-//    _slot->update(timestep);
-
-    Vec2 move = _input.getMove();
-    Vec2 direction = _input.getDirection();
+    Vec2 move = _input->getMove();
+    Vec2 direction = _input->getDirection();
 
     _player->setMove(move);
     _player->setIdle(move == Vec2::ZERO);
@@ -166,7 +160,7 @@ void GameScene::update(float timestep) {
         _player->setDir(direction);
     }
 
-    bool interact = _input.getInteraction();
+    bool interact = _input->getInteraction();
     
     shared_ptr<Trap> trap = nullptr;
     
@@ -186,7 +180,6 @@ void GameScene::update(float timestep) {
                 slot->setCharge();
                 slot->getNode()->setColor(Color4f::GREEN);
                 _slots.push_back(slot);
-//                CULog("ACTIVATE SLOT");
             }
         }
     }
@@ -218,11 +211,9 @@ void GameScene::update(float timestep) {
             if (!trap->getArmed() && !trap->getTriggered()) {
                 trap->setArmed(true);
                 trap->setLoc(_player->getLoc());
-//                CULog("SET TRAP");
             } else if (!trap->getTriggered()) {
                 trap->setTriggered(true);
                 trap->getNode()->setColor(Color4f::RED);
-//                CULog("TRIGGER TRAP");
             }
         }
     }
@@ -307,6 +298,7 @@ void GameScene::update(float timestep) {
         }
     }
 
+    /*
     // Reset the game if a win condition is reached
     if (_countdown > 0) {
         _countdown--;
@@ -314,6 +306,7 @@ void GameScene::update(float timestep) {
     else if (_countdown == 0) {
         reset();
     }
+    */
 }
 
 void GameScene::updateVision(const std::shared_ptr<Player>& player) {
@@ -327,4 +320,10 @@ void GameScene::updateVision(const std::shared_ptr<Player>& player) {
 
     _visionNode->setAngle(angle);
     _visionNode->setPosition(player->getLoc());
+}
+
+void GameScene::reset() {
+    auto assets = _assets;
+    dispose();
+    init(assets);
 }

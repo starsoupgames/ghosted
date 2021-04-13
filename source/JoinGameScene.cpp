@@ -15,12 +15,15 @@ using namespace cugl;
  * @return true if the controller is initialized properly, false otherwise.
  */
 bool JoinGameScene::init(const shared_ptr<AssetManager>& assets) {
-    GameMode::init(assets, constants::GameMode::JoinGame, "join");
+    if (!GameMode::init(assets, constants::GameMode::JoinGame, "join")) return false;
+
+    Application::get()->setClearColor(Color4(192, 192, 192, 255));
 
     _field = dynamic_pointer_cast<scene2::TextField>(assets->get<scene2::SceneNode>("join_textfield"));
     if (_field == nullptr) {
         return false;
     }
+    _roomID = "";
     _field->addExitListener([=](const string& name, const string& value) {
         if (utils::isNumeric(value)) {
             _roomID = value;
@@ -34,7 +37,6 @@ bool JoinGameScene::init(const shared_ptr<AssetManager>& assets) {
     if (_active) {
         _field->activate();
     }
-
     return true;
 }
 
@@ -43,6 +45,7 @@ bool JoinGameScene::init(const shared_ptr<AssetManager>& assets) {
  */
 void JoinGameScene::dispose() {
     GameMode::dispose();
+    setActive(false);
     _field = nullptr;
 }
 
@@ -57,6 +60,7 @@ void JoinGameScene::setActive(bool value) {
         _field->activate();
     }
     else if (!value && _field->isActive()) {
+        _field->setText("");
         _field->deactivate();
     }
 }
