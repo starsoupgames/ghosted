@@ -20,7 +20,7 @@ void Pal::update(float timestep) {
     }
 
     processDirection();
-    
+    float m = 100;
     if (_node != nullptr) {
         _node->setPosition(_loc);
     }

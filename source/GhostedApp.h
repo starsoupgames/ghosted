@@ -42,6 +42,8 @@
 #include "LobbyScene.h"
 #include "GameScene.h"
 
+
+
 /**
  * Class for the Ghosted application by Star Soup Games.
  */
@@ -50,11 +52,16 @@ protected:
     /** The loaders to (synchronously) load in assets */
     std::shared_ptr<cugl::AssetManager> _assets;
 
+    /**the shader **/
+    std::shared_ptr<cugl::Shader> _shader;
+
     /** A 3152 style SpriteBatch to render the scene */
     std::shared_ptr<cugl::SpriteBatch> _batch;
 
     /** Controller for handling networking */
     shared_ptr<NetworkController> _network;
+    /** A 3152 style SpriteBatch to render the scene */
+    std::shared_ptr<cugl::SpriteBatch> _shaderBatch;
     
     /** Controller for handling input */
     shared_ptr<InputController> _input;
@@ -81,6 +88,8 @@ protected:
      * have become standard in most game engines.
      */
     void buildScene();
+
+    void buildShader();
     
 public:
     /**

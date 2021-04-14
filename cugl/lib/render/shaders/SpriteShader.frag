@@ -186,7 +186,8 @@ void main(void) {
     
     if (mod(fType, 8.0) >= 4.0) {
         // Apply scissor mask
-        result *= scissormask(outPosition);
+        //result *= scissormask(outPosition);
+        result = vec4(1.0, 0.0, 0.0, 1.0);
     }
 
     frag_color = result;

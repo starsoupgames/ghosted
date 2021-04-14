@@ -15,6 +15,7 @@
 #include "RoomEntities/Trap.h"
 #include "RoomEntities/BatterySlot.h"
 
+
 using namespace std;
 using namespace cugl;
 
@@ -28,10 +29,14 @@ protected:
     /** Controller for handling networking */
     shared_ptr<NetworkController> _network;
 
+
     // VIEW
     /** Root node */
     shared_ptr<scene2::OrderedNode> _root;
-    /** Reference to the pal and ghost nodes */
+    shared_ptr<scene2::OrderedNode> _dimRoot;
+    shared_ptr<scene2::OrderedNode> _litRoot;
+    shared_ptr<scene2::PolygonNode> _floorNode;
+    shared_ptr<scene2::PolygonNode> _litFloorNode;
     shared_ptr<scene2::AnimationNode> _palNode;
     shared_ptr<scene2::AnimationNode> _ghostNode;
     /** Reference to the debug root of the scene graph */
@@ -54,6 +59,8 @@ protected:
     shared_ptr<GameMap> _gameMap;
     shared_ptr<Player> _player;
     vector<shared_ptr<Player>> _otherPlayers;
+    shared_ptr<Pal> _palModel;
+    shared_ptr<Ghost> _ghostModel;
 
     /** Whether or not debug mode is active */
     bool _debug;
@@ -150,7 +157,8 @@ public:
      */
     void reset();
 
-#pragma mark -
+    void draw(const std::shared_ptr<SpriteBatch>& batch);
+    void shaderDraw(const std::shared_ptr<SpriteBatch>& shaderBatch);
 };
 
 #endif /* __GAME_SCENE_H__ */

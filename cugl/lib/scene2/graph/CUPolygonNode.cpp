@@ -124,6 +124,7 @@ void PolygonNode::draw(const std::shared_ptr<SpriteBatch>& batch, const Mat4& tr
     if (!_rendered) {
         generateRenderData();
     }
+    //CULog("%u", getTag());
     
     batch->setColor(tint);
     batch->setTexture(_texture);

@@ -31,6 +31,7 @@ namespace constants {
         RoomEntity = 200, // 200-299
         Player = 300, // 300-399
     };
+
 }
 
 #endif // __CONSTANTS_H__

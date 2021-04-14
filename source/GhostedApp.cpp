@@ -30,8 +30,17 @@
 // Include the class header, which includes all of the CUGL classes
 #include "GhostedApp.h"
 
+
+
 // This keeps us from having to write cugl:: all the time
 using namespace cugl;
+
+const std::string _vsource =
+#include "../assets/shaders/lightShader.vert"
+;
+const std::string _fsource =
+#include "../assets/shaders/lightShader.frag"
+;
 
 /**
  * The method called after OpenGL is initialized, but before running the application.
@@ -44,13 +53,20 @@ using namespace cugl;
  * causing the application to run.
  */
 void GhostedApp::onStartup() {
-    // Create a sprite batch (and background color) to render the scene
-    _batch = SpriteBatch::alloc();
-    setClearColor(Color4::BLACK);
-    
+    Size size = getDisplaySize();
     // Create an asset manager to load all assets
     _assets = AssetManager::alloc();
     _mode = constants::GameMode::Loading;
+    
+    buildScene();
+    buildShader();
+
+    // Create a sprite batch (and background color) to render the scene
+    
+    _batch = SpriteBatch::alloc();
+    _shaderBatch = SpriteBatch::alloc(_shader);
+    setClearColor(Color4::RED);
+    
     _resetPressed = false;
 
     // Activate mouse or touch screen input as appropriate
@@ -65,7 +81,6 @@ void GhostedApp::onStartup() {
     _input = make_shared<InputController>();
     _input->init(Application::get()->getSafeBounds());
     // Build the scene from these assets
-    buildScene();
     Application::onStartup();
 }
 
@@ -191,6 +206,7 @@ void GhostedApp::update(float timestep) {
             _gameplay.setNetwork(_network);
             _gameplay.setInput(_input);
             _gameplay.init(_assets);
+            
             break;
         }
 
@@ -259,7 +275,11 @@ void GhostedApp::draw() {
         _lobby.render(_batch);
         break;
     case constants::GameMode::Game:
-        _gameplay.render(_batch);
+        
+        _gameplay.shaderDraw(_shaderBatch);
+        _assets->get<Texture>("ghost_texture")->unbind();
+        _assets->get<Texture>("pal_texture")->bind();
+        _gameplay.draw(_batch);
         break;
     }
 }
@@ -286,4 +306,16 @@ void GhostedApp::buildScene() {
     _assets->loadDirectoryAsync("json/join.json", nullptr);
     _assets->loadDirectoryAsync("json/game.json", nullptr);
     _assets->loadDirectoryAsync("json/lobby.json", nullptr);
+}
+
+/**
+ * Internal helper to build the shader.
+ *
+ * Scene graphs are not required.  You could manage all scenes just like
+ * you do in 3152.  However, they greatly simplify scene management, and
+ * have become standard in most game engines.
+ */
+void GhostedApp::buildShader() {
+    _shader = Shader::alloc(SHADER(_vsource),SHADER( _fsource));
+
 }
