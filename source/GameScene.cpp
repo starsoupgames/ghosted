@@ -25,12 +25,18 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
     Size dimen = Application::get()->getDisplaySize();
     dimen *= constants::SCENE_WIDTH / dimen.width;
     Rect bounds = Application::get()->getSafeBounds();
-
+    // Background color
     Application::get()->setClearColor(Color4f::BLACK);
 
     // Init data models
     _networkData = NetworkData::alloc();
     _network->attachData(_networkData);
+
+    _gameMap = GameMap::alloc();
+    _gameMap->generateRandomMap();
+    shared_ptr<Pal> palModel = _gameMap->getPal();
+    shared_ptr<Ghost> ghostModel = _gameMap->getGhost();
+
 
     _root = scene2::OrderedNode::allocWithOrder(scene2::OrderedNode::Order::ASCEND);
     _root->addChild(_assets->get<scene2::SceneNode>("game"));
@@ -39,51 +45,52 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
     addChild(_root);
 
 
-    GameMap _gameMap = GameMap();
-    _gameMap.generateRandomMap();
-    vector<shared_ptr<Texture>> textures;
-    textures.push_back(_assets->get<Texture>("dim_floor_texture"));
-    textures.push_back(_assets->get<Texture>("dim_door_texture"));
-    _gameMap.setTextures(textures);
-    for (auto& node : _gameMap.getNodes()) {
+    // Adds the room textures, will probably have to refactor when doing wall collisions
+    shared_ptr<Texture> floorTexture = _assets->get<Texture>("dim_floor_texture");
+    shared_ptr<Texture> doorTexture =_assets->get<Texture>("dim_door_texture");
+    for (auto& room : _gameMap->getRooms()) {
+        shared_ptr<scene2::PolygonNode> node = scene2::PolygonNode::allocWithTexture(floorTexture);
+        node->setPosition(room->getOrigin());
+        node->addChild(scene2::PolygonNode::allocWithTexture(doorTexture));
         _root->addChild(node);
     }
 
-
-    // Initialize the countdown
-    _countdown = 0;
-
     // Initialize ending messages
-    _winNode = scene2::Label::alloc("You win!", _assets->get<Font>("gyparody"));
-    _winNode->setAnchor(Vec2::ANCHOR_CENTER);
-    _winNode->setPosition(dimen.width / 2.0f, dimen.height / 2.0f);
-    _winNode->setForeground(Color4::YELLOW);
+    _ghostWinNode = scene2::Label::alloc("The ghost wins!", _assets->get<Font>("gyparody"));
+    _ghostWinNode->setAnchor(Vec2::ANCHOR_CENTER);
+    _ghostWinNode->setPosition(dimen.width / 2.0f, dimen.height / 2.0f);
+    _ghostWinNode->setForeground(Color4::YELLOW);
+    _ghostWinNode->setVisible(false);
+    _root->addChild(_ghostWinNode);
 
-    _loseNode = scene2::Label::alloc("You lose!", _assets->get<Font>("gyparody"));
-    _loseNode->setAnchor(Vec2::ANCHOR_CENTER);
-    _loseNode->setPosition(dimen.width / 2.0f, dimen.height / 2.0f);
-    _loseNode->setForeground(Color4::YELLOW);
+    _palWinNode = scene2::Label::alloc("The pals win!", _assets->get<Font>("gyparody"));
+    _palWinNode->setAnchor(Vec2::ANCHOR_CENTER);
+    _palWinNode->setPosition(dimen.width / 2.0f, dimen.height / 2.0f);
+    _palWinNode->setForeground(Color4::YELLOW);
+    _palWinNode->setVisible(false);
+    _root->addChild(_palWinNode);
 
     _palNode = scene2::AnimationNode::alloc(_assets->get<Texture>("pal_texture"), 4, 21);
     _root->addChild(_palNode);
-    _palModel = Pal::alloc(Vec2(-100, 0));
-    _palModel->setNode(_palNode);
+    palModel->setNode(_palNode);
     _palNode->setPriority(constants::Priority::Player);
 
     _ghostNode = scene2::AnimationNode::alloc(_assets->get<Texture>("ghost_texture"), 4, 21);
     _root->addChild(_ghostNode);
-    _ghostModel = Ghost::alloc(Vec2(100, 0));
-    _ghostModel->setNode(_ghostNode);
-    _ghostModel->setTimer(0);
+    ghostModel->setNode(_ghostNode);
     _ghostNode->setPriority(constants::Priority::Player);
 
     if (_network->isHost()) {
-        _player = _palModel;
-        _otherPlayers.push_back(_ghostModel);
+        _player = palModel;
+        _otherPlayers.push_back(ghostModel);
+        _gameMap->setPlayer(palModel);
+        _gameMap->setOtherPlayers({ ghostModel });
     }
     else {
-        _player =_ghostModel;
-        _otherPlayers.push_back(_palModel);
+        _player = ghostModel;
+        _otherPlayers.push_back(palModel);
+        _gameMap->setPlayer(ghostModel);
+        _gameMap->setOtherPlayers({ palModel });
     }
     _networkData->setPlayer(_player);
     _networkData->setOtherPlayers(_otherPlayers);
@@ -125,12 +132,10 @@ void GameScene::dispose() {
 
     _network = nullptr;
     _networkData = nullptr;
-
+    _gameMap = nullptr;
     _root = nullptr;
     _palNode = nullptr;
-    _palModel = nullptr;
     _ghostNode = nullptr;
-    _ghostModel = nullptr;
     _visionNode = nullptr;
 }
 
@@ -151,45 +156,53 @@ void GameScene::update(float timestep) {
     dimen *= constants::SCENE_WIDTH / dimen.width;
     Vec2 center(dimen.width / 2, dimen.height / 2);
 
-    Vec2 move = _input->getMove();
-    Vec2 direction = _input->getDirection();
-
-    _player->setMove(move);
-    _player->setIdle(move == Vec2::ZERO);
-    if (direction != Vec2::ZERO) {
-        _player->setDir(direction);
+    // Process movement input and update player states
+    _input->update(timestep);
+    _gameMap->move(_input->getMove(), _input->getDirection());
+    // Updates vision cones
+    updateVision(_player);
+    for (auto& p : _otherPlayers) {
+        p->update(timestep);
+        updateVision(p);
     }
 
-    bool interact = _input->getInteraction();
-    
-    shared_ptr<Trap> trap = nullptr;
-    
-    for (shared_ptr s : _slots) {
-        s->update(timestep);
-    }
-    
+    // Checks if the ghost should be revealed, commented out because no
+    // tagging yet
+    /**
     if (_player->getType() == Player::Type::Pal) {
-        if (!_palModel->getSpooked()) {
-            if (interact) {
+        _ghostNode->setVisible(_gameMap->getGhost()->getTagged());
+    }
+    */
+
+    // Processes interaction input
+    _gameMap->update(timestep, _input->getInteraction());
+    
+    // Delete after batteries implemented, will be handled in gamemap
+    shared_ptr<Trap> trap = nullptr;
+    if (_player->getType() == Player::Type::Pal) {
+        if (_gameMap->getPal()->getSpooked()) {
+            if (_input->getInteraction()) {
                 auto slotTexture = _assets->get<Texture>("slot");
                 shared_ptr<BatterySlot> slot = BatterySlot::alloc(Vec2(0, 100));
                 slot->setTextures(slotTexture, _root->getContentSize());
                 slot->getNode()->setScale(0.05f);
-                slot->setLoc(_player->getLoc());
                 _root->addChild(slot->getNode());
+                slot->getNode()->setVisible(true);
+                slot->setLoc(_player->getLoc());
                 slot->setCharge();
                 slot->getNode()->setColor(Color4f::GREEN);
-                _slots.push_back(slot);
+                _gameMap->addSlot(slot);
+//                CULog("ACTIVATE SLOT");
             }
         }
     }
     else {
-        if (interact) {
-            if (_traps.size() != 0) {
+        if (_input->getInteraction()) {
+            if (_gameMap->getTraps().size() != 0) {
                 float distance = ROOM_SIZE/2;
                 shared_ptr<Trap> tPtr = nullptr;
                 
-                for (shared_ptr<Trap> t : _traps) {
+                for (shared_ptr<Trap> t : _gameMap->getTraps()) {
                     Vec2 n = t->getLoc() -_player->getLoc();
                     float d = n.length();
                     if (d < distance && !t->getTriggered()) {
@@ -198,13 +211,13 @@ void GameScene::update(float timestep) {
                 }
                 trap = tPtr;
             }
-            if (trap == nullptr || _traps.size() == 0) {
+            if (trap == nullptr || _gameMap->getTraps().size() == 0) {
                 auto trapTexture = _assets->get<Texture>("trap");
                 shared_ptr<Trap> t = Trap::alloc(Vec2(0, 0));
                 t->setTextures(trapTexture, _root->getContentSize());
                 t->getNode()->setScale(0.25f);
                 _root->addChild(t->getNode());
-                _traps.push_back(t);
+                _gameMap->addTrap(t);
                 trap = t;
             }
             
@@ -218,13 +231,7 @@ void GameScene::update(float timestep) {
         }
     }
 
-    _player->update(timestep);
-    updateVision(_player);
-    for (auto& p : _otherPlayers) {
-        p->update(timestep);
-        updateVision(p);
-    }
-
+    // Sets priority of player nodes
     vector<shared_ptr<Player>> allPlayers;
     copy(_otherPlayers.begin(), _otherPlayers.end(), back_inserter(allPlayers));
     allPlayers.push_back(_player);
@@ -237,76 +244,15 @@ void GameScene::update(float timestep) {
     // Update camera
     _root->setPosition(center - _player->getLoc());
 
-    // Check collisions
-    _collision.checkForCollision(_ghostModel, _palModel);
-    _collision.checkForCollision(_ghostModel, _palModel, _visionNode);
-    
-    if (trap != nullptr && (trap->getTriggered() && trap->getArmed())) {
-        _collision.checkForCollision(_palModel, trap);
-        trap->setArmed(false);
-    }
-    
-    // TODO: Implement checking battery collisions
-    // _collision.checkInBounds(_ghostModel, bounds);    need to define bounds
-
-
-    // If ghost is tagged, lower tag timer
-    int tagTimer = _ghostModel->getTimer();
-    //CULog("%d", tagTimer);
-    if (tagTimer > 0) {
-        _ghostModel->setTimer(tagTimer - 1);
-    }
-    if (_ghostModel->getTimer() == 0) {
-        _ghostModel->setTagged(false);
+    // Check if a player has won
+    auto complete = _gameMap->getComplete();
+    if (complete[0]) {
+        // Pals win
+        _palWinNode->setVisible(complete[1]);
+        // Ghost wins
+        _ghostWinNode->setVisible(!complete[1]);
     }
 
-    // Pal case
-    if (_network->isHost()) {
-        if (_palModel->getSpooked() && _complete == false) {
-            // Player loses
-            _complete = true;
-            _loseNode->setVisible(true);
-            _countdown = 120;
-        }
-        else if (_palModel->getBatteries() == 3 && _complete == false) {
-            // Player wins
-            _complete = true;
-            _winNode->setVisible(true);
-            _countdown = 120;
-        }
-
-        if (tagTimer == 0) {
-            _ghostNode->setVisible(false);
-        }
-        else {
-            _ghostNode->setVisible(true);
-        }
-    }
-    // Ghost case
-    else {
-        if (_palModel->getSpooked() && _complete == false) {
-            // Player wins
-            _complete = true;
-            _winNode->setVisible(true);
-            _countdown = 120;
-        }
-        else if (_palModel->getBatteries() == 3 && _complete == false) {
-            // Player loses
-            _complete = true;
-            _loseNode->setVisible(true);
-            _countdown = 120;
-        }
-    }
-
-    /*
-    // Reset the game if a win condition is reached
-    if (_countdown > 0) {
-        _countdown--;
-    }
-    else if (_countdown == 0) {
-        reset();
-    }
-    */
 }
 
 void GameScene::updateVision(const std::shared_ptr<Player>& player) {

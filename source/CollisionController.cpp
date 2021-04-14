@@ -113,3 +113,4 @@ void CollisionController::checkInBounds(const std::shared_ptr<GameEntity>& entit
     }
     entity->setLoc(loc);
 }
+

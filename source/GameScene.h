@@ -31,31 +31,35 @@ protected:
     // VIEW
     /** Root node */
     shared_ptr<scene2::OrderedNode> _root;
+    /** Reference to the pal and ghost nodes */
     shared_ptr<scene2::AnimationNode> _palNode;
     shared_ptr<scene2::AnimationNode> _ghostNode;
-
-    shared_ptr<cugl::scene2::Label> _winNode;
-    shared_ptr<cugl::scene2::Label> _loseNode;
+    /** Reference to the debug root of the scene graph */
+    std::shared_ptr<cugl::scene2::SceneNode> _debugNode;
+    /** Reference to the win and lose message labels */
+    shared_ptr<scene2::Label> _ghostWinNode;
+    shared_ptr<scene2::Label> _palWinNode;
     
+    /** Reference to all the nodes for the rooms */
+    vector<shared_ptr<scene2::PolygonNode>> _roomNodes;
+
     /** The polygon node representing the vision cone */
     shared_ptr<scene2::PolygonNode> _visionNode;
-    
-    /** The vector of trap pointers currently in the scene */
-    std::vector<shared_ptr<Trap>> _traps;
-    
-    std::vector<shared_ptr<BatterySlot>> _slots;
+
+    /** The scale between the physics world and the screen (MUST BE UNIFORM) */
+    float _scale;
 
     // MODEL
     shared_ptr<NetworkData> _networkData;
+    shared_ptr<GameMap> _gameMap;
     shared_ptr<Player> _player;
     vector<shared_ptr<Player>> _otherPlayers;
-    shared_ptr<Pal> _palModel;
-    shared_ptr<Ghost> _ghostModel;
 
-    bool _complete;
-    int _countdown;
+    /** Whether or not debug mode is active */
+    bool _debug;
 
 public:
+#pragma mark Constructors
     /**
      * Creates a new game mode with the default values.
      *
@@ -90,6 +94,43 @@ public:
      */
     bool init(const shared_ptr<AssetManager>& assets);
 
+
+#pragma mark -
+#pragma mark State Access
+    /**
+   * Returns true if debug mode is active.
+   *
+   * If true, all objects will display their physics bodies.
+   *
+   * @return true if debug mode is active.
+   */
+    bool isDebug() const { return _debug; }
+
+    /**
+     * Sets whether debug mode is active.
+     *
+     * If true, all objects will display their physics bodies.
+     *
+     * @param value whether debug mode is active.
+     */
+    void setDebug(bool value) { _debug = value; _debugNode->setVisible(value); }
+
+    /**
+    * Sets the pointer to the network.
+    */
+    void setNetwork(shared_ptr<NetworkController> network) {
+        _network = network;
+    }
+
+    /**
+     * Sets the pointer to the input controller
+     */
+    void setInput(shared_ptr<InputController> input) {
+        _input = input;
+    }
+
+#pragma mark -
+#pragma mark Gameplay Handling
     /**
      * The method called to update the game mode.
      *
@@ -105,20 +146,11 @@ public:
     void updateVision(const std::shared_ptr<Player>& player);
 
     /**
-     * Sets the pointer to the network.
+     * Resets the gamescene
      */
-    void setNetwork(shared_ptr<NetworkController> network) {
-        _network = network;
-    }
-    
-    /**
-     * Sets the pointer to the input controller.
-     */
-    void setInput(shared_ptr<InputController> input) {
-        _input = input;
-    }
-    
     void reset();
+
+#pragma mark -
 };
 
 #endif /* __GAME_SCENE_H__ */
