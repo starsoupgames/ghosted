@@ -26,10 +26,27 @@ void Player::dispose() {
  *
  * @param value the Player animation node.
  */
+void Player::setNode(const std::shared_ptr<scene2::AnimationNode>& value, const std::shared_ptr<scene2::PolygonNode>& shadow) {
+    _shadow = shadow;
+    if (_shadow != nullptr) {
+        _shadow->setPosition(_shadow->getPosition() + Vec2(2, -30));
+        _shadow->setAnchor(Vec2::ANCHOR_BOTTOM_CENTER);
+    }
+    Player::setNode(value);
+}
+
+/**
+ * Sets the animation node representing this Player.
+ *
+ * Setting this to nullptr clears the value.
+ *
+ * @param value the Player animation node.
+ */
 void Player::setNode(const std::shared_ptr<scene2::AnimationNode>& value) {
     GameEntity::setNode(value);
     _node = GameEntity::getSprite();
     if (_node != nullptr) {
+        _timer = 0;
         _idle = true;
         _node->setFrame(IMG_FRONT);
     }
@@ -69,6 +86,13 @@ uint8_t Player::isDirection() {
 /** Processes the direction for the animation and vision cone */
 void Player::processDirection() {
     unsigned int frame = _node->getFrame();
+    if (_timer >= 2) {
+        _timer = 0;
+        _node->setFrame(frame);
+        return;
+
+    }
+    _node->setScale(Vec2(1, 1));
     switch (isDirection()) {
     case Direction::Top:
         if (_idle) {
@@ -97,19 +121,22 @@ void Player::processDirection() {
         }
         break;
     case Direction::Right:
+        _node->setScale(Vec2(-1, 1));
+        
         if (_idle) {
-            frame = IMG_RIGHT;
+            frame = IMG_LEFT;
         }
         else {
-            if (frame >= IMG_RIGHT && frame < IMG_LEFT - 1) {
+            if (frame >= IMG_LEFT && frame < IMG_FRONT - 1) {
                 ++frame;
             }
             else {
-                frame = IMG_RIGHT + 1;
+                frame = IMG_LEFT + 1;
             }
         }
         break;
     case Direction::Left:
+        
         if (_idle) {
             frame = IMG_LEFT;
         }
@@ -124,6 +151,7 @@ void Player::processDirection() {
         break;
     }
     CUAssertLog(frame < IMG_LAST, "Frame out of range.");
+    ++_timer;
     _node->setFrame(frame);
 };
 

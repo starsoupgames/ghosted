@@ -2038,6 +2038,7 @@ void SpriteBatch::unwind() {
         delete *it;
     }
     _history.clear();
+    _context->texture = nullptr;
 }
 
 /**

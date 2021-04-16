@@ -39,6 +39,8 @@ protected:
     shared_ptr<scene2::PolygonNode> _litFloorNode;
     shared_ptr<scene2::AnimationNode> _palNode;
     shared_ptr<scene2::AnimationNode> _ghostNode;
+    /** Nodes for pal shadows **/
+    shared_ptr<scene2::PolygonNode> _palShadowNode;
     /** Reference to the debug root of the scene graph */
     std::shared_ptr<cugl::scene2::SceneNode> _debugNode;
     /** Reference to the win and lose message labels */

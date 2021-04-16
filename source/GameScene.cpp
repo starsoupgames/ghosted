@@ -80,18 +80,26 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
     _palWinNode->setVisible(false);
     _root->addChild(_palWinNode);
 
-    _assets->get<Texture>("pal_texture")->setName("pal_sprite");
-    _palNode = scene2::AnimationNode::alloc(_assets->get<Texture>("pal_texture"), 4, 21);
-    _palModel->setNode(_palNode);
-    _palNode->setPriority(constants::Priority::Player);
-    _litRoot->addChild(_palNode);
+    Size shadowSize = Size(160.0, 160.0);
 
+    _assets->get<Texture>("pal_doe_texture")->setName("pal_sprite");
+    _palShadowNode = scene2::PolygonNode::allocWithTexture(_assets->get<Texture>("pal_shadow_texture"));
+    _palNode = scene2::AnimationNode::alloc(_assets->get<Texture>("pal_doe_texture"), 3, 24);
+    _palModel->setNode(_palNode, _palShadowNode);
+    _palNode->setPriority(constants::Priority::Player);
+    _palShadowNode->setPriority(_palNode->getPriority() - 1);
+    _litRoot->addChild(_palNode);
+    _palNode->addChild(_palShadowNode);
+
+    //TODO: THESE NEXT TWO LINES MUST BE REPLACED WITH THE NEW GHOST SPRITE TEXTURE INSTEAD OF THE SEAL
     _assets->get<Texture>("ghost_texture")->setName("ghost_sprite");
-    _ghostNode = scene2::AnimationNode::alloc(_assets->get<Texture>("ghost_texture"), 4, 21);
+    _ghostNode = scene2::AnimationNode::alloc(_assets->get<Texture>("ghost_texture"), 3, 24);
     _ghostModel->setNode(_ghostNode);
     _ghostModel->setTimer(0);
     _ghostNode->setPriority(constants::Priority::Player);
     _dimRoot->addChild(_ghostNode);
+
+
 
     if (_network->isHost()) {
         _player = _palModel;

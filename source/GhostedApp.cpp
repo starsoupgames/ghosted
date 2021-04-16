@@ -277,8 +277,6 @@ void GhostedApp::draw() {
     case constants::GameMode::Game:
         
         _gameplay.shaderDraw(_shaderBatch);
-        _assets->get<Texture>("ghost_texture")->unbind();
-        _assets->get<Texture>("pal_texture")->bind();
         _gameplay.draw(_batch);
         break;
     }

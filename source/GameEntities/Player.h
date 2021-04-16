@@ -6,11 +6,11 @@ using namespace std;
 using namespace cugl;
 
 /** Player Frame Sprite numbers */
-#define IMG_RIGHT 0   // Right idle frame
-#define IMG_LEFT 21   // Left idle frame
-#define IMG_FRONT 42  // Front idle frame
-#define IMG_BACK 63   // Back idle frame
-#define IMG_LAST 83
+#define IMG_LEFT 0   // Left idle frame
+#define IMG_RIGHT 23   // Left idle frame
+#define IMG_FRONT 24  // Front idle frame
+#define IMG_BACK 48   // Back idle frame
+#define IMG_LAST 71 // Last walk back frame
 
 /**
 This class contains information about the Player.
@@ -19,6 +19,9 @@ class Player : public GameEntity {
 protected:
     /** Reference to the animation node */
     shared_ptr<scene2::AnimationNode> _node;
+
+    /** Reference to the animation node */
+    shared_ptr<scene2::PolygonNode> _shadow;
 
     /** Whether we are idle */
     bool _idle;
@@ -31,6 +34,9 @@ protected:
 
     /** Player id */
     unsigned id;
+
+    /**frames since last change for animation fps**/
+    int _timer;
 
 public:
 
@@ -80,6 +86,12 @@ public:
     virtual uint8_t getType() {
         return Type::Undefined;
     }
+
+    /**
+     * @param value The Player node.
+     * @param shadow The Shadow node.
+     */
+    void setNode(const shared_ptr<scene2::AnimationNode>& value, const std::shared_ptr<scene2::PolygonNode>& shadow);
 
     /**
      * @param value The Player node.
