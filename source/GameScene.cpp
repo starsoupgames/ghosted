@@ -107,6 +107,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
         _gameMap->setOtherPlayers({ _ghostModel });
     }
     else {
+        CULog("we are the ghost");
         _player = _ghostModel;
         _otherPlayers.push_back(_palModel);
         _gameMap->setPlayer(_ghostModel);
@@ -305,7 +306,8 @@ void GameScene::draw(const std::shared_ptr<SpriteBatch>& batch) {
         batch->begin(_camera->getCombined());
         batch->setBlendFunc(_srcFactor, _dstFactor);
         batch->setBlendEquation(_blendEquation);
-        _root->render(batch, _root->getNodeToWorldTransform(), _color);
+        _dimRoot->render(batch, _root->getNodeToWorldTransform(), _color);
+        _litRoot->render(batch, _root->getNodeToWorldTransform(), _color);
         //_litRoot->render(batch, _root->getNodeToWorldTransform(), _color);
         batch->end();
     }
