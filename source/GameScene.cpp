@@ -80,7 +80,6 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
     _palWinNode->setVisible(false);
     _root->addChild(_palWinNode);
 
-    Size shadowSize = Size(160.0, 160.0);
 
     _assets->get<Texture>("pal_doe_texture")->setName("pal_sprite");
     _palShadowNode = scene2::PolygonNode::allocWithTexture(_assets->get<Texture>("pal_shadow_texture"));
