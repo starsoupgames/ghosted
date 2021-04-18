@@ -50,7 +50,6 @@ bool LoadingScene::init(const std::shared_ptr<AssetManager>& assets) {
     _button->addListener([=](const std::string& name, bool down) {
         this->_active = down;
         });
-
     Application::get()->setClearColor(Color4(192, 192, 192, 255));
     addChild(layer);
     return true;

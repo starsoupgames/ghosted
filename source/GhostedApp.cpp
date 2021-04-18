@@ -78,9 +78,6 @@ void GhostedApp::onStartup() {
 #endif
     Input::activate<TextInput>();
     Input::activate<Keyboard>();
-    _input = make_shared<InputController>();
-    _input->init(Application::get()->getSafeBounds());
-    // Build the scene from these assets
     Application::onStartup();
 }
 
@@ -151,7 +148,7 @@ void GhostedApp::update(float timestep) {
         mode = constants::GameMode::Start;
     }
     
-    if (_input->getEscape()) {
+    if (_input != nullptr && _input->getEscape()) {
         mode = constants::GameMode::Start;
     }
 
@@ -190,6 +187,8 @@ void GhostedApp::update(float timestep) {
             break;
         case constants::GameMode::Start:
             _network = make_shared<NetworkController>(); // reset network controller
+            _input = make_shared<InputController>();
+            _input->init(Application::get()->getSafeBounds());
             _start.init(_assets);
             break;
         case constants::GameMode::CreateGame:
@@ -213,7 +212,9 @@ void GhostedApp::update(float timestep) {
         _mode = mode;
     }
     
-    _input->update(timestep);
+    if (_input != nullptr) {
+        _input->update(timestep);
+    }
     
     switch (_mode) {
     case constants::GameMode::Loading:
