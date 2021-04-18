@@ -5,6 +5,7 @@
 #include <iostream>
 #include <sstream>
 #include "GameMode.h"
+#include "Constants.h"
 #include "GameMap.h"
 #include "GameEntities/Players/PlayerPal.h"
 #include "GameEntities/Players/PlayerGhost.h"
@@ -46,6 +47,11 @@ protected:
     /** Reference to the win and lose message labels */
     shared_ptr<scene2::Label> _ghostWinNode;
     shared_ptr<scene2::Label> _palWinNode;
+
+    /**offset for flashlight position**/
+    //Vec2 _flashlightOffset = Vec2(0, -50);
+
+
     
     /** Reference to all the nodes for the rooms */
     vector<shared_ptr<scene2::PolygonNode>> _roomNodes;
@@ -159,8 +165,7 @@ public:
      */
     void reset();
 
-    void draw(const std::shared_ptr<SpriteBatch>& batch);
-    void shaderDraw(const std::shared_ptr<SpriteBatch>& shaderBatch);
+    void draw(const std::shared_ptr<SpriteBatch>& batch, const std::shared_ptr<SpriteBatch>& shaderBatch);
 };
 
 #endif /* __GAME_SCENE_H__ */

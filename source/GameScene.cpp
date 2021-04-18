@@ -288,18 +288,65 @@ void GameScene::updateVision(const std::shared_ptr<Player>& player) {
     if (angle < 0) angle += 2 * M_PI;
 
     _visionNode->setAngle(angle);
-    _visionNode->setPosition(player->getLoc());
+    _visionNode->setPosition(player->getLoc() + constants::FLASHLIGHT_OFFSET);
 }
 
-void GameScene::draw(const std::shared_ptr<SpriteBatch>& batch) {
+void GameScene::draw(const std::shared_ptr<SpriteBatch>& batch, const std::shared_ptr<SpriteBatch>& shaderBatch) {
     if (_network->isHost()) {
-        
+        float roomLights[constants::MAX_ROOMS * 3];
+        int i = 0;
+        for (auto& room : _gameMap->getRooms()) {
+            roomLights[i] = _root->getPosition().x + room->getOrigin().x;
+            roomLights[i+1] = _root->getPosition().y + room->getOrigin().y;
+            // set to 1 if room's light is on, 0 if not
+            roomLights[i + 2] = 1.0;
+            i = i + 3;
+        }
+        //just to fill rest of values if the number of rooms < MAX_ROOMS
+        for (int j = i; j < (constants::MAX_ROOMS * 3); ++j) {
+            roomLights[j] = 0;
+        }
+
+        float palLights[constants::MAX_PALS * 4];
+        i = 0;
+        vector<shared_ptr<Player>> allPlayers;
+        copy(_otherPlayers.begin(), _otherPlayers.end(), back_inserter(allPlayers));
+        allPlayers.push_back(_player);
+        for (auto& player : allPlayers) {
+            if (player->getType() == Player::Type::Pal) {
+                palLights[i] = _root->getPosition().x + player->getLoc().x + constants::FLASHLIGHT_OFFSET.x;
+                palLights[i + 1] = _root->getPosition().y + player->getLoc().y + constants::FLASHLIGHT_OFFSET.y;
+                // set to 1 if pal is active 0 if not
+                palLights[i + 2] = 1.0;
+                palLights[i + 3] = (_visionNode->getAngle() - M_PI / 2);
+                CULog("%f", palLights[i + 3]);
+                i = i + 4;
+            }
+            
+        }
+        //just to fill rest of values if the number of pals < MAX_PALS
+        for (int j = i; j < (constants::MAX_PALS * 4); ++j) {
+            palLights[j] = 0;
+        }
+
+        shaderBatch->begin(_camera->getCombined());
+        GLint uPlayers = shaderBatch->getShader()->getUniformLocation("uPlayers");
+        shaderBatch->getShader()->setUniform4fv(uPlayers, constants::MAX_PALS, palLights);
+
+        GLint uRoomLights = shaderBatch->getShader()->getUniformLocation("uRoomLights");
+        shaderBatch->getShader()->setUniform3fv(uRoomLights, constants::MAX_ROOMS, roomLights);
+
+        shaderBatch->setBlendFunc(_srcFactor, _dstFactor);
+
+        shaderBatch->setBlendEquation(_blendEquation);
+        _dimRoot->render(shaderBatch, _root->getNodeToWorldTransform(), _color);
+
+        shaderBatch->end();
 
         batch->begin(_camera->getCombined());
         batch->setBlendFunc(_srcFactor, _dstFactor);
         batch->setBlendEquation(_blendEquation);
         _litRoot->render(batch, _root->getNodeToWorldTransform(), _color);
-        //_palNode->draw(batch, _root->getNodeToWorldTransform(), _color);
         batch->end();
     }
     else {
@@ -308,30 +355,10 @@ void GameScene::draw(const std::shared_ptr<SpriteBatch>& batch) {
         batch->setBlendEquation(_blendEquation);
         _dimRoot->render(batch, _root->getNodeToWorldTransform(), _color);
         _litRoot->render(batch, _root->getNodeToWorldTransform(), _color);
-        //_litRoot->render(batch, _root->getNodeToWorldTransform(), _color);
         batch->end();
     }
 }
 
-void GameScene::shaderDraw(const std::shared_ptr<SpriteBatch>& shaderBatch) {
-    if (_network->isHost()) {
-
-        shaderBatch->begin(_camera->getCombined());
-        //CULog("pal Model %f, %f", _palModel->getLoc().x, _palModel->getLoc().y);
-        //CULog("transformed %f, %f", _root->getPosition().x, _root->getPosition().y);
-        GLint uPlayerPos = shaderBatch->getShader()->getUniformLocation("uPlayerPos");
-        shaderBatch->getShader()->setUniformVec2(uPlayerPos, _root->getPosition() + _palModel->getLoc());
-        GLint uLightAngle = shaderBatch->getShader()->getUniformLocation("uLightAngle");
-        shaderBatch->getShader()->setUniform1f(uLightAngle, (_visionNode->getAngle() - M_PI / 2));
-
-        shaderBatch->setBlendFunc(_srcFactor, _dstFactor);
-
-        shaderBatch->setBlendEquation(_blendEquation);
-        _dimRoot->render(shaderBatch, _root->getNodeToWorldTransform(), _color);
-
-        shaderBatch->end();
-    }
-}
 
 void GameScene::reset() {
     auto assets = _assets;

@@ -276,9 +276,7 @@ void GhostedApp::draw() {
         _lobby.render(_batch);
         break;
     case constants::GameMode::Game:
-        
-        _gameplay.shaderDraw(_shaderBatch);
-        _gameplay.draw(_batch);
+        _gameplay.draw(_batch, _shaderBatch);
         break;
     }
 }

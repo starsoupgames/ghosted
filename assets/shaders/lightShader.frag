@@ -12,11 +12,13 @@ uniform vec2 uBlur;
 
 // The texture for sampling
 uniform sampler2D uTexture;
-//uniform sampler2D uLightTexture;
 
-uniform vec2 uPlayerPos;
-uniform vec2 uCenterPos;
-//uniform mat4 uWorldMatrix;
+
+//16 is maximum possible rooms in a map
+uniform vec3 uRoomLights[16];
+
+uniform vec4 uPlayers[3];
+
 uniform float uLightAngle;
 
 // The output color
@@ -140,30 +142,60 @@ vec4 blursample(vec2 coord) {
 }
 
 
+bool roomshade(vec3 light, vec2 pos) {
+    vec3 col = vec3(0.0, 0.0, 0.0);
+    if (light.z == 0) return false;
+    vec2 room = light.xy - pos;
+    float roomRadius = 200.0;
+    float rD = dist(light.xy, pos);
+    if (rD <= roomRadius) {
+        return true;
+    }
+    return false;
+}
+
+vec3 flashshade(vec4 pal, vec2 pos, vec3 texColor) {
+    vec3 col = vec3(0.0, 0.0, 0.0);
+    if (pal.z == 0) {
+        return col;
+    }
+    vec2 coor = pal.xy - pos;
+    float mangle = rangle(coor);
+    //the flashlight angle
+    float pangle = pal.w;
+    float palRadius = 200.0;
+    float d = dist(pal.xy, pos);
+    float inAngle = smoothstep(0.2, 0.0, sq(
+        dangle(pangle, mangle)
+    ));
+    vec3 flashCol = inAngle * texColor;
+    if (d <= palRadius) {
+        col = flashCol;
+    }
+    return col;
+
+}
+
+
+
+
 /**
  * Performs the main fragment shading.
  * idea for function taken from https://www.shadertoy.com/view/WsySRV
  */
 void main(void) {
     vec4 result = texture(uTexture, outTexCoord);
-    vec2 mouse = uPlayerPos - outPosition;
-    float mangle = rangle(mouse);
-    float pangle = uLightAngle;
-    float radius = 200.0;
-    float d = dist(uPlayerPos, outPosition);
+    vec3 col = vec3(0.0, 0.0, 0.0);
     
-    float fov = uLightAngle;
-    vec2 angle_range = vec2(mangle-fov/2., mangle+fov/2.);
-    float inAngle = smoothstep(0.2, 0.0, sq(
-        dangle(pangle, mangle)
-    ));
-    
-   	float op = 0.5;
-    
-    vec3 fcolor = result.rgb;
-    vec3 col = (op+0.5) * inAngle * fcolor;
-    if (d > radius) {
-        col = vec3(0.0, 0.0, 0.0);
+    for (int i = 0; i < 3; i++) {
+        vec3 flashcolor = flashshade(uPlayers[i], outPosition, result.rgb);
+        col += flashcolor;
+    }
+
+    for (int i = 0; i < 16; i++) {
+        if (roomshade(uRoomLights[i], outPosition)) {
+            col = result.rgb;
+        }
     }
 
     frag_color = vec4(col, result.a);
