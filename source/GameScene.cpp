@@ -3,9 +3,20 @@
 using namespace cugl;
 using namespace std;
 
+
+/** Length and width of the vision cone in pixels */
 #define CONE_WIDTH 75
 #define CONE_LENGTH 200
+/** Length and width of a room in pixels */
 #define ROOM_SIZE 960
+
+/** 
+ * Length and Width of the game world in Box2d units (meters).
+ * For a map with 3x3 rooms, this means that each room should be ten meters,
+ * as we are leaving 5 spare meters of space at the perimeter.
+ */
+#define DEFAULT_DIMENS  40.0f
+
 
 /**
  * Initializes the controller contents, and starts the game
@@ -21,13 +32,37 @@ using namespace std;
 
 bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
     if (!GameMode::init(assets, constants::GameMode::Game)) return false;
-
+    
     Size dimen = Application::get()->getDisplaySize();
     dimen *= constants::SCENE_WIDTH / dimen.width;
     Rect bounds = Application::get()->getSafeBounds();
     // Background color
     Application::get()->setClearColor(Color4f::BLACK);
 
+    // Init data models
+//    _networkData = NetworkData::alloc();
+//    _network->attachData(_networkData);
+
+    // Init the Box2d world
+    _world = physics2::ObstacleWorld::alloc(Rect(0, 0, DEFAULT_DIMENS, DEFAULT_DIMENS), Vec2(0, 0));
+    _world->activateCollisionCallbacks(true);
+    /**
+    _world->onBeginContact = [this](b2Contact* contact) {
+        _collision->beginContact(contact);
+    };
+    _world->beforeSolve = [this](b2Contact* contact, const b2Manifold* oldManifold) {
+        _collision->beforeSolve(contact, oldManifold);
+    };
+    */
+
+
+    // IMPORTANT: SCALING MUST BE UNIFORM
+    // This means that we cannot change the aspect ratio of the physics world
+    // Shift to center if a bad fit
+    /*
+    _scale = dimen.width == SCENE_WIDTH ? dimen.width / rect.size.width : dimen.height / rect.size.height;
+    Vec2 offset((dimen.width - SCENE_WIDTH) / 2.0f, (dimen.height - SCENE_HEIGHT) / 2.0f);
+    */
     _gameMap = GameMap::alloc();
     _gameMap->generateRandomMap();
     _palModel = _gameMap->getPal();
@@ -51,14 +86,24 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
     _litRoot->doLayout();
     _root->addChild(_litRoot);
 
-    // Adds the room textures, will probably have to refactor when doing wall collisions
+    // Sets the textures of the room nodes and adds them to _root
+    // Helper method that goes through all room objects, sets the textures of its nodes, and adds
+    // them to root. This same helper will create the box2d objects for the room's walls,
+    // obstacles, and batteryslot
     shared_ptr<Texture> floorTexture = _assets->get<Texture>("dim_floor_texture");
-    shared_ptr<Texture> doorTexture = _assets->get<Texture>("dim_door_texture");
+    shared_ptr<Texture> doorTexture =_assets->get<Texture>("dim_door_texture");
+    shared_ptr<Texture> trapTexture =_assets->get<Texture>("trap");
+    shared_ptr<Texture> slotTexture =_assets->get<Texture>("slot");
     for (auto& room : _gameMap->getRooms()) {
         shared_ptr<scene2::PolygonNode> node = scene2::PolygonNode::allocWithTexture(floorTexture);
-        node->setPosition(room->getOrigin());
         node->addChild(scene2::PolygonNode::allocWithTexture(doorTexture));
+        node->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
+        room->setNode(node);
+        room->initContents(trapTexture, slotTexture, _root->getContentSize());
+        _gameMap->addTrap(room->getTrap());
+        _gameMap->addSlot(room->getSlot());
         _dimRoot->addChild(node);
+        node->setPosition(room->getOrigin());
     }
 
     // Initialize ending messages
@@ -75,7 +120,6 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
     _palWinNode->setForeground(Color4::YELLOW);
     _palWinNode->setVisible(false);
     _root->addChild(_palWinNode);
-
 
     _assets->get<Texture>("pal_doe_texture")->setName("pal_sprite");
     _palShadowNode = scene2::PolygonNode::allocWithTexture(_assets->get<Texture>("pal_shadow_texture"));
@@ -149,7 +193,7 @@ void GameScene::dispose() {
     setActive(false);
 
 //    _input->dispose();
-
+    _collision = nullptr;
     _network = nullptr;
     _gameMap = nullptr;
     _root = nullptr;
@@ -180,8 +224,14 @@ void GameScene::update(float timestep) {
     dimen *= constants::SCENE_WIDTH / dimen.width;
     Vec2 center(dimen.width / 2, dimen.height / 2);
 
+    shared_ptr<Player> _player = _gameMap->getPlayer();
+    vector<shared_ptr<Player>> _otherPlayers = _gameMap->getOtherPlayers();
+
     // Process movement input and update player states
-    _input->update(timestep);
+
+    // Delete if input works V
+    //_input->update(timestep);
+
     _gameMap->move(_input->getMove(), _input->getDirection());
     // Updates vision cones
     for (auto& p : _players) {
@@ -193,6 +243,28 @@ void GameScene::update(float timestep) {
         }
     }
 
+    // Interaction checking should happen here
+    
+    if (_input->getInteraction()) {
+        if (_player->getType() == Player::Type::Pal) {
+            if (!(_gameMap->getPal()->getSpooked())) {
+                _gameMap->handleInteract(true);
+            }
+        }
+        else {
+            if (_gameMap->getTraps().size() != 0) {
+                bool ifTrapped = "the below comment";
+                // use collisioncontroller to check if pal is on trap
+                if (ifTrapped) {
+                    _gameMap->handleInteract(false);
+                }
+            }
+        }
+    }
+
+    // Updates the models
+    _gameMap->update(timestep);
+
     // Checks if the ghost should be revealed, commented out because no
     // tagging yet
     /**
@@ -201,63 +273,13 @@ void GameScene::update(float timestep) {
     }
     */
 
-    // Processes interaction input
-    _gameMap->update(timestep, _input->getInteraction());
-
-    // Delete after batteries implemented, will be handled in gamemap
-    shared_ptr<Trap> trap = nullptr;
-    if (_player->getType() == Player::Type::Pal) {
-        if (_gameMap->getPal()->getSpooked()) {
-            if (_input->getInteraction()) {
-                auto slotTexture = _assets->get<Texture>("slot");
-                shared_ptr<BatterySlot> slot = BatterySlot::alloc(Vec2(0, 100));
-                slot->setTextures(slotTexture, _root->getContentSize());
-                slot->getNode()->setScale(0.05f);
-                _root->addChild(slot->getNode());
-                slot->getNode()->setVisible(true);
-                slot->setLoc(_player->getLoc());
-                slot->setCharge();
-                slot->getNode()->setColor(Color4f::GREEN);
-                _gameMap->addSlot(slot);
-                //                CULog("ACTIVATE SLOT");
-            }
-        }
-    }
-    else {
-        if (_input->getInteraction()) {
-            if (_gameMap->getTraps().size() != 0) {
-                float distance = ROOM_SIZE / 2;
-                shared_ptr<Trap> tPtr = nullptr;
-
-                for (shared_ptr<Trap> t : _gameMap->getTraps()) {
-                    Vec2 n = t->getLoc() - _player->getLoc();
-                    float d = n.length();
-                    if (d < distance && !t->getTriggered()) {
-                        tPtr = t;
-                    }
-                }
-                trap = tPtr;
-            }
-            if (trap == nullptr || _gameMap->getTraps().size() == 0) {
-                auto trapTexture = _assets->get<Texture>("trap");
-                shared_ptr<Trap> t = Trap::alloc(Vec2(0, 0));
-                t->setTextures(trapTexture, _root->getContentSize());
-                t->getNode()->setScale(0.25f);
-                _root->addChild(t->getNode());
-                _gameMap->addTrap(t);
-                trap = t;
-            }
-
-            if (!trap->getArmed() && !trap->getTriggered()) {
-                trap->setArmed(true);
-                trap->setLoc(_player->getLoc());
-            }
-            else if (!trap->getTriggered()) {
-                trap->setTriggered(true);
-                trap->getNode()->setColor(Color4f::RED);
-            }
-        }
-    }
+    // Check collisions
+    // between players and bounds
+    // between pals and walls
+    // between ghost and vision cones
+    // between ghost and pal
+    // between trap and pal if trap is triggered
+    // between pal and battery
 
     // Sets priority of player nodes
     vector<shared_ptr<Player>> sortedPlayers;
@@ -302,10 +324,14 @@ void GameScene::draw(const std::shared_ptr<SpriteBatch>& batch, const std::share
         float roomLights[constants::MAX_ROOMS * 3];
         int i = 0;
         for (auto& room : _gameMap->getRooms()) {
-            roomLights[i] = _root->getPosition().x + room->getOrigin().x;
-            roomLights[i+1] = _root->getPosition().y + room->getOrigin().y;
+            roomLights[i] = _root->getPosition().x + room->getOrigin().x + constants::ROOM_CENTER.x;
+            roomLights[i+1] = _root->getPosition().y + room->getOrigin().y + constants::ROOM_CENTER.x;
             // set to 1 if room's light is on, 0 if not
-            roomLights[i + 2] = 1.0;
+            if (room->getLight()) {
+                roomLights[i + 2] = 1;
+            } else {
+                roomLights[i + 2] = 0;
+            }
             i = i + 3;
         }
         //just to fill rest of values if the number of rooms < MAX_ROOMS
@@ -322,7 +348,7 @@ void GameScene::draw(const std::shared_ptr<SpriteBatch>& batch, const std::share
                 // set to 1 if pal is active 0 if not
                 palLights[i + 2] = 1.0;
                 palLights[i + 3] = (_visionNode->getAngle() - M_PI / 2);
-                CULog("%f", palLights[i + 3]);
+//                CULog("%f", palLights[i + 3]);
                 i = i + 4;
             }
         }

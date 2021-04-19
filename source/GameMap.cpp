@@ -8,8 +8,8 @@
 #pragma mark Constructors
 bool GameMap::init() {
 	/** Initialize pal model */
-	_palModel = Pal::alloc(Vec2(-100, 0));
-	_ghostModel = Ghost::alloc(Vec2(150, 0));
+	_palModel = Pal::alloc(Vec2(50, 100));
+	_ghostModel = Ghost::alloc(Vec2(200, 100));
 	_complete[0] = false;
 	_complete[1] = false;
 	return true;
@@ -19,7 +19,6 @@ bool GameMap::init() {
  * Disposes of all(non - static) resources allocated
  */
 void GameMap::dispose() {
-	_world = nullptr;
 	_player = nullptr;
 	_palModel = nullptr;
 	_ghostModel = nullptr;
@@ -30,19 +29,18 @@ void GameMap::dispose() {
 		p = nullptr;
 	}
 }
-#pragma mark -
+
+
 #pragma mark Gameplay Handling
 
 /** Method to update the GameMap model, called by GameScene */
-void GameMap::update(float timestep, bool interact) {
+void GameMap::update(float timestep) {
 	shared_ptr<Trap> trap = nullptr;
 
 	for (shared_ptr s : _slots) {
 		s->update(timestep);
 	}
-	if (interact) {
-		//handleInteract(trap);
-	}
+
 	_player->update(timestep);
 
 	// If ghost is tagged, lower the tag timer
@@ -54,13 +52,7 @@ void GameMap::update(float timestep, bool interact) {
 		_ghostModel->setTagged(false);
 	}
 
-	// Check collisions
-	// between players and bounds
-	// between pals and walls
-	// between ghost and vision cones
-	// between ghost and pal
-	// between trap and pal if trap is triggered
-	// between pal and battery
+	// Call GameRoom::update(timestep)
 
 	// Check victory conditions
 	if (_palModel->getSpooked()) {
@@ -83,8 +75,9 @@ void GameMap::move(Vec2 move, Vec2 direction) {
 }
 
 /** Helper method to handle the "interact" input from the players */
-void GameMap::handleInteract(shared_ptr<Trap> trap) {
-	if (_player->getType() == Player::Type::Pal && !_palModel->getSpooked()) {
+void GameMap::handleInteract(bool pal) {
+    float range = 250.0f;
+    if (pal) {
 		//  CODE FOR WHEN BATTERIES FULLY IMPLEMENTED
 		/**
 		* if (pal is close to the slot in their room):
@@ -92,10 +85,45 @@ void GameMap::handleInteract(shared_ptr<Trap> trap) {
 		*	slot->getNode()->setColor(Color4f::GREEN);
 		*   _slots.push_back(slot);
 		*/
+        shared_ptr<BatterySlot> slot = nullptr;
+        
+        for (vector<shared_ptr<GameRoom>>  ::const_iterator room = _rooms.begin();
+              room != _rooms.end(); ++room)
+            {
+                Vec2 slotPos = (*room)->getOrigin() + (*room)->getSlot()->getNode()->getPosition();
+                Vec2 distance = slotPos - _player->getNode()->getPosition();
+                if (distance.lengthSquared() < range*range) {
+                    slot = (*room)->getSlot();
+//                    slot->getNode()->setVisible(true);
+//                    slot->getNode()->setColor(Color4f::GREEN);
+                }
+            }
+        if (slot != nullptr) {
+            if (slot->getCharge() <= 0) {
+                slot->setCharge();
+                slot->getNode()->setColor(Color4f::GREEN);
+            }
+        }
 	}
 	else if (_player->getType() == Player::Type::Ghost) {
 		// CODE FOR WHEN TRAPS FULLY IMPLEMENTED
-	}
+        shared_ptr<Trap> trap = nullptr;
+        
+        for (vector<shared_ptr<GameRoom>>  ::const_iterator room = _rooms.begin();
+              room != _rooms.end(); ++room)
+            {
+                Vec2 trapPos = (*room)->getOrigin() + (*room)->getTrap()->getNode()->getPosition();
+                Vec2 distance = trapPos - _ghostModel->getLoc();
+                if (distance.lengthSquared() < range*range) trap = (*room)->getTrap();
+        }
+        if (trap != nullptr) {
+            if (!trap->getTriggered()) {
+                trap->setTriggered(true);
+                trap->getNode()->setColor(Color4f::RED);
+                trap->getNode()->setVisible(true);
+            }
+        }
+    }
 }
 
 #pragma mark -
@@ -113,42 +141,41 @@ bool GameMap::assertValidMap() {
 		if (it != origins.end()) return false;
 		origins.insert(room->getOrigin());
 	}
-	// make sure connections are two-way
-	for (vector<shared_ptr<GameRoom>>::iterator room1It = _rooms.begin(); room1It != _rooms.end(); ++room1It) {
-		shared_ptr<GameRoom> room1 = *room1It;
-		set<shared_ptr<GameRoom>> connectedRooms1 = room1->getConnectedRooms();
-		for (vector<shared_ptr<GameRoom>>::iterator room2It = room1It; room2It != _rooms.end(); ++room2It) {
-			shared_ptr<GameRoom> room2 = *room2It;
-			if (connectedRooms1.find(room2) != connectedRooms1.end()) {
-				set<shared_ptr<GameRoom>> connectedRooms2 = room2->getConnectedRooms();
-				if (connectedRooms2.find(room1) == connectedRooms2.end()) return false;
-			};
-		}
-	}
+
+	
 	return true;
 };
 
-bool GameMap::generateBasicMap() {
+bool GameMap::generateBasicMap(int numBatteries) {
 	reset();
-	shared_ptr<GameRoom> room1 = GameRoom::alloc(Vec2(0, 0));
-	shared_ptr<GameRoom> room2 = GameRoom::alloc(Vec2(600, 0));
-	shared_ptr<GameRoom> room3 = GameRoom::alloc(Vec2(1200, 0));
-	_rooms.push_back(room1);
-	_rooms.push_back(room2);
-	_rooms.push_back(room3);
-	room1->setConnectedRoom(room2);
-	room2->setConnectedRoom(room1);
-	room2->setConnectedRoom(room3);
-	room3->setConnectedRoom(room2);
-	return assertValidMap();
+
+	/**
+	* 1. Create hard coded model that represent what type of rooms need to be where, no obstacles
+	* 2. Assign each room an ostacle layout
+	* 3. Call makeRoom() on each room+obstacle combo and add to _rooms
+	*/
+	return true;
 };
 
 void makeConnection(shared_ptr<GameRoom> room1, shared_ptr<GameRoom> room2) {
-	room1->setConnectedRoom(room2);
-	room2->setConnectedRoom(room1);
+}
+
+shared_ptr<GameRoom> makeRoom() {
+	// call gameroom's init and pass in obstacle layout and door configuration
+	RoomParser parser = RoomParser();
+	return parser.parse("json/room.json", Vec2(0, 0));
 }
 
 bool GameMap::generateRandomMap() {
+	reset();
+
+	/**
+	 * 1. Create random model that represent what type of rooms need to be where, no obstacles
+	 * 2. Assign each room an ostacle layout
+	 * 3. Call makeRoom() on each room+obstacle combo and add to _rooms
+	 */
+
+
 	RoomParser parser = RoomParser();
 	for (int i = 0; i < 3; i++) {
 		for (int j = 0; j < 3; j++) {
@@ -156,17 +183,8 @@ bool GameMap::generateRandomMap() {
 			_rooms.push_back(room);
 		}
 	}
-	makeConnection(_rooms[0], _rooms[1]);
-	makeConnection(_rooms[0], _rooms[3]);
-	makeConnection(_rooms[1], _rooms[4]);
-	makeConnection(_rooms[1], _rooms[2]);
-	makeConnection(_rooms[2], _rooms[5]);
-	makeConnection(_rooms[3], _rooms[4]);
-	makeConnection(_rooms[3], _rooms[6]);
-	makeConnection(_rooms[4], _rooms[7]);
-	makeConnection(_rooms[4], _rooms[5]);
-	makeConnection(_rooms[5], _rooms[8]);
-	makeConnection(_rooms[6], _rooms[7]);
-	makeConnection(_rooms[7], _rooms[8]);
+	
 	return true;
+
+
 }

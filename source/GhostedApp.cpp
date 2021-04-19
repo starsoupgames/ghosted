@@ -103,6 +103,7 @@ void GhostedApp::onShutdown() {
     _network = nullptr;
     _networkData = nullptr;
     _input = nullptr;
+    _collision = nullptr;
     
     _loadKeys = false;
     
@@ -197,6 +198,7 @@ void GhostedApp::update(float timestep) {
             break;
         case constants::GameMode::Start:
             _network = make_shared<NetworkController>(); // reset network controller
+            _collision = CollisionController::alloc();
             _networkData = make_shared<NetworkData>(); // reset network data
             _network->attachData(_networkData);
             _input = make_shared<InputController>();
@@ -218,6 +220,7 @@ void GhostedApp::update(float timestep) {
             _network->startGame();
             _gameplay.setNetwork(_network);
             _gameplay.setInput(_input);
+            _gameplay.setCollision(_collision);
             _gameplay.init(_assets);
             break;
         }
@@ -251,6 +254,7 @@ void GhostedApp::update(float timestep) {
             _gameplay.dispose();
             _gameplay.setNetwork(_network);
             _gameplay.setInput(_input);
+            _gameplay.setCollision(_collision);
             _gameplay.init(_assets);
         }
         _network->update(timestep);

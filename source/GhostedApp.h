@@ -33,7 +33,7 @@
 #include "Constants.h"
 
 #include "NetworkController.h"
-
+#include "CollisionController.h"
 #include "GameMode.h"
 #include "LoadingScene.h"
 #include "StartScene.h"
@@ -67,6 +67,9 @@ protected:
     
     /** Controller for handling input */
     shared_ptr<InputController> _input;
+
+    /** Controller for handling collisions */
+    shared_ptr<CollisionController> _collision;
     
     // Player modes
     /** The primary controller for the game world */

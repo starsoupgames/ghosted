@@ -3,10 +3,7 @@
 #define __COLLISION_CONTROLLER_H__
 #include <cugl/cugl.h>
 #include "GameEntity.h"
-#include "GameEntities/Players/PlayerGhost.h"
-#include "GameEntities/Players/PlayerPal.h"
-#include "GameEntities/BatteryCollectible.h"
-#include "RoomEntities/Trap.h"
+#include "GameMap.h"
 
 /**
  * Namespace of functions implementing simple game physics.
@@ -26,65 +23,25 @@ public:
     /**
      * Disposes this collision controller, releasing all resources.
      */
-    ~CollisionController() {};
+    ~CollisionController() { dispose(); };
+
+    bool init();
+
+    /**
+    * Disposes of all (non-static) resources allocated to this controller.
+    */
+    virtual void dispose();
+
+    /**
+     * Allocates this collision controller
+     */
+    static shared_ptr<CollisionController> alloc() {
+        shared_ptr<CollisionController> result = make_shared<CollisionController>();
+        return (result->init() ? result : nullptr);
+    }
 
 #pragma mark -
 #pragma mark Collision Handling
-
-    /**
-    *  Handles collisions between a Pal and a Ghost, spooking the Pal if requirements for
-    *  spooking are fulfilled.
-    *
-    *  This method should be called only once per collision.
-    *
-    *  @param Ghost       The Ghost in the collision
-    *  @param Pal         The Pal in the collision
-    */
-    void checkForCollision(const shared_ptr<Ghost>& ghost, const shared_ptr<Pal>& pal);
-
-
-    /**
-    *  Checks for collisions between the Ghost and the Pal's vision, tagging the Ghost if
-    *  such a collision occurs.
-    *
-    *  This method should be called only once per collision.
-    *
-    *  @param Ghost       The Ghost in the collision
-    *  @param vision      The Pal's vision in the collision
-    */
-    void checkForCollision(const shared_ptr<Ghost>& ghost, const shared_ptr<Pal>& pal, const shared_ptr<scene2::PolygonNode>& vision);
-
-    /**
-     *  Handles collisions between a Pal and a Battery, prompting the Pal to pick up the
-     *	Battery if requirements are fulfilled
-     *
-     *	CURRENTLY THE PAL WILL AUTOMATICALLY PICK UP THE BATTERY
-     *
-     *  This method should be called only once per collision.
-     *
-     *  @param Pal        The Pal in the collision
-     *  @param Battery    The Battery in the collision
-     */
-    void checkForCollision(const shared_ptr<Pal>& pal, const shared_ptr<Battery>& battery);
-    
-    /**
-     *  Handles collisions between a Pal and a Trap, prompting the Trap to spook the pal if requirements are fulfilled
-     *
-     *  This method should be called only once per collision.
-     *
-     *  @param Pal        The Pal in the collision
-     *  @param Battery    The Trap in the collision
-     */
-    void checkForCollision(const shared_ptr<Pal>& pal, const shared_ptr<Trap>& trap);
-
-
-    /**
-    * Nudge the entity to ensure it does not go out of bounds
-    *
-    * @param entity    The entity which may have collided
-    * @param bounds    The rectangular bounds of the playing field
-    */
-    void checkInBounds(const std::shared_ptr<GameEntity>& entity, const cugl::Rect bounds);
 
 
     /**
@@ -92,7 +49,7 @@ public:
      *
      * This method is called when we first get a collision between two objects.
      * We use this method to test if it is the "right" kind of collision.  In
-     * particular, we use it to test if we make it to the win door.
+     * particular, we use it to handle interactions between entities.
      *
      * @param  contact  The two bodies that collided
      */

@@ -26,7 +26,7 @@ protected:
     /** Controller for abstracting out input across multiple platforms */
     shared_ptr<InputController> _input;
     /** Controller for handling collisions */
-    CollisionController _collision;
+    shared_ptr<CollisionController> _collision;
     /** Controller for handling networking */
     shared_ptr<NetworkController> _network;
 
@@ -61,11 +61,15 @@ protected:
     /** The polygon node representing the vision cone */
     shared_ptr<scene2::PolygonNode> _visionNode;
 
+    /** The Box2D world */
+    shared_ptr<physics2::ObstacleWorld> _world;
+
     /** The scale between the physics world and the screen (MUST BE UNIFORM) */
     float _scale;
 
     // MODEL
     shared_ptr<GameMap> _gameMap;
+
     shared_ptr<Player> _player;
     vector<shared_ptr<Player>> _players;
     shared_ptr<Pal> _palModel;
@@ -143,6 +147,13 @@ public:
      */
     void setInput(shared_ptr<InputController> input) {
         _input = input;
+    }
+
+    /**
+     * Sets the pointer to the collision controller
+     */
+    void setCollision(shared_ptr<CollisionController> collision) {
+        _collision = collision;
     }
 
 #pragma mark -

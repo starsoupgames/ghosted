@@ -13,7 +13,7 @@ shared_ptr<GameRoom> RoomParser::parse(string file, const Vec2& origin) {
 	shared_ptr<JsonValue> batteries = value->get("batteries");
 	vector<vector<int>> batteryList = batteries->asVecArray(*batteries);
 
-	room->setBatterySpawns(batteryList);
+	//room->setBatterySpawns(batteryList);
 	return room;
 }
 

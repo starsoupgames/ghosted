@@ -6,8 +6,7 @@
 #include "GameRoom.h"
 #include "GameEntities/Players/PlayerPal.h"
 #include "GameEntities/Players/PlayerGhost.h"
-#include "RoomEntities/Trap.h"
-#include "RoomEntities/BatterySlot.h"
+#include "GameEntities/BatteryCollectible.h"
 
 using namespace std;
 using namespace cugl;
@@ -15,9 +14,6 @@ using namespace cugl;
 /** Class modeling a game map. */
 class GameMap {
 private:
-
-	/** The Box2D world */
-	shared_ptr<physics2::ObstacleWorld> _world;
 
 	/** All the rooms in the map */
 	vector<shared_ptr<GameRoom>> _rooms;
@@ -40,11 +36,6 @@ private:
 
 	bool assertValidMap();
 
-	bool generateBasicMap();
-
-	/** Helper method to handle the "interact" input from the players */
-	void handleInteract(shared_ptr<Trap> trap);
-
 public:
 #pragma mark Constructors
 	GameMap() { }
@@ -58,6 +49,9 @@ public:
 	*/
 	virtual void dispose();
 
+	/**
+	 * Allocates this model
+	 */
 	static shared_ptr<GameMap> alloc() {
 		shared_ptr<GameMap> result = make_shared<GameMap>();
 		return (result->init() ? result : nullptr);
@@ -80,8 +74,14 @@ public:
 	/** Returns whether or not the game is complete and who won */
 	bool* getComplete() { return _complete; }
 
-	/** Gets the list of traps, delete after traps properly implemented */
+	/** Returns the list of traps, delete after traps properly implemented */
 	vector<shared_ptr<Trap>> getTraps() { return _traps; }
+
+	/** Returns the player */
+	shared_ptr<Player> getPlayer() { return _player; }
+
+	/** Returns the list of other players */
+	vector<shared_ptr<Player>> getOtherPlayers() { return _otherPlayers; }
 
 	/** Sets the model for the player */
 	void setPlayer(shared_ptr<Player> val) { _player = val; }
@@ -99,16 +99,23 @@ public:
 #pragma mark Gameplay Handling
 
 	/** Method to update the GameMap model, called by GameScene */
-	void update(float timestep, bool interact);
+	void update(float timestep);
 
 	/** Method to move and change the direction of players */
 	void move(Vec2 move, Vec2 direction);
 
+	/** Method to handle the interactions */
+	void handleInteract(bool pal);
+
 #pragma mark -
 #pragma mark Map Gen
 
+	/** Generates a basic map */
+	bool generateBasicMap(int numBatteries);
+
 	/** Generates a random map */
 	bool generateRandomMap();
+
 #pragma mark -
 
 };

@@ -19,6 +19,8 @@ namespace constants {
 
     const Vec2 ROOM_DIMENSIONS (375, 375);
 
+    const Vec2 ROOM_CENTER (187.5, 187.5);
+
     const Vec2 GHOST_SHADOW_OFFSET (10, -15);
 
     const Vec2 PAL_SHADOW_OFFSET (2, -20);

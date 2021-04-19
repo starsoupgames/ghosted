@@ -10,9 +10,9 @@ void BatterySlot::setTextures(const std::shared_ptr<Texture>& slot, Size size) {
 void BatterySlot::update(float timestep) {
     RoomEntity::update(timestep);
     _charge -= timestep;
-    if (_charge <= 0) {
-        _animationNode->setColor(Color4f::RED);
-    }
+//    if (_charge <= 0) {
+//        _animationNode->setColor(Color4f::RED);
+//    }
 }
 
 void BatterySlot::dispose() {
