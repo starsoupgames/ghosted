@@ -24,7 +24,8 @@ void Player::dispose() {
  *
  * Setting this to nullptr clears the value.
  *
- * @param value the Player animation node.
+ * @param node the Player animation node
+ * @param shadow the Player shadow node
  */
 void Player::setNode(const std::shared_ptr<scene2::AnimationNode>& value, const std::shared_ptr<scene2::PolygonNode>& shadow) {
     Player::setNode(value);

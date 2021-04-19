@@ -98,10 +98,48 @@ vector<uint8_t> NetworkData::convertMetadata() {
 }
 
 shared_ptr<NetworkMetadata> NetworkData::interpretMetadata(const vector<uint8_t>& metadata) {
+    CUAssertLog(metadata.size() == 5, "interpretMetadata: Byte vector size is not equal to data type size.");
     vector<vector<uint8_t>> splitMetadata = split(metadata, { 1, 4 });
     int status = decodeByte(splitMetadata[0]);
     int id = decodeInt(splitMetadata[1]);
     return make_shared<NetworkMetadata>(status, id);
+}
+
+vector<uint8_t> NetworkData::convertLobbyData() {
+    vector<uint8_t> result;
+
+    if (_id < 0) {
+        CULog("ID is not defined.");
+        return result;
+    }
+
+    if (_id == _hostID) {
+        if (_lobbyData == nullptr) {
+            vector<int> playerOrder({ 0, 1, 2, 3 });
+            shuffle(playerOrder.begin(), playerOrder.end(), random_device());
+            _lobbyData = make_shared<LobbyData>(playerOrder);
+        }
+
+        for (int i : _lobbyData->playerOrder) {
+            encodeInt(i, result);
+        }
+    }
+
+    return result;
+}
+
+void NetworkData::interpretLobbyData(const int id, const vector<uint8_t>& msg) {
+    vector<vector<uint8_t>> splitMsg = split(msg, { 16 });
+    if (splitMsg.empty()) return;
+    if (id == _hostID && _lobbyData == nullptr) {
+        vector<vector<uint8_t>> splitPlayerOrder = split(splitMsg[0], { 4, 4, 4, 4 });
+        vector<int> playerOrder(4);
+        for (int i = 0; i < 4; ++i) {
+            playerOrder[i] = decodeInt(splitPlayerOrder[i]);
+            CULog("%d", playerOrder[i]);
+        }
+        _lobbyData = make_shared<LobbyData>(playerOrder);
+    }
 }
 
 vector<uint8_t> NetworkData::convertPlayerData() {
@@ -131,6 +169,7 @@ void NetworkData::interpretPlayerData(const int id, const vector<uint8_t>& playe
     shared_ptr<PlayerData> otherPlayer = getPlayer(id);
 
     vector<vector<uint8_t>> splitPlayerData = split(playerData, { 8, 8 });
+    if (splitPlayerData.empty()) return;
     Vec2 location = decodeVector(splitPlayerData[0]);
     Vec2 direction = decodeVector(splitPlayerData[1]);
 
@@ -163,8 +202,8 @@ vector<uint8_t> NetworkData::serializeData() {
 
     switch (_status) {
     case constants::MatchStatus::Waiting: {
-        // vector<uint8_t> lobbyData = convertLobbyData();
-        // result.insert(result.end(), lobbyData.begin(), lobbyData.end());
+        vector<uint8_t> lobbyData = convertLobbyData();
+        result.insert(result.end(), lobbyData.begin(), lobbyData.end()); // 16
         break;
     }
     case constants::MatchStatus::InProgress: {
@@ -199,12 +238,14 @@ void NetworkData::unserializeData(const vector<uint8_t>& msg) {
     case constants::MatchStatus::None:
         break;
     case constants::MatchStatus::Waiting: {
-        splitMsg = split(msg, { 5 });
-        // interpretLobbyData(metadata->id, splitMsg[1]);
+        if (splitMsg.size() <= 1) break;
+        interpretLobbyData(metadata->id, splitMsg[1]);
         break;
     }
     case constants::MatchStatus::InProgress: {
+        if (splitMsg.size() <= 1) break;
         splitMsg = split(msg, { 5, 16, 0 });
+        if (splitMsg.empty()) break;
         interpretPlayerData(metadata->id, splitMsg[1]);
         interpretMapData(splitMsg[2]);
         break;
@@ -240,6 +281,7 @@ void NetworkData::interpolatePlayerData() {
         }*/
 
         p->player->setLoc(interpolatedPosition);
+        p->player->update();
         if (progress >= 1.f) {
             p->player->setIdle(true);
         }

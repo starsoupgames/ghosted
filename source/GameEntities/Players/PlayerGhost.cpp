@@ -2,20 +2,15 @@
 
 using namespace cugl;
 
-/**
- * Sets the animation node representing this Player.
- *
- * Setting this to nullptr clears the value.
- *
- * @param value the Player animation node.
- */
-void Ghost::setNode(const std::shared_ptr<scene2::AnimationNode>& value, const std::shared_ptr<scene2::PolygonNode>& shadow) {
+
+void Ghost::setNode(const std::shared_ptr<scene2::AnimationNode>& node, const std::shared_ptr<scene2::PolygonNode>& shadow) {
     _shadow = shadow;
     if (_shadow != nullptr) {
         _shadow->setPosition(_shadow->getPosition() + constants::GHOST_SHADOW_OFFSET);
         _shadow->setAnchor(Vec2::ANCHOR_BOTTOM_CENTER);
+        node->addChildWithName(shadow, "shadow");
     }
-    Player::setNode(value);
+    Player::setNode(node);
 }
 
 /**
@@ -26,17 +21,13 @@ void Ghost::setNode(const std::shared_ptr<scene2::AnimationNode>& value, const s
  *
  * @param timestep  Time elapsed since last called.
  */
-void Ghost::update(float timestep) {
-    Player::update(timestep);
-    
+void Ghost::update(float timestep) {    
     // Move the ghost
     _loc += _move * _speed;
     
-    Player::processDirection();
+    processDirection();
 
-    if (_node != nullptr) {
-        _node->setPosition(_loc);
-    }
+    Player::update(timestep);
 }
 
 /**

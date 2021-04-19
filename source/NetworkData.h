@@ -22,6 +22,15 @@ struct NetworkMetadata {
     }
 };
 
+/** Lobby Data */
+struct LobbyData {
+    vector<int> playerOrder;
+
+    LobbyData(vector<int>& playerOrder) {
+        this->playerOrder = playerOrder;
+    }
+};
+
 /** Data used for player interpolation */
 struct InterpolationData {
     unsigned ticksSinceReceived;
@@ -64,10 +73,11 @@ private:
     /** Match status */
     uint8_t _status;
 
+    /** Player order */
+    shared_ptr<LobbyData> _lobbyData;
+
     /** Player data vector */
     vector<shared_ptr<PlayerData>> _players;
-    /** Interpolation data vector */
-    vector<shared_ptr<InterpolationData>> _interpolationData;
 
     /** Functions to convert data types to byte vectors */
     void encodeByte(uint8_t b, vector<uint8_t>& out); // 1 byte
@@ -87,6 +97,10 @@ private:
     vector<uint8_t> convertMetadata();
     shared_ptr<NetworkMetadata> interpretMetadata(const vector<uint8_t>& metadata);
 
+    /** Convert and interpret lobby data */
+    vector<uint8_t> convertLobbyData();
+    void interpretLobbyData(const int id, const vector<uint8_t>& lobbyData);
+
     /** Convert and interpret player data */
     vector<uint8_t> convertPlayerData();
     void interpretPlayerData(const int id, const vector<uint8_t>& playerData);
@@ -98,7 +112,12 @@ private:
 public:
     NetworkData() : _id(-1), _name("Player"), _hostID(0), _status(constants::MatchStatus::None) { };
 
-    ~NetworkData() { };
+    ~NetworkData() { dispose(); };
+
+    void dispose() {
+        _lobbyData = nullptr;
+        _players.clear();
+    }
 
     /** @return main player */
     shared_ptr<PlayerData> getPlayer();
@@ -116,13 +135,28 @@ public:
         _id = id;
     }
 
+    /** @return players */
+    vector<shared_ptr<Player>> getPlayers() {
+        vector<shared_ptr<Player>> players;
+        for (auto& p : _players) {
+            players.push_back(p->player);
+        }
+        return players;
+    }
+
     /** Set players as player data vector */
     void setPlayers(const vector<shared_ptr<Player>>& players) {
         CUAssertLog(players.size() == 4, "Players vector is not size 4.");
         _players = vector<shared_ptr<PlayerData>>(4, nullptr);
         for (int i = 0; i < 4; ++i) {
             if (players[i] != nullptr) {
-                _players[i] = make_shared<PlayerData>(i, players[i]);
+                if (_lobbyData != nullptr) {
+                    _players[i] = make_shared<PlayerData>(i, players[_lobbyData->playerOrder[i]]);
+                    CULog("%d, %d, %d", i, _lobbyData->playerOrder[i]);
+                }
+                else {
+                    _players[i] = make_shared<PlayerData>(i, players[i]);
+                }
             }
         }
     }

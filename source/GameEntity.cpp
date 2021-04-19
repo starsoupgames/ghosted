@@ -47,6 +47,7 @@ void GameEntity::setNode(const std::shared_ptr<scene2::AnimationNode>& value) {
  */
 
 void GameEntity::update(float timestep) {
+    if (_animationNode != nullptr) _animationNode->setPosition(_loc);
 }
 
 /**

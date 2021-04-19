@@ -12,9 +12,9 @@ using namespace cugl;
  */
 namespace constants {
     constexpr unsigned SCENE_WIDTH = 1024;
+
     constexpr uint8_t NETWORK_TICKS = 5;
 
-    /**offset for flashlight position**/
     const Vec2 FLASHLIGHT_OFFSET (0, -50);
 
     const Vec2 ROOM_DIMENSIONS (375, 375);
@@ -26,7 +26,7 @@ namespace constants {
     const Vec2 PAL_SHADOW_OFFSET (2, -20);
 
 
-    //Make sure to change values in lightShader.frag if you change these here
+    // Make sure to change values in lightShader.frag if you change these here
     /**maximum possible rooms generated in a map**/
     constexpr uint8_t MAX_ROOMS = 16;
 

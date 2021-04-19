@@ -3,10 +3,6 @@
 using namespace cugl;
 using namespace std;
 
-void NetworkController::attachData(const shared_ptr<NetworkData>& data) {
-    _data = data;
-}
-
 void NetworkController::connect() {
     if (_connection != nullptr || _connected) return;
     const auto config = CUNetworkConnection::ConnectionConfig(SERVER_ADDRESS, SERVER_PORT, MAX_PLAYERS, API_VERSION);

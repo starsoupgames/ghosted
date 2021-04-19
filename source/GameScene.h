@@ -30,7 +30,6 @@ protected:
     /** Controller for handling networking */
     shared_ptr<NetworkController> _network;
 
-
     // VIEW
     /** Root node */
     shared_ptr<scene2::OrderedNode> _root;
@@ -38,22 +37,14 @@ protected:
     shared_ptr<scene2::OrderedNode> _litRoot;
     shared_ptr<scene2::PolygonNode> _floorNode;
     shared_ptr<scene2::PolygonNode> _litFloorNode;
-    shared_ptr<scene2::AnimationNode> _palNode;
-    shared_ptr<scene2::AnimationNode> _ghostNode;
-    /** Nodes for pal shadows **/
-    shared_ptr<scene2::PolygonNode> _palShadowNode;
-    /** Node for ghost shadow **/
-    shared_ptr<scene2::PolygonNode> _ghostShadowNode;
     /** Reference to the debug root of the scene graph */
-    std::shared_ptr<cugl::scene2::SceneNode> _debugNode;
+    shared_ptr<scene2::SceneNode> _debugNode;
     /** Reference to the win and lose message labels */
     shared_ptr<scene2::Label> _ghostWinNode;
     shared_ptr<scene2::Label> _palWinNode;
 
     /**offset for flashlight position**/
     //Vec2 _flashlightOffset = Vec2(0, -50);
-
-
     
     /** Reference to all the nodes for the rooms */
     vector<shared_ptr<scene2::PolygonNode>> _roomNodes;
@@ -69,11 +60,7 @@ protected:
 
     // MODEL
     shared_ptr<GameMap> _gameMap;
-
-    shared_ptr<Player> _player;
     vector<shared_ptr<Player>> _players;
-    shared_ptr<Pal> _palModel;
-    shared_ptr<Ghost> _ghostModel;
 
     /** Whether or not debug mode is active */
     bool _debug;

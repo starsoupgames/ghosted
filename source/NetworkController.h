@@ -9,7 +9,7 @@
 /** Constants for connection config */
 constexpr char* SERVER_ADDRESS = "34.86.11.83";
 constexpr uint16_t SERVER_PORT = 61111;
-constexpr uint32_t MAX_PLAYERS = 2;
+constexpr uint32_t MAX_PLAYERS = 4;
 constexpr uint8_t API_VERSION = 0;
 
 using namespace std;
@@ -54,7 +54,14 @@ public:
     ~NetworkController() { dispose(); };
 
     /** Attach network data */
-    void attachData(const shared_ptr<NetworkData>& data);
+    void attachData(const shared_ptr<NetworkData>& data) {
+        _data = data;
+    }
+
+    /** @return network data */
+    shared_ptr<NetworkData> getData() {
+        return _data;
+    };
 
     /** Start the game */
     void startGame() {

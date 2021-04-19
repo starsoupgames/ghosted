@@ -65,9 +65,6 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
     */
     _gameMap = GameMap::alloc();
     _gameMap->generateRandomMap();
-    _palModel = _gameMap->getPal();
-    _ghostModel = _gameMap->getGhost();
-
 
     _root = scene2::OrderedNode::allocWithOrder(scene2::OrderedNode::Order::ASCEND);
     //_root->addChild(_assets->get<scene2::SceneNode>("game"));
@@ -121,41 +118,39 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
     _palWinNode->setVisible(false);
     _root->addChild(_palWinNode);
 
-    _assets->get<Texture>("pal_doe_texture")->setName("pal_sprite");
-    _palShadowNode = scene2::PolygonNode::allocWithTexture(_assets->get<Texture>("pal_shadow_texture"));
-    _palNode = scene2::AnimationNode::alloc(_assets->get<Texture>("pal_doe_texture"), 3, 24);
-    _palModel->setNode(_palNode, _palShadowNode);
-    _palNode->setPriority(constants::Priority::Player);
-    _palShadowNode->setPriority(_palNode->getPriority() - 1);
-    _litRoot->addChild(_palNode);
-    _palNode->addChild(_palShadowNode);
-
-    //TODO: THESE NEXT TWO LINES MUST BE REPLACED WITH THE NEW GHOST SPRITE TEXTURE INSTEAD OF THE SEAL
+    // Player models
+    _assets->get<Texture>("pal_doe_texture")->setName("pal_sprite_doe");
+    _assets->get<Texture>("pal_seal_texture")->setName("pal_sprite_seal");
+    _assets->get<Texture>("pal_tanuki_texture")->setName("pal_sprite_tanuki");
     _assets->get<Texture>("ghost_texture")->setName("ghost_sprite");
-    _ghostShadowNode = scene2::PolygonNode::allocWithTexture(_assets->get<Texture>("ghost_shadow_texture"));
-    _ghostNode = scene2::AnimationNode::alloc(_assets->get<Texture>("ghost_texture"), 3, 24);
-    _ghostModel->setNode(_ghostNode, _ghostShadowNode);
-    _ghostModel->setTimer(0);
-    _ghostNode->setPriority(constants::Priority::Player);
-    _ghostShadowNode->setPriority(_ghostNode->getPriority() - 1);
-    _dimRoot->addChild(_ghostNode);
-    _ghostNode->addChild(_ghostShadowNode);
 
-    if (_network->isHost()) {
-        _player = _palModel;
-        _gameMap->setPlayer(_palModel);
-        _gameMap->setOtherPlayers({ _ghostModel });
+    for (auto& s : { "doe", "seal", "tanuki" }) {
+        auto palNode = scene2::AnimationNode::alloc(_assets->get<Texture>("pal_" + string(s) + "_texture"), 3, 24);
+        palNode->setAnchor(Vec2::ANCHOR_CENTER);
+        _litRoot->addChild(palNode);
+
+        auto palShadowNode = scene2::PolygonNode::allocWithTexture(_assets->get<Texture>("pal_shadow_texture"));
+
+        auto palModel = Pal::alloc(Vec2(100, 100));
+        palModel->setNode(palNode, palShadowNode);
+        _players.push_back(palModel);
     }
-    else {
-        CULog("we are the ghost");
-        _player = _ghostModel;
-        _gameMap->setPlayer(_ghostModel);
-        _gameMap->setOtherPlayers({ _palModel });
-    }
-    _players = vector<shared_ptr<Player>>(4, nullptr);
-    _players[0] = _palModel;
-    _players[1] = _ghostModel;
-    _network->setPlayers(_players);
+
+    auto ghostNode = scene2::AnimationNode::alloc(_assets->get<Texture>("ghost_texture"), 3, 24);
+    ghostNode->setAnchor(Vec2::ANCHOR_CENTER);
+    _dimRoot->addChild(ghostNode);
+
+    auto ghostShadowNode = scene2::PolygonNode::allocWithTexture(_assets->get<Texture>("ghost_shadow_texture"));
+
+    auto ghostModel = Ghost::alloc(Vec2(300, 100));
+    ghostModel->setNode(ghostNode, ghostShadowNode);
+    ghostModel->setTimer(0);
+    _players.push_back(ghostModel);
+
+    _network->getData()->setPlayers(_players);
+    _players = _network->getData()->getPlayers();
+
+    _gameMap->setPlayer(_network->getData()->getPlayer()->player);
     
     vector<Vec2> coneShape;
     Vec2 tl(-CONE_WIDTH, CONE_LENGTH);
@@ -171,16 +166,10 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 
     _visionNode = scene2::PolygonNode::alloc(coneShape);
     _visionNode->setColor(Color4f(1, 1, 1, .2));
-    _visionNode->setAnchor(Vec2::ANCHOR_BOTTOM_CENTER);
+    _visionNode->setAnchor(Vec2::ANCHOR_CENTER);
     _visionNode->setPriority(constants::Priority::Player);
     
     _root->addChild(_visionNode);
-
-    for (auto& p : _players) {
-        if (p != nullptr) {
-            p->getNode()->setAnchor(Vec2::ANCHOR_CENTER);
-        }
-    }
     
     return true;
 }
@@ -197,13 +186,8 @@ void GameScene::dispose() {
     _network = nullptr;
     _gameMap = nullptr;
     _root = nullptr;
-    _palNode = nullptr;
-    _ghostNode = nullptr;
     _visionNode = nullptr;
 
-    _player = nullptr;
-    _palModel = nullptr;
-    _ghostModel = nullptr;
     _players.clear();
 }
 
@@ -224,46 +208,54 @@ void GameScene::update(float timestep) {
     dimen *= constants::SCENE_WIDTH / dimen.width;
     Vec2 center(dimen.width / 2, dimen.height / 2);
 
-    shared_ptr<Player> _player = _gameMap->getPlayer();
-    vector<shared_ptr<Player>> _otherPlayers = _gameMap->getOtherPlayers();
-
     // Process movement input and update player states
-
-    // Delete if input works V
-    //_input->update(timestep);
-
     _gameMap->move(_input->getMove(), _input->getDirection());
-    // Updates vision cones
+    _gameMap->update(timestep);
     for (auto& p : _players) {
         if (p != nullptr) {
-            if (p != _player) { // TODO converge player and otherPlayers in gameMap
-                p->update(timestep);
-            }
             updateVision(p);
         }
     }
 
-    // Interaction checking should happen here
-    
-    if (_input->getInteraction()) {
-        if (_player->getType() == Player::Type::Pal) {
-            if (!(_gameMap->getPal()->getSpooked())) {
-                _gameMap->handleInteract(true);
+    // Checks if the ghost should be revealed, commented out because no
+    // tagging yet
+    /**
+    if (_player->getType() == Player::Type::Pal) {
+        _ghostNode->setVisible(_gameMap->getGhost()->getTagged());
+    }
+    */
+
+    auto player = _gameMap->getPlayer();
+
+    // Delete after batteries implemented, will be handled in gamemap
+    if (player->getType() == Player::Type::Pal) {
+        if (!dynamic_pointer_cast<Pal>(player)->getSpooked()) {
+            if (_input->getInteraction()) {
+                auto slotTexture = _assets->get<Texture>("slot");
+                shared_ptr<BatterySlot> slot = BatterySlot::alloc(Vec2(0, 100));
+                slot->setTextures(slotTexture, _root->getContentSize());
+                slot->getNode()->setScale(0.05f);
+                _root->addChild(slot->getNode());
+                slot->getNode()->setVisible(true);
+                slot->setLoc(player->getLoc());
+                slot->setCharge();
+                slot->getNode()->setColor(Color4f::GREEN);
+                _gameMap->addSlot(slot);
+                _gameMap->handleInteract();
             }
         }
-        else {
+    }
+    else {
+        if (_input->getInteraction()) {
             if (_gameMap->getTraps().size() != 0) {
                 bool ifTrapped = "the below comment";
                 // use collisioncontroller to check if pal is on trap
                 if (ifTrapped) {
-                    _gameMap->handleInteract(false);
+                    _gameMap->handleInteract();
                 }
             }
         }
     }
-
-    // Updates the models
-    _gameMap->update(timestep);
 
     // Checks if the ghost should be revealed, commented out because no
     // tagging yet
@@ -289,11 +281,14 @@ void GameScene::update(float timestep) {
     sort(sortedPlayers.begin(), sortedPlayers.end(), &comparePlayerPriority);
     CUAssertLog(sortedPlayers.size() < constants::PRIORITY_RANGE, "Number of players exceeds priority range.");
     for (unsigned i = 0; i < sortedPlayers.size(); ++i) {
-        sortedPlayers[i]->getNode()->setPriority(constants::Priority::Player + 1 + i);
+        auto node = sortedPlayers[i]->getNode();
+        node->setPriority(constants::Priority::Player + 1 + i);
+        auto shadow = node->getChildByName("shadow");
+        if (shadow != nullptr) shadow->setPriority(node->getPriority() - 0.01f);
     }
 
     // Update camera
-    _root->setPosition(center - _player->getLoc());
+    _root->setPosition(center - player->getLoc());
 
     // Check if a player has won
     auto complete = _gameMap->getComplete();
@@ -309,6 +304,8 @@ void GameScene::update(float timestep) {
 void GameScene::updateVision(const std::shared_ptr<Player>& player) {
     if (player->getType() != Player::Type::Pal) return;
     
+    // TODO fix all of this
+
     Vec2 dir = player->getDir();
     // convert degrees to radians
     float angle = atan2(dir.y, dir.x);
@@ -320,19 +317,14 @@ void GameScene::updateVision(const std::shared_ptr<Player>& player) {
 }
 
 void GameScene::draw(const std::shared_ptr<SpriteBatch>& batch, const std::shared_ptr<SpriteBatch>& shaderBatch) {
-    if (_network->isHost()) {
+    if (_gameMap->getPlayer()->getType() == Player::Type::Pal) {
         float roomLights[constants::MAX_ROOMS * 3];
         int i = 0;
         for (auto& room : _gameMap->getRooms()) {
             roomLights[i] = _root->getPosition().x + room->getOrigin().x + constants::ROOM_CENTER.x;
-            roomLights[i+1] = _root->getPosition().y + room->getOrigin().y + constants::ROOM_CENTER.x;
-            // set to 1 if room's light is on, 0 if not
-            if (room->getLight()) {
-                roomLights[i + 2] = 1;
-            } else {
-                roomLights[i + 2] = 0;
-            }
-            i = i + 3;
+            roomLights[i + 1] = _root->getPosition().y + room->getOrigin().y + constants::ROOM_CENTER.x;
+            roomLights[i + 2] = room->getLight() ? 1 : 0; // set to 1 if room's light is on, 0 if not
+            i += 3;
         }
         //just to fill rest of values if the number of rooms < MAX_ROOMS
         for (int j = i; j < (constants::MAX_ROOMS * 3); ++j) {
@@ -341,18 +333,23 @@ void GameScene::draw(const std::shared_ptr<SpriteBatch>& batch, const std::share
 
         float palLights[constants::MAX_PALS * 4];
         i = 0;
-        for (auto& p : _players) {
-            if (p != nullptr && p->getType() == Player::Type::Pal) {
-                palLights[i] = _root->getPosition().x + p->getLoc().x + constants::FLASHLIGHT_OFFSET.x;
-                palLights[i + 1] = _root->getPosition().y + p->getLoc().y + constants::FLASHLIGHT_OFFSET.y;
-                // set to 1 if pal is active 0 if not
-                palLights[i + 2] = 1.0;
-                palLights[i + 3] = (_visionNode->getAngle() - M_PI / 2);
-//                CULog("%f", palLights[i + 3]);
-                i = i + 4;
+        for (auto& player : _players) {
+            if (player != nullptr && player->getType() == Player::Type::Pal) {
+                palLights[i] = _root->getPosition().x + player->getLoc().x + constants::FLASHLIGHT_OFFSET.x;
+                palLights[i + 1] = _root->getPosition().y + player->getLoc().y + constants::FLASHLIGHT_OFFSET.y;
+                palLights[i + 2] = 1; // set to 1 if pal is active, 0 if not
+
+                // because vision cone is broken
+                Vec2 dir = player->getDir();
+                float angle = atan2(dir.y, dir.x);
+                angle = fmod(angle - M_PI_2, 2 * M_PI);
+                if (angle < 0) angle += 2 * M_PI;
+                palLights[i + 3] = (angle - M_PI / 2);
+
+                i += 4;
             }
         }
-        //just to fill rest of values if the number of pals < MAX_PALS
+        // fill rest of values if the number of pals < MAX_PALS
         for (int j = i; j < (constants::MAX_PALS * 4); ++j) {
             palLights[j] = 0;
         }
@@ -386,7 +383,6 @@ void GameScene::draw(const std::shared_ptr<SpriteBatch>& batch, const std::share
         batch->end();
     }
 }
-
 
 void GameScene::reset() {
     auto assets = _assets;

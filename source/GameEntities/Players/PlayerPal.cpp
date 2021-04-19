@@ -3,13 +3,14 @@
 using namespace cugl;
 
 
-void Pal::setNode(const std::shared_ptr<scene2::AnimationNode>& value, const std::shared_ptr<scene2::PolygonNode>& shadow) {
+void Pal::setNode(const std::shared_ptr<scene2::AnimationNode>& node, const std::shared_ptr<scene2::PolygonNode>& shadow) {
     _shadow = shadow;
     if (_shadow != nullptr) {
         _shadow->setPosition(_shadow->getPosition() + constants::PAL_SHADOW_OFFSET);
         _shadow->setAnchor(Vec2::ANCHOR_BOTTOM_CENTER);
+        node->addChildWithName(shadow, "shadow");
     }
-    Player::setNode(value);
+    Player::setNode(node);
 }
 
 
@@ -23,17 +24,14 @@ void Pal::setNode(const std::shared_ptr<scene2::AnimationNode>& value, const std
  */
 
 void Pal::update(float timestep) {
-    Player::update(timestep);
-    
     // Move the pal
     if (!_spooked) {
         _loc += _move * _speed;
     }
 
     processDirection();
-    if (_node != nullptr) {
-        _node->setPosition(_loc);
-    }
+
+    Player::update(timestep);
 }
 
 void Pal::processDirection() {

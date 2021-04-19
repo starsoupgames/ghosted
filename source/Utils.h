@@ -20,6 +20,14 @@ namespace utils {
     inline void Log(const float f) {
         CULog("%f", f);
     }
+    inline void Log(const int i) {
+        CULog("%d", i);
+    }
+    inline void Log(const string& label, const vector<int>& v) {
+        for (int i = 0; i < v.size(); ++i) {
+            CULog((label + "[%d]: &d").c_str(), i, v[i]);
+        }
+    }
     inline void Log(const Vec2& v) {
         CULog("%f, %f", v.x, v.y);
     }

@@ -4,6 +4,7 @@
 #define __GAME_MAP_H__
 #include <cugl/cugl.h>
 #include "GameRoom.h"
+#include "RoomParser.h"
 #include "GameEntities/Players/PlayerPal.h"
 #include "GameEntities/Players/PlayerGhost.h"
 #include "GameEntities/BatteryCollectible.h"
@@ -20,14 +21,12 @@ private:
 
 	/** Models representing the players */
 	shared_ptr<Player> _player;
-	vector<shared_ptr<Player>> _otherPlayers;
-	shared_ptr<Pal> _palModel;
-	shared_ptr<Ghost> _ghostModel;
+	vector<shared_ptr<Player>> _players;
 
 	/** The vector of trap pointers currently in the game */
-	std::vector<shared_ptr<Trap>> _traps;
+	vector<shared_ptr<Trap>> _traps;
 	/** The vector of slot pointers currently in the game */
-	std::vector<shared_ptr<BatterySlot>> _slots;
+	vector<shared_ptr<BatterySlot>> _slots;
 
 	/**
 	 * The pair of bools representing if the game is complete
@@ -65,29 +64,20 @@ public:
 	/** Removes references for all rooms */
 	void reset() { _rooms.clear(); }
 
-	/** Returns the reference to the Pal model */
-	shared_ptr<Pal> getPal() { return _palModel; }
-
-	/** Returns the reference to the Ghost model */
-	shared_ptr<Ghost> getGhost() { return _ghostModel; }
-
 	/** Returns whether or not the game is complete and who won */
 	bool* getComplete() { return _complete; }
 
 	/** Returns the list of traps, delete after traps properly implemented */
 	vector<shared_ptr<Trap>> getTraps() { return _traps; }
 
-	/** Returns the player */
+	/** @return the player model */
 	shared_ptr<Player> getPlayer() { return _player; }
 
-	/** Returns the list of other players */
-	vector<shared_ptr<Player>> getOtherPlayers() { return _otherPlayers; }
+	/** Sets the player model */
+	void setPlayer(shared_ptr<Player>& player) { _player = player; }
 
-	/** Sets the model for the player */
-	void setPlayer(shared_ptr<Player> val) { _player = val; }
-
-	/** Sets the model for other players */
-	void setOtherPlayers(vector<shared_ptr<Player>> val) { _otherPlayers = val; }
+	/** Sets the models for all players */
+	void setPlayers(vector<shared_ptr<Player>>& players) { _players = players; }
 
 	/** Adds a charged slot to _slots, delete after batteries properly implemented */
 	void addSlot(shared_ptr<BatterySlot> slot) { _slots.push_back(slot); }
@@ -105,7 +95,7 @@ public:
 	void move(Vec2 move, Vec2 direction);
 
 	/** Method to handle the interactions */
-	void handleInteract(bool pal);
+	void handleInteract();
 
 #pragma mark -
 #pragma mark Map Gen

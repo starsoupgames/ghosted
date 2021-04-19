@@ -63,13 +63,22 @@ public:
     
     /** Sets the Player direction */
     void setDir(Vec2 dir) {
-        _direction = dir.normalize();
+        if (dir.isNearZero()) {
+            _direction = Vec2::ZERO;
+        }
+        else {
+            _direction = dir.normalize();
+        }
     };
 
     /** Sets the Player movement */
     void setMove(Vec2 move) {
-        _move = move;
-        if (_move.length() > 1) _move.normalize();
+        if (move.length() > 1) {
+            _move = move.normalize();
+        }
+        else {
+            _move = move;
+        }
     }
 
     /**
@@ -102,10 +111,10 @@ public:
     }
 
     /**
-     * @param value The Player node.
+     * @param node The Player node.
      * @param shadow The Shadow node.
      */
-    virtual void setNode(const shared_ptr<scene2::AnimationNode>& value, const std::shared_ptr<scene2::PolygonNode>& shadow);
+    virtual void setNode(const shared_ptr<scene2::AnimationNode>& node, const std::shared_ptr<scene2::PolygonNode>& shadow);
 
     /**
      * @param value The Player node.
