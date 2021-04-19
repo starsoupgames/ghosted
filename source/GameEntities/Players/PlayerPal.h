@@ -75,6 +75,12 @@ public:
     }
 
     /**
+     * @param value The Player node.
+     * @param shadow The Shadow node.
+     */
+    virtual void setNode(const shared_ptr<scene2::AnimationNode>& value, const std::shared_ptr<scene2::PolygonNode>& shadow) override;
+
+    /**
      * Updates the state of the model
      *
      * This method moves the pal forward, dampens the forces (if necessary)

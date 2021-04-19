@@ -18,6 +18,9 @@
     "pal_shadow_texture": {
       "file": "textures/player/Pal_Shadow.png"
     },
+    "ghost_shadow_texture": {
+      "file": "textures/player/Ghost_Shadow.png"
+    },
     "trap": {
       "file": "textures/play.png"
     },

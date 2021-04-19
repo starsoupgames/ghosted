@@ -3,6 +3,22 @@
 using namespace cugl;
 
 /**
+ * Sets the animation node representing this Player.
+ *
+ * Setting this to nullptr clears the value.
+ *
+ * @param value the Player animation node.
+ */
+void Ghost::setNode(const std::shared_ptr<scene2::AnimationNode>& value, const std::shared_ptr<scene2::PolygonNode>& shadow) {
+    _shadow = shadow;
+    if (_shadow != nullptr) {
+        _shadow->setPosition(_shadow->getPosition() + constants::GHOST_SHADOW_OFFSET);
+        _shadow->setAnchor(Vec2::ANCHOR_BOTTOM_CENTER);
+    }
+    Player::setNode(value);
+}
+
+/**
  * Updates the state of the model
  *
  * This method moves the Ghost forward, dampens the forces (if necessary)

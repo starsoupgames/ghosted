@@ -7,6 +7,7 @@ for animations
 */
 
 #include <cugl/cugl.h>
+#include "Constants.h"
 using namespace std;
 using namespace cugl;
 

@@ -19,6 +19,10 @@ namespace constants {
 
     const Vec2 ROOM_DIMENSIONS (375, 375);
 
+    const Vec2 GHOST_SHADOW_OFFSET (10, -15);
+
+    const Vec2 PAL_SHADOW_OFFSET (2, -20);
+
 
     //Make sure to change values in lightShader.frag if you change these here
     /**maximum possible rooms generated in a map**/

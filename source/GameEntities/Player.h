@@ -105,7 +105,7 @@ public:
      * @param value The Player node.
      * @param shadow The Shadow node.
      */
-    void setNode(const shared_ptr<scene2::AnimationNode>& value, const std::shared_ptr<scene2::PolygonNode>& shadow);
+    virtual void setNode(const shared_ptr<scene2::AnimationNode>& value, const std::shared_ptr<scene2::PolygonNode>& shadow);
 
     /**
      * @param value The Player node.

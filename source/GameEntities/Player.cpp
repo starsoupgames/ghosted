@@ -27,11 +27,6 @@ void Player::dispose() {
  * @param value the Player animation node.
  */
 void Player::setNode(const std::shared_ptr<scene2::AnimationNode>& value, const std::shared_ptr<scene2::PolygonNode>& shadow) {
-    _shadow = shadow;
-    if (_shadow != nullptr) {
-        _shadow->setPosition(_shadow->getPosition() + Vec2(2, -20));
-        _shadow->setAnchor(Vec2::ANCHOR_BOTTOM_CENTER);
-    }
     Player::setNode(value);
 }
 

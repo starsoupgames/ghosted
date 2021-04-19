@@ -88,11 +88,14 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 
     //TODO: THESE NEXT TWO LINES MUST BE REPLACED WITH THE NEW GHOST SPRITE TEXTURE INSTEAD OF THE SEAL
     _assets->get<Texture>("ghost_texture")->setName("ghost_sprite");
+    _ghostShadowNode = scene2::PolygonNode::allocWithTexture(_assets->get<Texture>("ghost_shadow_texture"));
     _ghostNode = scene2::AnimationNode::alloc(_assets->get<Texture>("ghost_texture"), 3, 24);
-    _ghostModel->setNode(_ghostNode);
+    _ghostModel->setNode(_ghostNode, _ghostShadowNode);
     _ghostModel->setTimer(0);
     _ghostNode->setPriority(constants::Priority::Player);
+    _ghostShadowNode->setPriority(_ghostNode->getPriority() - 1);
     _dimRoot->addChild(_ghostNode);
+    _ghostNode->addChild(_ghostShadowNode);
 
     if (_network->isHost()) {
         _player = _palModel;
