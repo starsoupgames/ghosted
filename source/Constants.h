@@ -47,6 +47,14 @@ namespace constants {
         Player = 300, // 300-399
     };
 
+    /** Status of the match */
+    enum MatchStatus {
+        None = 0,
+        Waiting = 1, // connected, waiting for players
+        InProgress = 2, // game is ongoing
+        Paused = 3, // player disconnected, game paused
+        Ended = 4 // game ended
+    };
 }
 
 #endif // __CONSTANTS_H__

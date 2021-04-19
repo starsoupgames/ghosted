@@ -18,9 +18,6 @@ private:
     /** Amount of Traps left */
     int _traps;
 
-    /** Speed of the Ghost */
-    float _speed;
-
     /** Whether the Ghost has been revealed recently */
     bool _tagged;
 
@@ -60,7 +57,7 @@ public:
     void setTagged(bool value) { _tagged = value; }
 
     /** Creates a Ghost with the default values */
-    Ghost() : Player(), _speed(5) { _tagTimer = 0; };
+    Ghost() : Player(6), _tagTimer(0) {};
 
     /** Releaes all resources allocated with this Ghost */
     ~Ghost() { }

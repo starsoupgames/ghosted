@@ -17,6 +17,9 @@ namespace utils {
     inline void Log(const string& s) {
         CULog(s.c_str());
     }
+    inline void Log(const float f) {
+        CULog("%f", f);
+    }
     inline void Log(const Vec2& v) {
         CULog("%f, %f", v.x, v.y);
     }

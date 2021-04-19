@@ -38,6 +38,7 @@ void NetworkController::updateStatus() {
     case CUNetworkConnection::NetStatus::Pending:
         break;
     case CUNetworkConnection::NetStatus::Connected:
+        _connected = false;
         break;
     case CUNetworkConnection::NetStatus::Reconnecting:
         break;
@@ -52,14 +53,13 @@ void NetworkController::updateStatus() {
     // new status
     switch (status) {
     case CUNetworkConnection::NetStatus::Disconnected:
-        _connected = false;
         break;
     case CUNetworkConnection::NetStatus::Pending:
         break;
     case CUNetworkConnection::NetStatus::Connected:
         _connected = true;
-        _playerID = _connection->getPlayerID().value();
         _roomID = _connection->getRoomID();
+        if (_data != nullptr) _data->setID(_connection->getPlayerID().value());
         break;
     case CUNetworkConnection::NetStatus::Reconnecting:
         break;
@@ -90,9 +90,8 @@ void NetworkController::update(float timestep) {
         CULog("Player exited the game.");
     }
 
-    // sync data model
+    // interpolate player data
     if (_data != nullptr) {
-        _data->setID(_playerID);
         if (_connected) {
             _data->interpolatePlayerData();
         }

@@ -2,6 +2,7 @@
 
 #include <cugl/cugl.h>
 #include "../GameEntity.h"
+#include "../Utils.h"
 using namespace std;
 using namespace cugl;
 
@@ -31,6 +32,9 @@ protected:
 
     /** Current Player movement */
     Vec2 _move;
+
+    /** Player speed */
+    float _speed;
 
     /** Player id */
     unsigned id;
@@ -64,11 +68,21 @@ public:
 
     /** Sets the Player movement */
     void setMove(Vec2 move) {
-        _move = move.normalize();
+        _move = move;
+        if (_move.length() > 1) _move.normalize();
     }
 
+    /**
+     * @return the Player speed
+     */
+    virtual float getSpeed() {
+        return _speed;
+    };
+
     /** Creates a Player with the default values */
-    Player() : GameEntity(), id(-1), _direction(Vec2(0.0f, -1.0f)) {};
+    Player() : Player(5) {};
+
+    Player(float speed) : GameEntity(), id(-1), _direction(Vec2(0.0f, -1.0f)), _speed(speed), _idle(true) {};
 
     /** Releases all resources allocated with this Player */
     ~Player() { dispose(); }

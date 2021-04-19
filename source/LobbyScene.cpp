@@ -62,7 +62,7 @@ void LobbyScene::update(float timestep) {
     _start->setVisible(_start->isActive());
 
     if (_network->isConnected()) {
-        if (_active && !_start->isActive()) {
+        if (_host && _active && !_start->isActive()) {
             _start->activate();
         }
 

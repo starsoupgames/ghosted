@@ -97,7 +97,11 @@ void GhostedApp::onShutdown() {
     _batch = nullptr;
     _assets = nullptr;
 
+    _shader = nullptr;
+    _shaderBatch = nullptr;
+
     _network = nullptr;
+    _networkData = nullptr;
     _input = nullptr;
     
     _loadKeys = false;
@@ -140,14 +144,20 @@ void GhostedApp::update(float timestep) {
     }
     else if (_lobby.isActive()) {
         mode = _lobby.getMode();
+        if (_networkData->getStatus() == constants::MatchStatus::InProgress) {
+            mode = constants::GameMode::Game;
+        }
     }
     else if (_gameplay.isActive()) {
         mode = _gameplay.getMode();
+        if (_networkData->getStatus() == constants::MatchStatus::Ended) {
+            // mode = constants::GameMode::Game;
+        }
     }
     else {
         mode = constants::GameMode::Start;
     }
-    
+
     if (_input != nullptr && _input->getEscape()) {
         mode = constants::GameMode::Start;
     }
@@ -187,6 +197,8 @@ void GhostedApp::update(float timestep) {
             break;
         case constants::GameMode::Start:
             _network = make_shared<NetworkController>(); // reset network controller
+            _networkData = make_shared<NetworkData>(); // reset network data
+            _network->attachData(_networkData);
             _input = make_shared<InputController>();
             _input->init(Application::get()->getSafeBounds());
             _start.init(_assets);
@@ -198,14 +210,15 @@ void GhostedApp::update(float timestep) {
             _join.init(_assets);
             break;
         case constants::GameMode::Lobby:
+            _networkData->setStatus(constants::MatchStatus::Waiting);
             _lobby.setNetwork(_network);
             _lobby.init(_assets);
             break;
         case constants::GameMode::Game:
+            _network->startGame();
             _gameplay.setNetwork(_network);
             _gameplay.setInput(_input);
             _gameplay.init(_assets);
-            
             break;
         }
 

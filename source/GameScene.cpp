@@ -28,10 +28,6 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
     // Background color
     Application::get()->setClearColor(Color4f::BLACK);
 
-    // Init data models
-    _networkData = NetworkData::alloc();
-    _network->attachData(_networkData);
-
     _gameMap = GameMap::alloc();
     _gameMap->generateRandomMap();
     _palModel = _gameMap->getPal();
@@ -98,23 +94,21 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
     _ghostNode->setPriority(constants::Priority::Player);
     _dimRoot->addChild(_ghostNode);
 
-
-
     if (_network->isHost()) {
         _player = _palModel;
-        _otherPlayers.push_back(_ghostModel);
         _gameMap->setPlayer(_palModel);
         _gameMap->setOtherPlayers({ _ghostModel });
     }
     else {
         CULog("we are the ghost");
         _player = _ghostModel;
-        _otherPlayers.push_back(_palModel);
         _gameMap->setPlayer(_ghostModel);
         _gameMap->setOtherPlayers({ _palModel });
     }
-    _networkData->setPlayer(_player);
-    _networkData->setOtherPlayers(_otherPlayers);
+    _players = vector<shared_ptr<Player>>(4, nullptr);
+    _players[0] = _palModel;
+    _players[1] = _ghostModel;
+    _network->setPlayers(_players);
     
     vector<Vec2> coneShape;
     Vec2 tl(-CONE_WIDTH, CONE_LENGTH);
@@ -135,9 +129,10 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
     
     _root->addChild(_visionNode);
 
-    _player->getNode()->setAnchor(Vec2::ANCHOR_CENTER);
-    for (auto& p : _otherPlayers) {
-        p->getNode()->setAnchor(Vec2::ANCHOR_CENTER);
+    for (auto& p : _players) {
+        if (p != nullptr) {
+            p->getNode()->setAnchor(Vec2::ANCHOR_CENTER);
+        }
     }
     
     return true;
@@ -153,12 +148,16 @@ void GameScene::dispose() {
 //    _input->dispose();
 
     _network = nullptr;
-    _networkData = nullptr;
     _gameMap = nullptr;
     _root = nullptr;
     _palNode = nullptr;
     _ghostNode = nullptr;
     _visionNode = nullptr;
+
+    _player = nullptr;
+    _palModel = nullptr;
+    _ghostModel = nullptr;
+    _players.clear();
 }
 
 /** Function to sort player node priorities */
@@ -182,10 +181,13 @@ void GameScene::update(float timestep) {
     _input->update(timestep);
     _gameMap->move(_input->getMove(), _input->getDirection());
     // Updates vision cones
-    updateVision(_player);
-    for (auto& p : _otherPlayers) {
-        p->update(timestep);
-        updateVision(p);
+    for (auto& p : _players) {
+        if (p != nullptr) {
+            if (p != _player) { // TODO converge player and otherPlayers in gameMap
+                p->update(timestep);
+            }
+            updateVision(p);
+        }
     }
 
     // Checks if the ghost should be revealed, commented out because no
@@ -255,13 +257,14 @@ void GameScene::update(float timestep) {
     }
 
     // Sets priority of player nodes
-    vector<shared_ptr<Player>> allPlayers;
-    copy(_otherPlayers.begin(), _otherPlayers.end(), back_inserter(allPlayers));
-    allPlayers.push_back(_player);
-    sort(allPlayers.begin(), allPlayers.end(), &comparePlayerPriority);
-    CUAssertLog(allPlayers.size() < constants::PRIORITY_RANGE, "Number of players exceeds priority range.");
-    for (unsigned i = 0; i < allPlayers.size(); ++i) {
-        allPlayers[i]->getNode()->setPriority(constants::Priority::Player + 1 + i);
+    vector<shared_ptr<Player>> sortedPlayers;
+    for (auto& p : _players) {
+        if (p != nullptr) sortedPlayers.push_back(p);
+    }
+    sort(sortedPlayers.begin(), sortedPlayers.end(), &comparePlayerPriority);
+    CUAssertLog(sortedPlayers.size() < constants::PRIORITY_RANGE, "Number of players exceeds priority range.");
+    for (unsigned i = 0; i < sortedPlayers.size(); ++i) {
+        sortedPlayers[i]->getNode()->setPriority(constants::Priority::Player + 1 + i);
     }
 
     // Update camera
@@ -309,20 +312,16 @@ void GameScene::draw(const std::shared_ptr<SpriteBatch>& batch, const std::share
 
         float palLights[constants::MAX_PALS * 4];
         i = 0;
-        vector<shared_ptr<Player>> allPlayers;
-        copy(_otherPlayers.begin(), _otherPlayers.end(), back_inserter(allPlayers));
-        allPlayers.push_back(_player);
-        for (auto& player : allPlayers) {
-            if (player->getType() == Player::Type::Pal) {
-                palLights[i] = _root->getPosition().x + player->getLoc().x + constants::FLASHLIGHT_OFFSET.x;
-                palLights[i + 1] = _root->getPosition().y + player->getLoc().y + constants::FLASHLIGHT_OFFSET.y;
+        for (auto& p : _players) {
+            if (p != nullptr && p->getType() == Player::Type::Pal) {
+                palLights[i] = _root->getPosition().x + p->getLoc().x + constants::FLASHLIGHT_OFFSET.x;
+                palLights[i + 1] = _root->getPosition().y + p->getLoc().y + constants::FLASHLIGHT_OFFSET.y;
                 // set to 1 if pal is active 0 if not
                 palLights[i + 2] = 1.0;
                 palLights[i + 3] = (_visionNode->getAngle() - M_PI / 2);
                 CULog("%f", palLights[i + 3]);
                 i = i + 4;
             }
-            
         }
         //just to fill rest of values if the number of pals < MAX_PALS
         for (int j = i; j < (constants::MAX_PALS * 4); ++j) {

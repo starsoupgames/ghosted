@@ -58,8 +58,10 @@ protected:
     /** A 3152 style SpriteBatch to render the scene */
     std::shared_ptr<cugl::SpriteBatch> _batch;
 
-    /** Controller for handling networking */
+    /** Controllers for handling networking */
     shared_ptr<NetworkController> _network;
+    shared_ptr<NetworkData> _networkData;
+
     /** A 3152 style SpriteBatch to render the scene */
     std::shared_ptr<cugl::SpriteBatch> _shaderBatch;
     
@@ -76,6 +78,7 @@ protected:
     GameScene _gameplay;
 
     constants::GameMode _mode;
+    uint8_t _status;
     
     bool _loadKeys;
     bool _resetPressed;
@@ -101,7 +104,7 @@ public:
      * of initialization from the constructor allows main.cpp to perform
      * advanced configuration of the application before it starts.
      */
-    GhostedApp() : cugl::Application(), _mode(constants::GameMode::None) {}
+    GhostedApp() : cugl::Application(), _mode(constants::GameMode::None), _status(constants::MatchStatus::None) {}
     
     /**
      * Disposes of this application, releasing all resources.

@@ -18,9 +18,6 @@ private:
     /** Whether a Pal is spooked or not */
     bool _spooked;
 
-    /** Speed of the Pal */
-    float _speed;
-
 public:
     /** Returns the amount of batteries left */
     int getBatteries() const {
@@ -43,7 +40,7 @@ public:
     }
 
     /** Creates a Pal with the default values */
-    Pal() : Player(), _batteries(0), _speed(5), _spooked(false) {};
+    Pal() : Player(5), _batteries(0), _spooked(false) {};
 
     /** Releases all resources allocated with this Pal */
     ~Pal() { }
