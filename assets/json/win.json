@@ -1,0 +1,314 @@
+{
+	"textures": {
+		"background": {
+            "file":   "textures/win/background1.png"
+        },
+        "menuboard": {
+            "file":  "textures/win/menu.png"
+        },
+        "menubutton": {
+            "file":  "textures/win/ninepatch.png"
+        },
+        "left": {
+            "file":   "textures/win/left_arrow.png"
+        },
+        "right": {
+            "file":   "textures/win/right_arrow.png"
+        },
+        "Winner": {
+            "file":   "textures/win/Winner.png"
+        },
+        "Star-1": {
+            "file":   "textures/win/Star-1.png"
+        },
+        "Star": {
+            "file":   "textures/win/Star.png"
+        },
+        "quitbutton": {
+            "file": "textures/win/quitbutton.png"
+        },
+        "replaybutton": {
+            "file": "textures/win/replaybutton.png"
+        },
+        "ellipse1": {
+            "file": "textures/win/ellipse1.png"
+        },
+        "ellipse2": {
+            "file": "textures/win/ellipse2.png"
+        },
+        "tanuki": {
+          "file": "textures/win/tanuki.png"
+        },
+        "doe": {
+          "file": "textures/win/doe.png"
+        },
+        "seal": {
+            "file": "textures/win/seal.png"
+        },
+        "ghost": {
+            "file": "textures/win/ghost.png"
+        }
+	},
+	"fonts": {
+		"gyparody": {
+			"file":     "fonts/gyparody-hv.ttf",
+			"size":     48
+		},
+        "script": {
+            "file":     "fonts/PenScript-rg.ttf",
+            "size":     48
+        }
+	},
+    
+          "scene2s" : {
+              "win": {
+                  "type"      : "Node",
+                  "comment"   : "This is the root node of Ghosted's alpha release",
+                  "format"    : {
+                      "type" : "Anchored"
+                  },
+                "children": {
+
+                  "backdrop": {
+                    "type": "Image",
+                    "data": {
+                      "texture": "background",
+                      "anchor": [ 0, 0.5 ]
+                    },
+                    "layout": {
+                      "x_anchor": "left",
+                      "y_anchor": "fill"
+                    }
+                  },
+                  "Winner": {
+                    "type": "Image",
+                    "format": {
+                      "type": "Anchored"
+                    },
+                    "data": {
+                      "texture": "Winner",
+                      "anchor": [ 0.5, -2 ],
+                      "scale": 2
+                    },
+                    "layout": {
+                      "x_anchor": "center",
+                      "y_anchor": "middle",
+                      "y_offset": 115,
+                      "absolute": true
+                    }
+                  },
+                  "Star-1": {
+                    "type": "Button",
+                    "format": {
+                      "type": "Anchored"
+                    },
+                    "data": {
+                      "upnode": "up",
+                      "anchor": [ 13, 0.5 ],
+                      "scale": 1.5
+                    },
+                    "children": {
+                      "up": {
+                        "type": "Image",
+                        "data": {
+                          "texture": "Star-1"
+                        }
+                      }
+                    },
+                    "layout": {
+                      "x_anchor": "right",
+                      "y_anchor": "top",
+                      "y_offset": -0.1,
+                      "x_offset": -0.1
+                    }
+                  },
+                  "Star": {
+                    "type": "Button",
+                    "format": {
+                      "type": "Anchored"
+                    },
+                    "data": {
+                      "upnode": "up",
+                      "anchor": [ 5, 0.5 ],
+                      "scale": 1.5
+                    },
+                    "children": {
+                      "up": {
+                        "type": "Image",
+                        "data": {
+                          "texture": "Star"
+                        }
+                      }
+                    },
+                    "layout": {
+                      "x_anchor": "right",
+                      "y_anchor": "top",
+                      "y_offset": -0.1,
+                      "x_offset": -0.1
+                    }
+                  },
+                  "quitbutton": {
+                    "type": "Button",
+                    "format": {
+                      "type": "Anchored"
+                    },
+                    "data": {
+                      "upnode": "up",
+                      "anchor": [ -2, -1 ],
+                      "scale": 1.5
+                    },
+                    "children": {
+                      "up": {
+                        "type": "Image",
+                        "data": {
+                          "texture": "quitbutton"
+                        }
+                      }
+                    },
+                    "layout": {
+                      "x_anchor": "middle",
+                      "y_anchor": "center"
+                    }
+                  },
+                  "ellipse2": {
+                    "type": "Button",
+                    "format": {
+                      "type": "Anchored"
+                    },
+                    "data": {
+                      "upnode": "up",
+                      "anchor": [ -0.7, 0.5 ],
+                      "scale": 2.5
+                    },
+                    "children": {
+                      "up": {
+                        "type": "Image",
+                        "data": {
+                          "texture": "ellipse2"
+                        }
+                      }
+                    },
+                    "layout": {
+                      "x_anchor": "center",
+                      "y_anchor": "middle"
+                    }
+                  },
+                  "ellipse1": {
+                    "type": "Button",
+                    "format": {
+                      "type": "Anchored"
+                    },
+                    "data": {
+                      "upnode": "up",
+                      "anchor": [ 1.7, 0.5 ],
+                      "scale": 2.5
+                    },
+                    "children": {
+                      "up": {
+                        "type": "Image",
+                        "data": {
+                          "texture": "ellipse1"
+                        }
+                      }
+                    },
+                    "layout": {
+                      "x_anchor": "center",
+                      "y_anchor": "middle"
+                    }
+                  },
+                  "doe": {
+                    "type": "Button",
+                    "format": {
+                      "type": "Anchored"
+                    },
+                    "data": {
+                      "upnode": "up",
+                      "anchor": [ 1.2, 0.5 ],
+                      "scale": 2
+                    },
+                    "children": {
+                      "up": {
+                        "type": "Image",
+                        "data": {
+                          "texture": "doe"
+                        }
+                      }
+                    },
+                    "layout": {
+                      "x_anchor": "center",
+                      "y_anchor": "middle"
+                    }
+                  },
+                  "tanuki": {
+                    "type": "Button",
+                    "format": {
+                      "type": "Anchored"
+                    },
+                    "data": {
+                      "upnode": "up",
+                      "anchor": [ -0.2, 0.5 ],
+                      "scale": 2
+                    },
+                    "children": {
+                      "up": {
+                        "type": "Image",
+                        "data": {
+                          "texture": "tanuki"
+                        }
+                      }
+                    },
+                    "layout": {
+                      "x_anchor": "center",
+                      "y_anchor": "middle"
+                    }
+                  },
+                  "seal": {
+                    "type": "Button",
+                    "format": {
+                      "type": "Anchored"
+                    },
+                    "data": {
+                      "upnode": "up",
+                      "anchor": [ 0.5, 0.5 ],
+                      "scale": 2
+                    },
+                    "children": {
+                      "up": {
+                        "type": "Image",
+                        "data": {
+                          "texture": "seal"
+                        }
+                      }
+                    },
+                    "layout": {
+                      "x_anchor": "center",
+                      "y_anchor": "middle"
+                    }
+                  },
+                  "ghost": {
+                    "type": "Button",
+                    "format": {
+                      "type": "Anchored"
+                    },
+                    "data": {
+                      "upnode": "up",
+                      "anchor": [ 0.5, 0.5 ],
+                      "scale": 2
+                    },
+                    "children": {
+                      "up": {
+                        "type": "Image",
+                        "data": {
+                          "texture": "ghost"
+                        }
+                      }
+                    },
+                    "layout": {
+                      "x_anchor": "center",
+                      "y_anchor": "middle"
+                    }
+                  }
+                }
+        }
+    }
+}

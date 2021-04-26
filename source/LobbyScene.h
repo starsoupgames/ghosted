@@ -18,6 +18,8 @@ private:
     uint8_t _numPlayers;
 
     shared_ptr<scene2::Button> _start;
+    shared_ptr<scene2::Button> _escape;
+
 
 public:
     /**

@@ -17,7 +17,7 @@ bool GameMap::init() {
  */
 void GameMap::dispose() {
     _player = nullptr;
-
+    
     _rooms.clear();
     _players.clear();
     _traps.clear();
@@ -29,24 +29,24 @@ void GameMap::dispose() {
 /** Method to update the GameMap model, called by GameScene */
 void GameMap::update(float timestep) {
     shared_ptr<Trap> trap = nullptr;
-
+    
     for (shared_ptr s : _slots) {
         s->update(timestep);
     }
     _player->update(timestep);
-
+    
     // If ghost is tagged, lower the tag timer
     /*
-    int tagTimer = _ghostModel->getTimer();
-    if (tagTimer > 0) {
-        _ghostModel->setTimer(tagTimer - 1);
-    }
-    if (_ghostModel->getTimer() == 0) {
-        _ghostModel->setTagged(false);
-    }*/
-
+     int tagTimer = _ghostModel->getTimer();
+     if (tagTimer > 0) {
+     _ghostModel->setTimer(tagTimer - 1);
+     }
+     if (_ghostModel->getTimer() == 0) {
+     _ghostModel->setTagged(false);
+     }*/
+    
     // Call GameRoom::update(timestep)
-
+    
     // Check victory conditions
 }
 
@@ -66,11 +66,11 @@ void GameMap::handleInteract() {
     if (_player->getType() == Player::Type::Pal) {
         //  CODE FOR WHEN BATTERIES FULLY IMPLEMENTED
         /**
-        * if (pal is close to the slot in their room):
-        *	slot->setCharge();
-        *	slot->getNode()->setColor(Color4f::GREEN);
-        *   _slots.push_back(slot);
-        */
+         * if (pal is close to the slot in their room):
+         *	slot->setCharge();
+         *	slot->getNode()->setColor(Color4f::GREEN);
+         *   _slots.push_back(slot);
+         */
         shared_ptr<BatterySlot> slot = nullptr;
         
         for (auto room = _rooms.begin(); room != _rooms.end(); ++room) {
@@ -125,12 +125,12 @@ bool GameMap::assertValidMap() {
 
 bool GameMap::generateBasicMap(int numBatteries) {
     reset();
-
+    
     /**
-    * 1. Create hard coded model that represent what type of rooms need to be where, no obstacles
-    * 2. Assign each room an ostacle layout
-    * 3. Call makeRoom() on each room+obstacle combo and add to _rooms
-    */
+     * 1. Create hard coded model that represent what type of rooms need to be where, no obstacles
+     * 2. Assign each room an ostacle layout
+     * 3. Call makeRoom() on each room+obstacle combo and add to _rooms
+     */
     return true;
 };
 
@@ -145,23 +145,38 @@ shared_ptr<GameRoom> makeRoom() {
 
 bool GameMap::generateRandomMap() {
     reset();
-
     /**
      * 1. Create random model that represent what type of rooms need to be where, no obstacles
      * 2. Assign each room an ostacle layout
      * 3. Call makeRoom() on each room+obstacle combo and add to _rooms
      */
-
-
+    
+    
     RoomParser parser = RoomParser();
     for (int i = 0; i < 3; i++) {
         for (int j = 0; j < 3; j++) {
             shared_ptr<GameRoom> room = parser.parse("json/room.json", Vec2(i * 375, j * 375));
+            
+            // set win room on top row
+            if (i == 2 && j == 2) {
+                room->setWinRoom(true);
+            }
+            
             _rooms.push_back(room);
         }
     }
     
     return true;
+    
+    
+}
 
-
+Vec2 GameMap::getWinRoomOrigin() {
+    for (shared_ptr r : _rooms) {
+        if (r->getWinRoom()) {
+            return r->getOrigin();
+        }
+    }
+    // default
+    return _rooms[8]->getOrigin();
 }

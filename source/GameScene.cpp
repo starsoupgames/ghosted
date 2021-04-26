@@ -190,6 +190,7 @@ void GameScene::dispose() {
     _visionNode = nullptr;
 
     _players.clear();
+    _ghostWin = false;
 }
 
 /** Function to sort player node priorities */
@@ -300,6 +301,18 @@ void GameScene::update(float timestep) {
         _palWinNode->setVisible(complete[1]);
         // Ghost wins
         _ghostWinNode->setVisible(!complete[1]);
+    }
+    
+    // TODO: TEMPORARY WIN CODE
+    _win = false;
+    _ghostWin = false;
+    Vec2 winOrigin = _gameMap->getWinRoomOrigin();
+    winOrigin = winOrigin + (constants::ROOM_DIMENSIONS/2);
+    float distance = (player->getLoc() - winOrigin).length();
+    
+    if (distance < 100) {
+        _win = true;
+        _ghostWin = player->getType() == Player::Type::Ghost;
     }
 
 }

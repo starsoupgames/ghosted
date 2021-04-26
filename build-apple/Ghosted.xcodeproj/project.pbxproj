@@ -37,6 +37,9 @@
 		A468B75A260A763E00F0E184 /* fonts in Resources */ = {isa = PBXBuildFile; fileRef = A468B759260A763E00F0E184 /* fonts */; };
 		A468B75B260A763E00F0E184 /* fonts in Resources */ = {isa = PBXBuildFile; fileRef = A468B759260A763E00F0E184 /* fonts */; };
 		A468B75C260A763E00F0E184 /* fonts in Resources */ = {isa = PBXBuildFile; fileRef = A468B759260A763E00F0E184 /* fonts */; };
+		A4810ACA2630C07500EBF151 /* WinScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4810AC92630C07500EBF151 /* WinScene.cpp */; };
+		A4810ACB2630C07500EBF151 /* WinScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4810AC92630C07500EBF151 /* WinScene.cpp */; };
+		A4810ACC2630C07500EBF151 /* WinScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4810AC92630C07500EBF151 /* WinScene.cpp */; };
 		A4B30875261A47D000563226 /* RoomEntity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4B30870261A47CF00563226 /* RoomEntity.cpp */; };
 		A4B30876261A47D000563226 /* RoomEntity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4B30870261A47CF00563226 /* RoomEntity.cpp */; };
 		A4B30877261A47D000563226 /* RoomEntity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4B30870261A47CF00563226 /* RoomEntity.cpp */; };
@@ -193,6 +196,8 @@
 		A4687392260BF31900F0E184 /* Trap.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Trap.cpp; sourceTree = "<group>"; };
 		A46873AC260BF3CF00F0E184 /* NetworkController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NetworkController.cpp; sourceTree = "<group>"; };
 		A468B759260A763E00F0E184 /* fonts */ = {isa = PBXFileReference; lastKnownFileType = folder; path = fonts; sourceTree = "<group>"; };
+		A4810AC22630BDA300EBF151 /* WinScene.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WinScene.h; sourceTree = "<group>"; };
+		A4810AC92630C07500EBF151 /* WinScene.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = WinScene.cpp; sourceTree = "<group>"; };
 		A4B30870261A47CF00563226 /* RoomEntity.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RoomEntity.cpp; sourceTree = "<group>"; };
 		A4B30874261A47CF00563226 /* RoomEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RoomEntity.h; sourceTree = "<group>"; };
 		A4B308F0261D98CC00563226 /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
@@ -529,6 +534,8 @@
 				A4BD18F825F44EB700FBD403 /* StartScene.cpp */,
 				A4BD18FC25F44EB800FBD403 /* StartScene.h */,
 				EB2BE9B41D74952A002FE78B /* main.cpp */,
+				A4810AC22630BDA300EBF151 /* WinScene.h */,
+				A4810AC92630C07500EBF151 /* WinScene.cpp */,
 			);
 			name = Source;
 			path = ../source;
@@ -727,6 +734,7 @@
 				A468739E260BF31900F0E184 /* Trap.cpp in Sources */,
 				A4687385260BF2F500F0E184 /* PlayerPal.cpp in Sources */,
 				A468737F260BF2F500F0E184 /* BatteryCollectible.cpp in Sources */,
+				A4810ACC2630C07500EBF151 /* WinScene.cpp in Sources */,
 				A468737C260BF2F500F0E184 /* Player.cpp in Sources */,
 				A4BD192425F44EBB00FBD403 /* CollisionController.cpp in Sources */,
 				A4BD190F25F44EBB00FBD403 /* GhostedApp.cpp in Sources */,
@@ -760,6 +768,7 @@
 				A468739D260BF31900F0E184 /* Trap.cpp in Sources */,
 				A4687384260BF2F500F0E184 /* PlayerPal.cpp in Sources */,
 				A468737E260BF2F500F0E184 /* BatteryCollectible.cpp in Sources */,
+				A4810ACB2630C07500EBF151 /* WinScene.cpp in Sources */,
 				A468737B260BF2F500F0E184 /* Player.cpp in Sources */,
 				A4BD192325F44EBB00FBD403 /* CollisionController.cpp in Sources */,
 				A4BD190E25F44EBB00FBD403 /* GhostedApp.cpp in Sources */,
@@ -793,6 +802,7 @@
 				A468739C260BF31900F0E184 /* Trap.cpp in Sources */,
 				A4687383260BF2F500F0E184 /* PlayerPal.cpp in Sources */,
 				A468737D260BF2F500F0E184 /* BatteryCollectible.cpp in Sources */,
+				A4810ACA2630C07500EBF151 /* WinScene.cpp in Sources */,
 				A468737A260BF2F500F0E184 /* Player.cpp in Sources */,
 				A4BD192225F44EBB00FBD403 /* CollisionController.cpp in Sources */,
 				A4BD190D25F44EBB00FBD403 /* GhostedApp.cpp in Sources */,
@@ -883,7 +893,8 @@
 					"@executable_path/Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
-				PRODUCT_BUNDLE_IDENTIFIER = edu.cornell.gdiac.ios.SSGGhosted;
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = edu.cornell.gdiac.ios.GhostedBeta;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -909,7 +920,8 @@
 					"@executable_path/Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
-				PRODUCT_BUNDLE_IDENTIFIER = edu.cornell.gdiac.ios.SSGGhosted;
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = edu.cornell.gdiac.ios.GhostedBeta;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";

@@ -1,0 +1,52 @@
+{
+  "textures": {
+    "temp": {
+      "file": "textures/start/create.png"
+    }
+  },
+  "scene2s": {
+    "lobby": {
+      "type": "Node",
+      "comment": "Lobby mode root node",
+      "format": {
+        "type": "Anchored"
+      },
+      "children": {
+        "backdrop": {
+          "type": "Image",
+          "data": {
+            "texture": "background",
+            "anchor": [ 0, 0.5 ]
+          },
+          "layout": {
+            "x_anchor": "left",
+            "y_anchor": "fill"
+          }
+        },
+        "create": {
+          "type": "Button",
+          "format": {
+            "type": "Anchored"
+          },
+          "data": {
+            "upnode": "up",
+            "anchor": [ 0.5, 0.5 ],
+            "scale": 0.75
+          },
+          "children": {
+            "up": {
+              "type": "Image",
+              "data": {
+                "texture": "create"
+              }
+            }
+          },
+          "layout": {
+            "x_anchor": "center",
+            "y_anchor": "center"
+          }
+        }
+      }
+    }
+  }
+}

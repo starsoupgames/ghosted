@@ -3,14 +3,15 @@
 using namespace std;
 
 bool GameRoom::init(const Vec2& origin) {
-	// traps should be setVisible(false)
-	// slots should be setVisible(true)
-	// set obstacle nodes based on the passed in json
+    // traps should be setVisible(false)
+    // slots should be setVisible(true)
+    // set obstacle nodes based on the passed in json
     
-	_origin = origin;
-	_batterySpawns = vector<vector<int>>();
-	_doors = vector<bool>{ false, false, false, false };
-	return true;
+    _origin = origin;
+    _batterySpawns = vector<vector<int>>();
+    _doors = vector<bool>{ false, false, false, false };
+    _winRoom = false;
+    return true;
 }
 
 void GameRoom::initContents(shared_ptr<Texture> trap, shared_ptr<Texture> slot, Size size) {
@@ -31,17 +32,17 @@ void GameRoom::initContents(shared_ptr<Texture> trap, shared_ptr<Texture> slot, 
 }
 
 bool GameRoom::assertValidRoom() {
-	if ((int)_origin.x % ROOM_DIMENSION != 0) return false;
-	if ((int)_origin.y % ROOM_DIMENSION != 0) return false;
-	return true;
+    if ((int)_origin.x % ROOM_DIMENSION != 0) return false;
+    if ((int)_origin.y % ROOM_DIMENSION != 0) return false;
+    return true;
 };
 
 bool GameRoom::assertRoomIsAdjacent(const shared_ptr<GameRoom>& room) {
-	Vec2 diff = _origin - room->_origin;
-	// check if within square
-	if (diff.x <= ROOM_DIMENSION && diff.y <= ROOM_DIMENSION) {
-		// return false if horizontal diff
-		return abs(diff.x) == abs(diff.y);
-	}
-	return false;
+    Vec2 diff = _origin - room->_origin;
+    // check if within square
+    if (diff.x <= ROOM_DIMENSION && diff.y <= ROOM_DIMENSION) {
+        // return false if horizontal diff
+        return abs(diff.x) == abs(diff.y);
+    }
+    return false;
 };

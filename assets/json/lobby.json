@@ -1,52 +1,210 @@
 {
-  "textures": {
-    "temp": {
-      "file": "textures/start/create.png"
-    }
-  },
-  "scene2s": {
-    "lobby": {
-      "type": "Node",
-      "comment": "Lobby mode root node",
-      "format": {
-        "type": "Anchored"
-      },
-      "children": {
-        "backdrop": {
-          "type": "Image",
-          "data": {
-            "texture": "background",
-            "anchor": [ 0, 0.5 ]
-          },
-          "layout": {
-            "x_anchor": "left",
-            "y_anchor": "fill"
-          }
+	"textures": {
+		"background": {
+            "file":   "textures/lobby/background1.png"
         },
-        "create": {
-          "type": "Button",
-          "format": {
-            "type": "Anchored"
-          },
-          "data": {
-            "upnode": "up",
-            "anchor": [ 0.5, 0.5 ],
-            "scale": 0.75
-          },
-          "children": {
-            "up": {
-              "type": "Image",
-              "data": {
-                "texture": "create"
-              }
-            }
-          },
-          "layout": {
-            "x_anchor": "center",
-            "y_anchor": "center"
-          }
+        "menuboard": {
+            "file":  "textures/lobby/menu.png"
+        },
+        "menubutton": {
+            "file":  "textures/lobby/ninepatch.png"
+        },
+        "left": {
+            "file":   "textures/lobby/left_arrow.png"
+        },
+        "right": {
+            "file":   "textures/lobby/right_arrow.png"
+        },
+        "newinvcode": {
+            "file":   "textures/lobby/newinvcode.png"
+        },
+        "newinfo": {
+            "file":   "textures/lobby/newinfo.png"
+        },
+        "newsettings": {
+            "file":   "textures/lobby/newsettings.png"
+        },
+        "cancelgame": {
+            "file": "textures/lobby/cancelgame.png"
+        },
+        "waiting": {
+            "file": "textures/lobby/waiting.png"
+        },
+        "startgame": {
+            "file": "textures/lobby/startgame.png"
+        },
+        "names": {
+            "file": "textures/lobby/ui_backdrop.png"
         }
-      }
+	},
+	"fonts": {
+		"gyparody": {
+			"file":     "fonts/gyparody-rg.ttf",
+			"size":     48
+		},
+        "script": {
+            "file":     "fonts/PenScript-rg.ttf",
+            "size":     48
+        }
+	},
+    
+          "scene2s" : {
+              "lobby": {
+                  "type"      : "Node",
+                  "comment"   : "This is the root node of Ghosted's alpha release",
+                  "format"    : {
+                      "type" : "Anchored"
+                  },
+                "children": {
+
+                  "backdrop": {
+                    "type": "Image",
+                    "data": {
+                      "texture": "background",
+                      "anchor": [ 0, 0.5 ]
+                    },
+                    "layout": {
+                      "x_anchor": "left",
+                      "y_anchor": "fill"
+                    }
+                  },
+                  "waiting": {
+                    "type": "Image",
+                    "format": {
+                      "type": "Anchored"
+                    },
+                    "data": {
+                      "texture": "waiting",
+                      "anchor": [ -2.4, -6.5 ],
+                      "scale": 1.2
+                    },
+                    "layout": {
+                      "x_anchor": "top",
+                      "y_anchor": "middle",
+                      "y_offset": 115,
+                      "absolute": true
+                    }
+                  },
+                  "newsettings": {
+                    "type": "Button",
+                    "format": {
+                      "type": "Anchored"
+                    },
+                    "data": {
+                      "upnode": "up",
+                      "anchor": [ 0, 1 ],
+                      "scale": 1.5
+                    },
+                    "children": {
+                      "up": {
+                        "type": "Image",
+                        "data": {
+                          "texture": "newsettings"
+                        }
+                      }
+                    },
+                    "layout": {
+                      "x_anchor": "right",
+                      "y_anchor": "top",
+                      "y_offset": -0.1,
+                      "x_offset": -0.1
+                    }
+                  },
+                  "newinfo": {
+                    "type": "Button",
+                    "format": {
+                      "type": "Anchored"
+                    },
+                    "data": {
+                      "upnode": "up",
+                      "anchor": [ 0, 2.5 ],
+                      "scale": 1.5
+                    },
+                    "children": {
+                      "up": {
+                        "type": "Image",
+                        "data": {
+                          "texture": "newinfo"
+                        }
+                      }
+                    },
+                    "layout": {
+                      "x_anchor": "right",
+                      "y_anchor": "top",
+                      "y_offset": -0.1,
+                      "x_offset": -0.1
+                    }
+                  },
+                  "cancelgame": {
+                    "type": "Button",
+                    "format": {
+                      "type": "Anchored"
+                    },
+                    "data": {
+                      "upnode": "up",
+                      "anchor": [ -1.5, -0.5 ],
+                      "scale": 1.5
+                    },
+                    "children": {
+                      "up": {
+                        "type": "Image",
+                        "data": {
+                          "texture": "cancelgame"
+                        }
+                      }
+                    },
+                    "layout": {
+                      "x_anchor": "middle",
+                      "y_anchor": "center"
+                    }
+                  },
+                  "startgame": {
+                    "type": "Button",
+                    "format": {
+                      "type": "Anchored"
+                    },
+                    "data": {
+                      "upnode": "up",
+                      "anchor": [ -2.75, -0.5 ],
+                      "scale": 1.5
+                    },
+                    "children": {
+                      "up": {
+                        "type": "Image",
+                        "data": {
+                          "texture": "startgame"
+                        }
+                      }
+                    },
+                    "layout": {
+                      "x_anchor": "middle",
+                      "y_anchor": "center"
+                    }
+                  },
+                  "names": {
+                    "type": "Button",
+                    "format": {
+                      "type": "Anchored"
+                    },
+                    "data": {
+                      "upnode": "up",
+                      "anchor": [ 0.5, 0.5 ],
+                      "scale": 0.25
+                    },
+                    "children": {
+                      "up": {
+                        "type": "Image",
+                        "data": {
+                          "texture": "names"
+                        }
+                      }
+                    },
+                    "layout": {
+                      "x_anchor": "center",
+                      "y_anchor": "middle"
+                    }
+                  }
+                }
+                }
     }
-  }
 }

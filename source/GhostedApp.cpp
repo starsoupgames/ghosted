@@ -154,6 +154,13 @@ void GhostedApp::update(float timestep) {
         if (_networkData->getStatus() == constants::MatchStatus::Ended) {
             // mode = constants::GameMode::Game;
         }
+        // Someone won the game
+        if (_gameplay.didWin()) {
+            _ghostWin = _gameplay.didGhostWin();
+            mode = constants::GameMode::Win;
+        }
+    } else if (_win.isActive()) {
+        mode = _win.getMode();
     }
     else {
         mode = constants::GameMode::Start;
@@ -188,6 +195,9 @@ void GhostedApp::update(float timestep) {
         case constants::GameMode::Game:
             _gameplay.dispose();
             break;
+        case constants::GameMode::Win:
+            _win.dispose();
+            break;
         }
 
         // entering mode
@@ -201,8 +211,10 @@ void GhostedApp::update(float timestep) {
             _collision = CollisionController::alloc();
             _networkData = make_shared<NetworkData>(); // reset network data
             _network->attachData(_networkData);
-            _input = make_shared<InputController>();
-            _input->init(Application::get()->getSafeBounds());
+            if (_input == nullptr) {
+                _input = make_shared<InputController>();
+                _input->init(Application::get()->getSafeBounds());
+            }
             _start.init(_assets);
             break;
         case constants::GameMode::CreateGame:
@@ -222,6 +234,10 @@ void GhostedApp::update(float timestep) {
             _gameplay.setInput(_input);
             _gameplay.setCollision(_collision);
             _gameplay.init(_assets);
+            break;
+        case constants::GameMode::Win:
+            _win.setWinner(_ghostWin);
+            _win.init(_assets);
             break;
         }
 
@@ -260,6 +276,9 @@ void GhostedApp::update(float timestep) {
         _network->update(timestep);
         _gameplay.update(timestep);
         break;
+    case constants::GameMode::Win:
+        _win.update(timestep);
+        break;
     default:
         CULogError("No corresponding mode.");
         break;
@@ -292,6 +311,9 @@ void GhostedApp::draw() {
     case constants::GameMode::Lobby:
         _lobby.render(_batch);
         break;
+    case constants::GameMode::Win:
+        _win.render(_batch);
+        break;
     case constants::GameMode::Game:
         _gameplay.draw(_batch, _shaderBatch);
         break;
@@ -320,6 +342,7 @@ void GhostedApp::buildScene() {
     _assets->loadDirectoryAsync("json/join.json", nullptr);
     _assets->loadDirectoryAsync("json/game.json", nullptr);
     _assets->loadDirectoryAsync("json/lobby.json", nullptr);
+    _assets->loadDirectoryAsync("json/win.json", nullptr);
 }
 
 /**

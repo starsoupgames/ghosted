@@ -41,6 +41,7 @@
 #include "JoinGameScene.h"
 #include "LobbyScene.h"
 #include "GameScene.h"
+#include "WinScene.h"
 
 
 
@@ -79,6 +80,9 @@ protected:
     JoinGameScene _join;
     LobbyScene _lobby;
     GameScene _gameplay;
+    WinScene _win;
+    
+    bool _ghostWin;
 
     constants::GameMode _mode;
     uint8_t _status;
@@ -107,7 +111,8 @@ public:
      * of initialization from the constructor allows main.cpp to perform
      * advanced configuration of the application before it starts.
      */
-    GhostedApp() : cugl::Application(), _mode(constants::GameMode::None), _status(constants::MatchStatus::None) {}
+    GhostedApp() : cugl::Application(), _mode(constants::GameMode::None), _status(constants::MatchStatus::None),
+        _ghostWin(false) {}
     
     /**
      * Disposes of this application, releasing all resources.

@@ -43,7 +43,8 @@ namespace constants {
         CreateGame,
         JoinGame,
         Lobby,
-        Game
+        Game,
+        Win
     };
 
     /** Node priority levels */
