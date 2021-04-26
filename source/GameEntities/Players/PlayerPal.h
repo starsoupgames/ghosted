@@ -5,6 +5,18 @@
 using namespace std;
 using namespace cugl;
 
+/** Pal Frame Sprite numbers */
+#define IMG_LEFT 0   // Left idle frame
+#define IMG_RIGHT 23   // Left idle frame
+#define IMG_FRONT 24  // Front idle frame
+#define IMG_BACK 48   // Back idle frame
+#define IMG_LAST 71 // Last walk back frame
+#define IMG_SPOOK_CHANGE 72 // Initial spook frame
+#define IMG_SPOOKED_START 94 // Idle spooked frame
+#define IMG_SPOOKED_END 95 // Last idle spooked frame
+#define IMG_SMOKE_FRAME_START 75 // Frame for smoke to start (refers to pal texture)
+#define IMG_SMOKE_END 18 // Last smoke frame (refers to smoke texture, NOT pal texture)
+
 
 /**
 This PlayerPal class contains information about the Pal's texture, the amount of batteries it has,
@@ -17,6 +29,9 @@ private:
 
     /** Whether a Pal is spooked or not */
     bool _spooked;
+
+    /** Reference to the animation node */
+    shared_ptr<scene2::AnimationNode> _smokeNode;
 
 public:
     /** Returns the amount of batteries left */
@@ -58,7 +73,7 @@ public:
         return (result->init(pos) ? result : nullptr);
     };
 
-    /** Processes the direction for the animation and vision cone */
+    /** Processes the direction for the animation */
     virtual void processDirection() override;
 
     /** Places a battery in the nearby slot */
@@ -78,7 +93,7 @@ public:
      * @param value The Player node.
      * @param shadow The Shadow node.
      */
-    virtual void setNode(const shared_ptr<scene2::AnimationNode>& value, const std::shared_ptr<scene2::PolygonNode>& shadow) override;
+    virtual void setNode(const std::shared_ptr<scene2::AnimationNode>& node, const std::shared_ptr<scene2::PolygonNode>& shadow, const std::shared_ptr<scene2::AnimationNode>& smoke);
 
     /**
      * Updates the state of the model
@@ -89,6 +104,7 @@ public:
      * @param timestep  Time elapsed since last called.
      */
     virtual void update(float timestep = 0.0f) override;
+
 
     /**
      * Resets the pal back to its original settings

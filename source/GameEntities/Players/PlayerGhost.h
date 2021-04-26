@@ -11,6 +11,15 @@ and methods for the Ghost's actions
 using namespace std;
 using namespace cugl;
 
+/** Pal Frame Sprite numbers */
+#define IMG_LEFT 0   // Left idle frame
+#define IMG_RIGHT 23   // Left idle frame
+#define IMG_FRONT 24  // Front idle frame
+#define IMG_BACK 48   // Back idle frame
+#define IMG_LAST 71 // Last walk back frame
+#define IMG_SPOOKING_START 72 // Initial spooking frame
+#define IMG_SPOOKING_END 95 // Last spooking frame
+
 
 class Ghost : public Player {
 private:
@@ -23,6 +32,12 @@ private:
 
     /** Amount of frames before the Ghost is untagged */
     int _tagTimer;
+
+    /** Amount of frames before the Ghost is done spooking */
+    int _spookingTimer;
+
+    /** Whether a Ghost is spooking or not */
+    bool _spooking;
 
 public:
 
@@ -56,6 +71,16 @@ public:
      */
     void setTagged(bool value) { _tagged = value; }
 
+    /** Returns whether or not the ghost is spooking */
+    bool getSpooking() const {
+        return _spooking;
+    }
+
+    /** Sets whether or not a Ghost is spooking */
+    void setSpooking(bool spooking) {
+        _spooking = spooking;
+    }
+
     /** Creates a Ghost with the default values */
     Ghost() : Player(6), _tagTimer(0) {};
 
@@ -88,6 +113,9 @@ public:
      * @param shadow The Shadow node.
      */
     virtual void setNode(const shared_ptr<scene2::AnimationNode>& value, const std::shared_ptr<scene2::PolygonNode>& shadow) override;
+
+    /** Processes the direction for the animation */
+    virtual void processDirection() override;
 
     /**
      * Updates the state of the model

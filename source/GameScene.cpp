@@ -125,18 +125,19 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
     _assets->get<Texture>("ghost_texture")->setName("ghost_sprite");
 
     for (auto& s : { "doe", "seal", "tanuki" }) {
-        auto palNode = scene2::AnimationNode::alloc(_assets->get<Texture>("pal_" + string(s) + "_texture"), 3, 24);
+        auto palNode = scene2::AnimationNode::alloc(_assets->get<Texture>("pal_" + string(s) + "_texture"), 4, 24);
         palNode->setAnchor(Vec2::ANCHOR_CENTER);
         _litRoot->addChild(palNode);
 
         auto palShadowNode = scene2::PolygonNode::allocWithTexture(_assets->get<Texture>("pal_shadow_texture"));
+        auto palSmokeNode = scene2::AnimationNode::alloc(_assets->get<Texture>("pal_smoke_texture"), 1, 19);
 
         auto palModel = Pal::alloc(Vec2(100, 100));
-        palModel->setNode(palNode, palShadowNode);
+        palModel->setNode(palNode, palShadowNode, palSmokeNode);
         _players.push_back(palModel);
     }
 
-    auto ghostNode = scene2::AnimationNode::alloc(_assets->get<Texture>("ghost_texture"), 3, 24);
+    auto ghostNode = scene2::AnimationNode::alloc(_assets->get<Texture>("ghost_texture"), 4, 24);
     ghostNode->setAnchor(Vec2::ANCHOR_CENTER);
     _dimRoot->addChild(ghostNode);
 
@@ -283,8 +284,10 @@ void GameScene::update(float timestep) {
     for (unsigned i = 0; i < sortedPlayers.size(); ++i) {
         auto node = sortedPlayers[i]->getNode();
         node->setPriority(constants::Priority::Player + 1 + i);
+        auto smoke = node->getChildByName("smoke");
+        if (smoke != nullptr) smoke->setPriority(node->getPriority() - 0.01f);
         auto shadow = node->getChildByName("shadow");
-        if (shadow != nullptr) shadow->setPriority(node->getPriority() - 0.01f);
+        if (shadow != nullptr) shadow->setPriority(node->getPriority() - 0.02f);
     }
 
     // Update camera

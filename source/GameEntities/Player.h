@@ -13,6 +13,8 @@ using namespace cugl;
 #define IMG_BACK 48   // Back idle frame
 #define IMG_LAST 71 // Last walk back frame
 
+
+
 /**
 This class contains information about the Player.
 */
@@ -149,7 +151,7 @@ public:
     uint8_t isDirection();
 
     /** Processes the direction for the animation and vision cone */
-    virtual void processDirection();
+    virtual void processDirection() { };
     
     enum Direction {
         Keep = 0,

@@ -25,6 +25,8 @@ namespace constants {
 
     const Vec2 PAL_SHADOW_OFFSET (2, -20);
 
+    const Vec2 PAL_SMOKE_OFFSET(-10, 0);
+
 
     // Make sure to change values in lightShader.frag if you change these here
     /**maximum possible rooms generated in a map**/
