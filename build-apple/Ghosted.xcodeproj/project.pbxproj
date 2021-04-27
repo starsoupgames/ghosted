@@ -58,6 +58,9 @@
 		A4B30909261D9B6600563226 /* CreateGameScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4B30902261D9B6500563226 /* CreateGameScene.cpp */; };
 		A4B3090A261D9B6600563226 /* CreateGameScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4B30902261D9B6500563226 /* CreateGameScene.cpp */; };
 		A4B3090B261D9B6600563226 /* CreateGameScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4B30902261D9B6500563226 /* CreateGameScene.cpp */; };
+		A4B948B7263737880099F29B /* shaders in Resources */ = {isa = PBXBuildFile; fileRef = A4B948B6263737880099F29B /* shaders */; };
+		A4B948B8263737880099F29B /* shaders in Resources */ = {isa = PBXBuildFile; fileRef = A4B948B6263737880099F29B /* shaders */; };
+		A4B948B9263737880099F29B /* shaders in Resources */ = {isa = PBXBuildFile; fileRef = A4B948B6263737880099F29B /* shaders */; };
 		A4BD190A25F44EBB00FBD403 /* StartScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4BD18F825F44EB700FBD403 /* StartScene.cpp */; };
 		A4BD190B25F44EBB00FBD403 /* StartScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4BD18F825F44EB700FBD403 /* StartScene.cpp */; };
 		A4BD190C25F44EBB00FBD403 /* StartScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4BD18F825F44EB700FBD403 /* StartScene.cpp */; };
@@ -210,6 +213,7 @@
 		A4B30900261D9B6500563226 /* JoinGameScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JoinGameScene.h; sourceTree = "<group>"; };
 		A4B30901261D9B6500563226 /* GameMode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameMode.h; sourceTree = "<group>"; };
 		A4B30902261D9B6500563226 /* CreateGameScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CreateGameScene.cpp; sourceTree = "<group>"; };
+		A4B948B6263737880099F29B /* shaders */ = {isa = PBXFileReference; lastKnownFileType = folder; path = shaders; sourceTree = "<group>"; };
 		A4BD18F425F44EB700FBD403 /* CollisionController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CollisionController.h; sourceTree = "<group>"; };
 		A4BD18F825F44EB700FBD403 /* StartScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StartScene.cpp; sourceTree = "<group>"; };
 		A4BD18F925F44EB800FBD403 /* GhostedApp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GhostedApp.cpp; sourceTree = "<group>"; };
@@ -242,7 +246,7 @@
 		EB2BE9CB1D749937002FE78B /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		EB2BE9CD1D749953002FE78B /* ForceFeedback.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ForceFeedback.framework; path = System/Library/Frameworks/ForceFeedback.framework; sourceTree = SDKROOT; };
 		EB2BE9CE1D749953002FE78B /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
-		EB74548C1D74D75C002FBAE6 /* Ghosted (iOS).app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Ghosted (iOS).app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		EB74548C1D74D75C002FBAE6 /* Ghosted.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = Ghosted.app; path = "Ghosted (iOS).app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		EB7454A61D74D846002FBAE6 /* iOS-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "iOS-Info.plist"; sourceTree = "<group>"; };
 		EB7454A71D74D846002FBAE6 /* iOS.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = iOS.xcassets; sourceTree = "<group>"; };
 		EB7454A81D74D846002FBAE6 /* Landscape.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Landscape.storyboard; sourceTree = "<group>"; };
@@ -396,6 +400,7 @@
 		EB2BE9B71D749870002FE78B /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				A4B948B6263737880099F29B /* shaders */,
 				A468B759260A763E00F0E184 /* fonts */,
 				EBFE7C041E19B496001007C2 /* json */,
 				EB2BE9BA1D7498D2002FE78B /* textures */,
@@ -472,7 +477,7 @@
 			isa = PBXGroup;
 			children = (
 				EBBF18911D74904A008E2001 /* Ghosted (Mac).app */,
-				EB74548C1D74D75C002FBAE6 /* Ghosted (iOS).app */,
+				EB74548C1D74D75C002FBAE6 /* Ghosted.app */,
 				EB22BF5E25D0E8BC002ACE41 /* Ghosted (Sim).app */,
 			);
 			name = Products;
@@ -575,7 +580,7 @@
 			);
 			name = "Ghosted (iOS)";
 			productName = "CUGL Demo (iOS)";
-			productReference = EB74548C1D74D75C002FBAE6 /* Ghosted (iOS).app */;
+			productReference = EB74548C1D74D75C002FBAE6 /* Ghosted.app */;
 			productType = "com.apple.product-type.application";
 		};
 		EBBF18901D74904A008E2001 /* Ghosted (Mac) */ = {
@@ -610,7 +615,6 @@
 					};
 					EB74548B1D74D75C002FBAE6 = {
 						CreatedOnToolsVersion = 7.3.1;
-						DevelopmentTeam = 4SA9JDC229;
 					};
 					EBBF18901D74904A008E2001 = {
 						CreatedOnToolsVersion = 7.3.1;
@@ -673,6 +677,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				EB22BF9B25D0EA5C002ACE41 /* DeviceMargins.plist in Resources */,
+				A4B948B9263737880099F29B /* shaders in Resources */,
 				EB22BF9625D0EA50002ACE41 /* json in Resources */,
 				EB22BF9725D0EA51002ACE41 /* textures in Resources */,
 				A468B75C260A763E00F0E184 /* fonts in Resources */,
@@ -687,6 +692,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				EB7454D01D750623002FBAE6 /* textures in Resources */,
+				A4B948B8263737880099F29B /* shaders in Resources */,
 				EB7454AB1D74D846002FBAE6 /* iOS.xcassets in Resources */,
 				EB7454AC1D74D846002FBAE6 /* Landscape.storyboard in Resources */,
 				A468B75B260A763E00F0E184 /* fonts in Resources */,
@@ -703,6 +709,7 @@
 				EBFE7C091E19B4AC001007C2 /* json in Resources */,
 				EB2BE9BB1D7498D2002FE78B /* textures in Resources */,
 				EBBF189B1D74904A008E2001 /* Mac.xcassets in Resources */,
+				A4B948B7263737880099F29B /* shaders in Resources */,
 				A468B75A260A763E00F0E184 /* fonts in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -986,6 +993,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = Ghosted;
 				SDKROOT = macosx;
 				VALIDATE_WORKSPACE_SKIPPED_SDK_FRAMEWORKS = "OpenGL OpenGLES";
 			};
@@ -1041,6 +1049,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_NAME = Ghosted;
 				SDKROOT = macosx;
 				VALIDATE_WORKSPACE_SKIPPED_SDK_FRAMEWORKS = "OpenGL OpenGLES";
 			};

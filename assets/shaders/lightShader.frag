@@ -144,7 +144,7 @@ vec4 blursample(vec2 coord) {
 
 bool roomshade(vec3 light, vec2 pos) {
     vec3 col = vec3(0.0, 0.0, 0.0);
-    if (light.z == 0) return false;
+    if (light.z == 0.0f) return false;
     vec2 room = light.xy - pos;
     float roomRadius = 200.0;
     float rD = dist(light.xy, pos);
@@ -156,7 +156,7 @@ bool roomshade(vec3 light, vec2 pos) {
 
 vec3 flashshade(vec4 pal, vec2 pos, vec3 texColor) {
     vec3 col = vec3(0.0, 0.0, 0.0);
-    if (pal.z == 0) {
+    if (pal.z == 0.0f) {
         return col;
     }
     vec2 coor = pal.xy - pos;
