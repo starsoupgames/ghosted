@@ -1,17 +1,17 @@
 {
-  "id" : "couchRoom",
-  "obstacles": [
-    {
-      "name": "couch",
-      "position": [6, 6],
-      "textureDims": [6, 3],
-      "collisionDims": [6, 4]
-    }
-  ],
-  "batteries": [
-    [2, 3],
-    [10, 3],
-    [2, 9],
-    [10, 9]
-  ]
+    "id" : "couchRoom",
+    "obstacles": [
+        {
+            "name": "couch",
+            "position": [6, 6],
+            "textureDims": [6, 3],
+            "collisionDims": [6, 4]
+        }
+    ],
+    "batteries": [
+        [2, 3],
+        [10, 3],
+        [2, 9],
+        [10, 9]
+    ]
 }

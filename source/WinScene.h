@@ -17,11 +17,11 @@ private:
     shared_ptr<scene2::Button> _quit;
     
     /** Pals */
-    shared_ptr<scene2::Button> _doe;
-    shared_ptr<scene2::Button> _seal;
-    shared_ptr<scene2::Button> _tanuki;
+    shared_ptr<scene2::SceneNode> _doe;
+    shared_ptr<scene2::SceneNode> _seal;
+    shared_ptr<scene2::SceneNode> _tanuki;
     
-    shared_ptr<scene2::Button> _ghost;
+    shared_ptr<scene2::SceneNode> _ghost;
     
     /** Default value is ghostWin = false (the pals win)
         Ghost win is ghostWin = true */

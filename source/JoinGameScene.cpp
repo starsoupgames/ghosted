@@ -17,8 +17,26 @@ using namespace cugl;
 bool JoinGameScene::init(const shared_ptr<AssetManager>& assets) {
     if (!GameMode::init(assets, constants::GameMode::JoinGame, "join")) return false;
 
-    Application::get()->setClearColor(Color4(192, 192, 192, 255));
-
+    _next = dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("join_next"));
+    if (_next == nullptr) {
+        return false;
+    }
+    _next->addListener([=](const string& name, bool down) {
+        if (!down && _roomID != "") {
+            _mode = constants::GameMode::Lobby;
+        }
+        });
+    
+    _back = dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("join_back"));
+    if (_back == nullptr) {
+        return false;
+    }
+    _back->addListener([=](const string& name, bool down) {
+        if (!down) {
+            _mode = constants::GameMode::Start;
+        }
+        });
+    
     _field = dynamic_pointer_cast<scene2::TextField>(assets->get<scene2::SceneNode>("join_textfield"));
     if (_field == nullptr) {
         return false;
@@ -27,7 +45,6 @@ bool JoinGameScene::init(const shared_ptr<AssetManager>& assets) {
     _field->addExitListener([=](const string& name, const string& value) {
         if (utils::isNumeric(value)) {
             _roomID = value;
-            _mode = constants::GameMode::Lobby;
         }
         else {
             CULog("%s is not numeric.", value.c_str());
@@ -36,6 +53,8 @@ bool JoinGameScene::init(const shared_ptr<AssetManager>& assets) {
 
     if (_active) {
         _field->activate();
+        _back->activate();
+        _next->activate();
     }
     return true;
 }
@@ -47,6 +66,8 @@ void JoinGameScene::dispose() {
     GameMode::dispose();
     setActive(false);
     _field = nullptr;
+    _back = nullptr;
+    _next = nullptr;
 }
 
 /**
@@ -58,9 +79,13 @@ void JoinGameScene::setActive(bool value) {
     _active = value;
     if (value && !_field->isActive()) {
         _field->activate();
+        _next->activate();
+        _back->activate();
     }
     else if (!value && _field->isActive()) {
         _field->setText("");
         _field->deactivate();
+        _next->deactivate();
+        _back->deactivate();
     }
 }

@@ -1,63 +1,63 @@
 {
-  "textures": {
-    "pal_texture": {
-      "file": "textures/player/Pal_Base_Body_Frames.png"
+    "textures": {
+        "pal_texture": {
+            "file": "textures/player/Pal_Base_Body_Frames.png"
+        },
+        "ghost_texture": {
+            "file": "textures/player/Ghost_Frames.png"
+        },
+        "pal_doe_texture": {
+            "file": "textures/player/Pal_Doe_Frames.png"
+        },
+        "pal_seal_texture": {
+            "file": "textures/player/Pal_Seal_Frames.png"
+        },
+        "pal_tanuki_texture": {
+            "file": "textures/player/Pal_Tanuki_Frames.png"
+        },
+        "pal_shadow_texture": {
+            "file": "textures/player/Pal_Shadow.png"
+        },
+        "ghost_shadow_texture": {
+            "file": "textures/player/Ghost_Shadow.png"
+        },
+        "pal_smoke_texture": {
+            "file": "textures/player/Pal_Smoke_Frames.png"
+        },
+        "trap": {
+            "file": "textures/play.png"
+        },
+        "slot": {
+            "file": "textures/logo.png"
+        },
+        "dim_floor_texture": {
+            "file": "textures/game/dim_floor.png"
+        },
+        "lit_floor_texture": {
+            "file": "textures/game/lit_floor.png"
+        },
+        "dim_wall_texture": {
+            "file": "textures/game/dim_wall.png"
+        },
+        "lit_wall_texture": {
+            "file": "textures/game/lit_wall.png"
+        },
+        "dim_door_texture": {
+            "file": "textures/game/dim_door.png"
+        },
+        "lit_door_texture": {
+            "file": "textures/game/lit_door.png"
+        }
     },
-    "ghost_texture": {
-      "file": "textures/player/Ghost_Frames.png"
+    "fonts": {
     },
-    "pal_doe_texture": {
-      "file": "textures/player/Pal_Doe_Frames.png"
-    },
-    "pal_seal_texture": {
-      "file": "textures/player/Pal_Seal_Frames.png"
-    },
-    "pal_tanuki_texture": {
-      "file": "textures/player/Pal_Tanuki_Frames.png"
-    },
-    "pal_shadow_texture": {
-      "file": "textures/player/Pal_Shadow.png"
-    },
-    "ghost_shadow_texture": {
-      "file": "textures/player/Ghost_Shadow.png"
-    },
-    "pal_smoke_texture": {
-      "file": "textures/player/Pal_Smoke_Frames.png"
-    },
-    "trap": {
-      "file": "textures/play.png"
-    },
-    "slot": {
-        "file": "textures/logo.png"
-    },
-    "dim_floor_texture": {
-      "file": "textures/game/dim_floor.png"
-    },
-    "lit_floor_texture": {
-      "file": "textures/game/lit_floor.png"
-    },
-    "dim_wall_texture": {
-      "file": "textures/game/dim_wall.png"
-    },
-    "lit_wall_texture": {
-      "file": "textures/game/lit_wall.png"
-    },
-    "dim_door_texture": {
-      "file": "textures/game/dim_door.png"
-    },
-    "lit_door_texture": {
-      "file": "textures/game/lit_door.png"
+    "scene2s": {
+        "game": {
+            "type": "Node",
+            "comment": "Game mode root node",
+            "format": {
+                "type": "Anchored"
+            }
+        }
     }
-  },
-  "fonts": {
-  },
-  "scene2s": {
-    "game": {
-      "type": "Node",
-      "comment": "Game mode root node",
-      "format": {
-        "type": "Anchored"
-      }
-    }
-  }
 }

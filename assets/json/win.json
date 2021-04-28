@@ -1,6 +1,6 @@
 {
-	"textures": {
-		"background": {
+    "textures": {
+        "background": {
             "file":   "textures/win/background1.png"
         },
         "menuboard": {
@@ -37,10 +37,10 @@
             "file": "textures/win/ellipse2.png"
         },
         "tanuki": {
-          "file": "textures/win/tanuki.png"
+            "file": "textures/win/tanuki.png"
         },
         "doe": {
-          "file": "textures/win/doe.png"
+            "file": "textures/win/doe.png"
         },
         "seal": {
             "file": "textures/win/seal.png"
@@ -48,267 +48,233 @@
         "ghost": {
             "file": "textures/win/ghost.png"
         }
-	},
-	"fonts": {
-		"gyparody": {
-			"file":     "fonts/gyparody-hv.ttf",
-			"size":     48
-		},
+    },
+    "fonts": {
+        "gyparody": {
+            "file":     "fonts/gyparody-hv.ttf",
+            "size":     48
+        },
         "script": {
             "file":     "fonts/PenScript-rg.ttf",
             "size":     48
         }
-	},
+    },
     
-          "scene2s" : {
-              "win": {
-                  "type"      : "Node",
-                  "comment"   : "This is the root node of Ghosted's alpha release",
-                  "format"    : {
-                      "type" : "Anchored"
-                  },
-                "children": {
-
-                  "backdrop": {
+    "scene2s" : {
+        "win": {
+            "type"      : "Node",
+            "comment"   : "This is the root node of Ghosted's alpha release",
+            "format"    : {
+                "type" : "Anchored"
+            },
+            "children": {
+                
+                "backdrop": {
                     "type": "Image",
                     "data": {
-                      "texture": "background",
-                      "anchor": [ 0, 0.5 ]
+                        "texture": "background",
+                        "anchor": [ 0, 0.5 ]
                     },
                     "layout": {
-                      "x_anchor": "left",
-                      "y_anchor": "fill"
+                        "x_anchor": "left",
+                        "y_anchor": "fill"
                     }
-                  },
-                  "Winner": {
+                },
+                "Winner": {
                     "type": "Image",
                     "format": {
-                      "type": "Anchored"
+                        "type": "Anchored"
                     },
                     "data": {
-                      "texture": "Winner",
-                      "anchor": [ 0.5, -2 ],
-                      "scale": 2
+                        "texture": "Winner",
+                        "anchor": [ 0.5, -4.5 ],
+                        "scale": 2
                     },
                     "layout": {
-                      "x_anchor": "center",
-                      "y_anchor": "middle",
-                      "y_offset": 115,
-                      "absolute": true
+                        "x_anchor": "center",
+                        "y_anchor": "middle"
                     }
-                  },
-                  "Star-1": {
+                },
+                "Star-1": {
                     "type": "Button",
                     "format": {
-                      "type": "Anchored"
+                        "type": "Anchored"
                     },
                     "data": {
-                      "upnode": "up",
-                      "anchor": [ 13, 0.5 ],
-                      "scale": 1.5
+                        "upnode": "up",
+                        "anchor": [ 13, 0.5 ],
+                        "scale": 1.5
                     },
                     "children": {
-                      "up": {
-                        "type": "Image",
-                        "data": {
-                          "texture": "Star-1"
+                        "up": {
+                            "type": "Image",
+                            "data": {
+                                "texture": "Star-1"
+                            }
                         }
-                      }
                     },
                     "layout": {
-                      "x_anchor": "right",
-                      "y_anchor": "top",
-                      "y_offset": -0.1,
-                      "x_offset": -0.1
+                        "x_anchor": "right",
+                        "y_anchor": "top",
+                        "y_offset": -0.1,
+                        "x_offset": -0.1
                     }
-                  },
-                  "Star": {
+                },
+                "Star": {
                     "type": "Button",
                     "format": {
-                      "type": "Anchored"
+                        "type": "Anchored"
                     },
                     "data": {
-                      "upnode": "up",
-                      "anchor": [ 5, 0.5 ],
-                      "scale": 1.5
+                        "upnode": "up",
+                        "anchor": [ 5, 0.5 ],
+                        "scale": 1.5
                     },
                     "children": {
-                      "up": {
-                        "type": "Image",
-                        "data": {
-                          "texture": "Star"
+                        "up": {
+                            "type": "Image",
+                            "data": {
+                                "texture": "Star"
+                            }
                         }
-                      }
                     },
                     "layout": {
-                      "x_anchor": "right",
-                      "y_anchor": "top",
-                      "y_offset": -0.1,
-                      "x_offset": -0.1
+                        "x_anchor": "right",
+                        "y_anchor": "top",
+                        "y_offset": -0.1,
+                        "x_offset": -0.1
                     }
-                  },
-                  "quitbutton": {
+                },
+                "quitbutton": {
                     "type": "Button",
                     "format": {
-                      "type": "Anchored"
+                        "type": "Anchored"
                     },
                     "data": {
-                      "upnode": "up",
-                      "anchor": [ -2, -1 ],
-                      "scale": 1.5
+                        "upnode": "up",
+                        "anchor": [ -2, -1 ],
+                        "scale": 1.5
                     },
                     "children": {
-                      "up": {
-                        "type": "Image",
-                        "data": {
-                          "texture": "quitbutton"
+                        "up": {
+                            "type": "Image",
+                            "data": {
+                                "texture": "quitbutton"
+                            }
                         }
-                      }
                     },
                     "layout": {
-                      "x_anchor": "middle",
-                      "y_anchor": "center"
+                        "x_anchor": "middle",
+                        "y_anchor": "center"
                     }
-                  },
-                  "ellipse2": {
+                },
+                "ellipse2": {
                     "type": "Button",
                     "format": {
-                      "type": "Anchored"
+                        "type": "Anchored"
                     },
                     "data": {
-                      "upnode": "up",
-                      "anchor": [ -0.7, 0.5 ],
-                      "scale": 2.5
+                        "upnode": "up",
+                        "anchor": [ -0.7, 0.5 ],
+                        "scale": 2.5
                     },
                     "children": {
-                      "up": {
-                        "type": "Image",
-                        "data": {
-                          "texture": "ellipse2"
+                        "up": {
+                            "type": "Image",
+                            "data": {
+                                "texture": "ellipse2"
+                            }
                         }
-                      }
                     },
                     "layout": {
-                      "x_anchor": "center",
-                      "y_anchor": "middle"
+                        "x_anchor": "center",
+                        "y_anchor": "middle"
                     }
-                  },
-                  "ellipse1": {
+                },
+                "ellipse1": {
                     "type": "Button",
                     "format": {
-                      "type": "Anchored"
+                        "type": "Anchored"
                     },
                     "data": {
-                      "upnode": "up",
-                      "anchor": [ 1.7, 0.5 ],
-                      "scale": 2.5
+                        "upnode": "up",
+                        "anchor": [ 1.7, 0.5 ],
+                        "scale": 2.5
                     },
                     "children": {
-                      "up": {
-                        "type": "Image",
-                        "data": {
-                          "texture": "ellipse1"
+                        "up": {
+                            "type": "Image",
+                            "data": {
+                                "texture": "ellipse1"
+                            }
                         }
-                      }
                     },
                     "layout": {
-                      "x_anchor": "center",
-                      "y_anchor": "middle"
+                        "x_anchor": "center",
+                        "y_anchor": "middle"
                     }
-                  },
-                  "doe": {
-                    "type": "Button",
+                },
+                "doe": {
+                    "type": "Image",
                     "format": {
-                      "type": "Anchored"
+                        "type": "Anchored"
                     },
                     "data": {
-                      "upnode": "up",
-                      "anchor": [ 1.2, 0.5 ],
-                      "scale": 2
-                    },
-                    "children": {
-                      "up": {
-                        "type": "Image",
-                        "data": {
-                          "texture": "doe"
-                        }
-                      }
+                        "texture": "doe",
+                        "anchor": [ 1.2, 0.5 ],
+                        "scale": 2
                     },
                     "layout": {
-                      "x_anchor": "center",
-                      "y_anchor": "middle"
+                        "x_anchor": "center",
+                        "y_anchor": "middle"
                     }
-                  },
-                  "tanuki": {
-                    "type": "Button",
+                },
+                "tanuki": {
+                    "type": "Image",
                     "format": {
-                      "type": "Anchored"
+                        "type": "Anchored"
                     },
                     "data": {
-                      "upnode": "up",
-                      "anchor": [ -0.2, 0.5 ],
-                      "scale": 2
-                    },
-                    "children": {
-                      "up": {
-                        "type": "Image",
-                        "data": {
-                          "texture": "tanuki"
-                        }
-                      }
+                        "texture": "tanuki",
+                        "anchor": [ -0.2, 0.5 ],
+                        "scale": 2
                     },
                     "layout": {
-                      "x_anchor": "center",
-                      "y_anchor": "middle"
+                        "x_anchor": "center",
+                        "y_anchor": "middle"
                     }
-                  },
-                  "seal": {
-                    "type": "Button",
+                },
+                "seal": {
+                    "type": "Image",
                     "format": {
-                      "type": "Anchored"
+                        "type": "Anchored"
                     },
                     "data": {
-                      "upnode": "up",
-                      "anchor": [ 0.5, 0.5 ],
-                      "scale": 2
-                    },
-                    "children": {
-                      "up": {
-                        "type": "Image",
-                        "data": {
-                          "texture": "seal"
-                        }
-                      }
+                        "texture": "seal",
+                        "anchor": [ 0.5, 0.5 ],
+                        "scale": 2
                     },
                     "layout": {
-                      "x_anchor": "center",
-                      "y_anchor": "middle"
+                        "x_anchor": "center",
+                        "y_anchor": "middle"
                     }
-                  },
-                  "ghost": {
-                    "type": "Button",
+                },
+                "ghost": {
+                    "type": "Image",
                     "format": {
-                      "type": "Anchored"
+                        "type": "Anchored"
                     },
                     "data": {
-                      "upnode": "up",
-                      "anchor": [ 0.5, 0.5 ],
-                      "scale": 2
-                    },
-                    "children": {
-                      "up": {
-                        "type": "Image",
-                        "data": {
-                          "texture": "ghost"
-                        }
-                      }
+                        "texture": "ghost",
+                        "anchor": [ 0.5, 0.5 ],
+                        "scale": 2
                     },
                     "layout": {
-                      "x_anchor": "center",
-                      "y_anchor": "middle"
+                        "x_anchor": "center",
+                        "y_anchor": "middle"
                     }
-                  }
                 }
+            }
         }
     }
 }

@@ -11,6 +11,9 @@ using namespace cugl;
 
 class JoinGameScene : public GameMode {
 private:
+    shared_ptr<scene2::Button> _next;
+    shared_ptr<scene2::Button> _back;
+    
     /** Text field */
     shared_ptr<scene2::TextField> _field;
 

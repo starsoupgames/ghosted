@@ -19,13 +19,13 @@ bool WinScene::init(const shared_ptr<AssetManager>& assets) {
 
     _quit = dynamic_pointer_cast<scene2::Button>(assets->get<scene2::SceneNode>("win_quitbutton"));
     
-    _ghost = dynamic_pointer_cast<scene2::Button>(assets->get<scene2::SceneNode>("win_ghost"));
+    _ghost = assets->get<scene2::SceneNode>("win_ghost");
     
-    _doe = dynamic_pointer_cast<scene2::Button>(assets->get<scene2::SceneNode>("win_doe"));
+    _doe = assets->get<scene2::SceneNode>("win_doe");
     
-    _seal = dynamic_pointer_cast<scene2::Button>(assets->get<scene2::SceneNode>("win_seal"));
+    _seal = assets->get<scene2::SceneNode>("win_seal");
     
-    _tanuki = dynamic_pointer_cast<scene2::Button>(assets->get<scene2::SceneNode>("win_tanuki"));
+    _tanuki = assets->get<scene2::SceneNode>("win_tanuki");
     
     if (_quit == nullptr) {
         return false;
@@ -38,10 +38,6 @@ bool WinScene::init(const shared_ptr<AssetManager>& assets) {
         });
     if (_active) {
         _quit->activate();
-        _ghost->activate();
-        _doe->activate();
-        _seal->activate();
-        _tanuki->activate();
     }
     _mode = constants::GameMode::Win;
     return true;
@@ -98,18 +94,6 @@ void WinScene::setActive(bool value) {
     else {
         if (_quit->isActive()) {
             _quit->deactivate();
-        }
-        if (_ghost->isActive()) {
-            _ghost->deactivate();
-        }
-        if (_seal->isActive()) {
-            _seal->deactivate();
-        }
-        if (_doe->isActive()) {
-            _doe->deactivate();
-        }
-        if (_tanuki->isActive()) {
-            _tanuki->deactivate();
         }
     }
 }

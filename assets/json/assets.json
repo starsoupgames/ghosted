@@ -1,19 +1,19 @@
 {
-  "textures": {
-    "logo": {
-      "file": "textures/logo.png",
-      "minfilter": "nearest",
-      "magfilter": "linear",
-      "wrapS": "clamp",
-      "wrapT": "clamp"
+    "textures": {
+        "logo": {
+            "file": "textures/logo.png",
+            "minfilter": "nearest",
+            "magfilter": "linear",
+            "wrapS": "clamp",
+            "wrapT": "clamp"
+        }
+    },
+    "fonts": {
+        "gyparody": {
+            "file": "fonts/gyparody-hv.ttf",
+            "size": 48
+        }
+    },
+    "scene2s": {
     }
-  },
-  "fonts": {
-    "gyparody": {
-      "file": "fonts/gyparody-hv.ttf",
-      "size": 48
-    }
-  },
-  "scene2s": {
-  }
 }
