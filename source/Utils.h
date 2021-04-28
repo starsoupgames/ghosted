@@ -14,9 +14,6 @@ using namespace cugl;
 namespace utils {
 
     // logging functions
-    inline void Log(const string& s) {
-        CULog(s.c_str());
-    }
     inline void Log(const float f) {
         CULog("%f", f);
     }
@@ -33,11 +30,6 @@ namespace utils {
     }
     inline void Log(const string& label, const Vec2& v) {
         CULog((label + ": %f, %f").c_str(), v.x, v.y);
-    }
-    inline void LogWithNoise(const string& s) {
-        int n = rand() % 26;
-        string c(1, (char)(n + 65));
-        CULog((s + " " + c).c_str());
     }
 
     // https://stackoverflow.com/questions/4654636/how-to-determine-if-a-string-is-a-number-with-c

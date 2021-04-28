@@ -215,6 +215,7 @@
     <ClInclude Include="..\..\source\CreateGameScene.h" />
     <ClInclude Include="..\..\source\StartScene.h" />
     <ClInclude Include="..\..\source\Utils.h" />
+    <ClInclude Include="..\..\source\WinScene.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
@@ -241,8 +242,9 @@
     <ClCompile Include="..\..\source\RoomEntities\Obstacle.cpp" />
     <ClCompile Include="..\..\source\RoomEntities\Trap.cpp" />
     <ClCompile Include="..\..\source\RoomEntity.cpp" />
+    <ClCompile Include="..\..\source\RoomParser.cpp" />
     <ClCompile Include="..\..\source\StartScene.cpp" />
-    <ClCompile Include="RoomParser.cpp" />
+    <ClCompile Include="..\..\source\WinScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Ghosted.rc" />
