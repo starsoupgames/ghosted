@@ -54,6 +54,7 @@ void Player::setNode(const std::shared_ptr<scene2::AnimationNode>& value) {
  * @param timestep  Time elapsed since last called.
  */
 void Player::update(float timestep) {
+    _loc += _velocity;
     GameEntity::update(timestep);
 }
 

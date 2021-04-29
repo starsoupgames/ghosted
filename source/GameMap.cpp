@@ -17,7 +17,7 @@ bool GameMap::init() {
  */
 void GameMap::dispose() {
     _player = nullptr;
-    
+
     _rooms.clear();
     _players.clear();
     _traps.clear();
@@ -29,12 +29,12 @@ void GameMap::dispose() {
 /** Method to update the GameMap model, called by GameScene */
 void GameMap::update(float timestep) {
     shared_ptr<Trap> trap = nullptr;
-    
+
     for (shared_ptr s : _slots) {
         s->update(timestep);
     }
     _player->update(timestep);
-    
+
     // If ghost is tagged, lower the tag timer
     /*
      int tagTimer = _ghostModel->getTimer();
@@ -44,18 +44,24 @@ void GameMap::update(float timestep) {
      if (_ghostModel->getTimer() == 0) {
      _ghostModel->setTagged(false);
      }*/
-    
-    // Call GameRoom::update(timestep)
-    
-    // Check victory conditions
+
+     // Call GameRoom::update(timestep)
+
+     // Check victory conditions
 }
 
-/** Method to move and change the direction of players */
+/** Method to update player velocity and players */
 void GameMap::move(Vec2 move, Vec2 direction) {
-    _player->setMove(move);
-    _player->setIdle(move.isNearZero());
-    if (direction != Vec2::ZERO) {
-        _player->setDir(direction);
+    _player->updateVelocity(move);
+    if (_player->getType() == Player::Type::Pal) {
+        if (direction != Vec2::ZERO) {
+            _player->setDir(direction);
+        }
+    }
+    else {
+        if (move != Vec2::ZERO) {
+            _player->setDir(move);
+        }
     }
 }
 

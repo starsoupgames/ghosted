@@ -263,7 +263,9 @@
     <None Include="..\..\assets\json\join.json" />
     <None Include="..\..\assets\json\loading.json" />
     <None Include="..\..\assets\json\lobby.json" />
+    <None Include="..\..\assets\json\room.json" />
     <None Include="..\..\assets\json\start.json" />
+    <None Include="..\..\assets\json\win.json" />
     <None Include="..\..\assets\shaders\shaderTest.fs" />
     <None Include="..\..\assets\shaders\shaderTest.vs" />
   </ItemGroup>

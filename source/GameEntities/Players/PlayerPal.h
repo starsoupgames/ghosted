@@ -6,11 +6,6 @@ using namespace std;
 using namespace cugl;
 
 /** Pal Frame Sprite numbers */
-#define IMG_LEFT 0   // Left idle frame
-#define IMG_RIGHT 23   // Left idle frame
-#define IMG_FRONT 24  // Front idle frame
-#define IMG_BACK 48   // Back idle frame
-#define IMG_LAST 71 // Last walk back frame
 #define IMG_SPOOK_CHANGE 72 // Initial spook frame
 #define IMG_SPOOKED_START 94 // Idle spooked frame
 #define IMG_SPOOKED_END 95 // Last idle spooked frame

@@ -136,7 +136,7 @@ void NetworkData::interpretLobbyData(const int id, const vector<uint8_t>& msg) {
         vector<int> playerOrder(4);
         for (int i = 0; i < 4; ++i) {
             playerOrder[i] = decodeInt(splitPlayerOrder[i]);
-            CULog("%d", playerOrder[i]);
+            // CULog("%d", playerOrder[i]);
         }
         _lobbyData = make_shared<LobbyData>(playerOrder);
     }
@@ -268,17 +268,6 @@ void NetworkData::interpolatePlayerData() {
     for (auto& p : otherPlayers) {
         float progress = min((float)p->interpolationData->ticksSinceReceived / constants::NETWORK_TICKS, 1.f);
         Vec2 interpolatedPosition = p->interpolationData->oldPosition * (1 - progress) + p->interpolationData->newPosition * progress;
-        /*
-        Vec2 diff = interpolatedPosition - otherPlayer->getLoc();
-        utils::Log(diff.length());
-        if (diff.isNearZero()) {
-            otherPlayer->setLoc(interpolatedPosition);
-            otherPlayer->setIdle(true);
-        }
-        else {
-            otherPlayer->setMove(diff);
-            otherPlayer->update();
-        }*/
 
         p->player->setLoc(interpolatedPosition);
         p->player->update();

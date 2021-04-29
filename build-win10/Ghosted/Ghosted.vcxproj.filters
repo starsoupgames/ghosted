@@ -232,5 +232,11 @@
     </None>
     <None Include="..\..\assets\shaders\shaderTest.fs" />
     <None Include="..\..\assets\shaders\shaderTest.vs" />
+    <None Include="..\..\assets\json\room.json">
+      <Filter>JSON Assets</Filter>
+    </None>
+    <None Include="..\..\assets\json\win.json">
+      <Filter>JSON Assets</Filter>
+    </None>
   </ItemGroup>
 </Project>

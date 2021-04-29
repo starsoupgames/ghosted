@@ -152,7 +152,6 @@ public:
             if (players[i] != nullptr) {
                 if (_lobbyData != nullptr) {
                     _players[i] = make_shared<PlayerData>(i, players[_lobbyData->playerOrder[i]]);
-                    CULog("%d, %d, %d", i, _lobbyData->playerOrder[i]);
                 }
                 else {
                     _players[i] = make_shared<PlayerData>(i, players[i]);

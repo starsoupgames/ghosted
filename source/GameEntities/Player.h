@@ -13,6 +13,9 @@ using namespace cugl;
 #define IMG_BACK 48   // Back idle frame
 #define IMG_LAST 71 // Last walk back frame
 
+/** Player movement physics */
+#define ACCELERATION 5
+#define DRAG 2
 
 
 /**
@@ -32,10 +35,10 @@ protected:
     /** Current player direction */
     Vec2 _direction;
 
-    /** Current Player movement */
-    Vec2 _move;
+    /** Current player velocity */
+    Vec2 _velocity;
 
-    /** Player speed */
+    /** Max speed */
     float _speed;
 
     /** Player id */
@@ -73,22 +76,27 @@ public:
         }
     };
 
-    /** Sets the Player movement */
-    void setMove(Vec2 move) {
-        if (move.length() > 1) {
-            _move = move.normalize();
+    /** Updates the Player velocity */
+    void updateVelocity(Vec2 move) {
+        // subtract drag
+        if (_velocity.length() <= DRAG) {
+            _velocity = Vec2::ZERO;
         }
         else {
-            _move = move;
+            _velocity -= _velocity.normalize() * DRAG;
         }
-    }
 
-    /**
-     * @return the Player speed
-     */
-    virtual float getSpeed() {
-        return _speed;
-    };
+        // add acceleration
+        _velocity += move.normalize() * ACCELERATION;
+
+        // clamp to speed
+        if (_velocity.length() > _speed) {
+            _velocity = _velocity.normalize() * _speed; // clamp to speed
+        }
+
+        // set idle
+        setIdle(_velocity.isNearZero());
+    }
 
     /** Creates a Player with the default values */
     Player() : Player(5) {};

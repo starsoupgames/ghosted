@@ -23,8 +23,6 @@ void Ghost::setNode(const std::shared_ptr<scene2::AnimationNode>& node, const st
  * @param timestep  Time elapsed since last called.
  */
 void Ghost::update(float timestep) {    
-    // Move the ghost
-    _loc += _move * _speed;
     if (getSpooking() && _spookingTimer < 48) {
         ++_spookingTimer;
     }
@@ -33,7 +31,6 @@ void Ghost::update(float timestep) {
     }
 
     processDirection();
-    
 
     Player::update(timestep);
 }
@@ -63,42 +60,42 @@ void Ghost::processDirection() {
 
     switch (isDirection()) {
     case Direction::Top:
-		if (frame >= IMG_BACK && frame < IMG_LAST - 1) {
-			++frame;
-		}
-		else {
-			frame = IMG_BACK;
-		}
+        if (frame >= IMG_BACK && frame < IMG_LAST - 1) {
+            ++frame;
+        }
+        else {
+            frame = IMG_BACK;
+        }
 
-		break;
+        break;
     case Direction::Bottom:
-		if (frame >= IMG_FRONT && frame < IMG_BACK - 1) {
-			++frame;
-		}
-		else {
-			frame = IMG_FRONT;
-		}
-		break;
+        if (frame >= IMG_FRONT && frame < IMG_BACK - 1) {
+            ++frame;
+        }
+        else {
+            frame = IMG_FRONT;
+        }
+        break;
     case Direction::Right:
-		_node->setScale(Vec2(-1, 1));
-		if (frame >= IMG_LEFT && frame < IMG_FRONT - 1) {
-			++frame;
-		}
-		else {
-			frame = IMG_LEFT;
-		}
+        _node->setScale(Vec2(-1, 1));
+        if (frame >= IMG_LEFT && frame < IMG_FRONT - 1) {
+            ++frame;
+        }
+        else {
+            frame = IMG_LEFT;
+        }
 
-		break;
+        break;
     case Direction::Left:
 
-		if (frame >= IMG_LEFT && frame < IMG_FRONT - 1) {
-			++frame;
-		}
-		else {
-			frame = IMG_LEFT;
-		}
+        if (frame >= IMG_LEFT && frame < IMG_FRONT - 1) {
+            ++frame;
+        }
+        else {
+            frame = IMG_LEFT;
+        }
 
-		break;
+        break;
     }
     CUAssertLog(frame < IMG_LAST, "Frame out of range.");
     ++_timer;
