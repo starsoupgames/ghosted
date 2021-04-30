@@ -142,37 +142,45 @@ vec4 blursample(vec2 coord) {
 }
 
 
-bool roomshade(vec3 light, vec2 pos) {
-    vec3 col = vec3(0.0, 0.0, 0.0);
-    if (light.z == 0.0f) return false;
+float roomshade(vec3 light, vec2 pos) {
+    float a = 0.0;
+    if (light.z == 0.0f) return a;
     vec2 room = light.xy - pos;
+    //sharpness of outer circle edge
     float roomRadius = 200.0;
+    float roomOuterRadius = 210.0;
     float rD = dist(light.xy, pos);
     if (rD <= roomRadius) {
-        return true;
+        a = 1.0;
+    } else {
+        a = smoothstep(roomOuterRadius, roomRadius, rD);
     }
-    return false;
+    return a;
 }
 
-vec3 flashshade(vec4 pal, vec2 pos, vec3 texColor) {
-    vec3 col = vec3(0.0, 0.0, 0.0);
+float flashshade(vec4 pal, vec2 pos) {
+    float a = 0.0;
     if (pal.z == 0.0f) {
-        return col;
+        return a;
     }
     vec2 coor = pal.xy - pos;
     float mangle = rangle(coor);
     //the flashlight angle
     float pangle = pal.w;
+    //sharpness of outer circle edge
     float palRadius = 200.0;
+    float palOuterRadius = 210.0;
     float d = dist(pal.xy, pos);
-    float inAngle = smoothstep(0.2, 0.0, sq(
+    //adjust 0.2 and 0.1 to make edge sharper
+    float inAngle = smoothstep(0.2, 0.1, sq(
         dangle(pangle, mangle)
     ));
-    vec3 flashCol = inAngle * texColor;
     if (d <= palRadius) {
-        col = flashCol;
+        a = inAngle;
+    } else {
+        a = inAngle*smoothstep(palOuterRadius, palRadius, d);
     }
-    return col;
+    return a;
 
 }
 
@@ -185,20 +193,29 @@ vec3 flashshade(vec4 pal, vec2 pos, vec3 texColor) {
  */
 void main(void) {
     vec4 result = texture(uTexture, outTexCoord);
-    vec3 col = vec3(0.0, 0.0, 0.0);
-    
-    for (int i = 0; i < 3; i++) {
-        vec3 flashcolor = flashshade(uPlayers[i], outPosition, result.rgb);
-        col += flashcolor;
-    }
+    if (result.a == 0.0) {
+        frag_color = result;
 
-    for (int i = 0; i < 16; i++) {
-        if (roomshade(uRoomLights[i], outPosition)) {
-            col = result.rgb;
+    } else {
+        float a = 1.0;
+        
+        for (int i = 0; i < 3; i++) {
+            float flashcolor = flashshade(uPlayers[i], outPosition);
+            if (flashcolor > 0.0) {
+                a = max((a - flashcolor),0.0);
+            }
+            
         }
-    }
 
-    frag_color = vec4(col, result.a);
+        for (int i = 0; i < 16; i++) {
+            float roomcolor = roomshade(uRoomLights[i], outPosition);
+            if (roomcolor > 0.0) {
+                a = max((a - roomcolor),0.0);
+            }
+        }
+
+        frag_color = vec4(result.rgb, a);
+    }
 
 }
 )"

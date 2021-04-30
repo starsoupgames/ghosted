@@ -33,6 +33,7 @@ protected:
     // VIEW
     /** Root node */
     shared_ptr<scene2::OrderedNode> _root;
+    shared_ptr<scene2::OrderedNode> _topRoot;
     shared_ptr<scene2::OrderedNode> _dimRoot;
     shared_ptr<scene2::OrderedNode> _litRoot;
     shared_ptr<scene2::PolygonNode> _floorNode;

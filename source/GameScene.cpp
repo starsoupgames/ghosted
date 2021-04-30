@@ -83,12 +83,19 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
     _litRoot->doLayout();
     _root->addChild(_litRoot);
 
+    _topRoot = scene2::OrderedNode::allocWithOrder(scene2::OrderedNode::Order::ASCEND);
+    _topRoot->setContentSize(dimen);
+    _topRoot->doLayout();
+    _root->addChild(_topRoot);
+
     // Sets the textures of the room nodes and adds them to _root
     // Helper method that goes through all room objects, sets the textures of its nodes, and adds
     // them to root. This same helper will create the box2d objects for the room's walls,
     // obstacles, and batteryslot
     shared_ptr<Texture> floorTexture = _assets->get<Texture>("dim_floor_texture");
+    shared_ptr<Texture> litFloorTexture = _assets->get<Texture>("lit_floor_texture");
     shared_ptr<Texture> doorTexture =_assets->get<Texture>("dim_door_texture");
+    shared_ptr<Texture> litDoorTexture = _assets->get<Texture>("lit_door_texture");
     shared_ptr<Texture> trapTexture =_assets->get<Texture>("trap");
     shared_ptr<Texture> slotTexture =_assets->get<Texture>("slot");
     for (auto& room : _gameMap->getRooms()) {
@@ -101,6 +108,13 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
         _gameMap->addSlot(room->getSlot());
         _dimRoot->addChild(node);
         node->setPosition(room->getOrigin());
+
+        //scene graph for lit versions of entities, or entities only visible under light
+        shared_ptr<scene2::PolygonNode> litNode = scene2::PolygonNode::allocWithTexture(litFloorTexture);
+        litNode->addChild(scene2::PolygonNode::allocWithTexture(litDoorTexture));
+        litNode->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
+        _litRoot->addChild(litNode);
+        litNode->setPosition(room->getOrigin());
     }
 
     // Initialize ending messages
@@ -127,7 +141,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
     for (auto& s : { "doe", "seal", "tanuki" }) {
         auto palNode = scene2::AnimationNode::alloc(_assets->get<Texture>("pal_" + string(s) + "_texture"), 4, 24);
         palNode->setAnchor(Vec2::ANCHOR_CENTER);
-        _litRoot->addChild(palNode);
+        _topRoot->addChild(palNode);
 
         auto palShadowNode = scene2::PolygonNode::allocWithTexture(_assets->get<Texture>("pal_shadow_texture"));
         auto palSmokeNode = scene2::AnimationNode::alloc(_assets->get<Texture>("pal_smoke_texture"), 1, 19);
@@ -139,7 +153,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 
     auto ghostNode = scene2::AnimationNode::alloc(_assets->get<Texture>("ghost_texture"), 4, 24);
     ghostNode->setAnchor(Vec2::ANCHOR_CENTER);
-    _dimRoot->addChild(ghostNode);
+    _litRoot->addChild(ghostNode);
 
     auto ghostShadowNode = scene2::PolygonNode::allocWithTexture(_assets->get<Texture>("ghost_shadow_texture"));
 
@@ -369,6 +383,11 @@ void GameScene::draw(const std::shared_ptr<SpriteBatch>& batch, const std::share
         for (int j = i; j < (constants::MAX_PALS * 4); ++j) {
             palLights[j] = 0;
         }
+        batch->begin(_camera->getCombined());
+        batch->setBlendFunc(_srcFactor, _dstFactor);
+        batch->setBlendEquation(_blendEquation);
+        _litRoot->render(batch, _root->getNodeToWorldTransform(), _color);
+        batch->end();
 
         shaderBatch->begin(_camera->getCombined());
         GLint uPlayers = shaderBatch->getShader()->getUniformLocation("uPlayers");
@@ -387,15 +406,15 @@ void GameScene::draw(const std::shared_ptr<SpriteBatch>& batch, const std::share
         batch->begin(_camera->getCombined());
         batch->setBlendFunc(_srcFactor, _dstFactor);
         batch->setBlendEquation(_blendEquation);
-        _litRoot->render(batch, _root->getNodeToWorldTransform(), _color);
+        _topRoot->render(batch, _root->getNodeToWorldTransform(), _color);
         batch->end();
     }
     else {
         batch->begin(_camera->getCombined());
         batch->setBlendFunc(_srcFactor, _dstFactor);
         batch->setBlendEquation(_blendEquation);
-        _dimRoot->render(batch, _root->getNodeToWorldTransform(), _color);
         _litRoot->render(batch, _root->getNodeToWorldTransform(), _color);
+        _topRoot->render(batch, _root->getNodeToWorldTransform(), _color);
         batch->end();
     }
 }
