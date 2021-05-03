@@ -7,8 +7,7 @@ void Ghost::setNode(const std::shared_ptr<scene2::AnimationNode>& node, const st
     _shadow = shadow;
     _spooking = false;
     if (_shadow != nullptr) {
-        _shadow->setPosition(_shadow->getPosition() + constants::GHOST_SHADOW_OFFSET);
-        _shadow->setAnchor(Vec2::ANCHOR_BOTTOM_CENTER);
+        _shadow->setPosition(Vec2(node->getWidth() / 2, 0));
         node->addChildWithName(shadow, "shadow");
     }
     Player::setNode(node);

@@ -45,6 +45,7 @@ void Player::setNode(const std::shared_ptr<scene2::AnimationNode>& value) {
         _timer = 0;
         _idle = true;
         _node->setFrame(IMG_FRONT);
+        _node->setAnchor(Vec2::ANCHOR_BOTTOM_CENTER);
     }
 }
 

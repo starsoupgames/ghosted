@@ -140,7 +140,6 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 
     for (auto& s : { "doe", "seal", "tanuki" }) {
         auto palNode = scene2::AnimationNode::alloc(_assets->get<Texture>("pal_" + string(s) + "_texture"), 4, 24);
-        palNode->setAnchor(Vec2::ANCHOR_CENTER);
         _topRoot->addChild(palNode);
 
         auto palShadowNode = scene2::PolygonNode::allocWithTexture(_assets->get<Texture>("pal_shadow_texture"));
@@ -152,7 +151,6 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
     }
 
     auto ghostNode = scene2::AnimationNode::alloc(_assets->get<Texture>("ghost_texture"), 4, 24);
-    ghostNode->setAnchor(Vec2::ANCHOR_CENTER);
     _litRoot->addChild(ghostNode);
 
     auto ghostShadowNode = scene2::PolygonNode::allocWithTexture(_assets->get<Texture>("ghost_shadow_texture"));
@@ -343,7 +341,7 @@ void GameScene::updateVision(const std::shared_ptr<Player>& player) {
     if (angle < 0) angle += 2 * M_PI;
 
     _visionNode->setAngle(angle);
-    _visionNode->setPosition(player->getLoc() + constants::FLASHLIGHT_OFFSET);
+    _visionNode->setPosition(player->getLoc());
 }
 
 void GameScene::draw(const std::shared_ptr<SpriteBatch>& batch, const std::shared_ptr<SpriteBatch>& shaderBatch) {
@@ -365,8 +363,8 @@ void GameScene::draw(const std::shared_ptr<SpriteBatch>& batch, const std::share
         i = 0;
         for (auto& player : _players) {
             if (player != nullptr && player->getType() == Player::Type::Pal) {
-                palLights[i] = _root->getPosition().x + player->getLoc().x + constants::FLASHLIGHT_OFFSET.x;
-                palLights[i + 1] = _root->getPosition().y + player->getLoc().y + constants::FLASHLIGHT_OFFSET.y;
+                palLights[i] = _root->getPosition().x + player->getLoc().x;
+                palLights[i + 1] = _root->getPosition().y + player->getLoc().y;
                 palLights[i + 2] = 1; // set to 1 if pal is active, 0 if not
 
                 // because vision cone is broken

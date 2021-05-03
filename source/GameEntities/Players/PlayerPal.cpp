@@ -7,13 +7,11 @@ void Pal::setNode(const std::shared_ptr<scene2::AnimationNode>& node, const std:
     _shadow = shadow;
     _smokeNode = smoke;
     if (_shadow != nullptr) {
-        _shadow->setPosition(_shadow->getPosition() + constants::PAL_SHADOW_OFFSET);
-        _shadow->setAnchor(Vec2::ANCHOR_BOTTOM_CENTER);
+        _shadow->setPosition(Vec2(node->getWidth() / 2, 0));
         node->addChildWithName(shadow, "shadow");
     }
     if (_smokeNode != nullptr) {
         _smokeNode->setPosition(_smokeNode->getPosition() + constants::PAL_SMOKE_OFFSET);
-        _smokeNode->setAnchor(Vec2::ANCHOR_BOTTOM_CENTER);
         _smokeNode->setFrame(0);
         _smokeNode->setVisible(false);
         node->addChildWithName(smoke, "smoke");
