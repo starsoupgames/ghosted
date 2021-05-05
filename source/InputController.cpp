@@ -155,14 +155,21 @@ void InputController::update(float dt) {
         _direction.y -= 1.0f;
     }
     
-#endif
     //INTERACTIONS (BATTERIES/TRAPS)
     _interact = false;
     if (_keyInteract && _spaceReleased) {
         _interact = true;
         _spaceReleased = false;
         _keyInteract = false;
-    } 
+    }
+#else
+    //INTERACTIONS (BATTERIES/TRAPS)
+    _interact = false;
+    if (_keyInteract) {
+        _interact = true;
+        _keyInteract = false;
+    }
+#endif
 }
 
 #pragma mark -
@@ -236,23 +243,31 @@ void InputController::readLeft(const cugl::Vec2 pos) {
     Vec2 diff =  _ltouch.position-pos;
 
     // Reset the anchor if we drifted too far
-    if (diff.lengthSquared() > JSTICK_RADIUS*JSTICK_RADIUS) {
-        diff.normalize();
-        diff *= (JSTICK_RADIUS+JSTICK_DEADZONE)/2;
-        _ltouch.position = pos+diff;
-    }
-//    _ltouch.position.y = pos.y;
-//    _ljoycenter = this->touch2Screen(_ltouch.position);
-//    _ljoycenter.y += JSTICK_OFFSET;
+//    if (diff.lengthSquared() > JSTICK_RADIUS*JSTICK_RADIUS) {
+//        diff.normalize();
+//        diff *= (JSTICK_RADIUS+JSTICK_DEADZONE)/2;
+//        _ltouch.position = pos+diff;
+//    }
+
+    _ljoycenter = this->touch2Screen(_ltouch.position);
+    _ljoycenter.y += JSTICK_OFFSET;
     
     if (std::fabsf(diff.y) > JSTICK_DEADZONE/3 || std::fabsf(diff.x) > JSTICK_DEADZONE) {
         _ljoystick = true;
         
         // return as movement vector (x,y) normalize in move in PLAYER
-        _movement = Vec2(pos.x-_ltouch.position.x, _ltouch.position.y-pos.y);
+        if (_movement != Vec2::ZERO) {
+            if (std::fabsf(diff.length()) > 25) {
+                _movement = Vec2(pos.x-_ltouch.position.x, _ltouch.position.y-pos.y);
+            }
+        } else {
+            _movement = Vec2(pos.x-_ltouch.position.x, _ltouch.position.y-pos.y);
+        }
+        
     } else {
         _ljoystick = false;
         _movement = Vec2::ZERO;
+        _ltouch.position = pos;
     }
 }
 
@@ -275,11 +290,11 @@ void InputController::readRight(const Vec2 start, const Vec2 stop, Timestamp cur
         diff *= (JSTICK_RADIUS+JSTICK_DEADZONE)/2;
         _rtouch.position = stop+diff;
     }
-//    _rtouch.position = stop;
-//    _rjoycenter = this->touch2Screen(_rtouch.position);
-//    _rjoycenter.y += JSTICK_OFFSET;
+    _rtouch.position = stop;
+    _rjoycenter = this->touch2Screen(_rtouch.position);
+    _rjoycenter.y += JSTICK_OFFSET;
     
-    if (std::fabsf(diff.y) > JSTICK_DEADZONE/3 || std::fabsf(diff.x) > JSTICK_DEADZONE) {
+    if (std::fabsf(diff.y) > JSTICK_DEADZONE || std::fabsf(diff.x) > JSTICK_DEADZONE) {
         _rjoystick = true;
         
         // return as direction vector (x,y) normalize in setDir in PLAYER

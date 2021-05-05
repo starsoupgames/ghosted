@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A4081DD52641EE5600A3E59C /* fonts in Resources */ = {isa = PBXBuildFile; fileRef = A4081DD42641EE5500A3E59C /* fonts */; };
+		A4081DD62641EE5600A3E59C /* fonts in Resources */ = {isa = PBXBuildFile; fileRef = A4081DD42641EE5500A3E59C /* fonts */; };
+		A4081DD72641EE5600A3E59C /* fonts in Resources */ = {isa = PBXBuildFile; fileRef = A4081DD42641EE5500A3E59C /* fonts */; };
 		A468737A260BF2F500F0E184 /* Player.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4687370260BF2F300F0E184 /* Player.cpp */; };
 		A468737B260BF2F500F0E184 /* Player.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4687370260BF2F300F0E184 /* Player.cpp */; };
 		A468737C260BF2F500F0E184 /* Player.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4687370260BF2F300F0E184 /* Player.cpp */; };
@@ -34,9 +37,6 @@
 		A46873AD260BF3CF00F0E184 /* NetworkController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A46873AC260BF3CF00F0E184 /* NetworkController.cpp */; };
 		A46873AE260BF3CF00F0E184 /* NetworkController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A46873AC260BF3CF00F0E184 /* NetworkController.cpp */; };
 		A46873AF260BF3CF00F0E184 /* NetworkController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A46873AC260BF3CF00F0E184 /* NetworkController.cpp */; };
-		A468B75A260A763E00F0E184 /* fonts in Resources */ = {isa = PBXBuildFile; fileRef = A468B759260A763E00F0E184 /* fonts */; };
-		A468B75B260A763E00F0E184 /* fonts in Resources */ = {isa = PBXBuildFile; fileRef = A468B759260A763E00F0E184 /* fonts */; };
-		A468B75C260A763E00F0E184 /* fonts in Resources */ = {isa = PBXBuildFile; fileRef = A468B759260A763E00F0E184 /* fonts */; };
 		A4810ACA2630C07500EBF151 /* WinScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4810AC92630C07500EBF151 /* WinScene.cpp */; };
 		A4810ACB2630C07500EBF151 /* WinScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4810AC92630C07500EBF151 /* WinScene.cpp */; };
 		A4810ACC2630C07500EBF151 /* WinScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4810AC92630C07500EBF151 /* WinScene.cpp */; };
@@ -180,6 +180,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		A4081DD42641EE5500A3E59C /* fonts */ = {isa = PBXFileReference; lastKnownFileType = folder; path = fonts; sourceTree = "<group>"; };
 		A4687370260BF2F300F0E184 /* Player.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Player.cpp; sourceTree = "<group>"; };
 		A4687371260BF2F300F0E184 /* Player.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Player.h; sourceTree = "<group>"; };
 		A4687372260BF2F400F0E184 /* BatteryCollectible.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BatteryCollectible.h; sourceTree = "<group>"; };
@@ -198,7 +199,6 @@
 		A4687391260BF31900F0E184 /* Obstacle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Obstacle.h; sourceTree = "<group>"; };
 		A4687392260BF31900F0E184 /* Trap.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Trap.cpp; sourceTree = "<group>"; };
 		A46873AC260BF3CF00F0E184 /* NetworkController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NetworkController.cpp; sourceTree = "<group>"; };
-		A468B759260A763E00F0E184 /* fonts */ = {isa = PBXFileReference; lastKnownFileType = folder; path = fonts; sourceTree = "<group>"; };
 		A4810AC22630BDA300EBF151 /* WinScene.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WinScene.h; sourceTree = "<group>"; };
 		A4810AC92630C07500EBF151 /* WinScene.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = WinScene.cpp; sourceTree = "<group>"; };
 		A4B30870261A47CF00563226 /* RoomEntity.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RoomEntity.cpp; sourceTree = "<group>"; };
@@ -246,7 +246,7 @@
 		EB2BE9CB1D749937002FE78B /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		EB2BE9CD1D749953002FE78B /* ForceFeedback.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ForceFeedback.framework; path = System/Library/Frameworks/ForceFeedback.framework; sourceTree = SDKROOT; };
 		EB2BE9CE1D749953002FE78B /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
-		EB74548C1D74D75C002FBAE6 /* Ghosted.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = Ghosted.app; path = "Ghosted (iOS).app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		EB74548C1D74D75C002FBAE6 /* Ghosted (iOS).app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Ghosted (iOS).app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		EB7454A61D74D846002FBAE6 /* iOS-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "iOS-Info.plist"; sourceTree = "<group>"; };
 		EB7454A71D74D846002FBAE6 /* iOS.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = iOS.xcassets; sourceTree = "<group>"; };
 		EB7454A81D74D846002FBAE6 /* Landscape.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Landscape.storyboard; sourceTree = "<group>"; };
@@ -400,8 +400,8 @@
 		EB2BE9B71D749870002FE78B /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				A4081DD42641EE5500A3E59C /* fonts */,
 				A4B948B6263737880099F29B /* shaders */,
-				A468B759260A763E00F0E184 /* fonts */,
 				EBFE7C041E19B496001007C2 /* json */,
 				EB2BE9BA1D7498D2002FE78B /* textures */,
 			);
@@ -477,7 +477,7 @@
 			isa = PBXGroup;
 			children = (
 				EBBF18911D74904A008E2001 /* Ghosted (Mac).app */,
-				EB74548C1D74D75C002FBAE6 /* Ghosted.app */,
+				EB74548C1D74D75C002FBAE6 /* Ghosted (iOS).app */,
 				EB22BF5E25D0E8BC002ACE41 /* Ghosted (Sim).app */,
 			);
 			name = Products;
@@ -580,7 +580,7 @@
 			);
 			name = "Ghosted (iOS)";
 			productName = "CUGL Demo (iOS)";
-			productReference = EB74548C1D74D75C002FBAE6 /* Ghosted.app */;
+			productReference = EB74548C1D74D75C002FBAE6 /* Ghosted (iOS).app */;
 			productType = "com.apple.product-type.application";
 		};
 		EBBF18901D74904A008E2001 /* Ghosted (Mac) */ = {
@@ -680,10 +680,10 @@
 				A4B948B9263737880099F29B /* shaders in Resources */,
 				EB22BF9625D0EA50002ACE41 /* json in Resources */,
 				EB22BF9725D0EA51002ACE41 /* textures in Resources */,
-				A468B75C260A763E00F0E184 /* fonts in Resources */,
 				EB22BF9025D0EA49002ACE41 /* iOS.xcassets in Resources */,
 				EB22BF9125D0EA49002ACE41 /* Landscape.storyboard in Resources */,
 				EB22BF9225D0EA49002ACE41 /* Portrait.storyboard in Resources */,
+				A4081DD72641EE5600A3E59C /* fonts in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -695,10 +695,10 @@
 				A4B948B8263737880099F29B /* shaders in Resources */,
 				EB7454AB1D74D846002FBAE6 /* iOS.xcassets in Resources */,
 				EB7454AC1D74D846002FBAE6 /* Landscape.storyboard in Resources */,
-				A468B75B260A763E00F0E184 /* fonts in Resources */,
 				EBFE7C051E19B496001007C2 /* json in Resources */,
 				EB7454AD1D74D846002FBAE6 /* Portrait.storyboard in Resources */,
 				EB07CFB621EFF3F8000CB3A3 /* DeviceMargins.plist in Resources */,
+				A4081DD62641EE5600A3E59C /* fonts in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -707,10 +707,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				EBFE7C091E19B4AC001007C2 /* json in Resources */,
+				A4081DD52641EE5600A3E59C /* fonts in Resources */,
 				EB2BE9BB1D7498D2002FE78B /* textures in Resources */,
 				EBBF189B1D74904A008E2001 /* Mac.xcassets in Resources */,
 				A4B948B7263737880099F29B /* shaders in Resources */,
-				A468B75A260A763E00F0E184 /* fonts in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -891,6 +891,7 @@
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = 4SA9JDC229;
 				ENABLE_BITCODE = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -900,7 +901,7 @@
 					"@executable_path/Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
-				MARKETING_VERSION = 0.1.0;
+				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = edu.cornell.gdiac.ios.GhostedBeta;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
@@ -918,6 +919,7 @@
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = 4SA9JDC229;
 				ENABLE_BITCODE = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -927,7 +929,7 @@
 					"@executable_path/Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
-				MARKETING_VERSION = 0.1.0;
+				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = edu.cornell.gdiac.ios.GhostedBeta;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
