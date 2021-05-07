@@ -71,9 +71,6 @@ public:
     /** Processes the direction for the animation */
     virtual void processDirection() override;
 
-    /** Places a battery in the nearby slot */
-    void placeBattery();
-
     /** Increments/decrements the battery counter */
     void addBattery(int num) {
         _batteries += num;

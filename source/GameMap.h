@@ -8,6 +8,7 @@
 #include "GameEntities/Players/PlayerPal.h"
 #include "GameEntities/Players/PlayerGhost.h"
 #include "GameEntities/BatteryCollectible.h"
+#include "GameEntities/Trap.h"
 
 using namespace std;
 using namespace cugl;
@@ -15,6 +16,9 @@ using namespace cugl;
 /** Class modeling a game map. */
 class GameMap {
 private:
+    shared_ptr<AssetManager> _assets;
+
+    shared_ptr<scene2::OrderedNode> _node;
     
     /** All the rooms in the map */
     vector<shared_ptr<GameRoom>> _rooms;
@@ -41,14 +45,24 @@ public:
     /**
      * Disposes of all (non-static) resources allocated to this mode.
      */
-    virtual void dispose();
+    virtual void dispose() {
+        _assets = nullptr;
+        _node = nullptr;
+        _player = nullptr;
+        _rooms.clear();
+        _traps.clear();
+        _slots.clear();
+    };
     
     /**
      * Allocates this model
      */
-    static shared_ptr<GameMap> alloc() {
+    static shared_ptr<GameMap> alloc(shared_ptr<AssetManager>& assets, shared_ptr<scene2::OrderedNode>& node) {
         shared_ptr<GameMap> result = make_shared<GameMap>();
-        return (result->init() ? result : nullptr);
+        if (!result->init()) return nullptr;
+        result->_assets = assets;
+        result->_node = node;
+        return result;
     }
 #pragma mark -
 #pragma mark State Access
@@ -77,7 +91,23 @@ public:
     void addSlot(shared_ptr<BatterySlot> slot) { _slots.push_back(slot); }
     
     /** Adds a trap to _traps, delete after traps properly implemented */
-    void addTrap(shared_ptr<Trap> trap) { _traps.push_back(trap); }
+    void addTrap(Vec2 pos) {
+        auto trap = Trap::alloc(_player->getLoc());
+        trap->setArmed();
+        auto trapNode = scene2::AnimationNode::alloc(_assets->get<Texture>("trap"), 1, 1, 1);
+        trapNode->setAnchor(Vec2::ANCHOR_CENTER);
+        trapNode->setScale(0.25f); // TEMP
+        _node->addChild(trapNode);
+
+        auto trapRadiusNode = scene2::AnimationNode::alloc(_assets->get<Texture>("trap_radius"), 1, 1, 1);
+        trapRadiusNode->setVisible(false);
+        trapRadiusNode->setScale(2);
+        trapRadiusNode->setPosition(Vec2(trapNode->getWidth(), trapNode->getHeight())*2); // 1/2 * 4 because of 0.25 scale
+        trapNode->addChildWithName(trapRadiusNode, "radius");
+
+        trap->setNode(trapNode);
+        _traps.push_back(trap); 
+    }
     
 #pragma mark -
 #pragma mark Gameplay Handling

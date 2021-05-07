@@ -5,6 +5,8 @@
 #include <cugl/cugl.h>
 #include "Constants.h"
 #include "GameEntities/Player.h"
+#include "GameEntities/Players/PlayerPal.h"
+#include "GameEntities/Players/PlayerGhost.h"
 
 /** The precision to multiply floating point numbers by */
 constexpr float FLOAT_PRECISION = 100.0f;

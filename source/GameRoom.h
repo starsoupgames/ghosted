@@ -3,7 +3,6 @@
 #ifndef __GAME_ROOM_H__
 #define __GAME_ROOM_H__
 #include <cugl/cugl.h>
-#include "RoomEntities/Trap.h"
 #include "RoomEntities/BatterySlot.h"
 
 using namespace cugl;
@@ -18,21 +17,19 @@ using namespace cugl;
  * GameScene needs to be able to get information from GameRoom in order
  * to create the Box2d objects.
  *
- * GameMap needs to be able to change the trap node's visibility, whether to
- * draw a filled in battery slot or empty,
+ * GameMap needs to be able to change whether to draw a filled in or empty battery slot
  */
 class GameRoom {
 private:
-    /** The node containing the nodes for the floor + wall, slot, trap, cable,
+    /** The node containing the nodes for the floor + wall, slot, cable,
      * and obstacles.
      */
     shared_ptr<scene2::PolygonNode> _node;
     
-    /** The nodes for the floor + wall, slot, trap, and cable */
+    /** The nodes for the floor + wall, slot, and cable */
     // These should only be alloc'd with position, as textures will be set in GameScene
     shared_ptr<scene2::PolygonNode> _roomNode;
     shared_ptr<BatterySlot> _slotModel;
-    shared_ptr<Trap> _trapModel;
     shared_ptr<scene2::PolygonNode> _cableNode;
     
     /** The origin of the room. Distance from (0,0) of the map to room's bottom left corner */
@@ -57,7 +54,7 @@ public:
     
     bool init(const Vec2& origin);
     
-    void initContents(shared_ptr<Texture> trap, shared_ptr<Texture> slot, Size size);
+    void initContents(shared_ptr<Texture> slot, Size size);
     
     static shared_ptr<GameRoom> alloc() {
         shared_ptr<GameRoom> result = make_shared<GameRoom>();
@@ -84,8 +81,6 @@ public:
     
     // Gets the list of doors
     vector<bool> getDoors() { return _doors; };
-    
-    shared_ptr<Trap> getTrap() { return _trapModel; };
     
     shared_ptr<BatterySlot> getSlot() { return _slotModel; };
     

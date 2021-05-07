@@ -23,7 +23,7 @@ vector<vector<uint8_t>> split(const vector<uint8_t>& bytes, const vector<uint8_t
     uint8_t index = 0;
     for (auto& size : sizes) {
         if (bytes.size() < index + size) {
-            CULogError("Byte vector is too small.");
+            CULogError("Byte vector is too small. Byte vector size: %d", bytes.size());
             return result;
         }
     }
@@ -124,8 +124,8 @@ vector<uint8_t> NetworkData::convertLobbyData() {
 
     if (_id == _hostID) {
         if (_lobbyData == nullptr) {
-            vector<int> playerOrder({ 0, 1, 2, 3 });
-            shuffle(playerOrder.begin(), playerOrder.end(), random_device());
+            vector<int> playerOrder({ 3, 0, 1, 2 });
+            // shuffle(playerOrder.begin(), playerOrder.end(), random_device());
             _lobbyData = make_shared<LobbyData>(playerOrder);
         }
 
@@ -145,7 +145,6 @@ void NetworkData::interpretLobbyData(const int id, const vector<uint8_t>& msg) {
         vector<int> playerOrder(4);
         for (int i = 0; i < 4; ++i) {
             playerOrder[i] = decodeInt(splitPlayerOrder[i]);
-            // CULog("%d", playerOrder[i]);
         }
         _lobbyData = make_shared<LobbyData>(playerOrder);
     }
@@ -165,33 +164,68 @@ vector<uint8_t> NetworkData::convertPlayerData() {
         return result;
     }
 
+    auto player = playerData->player;
+
     // player location
-    encodeVector(playerData->player->getLoc(), result);
+    encodeVector(player->getLoc(), result);
 
     // player direction
-    encodeVector(playerData->player->getDir(), result);
+    encodeVector(player->getDir(), result);
+
+    if (_id == _hostID) {
+        for (auto& p : _players) {
+            player = p->player;
+
+            // player spooked / tagged
+            if (player->getType() == constants::PlayerType::Pal) {
+                encodeBool(dynamic_pointer_cast<Pal>(player)->getSpooked(), result);
+            }
+            else {
+                encodeBool(dynamic_pointer_cast<Ghost>(player)->getTagged(), result);
+            }
+        }
+    }
 
     return result;
 }
 
 void NetworkData::interpretPlayerData(const int id, const vector<uint8_t>& playerData) {
-    shared_ptr<PlayerData> otherPlayer = getPlayer(id);
+    shared_ptr<PlayerData> otherPlayerData = getPlayer(id);
+
+    if (otherPlayerData == nullptr || otherPlayerData->player == nullptr) {
+        CULog("Other player is null.");
+        return;
+    }
 
     vector<vector<uint8_t>> splitPlayerData = split(playerData, { 8, 8 });
     if (splitPlayerData.empty()) return;
     Vec2 location = decodeVector(splitPlayerData[0]);
     Vec2 direction = decodeVector(splitPlayerData[1]);
 
-    if (otherPlayer == nullptr || otherPlayer->player == nullptr) {
-        CULog("Other player is null.");
-        return;
-    }
+    auto otherPlayer = otherPlayerData->player;
 
-    otherPlayer->player->setDir(direction);
-    otherPlayer->interpolationData->ticksSinceReceived = 0;
-    otherPlayer->interpolationData->oldPosition = otherPlayer->player->getLoc();
-    otherPlayer->interpolationData->newPosition = location;
-    otherPlayer->player->setIdle((location - otherPlayer->player->getLoc()).length() < 1.f);
+    otherPlayer->setDir(direction);
+    otherPlayerData->interpolationData->ticksSinceReceived = 0;
+    otherPlayerData->interpolationData->oldPosition = otherPlayer->getLoc();
+    otherPlayerData->interpolationData->newPosition = location;
+    otherPlayer->setIdle((location - otherPlayer->getLoc()).length() < 1.f);
+
+    if (id == _hostID) {
+        splitPlayerData = split(splitPlayerData[2], { 1, 1, 1, 1 });
+        for (unsigned i = 0; i < _players.size(); i++) {
+            auto p = _players[i];
+            otherPlayer = p->player;
+
+            // player spooked / tagged
+            bool spookedTagged = decodeBool(splitPlayerData[i]);
+            if (otherPlayer->getType() == constants::PlayerType::Pal) {
+                dynamic_pointer_cast<Pal>(otherPlayer)->setSpooked(spookedTagged);
+            }
+            else {
+                dynamic_pointer_cast<Ghost>(otherPlayer)->setTagged(spookedTagged);
+            }
+        }
+    }
 }
 
 vector<uint8_t> NetworkData::convertMapData() {
@@ -261,7 +295,7 @@ vector<uint8_t> NetworkData::serializeData() {
         break;
     }
     case constants::MatchStatus::InProgress: {
-        vector<uint8_t> playerData = convertPlayerData(); // 16
+        vector<uint8_t> playerData = convertPlayerData(); // 16 or 20
         result.insert(result.end(), playerData.begin(), playerData.end());
 
         vector<uint8_t> mapData = convertMapData(); // 0
@@ -300,10 +334,15 @@ void NetworkData::unserializeData(const vector<uint8_t>& msg) {
     }
     case constants::MatchStatus::InProgress: {
         if (splitMsg.size() <= 1) break;
-        splitMsg = split(msg, { 5, 16, 0 });
+        if (metadata->id == _hostID) {
+            splitMsg = split(splitMsg[1], { 20, 0 });
+        }
+        else {
+            splitMsg = split(splitMsg[1], { 16, 0 });
+        }
         if (splitMsg.empty()) break;
-        interpretPlayerData(metadata->id, splitMsg[1]);
-        interpretMapData(splitMsg[2]);
+        interpretPlayerData(metadata->id, splitMsg[0]);
+        interpretMapData(splitMsg[1]);
         break;
     }
     case constants::MatchStatus::Paused:

@@ -81,9 +81,6 @@
     <ClInclude Include="..\..\source\NetworkData.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\source\RoomEntities\Trap.h">
-      <Filter>Header Files\RoomEntities</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\source\GameEntities\Player.h">
       <Filter>Header Files\GameEntities</Filter>
     </ClInclude>
@@ -119,6 +116,9 @@
     </ClInclude>
     <ClInclude Include="..\..\source\WinScene.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\GameEntities\Trap.h">
+      <Filter>Header Files\GameEntities</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -167,9 +167,6 @@
     <ClCompile Include="..\..\source\NetworkData.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\source\RoomEntities\Trap.cpp">
-      <Filter>Source Files\RoomEntities</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\source\GameEntities\Player.cpp">
       <Filter>Source Files\GameEntities</Filter>
     </ClCompile>
@@ -199,6 +196,9 @@
     </ClCompile>
     <ClCompile Include="..\..\source\WinScene.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\GameEntities\Trap.cpp">
+      <Filter>Source Files\GameEntities</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

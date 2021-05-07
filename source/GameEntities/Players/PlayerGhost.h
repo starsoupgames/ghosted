@@ -95,9 +95,6 @@ public:
         return (result->init(pos) ? result : nullptr);
     };
 
-    /** Triggers the nearest trap */
-    void trigger();
-
     /** Get player type */
     virtual constants::PlayerType getType() override {
         return constants::PlayerType::Ghost;

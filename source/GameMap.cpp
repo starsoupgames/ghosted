@@ -3,31 +3,39 @@
 #define CONE_WIDTH 75
 #define CONE_LENGTH 200
 #define ROOM_SIZE 960
+#define TRAP_RADIUS 500
 
 #pragma mark Constructors
 bool GameMap::init() {
     return true;
 }
 
-/**
- * Disposes of all(non - static) resources allocated
- */
-void GameMap::dispose() {
-    _player = nullptr;
-
-    _rooms.clear();
-    _players.clear();
-    _traps.clear();
-    _slots.clear();
-}
-
 #pragma mark Gameplay Handling
 
 /** Method to update the GameMap model, called by GameScene */
 void GameMap::update(float timestep) {
-    shared_ptr<Trap> trap = nullptr;
-
-    for (shared_ptr s : _slots) {
+    vector<shared_ptr<Trap>> newTraps;
+    for (auto& t : _traps) {
+        t->update(timestep);
+        if (t->justTriggered()) {
+            for (auto& p : _players) {
+                if (p->getType() == constants::PlayerType::Pal) {
+                    if ((t->getLoc() - p->getLoc()).length() < TRAP_RADIUS) {
+                        auto pal = dynamic_pointer_cast<Pal>(p);
+                        if (!pal->getSpooked()) {
+                            pal->setSpooked(true);
+                        }
+                    }
+                }
+            }
+        }
+        if (!t->doneTriggering()) {
+            newTraps.push_back(t);
+        }
+    }
+    _traps.clear();
+    _traps = newTraps;
+    for (auto& s : _slots) {
         s->update(timestep);
     }
     _player->update(timestep);
@@ -91,23 +99,30 @@ void GameMap::handleInteract() {
         }
     }
     else if (_player->getType() == constants::PlayerType::Ghost) {
-        // CODE FOR WHEN TRAPS FULLY IMPLEMENTED
         shared_ptr<Trap> trap = nullptr;
         
-        for (auto room = _rooms.begin(); room != _rooms.end(); ++room) {
-            Vec2 trapPos = (*room)->getOrigin() + (*room)->getTrap()->getNode()->getPosition();
-            Vec2 distance = trapPos - _player->getLoc();
-            if (distance.length() < range) {
-                trap = (*room)->getTrap();
+        float minDistance = numeric_limits<float>::infinity();
+        for (auto& t : _traps) {
+            if (!t->getTriggered()) {
+                Vec2 distance = t->getLoc() - _player->getLoc();
+                if (distance.length() < minDistance) {
+                    trap = t;
+                    minDistance = distance.length();
+                }
             }
         }
-        if (trap != nullptr) {
-            if (!trap->getTriggered()) {
-                trap->setTriggered(true);
-                trap->getNode()->setColor(Color4f::RED);
-                trap->getNode()->setVisible(true);
+        if (trap == nullptr) {
+            addTrap(_player->getLoc());
+        }
+        else {
+            if (minDistance < TRAP_RADIUS) {
+                trap->setTriggered();
+            }
+            else {
+                addTrap(_player->getLoc());
             }
         }
+
     }
 }
 

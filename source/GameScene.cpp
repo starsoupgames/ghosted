@@ -63,8 +63,6 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
     _scale = dimen.width == SCENE_WIDTH ? dimen.width / rect.size.width : dimen.height / rect.size.height;
     Vec2 offset((dimen.width - SCENE_WIDTH) / 2.0f, (dimen.height - SCENE_HEIGHT) / 2.0f);
     */
-    _gameMap = GameMap::alloc();
-    _gameMap->generateRandomMap();
 
     _root = scene2::OrderedNode::allocWithOrder(scene2::OrderedNode::Order::ASCEND);
     //_root->addChild(_assets->get<scene2::SceneNode>("game"));
@@ -88,6 +86,9 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
     _topRoot->doLayout();
     _root->addChild(_topRoot);
 
+    _gameMap = GameMap::alloc(_assets, _litRoot);
+    _gameMap->generateRandomMap();
+
     // Sets the textures of the room nodes and adds them to _root
     // Helper method that goes through all room objects, sets the textures of its nodes, and adds
     // them to root. This same helper will create the box2d objects for the room's walls,
@@ -96,15 +97,13 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
     shared_ptr<Texture> litFloorTexture = _assets->get<Texture>("lit_floor_texture");
     shared_ptr<Texture> doorTexture =_assets->get<Texture>("dim_door_texture");
     shared_ptr<Texture> litDoorTexture = _assets->get<Texture>("lit_door_texture");
-    shared_ptr<Texture> trapTexture =_assets->get<Texture>("trap");
     shared_ptr<Texture> slotTexture =_assets->get<Texture>("slot");
     for (auto& room : _gameMap->getRooms()) {
         shared_ptr<scene2::PolygonNode> node = scene2::PolygonNode::allocWithTexture(floorTexture);
         node->addChild(scene2::PolygonNode::allocWithTexture(doorTexture));
         node->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
         room->setNode(node);
-        room->initContents(trapTexture, slotTexture, _root->getContentSize());
-        _gameMap->addTrap(room->getTrap());
+        room->initContents(slotTexture, _root->getContentSize());
         _gameMap->addSlot(room->getSlot());
         _dimRoot->addChild(node);
         node->setPosition(room->getOrigin());
@@ -164,6 +163,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
     _players = _network->getData()->getPlayers();
 
     _gameMap->setPlayer(_network->getData()->getPlayer()->player);
+    _gameMap->setPlayers(_network->getData()->getPlayers());
     
     vector<Vec2> coneShape;
     Vec2 tl(-CONE_WIDTH, CONE_LENGTH);
@@ -305,13 +305,7 @@ void GameScene::update(float timestep) {
     }
     else {
         if (_input->getInteraction()) {
-            if (_gameMap->getTraps().size() != 0) {
-                bool ifTrapped = "the below comment";
-                // use collisioncontroller to check if pal is on trap
-                if (ifTrapped) {
-                    _gameMap->handleInteract();
-                }
-            }
+            _gameMap->handleInteract();
         }
     }
 
@@ -357,6 +351,16 @@ void GameScene::update(float timestep) {
             _network->getData()->setWinner(p->getType());
             break;
         }
+    }
+    // Ghost wins
+    bool allPalsSpooked = true;
+    for (auto& p : _players) {
+        if (p->getType() == constants::PlayerType::Pal) {
+            allPalsSpooked = allPalsSpooked && dynamic_pointer_cast<Pal>(p)->getSpooked();
+        }
+    }
+    if (allPalsSpooked) {
+        _network->getData()->setWinner(constants::PlayerType::Ghost);
     }
 
     if (_network->getData()->getWinner() != constants::PlayerType::Undefined) {

@@ -14,21 +14,13 @@ bool GameRoom::init(const Vec2& origin) {
     return true;
 }
 
-void GameRoom::initContents(shared_ptr<Texture> trap, shared_ptr<Texture> slot, Size size) {
+void GameRoom::initContents(shared_ptr<Texture> slot, Size size) {
     Vec2 center = Vec2(ROOM_DIMENSION/2, ROOM_DIMENSION/2);
     _slotModel = BatterySlot::alloc(_origin);
     _slotModel->setTextures(slot, size/2);
     _slotModel->getNode()->setScale(0.05f);
     _slotModel->getNode()->setPosition(center);
     _node->addChild(_slotModel->getNode());
-    
-    _trapModel = Trap::alloc(_origin);
-    _trapModel->setTextures(trap, size);
-    _trapModel->getNode()->setScale(0.25f);
-    _trapModel->getNode()->setPosition(center);
-    _trapModel->getNode()->setVisible(false);
-    _node->addChild(_trapModel->getNode());
-    _trapModel->setArmed(true);
 }
 
 bool GameRoom::assertValidRoom() {

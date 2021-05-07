@@ -86,12 +86,14 @@ public:
             _velocity -= _velocity.normalize() * DRAG;
         }
 
-        // add acceleration
-        _velocity += move.normalize() * ACCELERATION;
+        if (!move.isNearZero()) {
+            // add acceleration
+            _velocity += move.normalize() * ACCELERATION;
 
-        // clamp to speed
-        if (_velocity.length() > _speed) {
-            _velocity = _velocity.normalize() * _speed; // clamp to speed
+            // clamp to speed
+            if (!_velocity.isNearZero() && _velocity.length() > _speed) {
+                _velocity = _velocity.normalize() * _speed; // clamp to speed
+            }
         }
 
         // set idle

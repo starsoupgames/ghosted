@@ -27,6 +27,9 @@
         "trap": {
             "file": "textures/play.png"
         },
+        "trap_radius": {
+            "file": "textures/player/trap_radius.png"
+        },
         "slot": {
             "file": "textures/logo.png"
         },

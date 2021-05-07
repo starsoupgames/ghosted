@@ -98,7 +98,7 @@ public:
 	 *
 	 * @return a reference to film strip representing this pal.
 	 */
-	std::shared_ptr<cugl::scene2::AnimationNode>& getSprite() { return _animationNode; }
+	std::shared_ptr<cugl::scene2::AnimationNode>& getNode() { return _animationNode; }
 
 	/**
 	 * Sets the film strip representing this pal.
@@ -117,11 +117,11 @@ public:
 	 *
 	 * @param timestep  Time elapsed since last called.
 	 */
-	void    update(float timestep = 0.0f);
+	void update(float timestep = 0.0f);
 
 	/**
 	 * Resets the pal back to its original settings
 	 */
-	void    reset();
+	void reset();
 };
 

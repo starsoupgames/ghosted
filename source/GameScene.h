@@ -13,7 +13,6 @@
 #include "CollisionController.h"
 #include "NetworkController.h"
 #include "NetworkData.h"
-#include "RoomEntities/Trap.h"
 #include "RoomEntities/BatterySlot.h"
 
 

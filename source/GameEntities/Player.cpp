@@ -40,7 +40,7 @@ void Player::setNode(const std::shared_ptr<scene2::AnimationNode>& value, const 
  */
 void Player::setNode(const std::shared_ptr<scene2::AnimationNode>& value) {
     GameEntity::setNode(value);
-    _node = GameEntity::getSprite();
+    _node = GameEntity::getNode();
     if (_node != nullptr) {
         _timer = 0;
         _idle = true;
