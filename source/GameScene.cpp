@@ -73,7 +73,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
     addChild(_root);
 
     _dimRoot = scene2::OrderedNode::allocWithOrder(scene2::OrderedNode::Order::ASCEND);
-    _dimRoot->addChild(_assets->get<scene2::SceneNode>("game"));
+//    _dimRoot->addChild(_assets->get<scene2::SceneNode>("game"));
     _dimRoot->setContentSize(dimen);
     _dimRoot->doLayout();
     _root->addChild(_dimRoot);
@@ -184,6 +184,24 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
     
     _root->addChild(_visionNode);
     
+    // Joystick UI
+    _leftnode = scene2::PolygonNode::allocWithTexture(_assets->get<Texture>("dpad_left"));
+    _leftnode->SceneNode::setAnchor(cugl::Vec2::ANCHOR_MIDDLE_RIGHT);
+    _leftnode->setScale(0.35f);
+    _leftnode->setVisible(false);
+    _topRoot->addChild(_leftnode);
+
+    _rightnode = scene2::PolygonNode::allocWithTexture(_assets->get<Texture>("dpad_right"));
+    _rightnode->SceneNode::setAnchor(cugl::Vec2::ANCHOR_MIDDLE_LEFT);
+    _rightnode->setScale(0.35f);
+    _rightnode->setVisible(false);
+    
+    _topRoot->addChild(_rightnode);
+    
+//    _gameUI = _assets->get<scene2::SceneNode>("game");
+//    _gameMap->getPlayer()->getNode()->addChild(_gameUI);
+
+    
     return true;
 }
 
@@ -200,6 +218,8 @@ void GameScene::dispose() {
     _gameMap = nullptr;
     _root = nullptr;
     _visionNode = nullptr;
+    _leftnode = nullptr;
+    _rightnode = nullptr;
 
     _players.clear();
 }
@@ -220,6 +240,8 @@ void GameScene::update(float timestep) {
     Size dimen = Application::get()->getDisplaySize();
     dimen *= constants::SCENE_WIDTH / dimen.width;
     Vec2 center(dimen.width / 2, dimen.height / 2);
+    
+    auto player = _gameMap->getPlayer();
 
     // Process movement input and update player states
     _gameMap->move(_input->getMove(), _input->getDirection());
@@ -229,6 +251,31 @@ void GameScene::update(float timestep) {
             updateVision(p);
         }
     }
+        
+    // FLOATING JOYSTICK UI
+//    if (_input->withJoystick()) {
+//        if (_input->getMove() != Vec2::ZERO) {
+//            CULog("SET LEFT");
+//            _leftnode->setVisible(true);
+//        } else {
+//            _leftnode->setVisible(false);
+//        }
+//
+//        if (_input->getDirection() != Vec2::ZERO) {
+//            _rightnode->setVisible(true);
+//        } else {
+//            _rightnode->setVisible(false);
+//        }
+//        auto player = _gameMap->getPlayer();
+//
+//        _leftnode->setPosition(_input->getLJoystick() - player->getLoc());
+//        utils::Log(_input->getLJoystick()  - _players[0]->getLoc());
+//        utils::Log(player->getLoc());
+//        _rightnode->setPosition(_input->getRJoystick());
+//    } else {
+//        _leftnode->setVisible(false);
+//        _rightnode->setVisible(false);
+//    }
 
     // Checks if the ghost should be revealed, commented out because no
     // tagging yet
@@ -237,8 +284,6 @@ void GameScene::update(float timestep) {
         _ghostNode->setVisible(_gameMap->getGhost()->getTagged());
     }
     */
-
-    auto player = _gameMap->getPlayer();
 
     // Delete after batteries implemented, will be handled in gamemap
     if (player->getType() == constants::PlayerType::Pal) {

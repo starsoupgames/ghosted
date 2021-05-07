@@ -87,7 +87,7 @@
                     },
                     "data": {
                         "texture": "Winner",
-                        "anchor": [ 0.5, -4.5 ],
+                        "anchor": [ 0.5, -3.7 ],
                         "scale": 1
                     },
                     "layout": {
@@ -152,7 +152,7 @@
                     },
                     "data": {
                         "upnode": "up",
-                        "anchor": [ -2, -1 ],
+                        "anchor": [ -2, -0.6 ],
                         "scale": 1
                     },
                     "children": {

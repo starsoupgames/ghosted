@@ -147,6 +147,16 @@ public:
         return _escapePressed;
     }
     
+    bool withJoystick() { return _rjoystick || _ljoystick; };
+    
+    cugl::Vec2 getRJoystick() const {
+        return touch2Screen(_rjoycenter);
+    }
+    
+    cugl::Vec2 getLJoystick() const {
+        return _ljoycenter;
+    }
+    
     /**
      * Returns the turning angle
      *

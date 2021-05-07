@@ -75,7 +75,7 @@
                     },
                     "data": {
                         "texture": "waiting",
-                        "anchor": [ -2.45, -12 ],
+                        "anchor": [ -2.45, -9.5 ],
                         "scale": 1.2
                     },
                     "layout": {

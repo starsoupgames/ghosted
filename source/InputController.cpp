@@ -241,16 +241,7 @@ Vec2 InputController::touch2Screen(const Vec2 pos) const {
  */
 void InputController::readLeft(const cugl::Vec2 pos) {
     Vec2 diff =  _ltouch.position-pos;
-
-    // Reset the anchor if we drifted too far
-//    if (diff.lengthSquared() > JSTICK_RADIUS*JSTICK_RADIUS) {
-//        diff.normalize();
-//        diff *= (JSTICK_RADIUS+JSTICK_DEADZONE)/2;
-//        _ltouch.position = pos+diff;
-//    }
-
-    _ljoycenter = this->touch2Screen(_ltouch.position);
-    _ljoycenter.y += JSTICK_OFFSET;
+    
     
     if (std::fabsf(diff.y) > JSTICK_DEADZONE/3 || std::fabsf(diff.x) > JSTICK_DEADZONE) {
         _ljoystick = true;
@@ -258,6 +249,7 @@ void InputController::readLeft(const cugl::Vec2 pos) {
         // return as movement vector (x,y) normalize in move in PLAYER
         if (_movement != Vec2::ZERO) {
             if (std::fabsf(diff.length()) > 25) {
+                _ljoycenter = _ltouch.position;
                 _movement = Vec2(pos.x-_ltouch.position.x, _ltouch.position.y-pos.y);
             }
         } else {
@@ -285,20 +277,26 @@ void InputController::readRight(const Vec2 start, const Vec2 stop, Timestamp cur
     Vec2 diff = _rtouch.position-stop;
 //
 //    // Reset the anchor if we drifted too far
-    if (diff.lengthSquared() > JSTICK_RADIUS*JSTICK_RADIUS) {
-        diff.normalize();
-        diff *= (JSTICK_RADIUS+JSTICK_DEADZONE)/2;
-        _rtouch.position = stop+diff;
-    }
-    _rtouch.position = stop;
+//    if (diff.lengthSquared() > JSTICK_RADIUS*JSTICK_RADIUS) {
+//        diff.normalize();
+//        diff *= (JSTICK_RADIUS+JSTICK_DEADZONE)/2;
+//        _rtouch.position = stop+diff;
+//    }
+//    _rtouch.position = stop;
     _rjoycenter = this->touch2Screen(_rtouch.position);
     _rjoycenter.y += JSTICK_OFFSET;
     
     if (std::fabsf(diff.y) > JSTICK_DEADZONE || std::fabsf(diff.x) > JSTICK_DEADZONE) {
         _rjoystick = true;
         
-        // return as direction vector (x,y) normalize in setDir in PLAYER
-        _direction = Vec2(stop.x-start.x, start.y-stop.y);
+        // return as movement vector (x,y) normalize in move in PLAYER
+        if (_direction != Vec2::ZERO) {
+            if (std::fabsf(diff.length()) > 25) {
+                _direction = Vec2(stop.x-_rtouch.position.x, _rtouch.position.y-stop.y);
+            }
+        } else {
+            _direction = Vec2(stop.x-_rtouch.position.x, _rtouch.position.y-stop.y);
+        }
     } else {
         _rjoystick = false;
         _direction = Vec2::ZERO;
@@ -327,8 +325,8 @@ void InputController::touchBeganCB(const TouchEvent& event, bool focus) {
                 _ltouch.touchids.insert(event.touch);
 
                 _ljoystick = true;
-                _ljoycenter = touch2Screen(event.position);
-                _ljoycenter.y += JSTICK_OFFSET;
+//                _ljoycenter += Vec2(JSTICK_OFFSET, JSTICK_OFFSET);
+//                _ljoycenter = touch2Screen(event.position);
             }
             break;
         case Zone::RIGHT:
@@ -343,7 +341,7 @@ void InputController::touchBeganCB(const TouchEvent& event, bool focus) {
                 
                 _rjoystick = true;
                 _rjoycenter = touch2Screen(event.position);
-                _rjoycenter.y += JSTICK_OFFSET;
+                _rjoycenter += Vec2(JSTICK_OFFSET, JSTICK_OFFSET);
             }
             break;
         default:
