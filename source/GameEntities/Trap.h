@@ -81,7 +81,7 @@ public:
 
     static shared_ptr<Trap> alloc(const Vec2& pos) {
         shared_ptr<Trap> result = make_shared<Trap>();
-        return (result->init(pos, 5) ? result : nullptr);
+        return (result->init(pos) ? result : nullptr);
     };
 
     void update(float timestep);

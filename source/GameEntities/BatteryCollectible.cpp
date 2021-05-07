@@ -11,7 +11,8 @@ using namespace cugl;
 bool Battery::init(const Vec2& loc) {
     drawable = true;
     deleteFlag = false;
-    GameEntity::init(loc, 10);
+    // TODO: Specify an actual polygon for battery hitbox
+    GameEntity::init(loc);
     return true;
 }
 

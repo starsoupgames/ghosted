@@ -4,12 +4,17 @@
 #include <cugl/cugl.h>
 #include "GameEntity.h"
 #include "GameMap.h"
+#include <Box2D/Dynamics/b2World.h>
+#include <Box2D/Dynamics/Contacts/b2Contact.h>
+#include <Box2D/Collision/b2Collision.h>
 
 /**
  * Namespace of functions implementing simple game physics.
  */
 class CollisionController {
 private:
+    /** The GameMap Model */
+    shared_ptr<GameMap> _gameMap;
 
 public:
 #pragma mark Constructors
@@ -39,6 +44,16 @@ public:
         shared_ptr<CollisionController> result = make_shared<CollisionController>();
         return (result->init() ? result : nullptr);
     }
+
+#pragma mark -
+#pragma mark State Access
+
+    /**
+    * Sets the GameMap model
+    *
+    * @param  gameMap  The pointer to the GameMap
+    */
+    void setGameMap(shared_ptr<GameMap> gameMap) { _gameMap = gameMap; }
 
 #pragma mark -
 #pragma mark Collision Handling

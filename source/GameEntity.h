@@ -53,13 +53,13 @@ public:
 	};
 
 	/**
-	* Initializes a new GameEnity at the origin with radius 0
+	* Initializes a new GameEnity at the origin with size 0
 	* @return true if the GameEntity is initialized properly, false otherwise
 	*/
-	bool init() { return init(cugl::Vec2::ZERO, 0); }
+	bool init() { return init(Vec2::ZERO); }
 
 	/** Initializes a new GameEntity at given location */
-	bool init(const cugl::Vec2& pos, const int radius);
+	bool init(const Vec2& pos);
 
 	/** Releases all resources allocated with this entity */
 	void dispose();
@@ -80,13 +80,13 @@ public:
 
 	/**
 	* Returns a newly allocated Pal at the given position
-	* @param pos Initial position in world coordinates
+	* @param pos Initial position in physics coordinates
 	*
 	* @return a newly allocated Pal at the given position
 	*/
-	static std::shared_ptr<GameEntity> alloc(const cugl::Vec2& pos, const int radius) {
+	static std::shared_ptr<GameEntity> alloc(const Vec2& pos) {
 		std::shared_ptr<GameEntity> result = std::make_shared<GameEntity>();
-		return (result->init(pos, radius) ? result : nullptr);
+		return (result->init(pos) ? result : nullptr);
 	}
 
 #pragma mark -

@@ -35,6 +35,9 @@ private:
     /** The origin of the room. Distance from (0,0) of the map to room's bottom left corner */
     Vec2 _origin;
     
+    /** Where in the grid of rooms this room is */
+    Vec2 _ranking;
+
     bool _winRoom;
     
     /** Possible locations within the room where batteries can spawn */
@@ -49,38 +52,55 @@ private:
     
 public:
     GameRoom() {}
-    
+
     ~GameRoom() { }
-    
-    bool init(const Vec2& origin);
+
+    bool init(const Vec2& origin, vector<bool> doors);
     
     void initContents(shared_ptr<Texture> slot, Size size);
-    
+
     static shared_ptr<GameRoom> alloc() {
         shared_ptr<GameRoom> result = make_shared<GameRoom>();
-        return (result->init(Vec2(0,0)) ? result : nullptr);
+        return (result->init(Vec2(0, 0), { true, true, true, true }) ? result : nullptr);
     }
-    
-    static shared_ptr<GameRoom> alloc(const Vec2& origin) {
+
+    static shared_ptr<GameRoom> alloc(const Vec2& origin, vector<bool> doors) {
         shared_ptr<GameRoom> result = make_shared<GameRoom>();
-        return (result->init(origin) ? result : nullptr);
+        return (result->init(origin, doors) ? result : nullptr);
     }
     
     // Gets the coordinates of the origin of this room
     Vec2 getOrigin() { return _origin; }
-    
+
+    // Gets the ranking of the room
+    Vec2 getRanking() { return _ranking; }
+
     // Gets the scene node
     shared_ptr<scene2::PolygonNode> getNode() { return _node; };
     
     void setNode(shared_ptr<scene2::PolygonNode> node) {
         _node = node;
     }
-    
+
     // Gets the list of battery spawns
     vector<vector<int>> getBatterySpawns() { return _batterySpawns; };
-    
+
     // Gets the list of doors
     vector<bool> getDoors() { return _doors; };
+
+    // Gets the list of doors in string form
+    string getDoorsStr() {
+        string outp = "";
+        for (bool d : _doors) {
+            if (d) {
+                outp += "1";
+            }
+            else {
+                outp += "0";
+            }
+        }
+        return outp;
+    }
     
     shared_ptr<BatterySlot> getSlot() { return _slotModel; };
     

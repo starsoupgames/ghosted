@@ -2,16 +2,15 @@
 
 using namespace std;
 
-bool GameRoom::init(const Vec2& origin) {
-    // traps should be setVisible(false)
-    // slots should be setVisible(true)
-    // set obstacle nodes based on the passed in json
-    
-    _origin = origin;
-    _batterySpawns = vector<vector<int>>();
-    _doors = vector<bool>{ false, false, false, false };
-    _winRoom = false;
-    return true;
+bool GameRoom::init(const Vec2& origin, vector<bool> doors) {
+	// traps should be setVisible(false)
+	// slots should be setVisible(true)
+	// set obstacle nodes based on the passed in json
+    _ranking = Vec2(origin.x / 1120, origin.y / 1120);
+	_origin = origin;
+	_batterySpawns = vector<vector<int>>();
+	_doors = doors;
+	return true;
 }
 
 void GameRoom::initContents(shared_ptr<Texture> slot, Size size) {

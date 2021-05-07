@@ -73,7 +73,52 @@
         },
         "bat": {
           "file": "textures/game/bat.png"
-        }
+        },
+    "0001": {
+      "file": "textures/rooms/0001.png"
+    },
+    "0010": {
+      "file": "textures/rooms/0010.png"
+    },
+    "0011": {
+      "file": "textures/rooms/0011.png"
+    },
+    "0100": {
+      "file": "textures/rooms/0100.png"
+    },
+    "0101": {
+      "file": "textures/rooms/0101.png"
+    },
+    "0110": {
+      "file": "textures/rooms/0110.png"
+    },
+    "0111": {
+      "file": "textures/rooms/0111.png"
+    },
+    "1000": {
+      "file": "textures/rooms/1000.png"
+    },
+    "1001": {
+      "file": "textures/rooms/1001.png"
+    },
+    "1010": {
+      "file": "textures/rooms/1010.png"
+    },
+    "1011": {
+      "file": "textures/rooms/1011.png"
+    },
+    "1100": {
+      "file": "textures/rooms/1100.png"
+    },
+    "1101": {
+      "file": "textures/rooms/1101.png"
+    },
+    "1110": {
+      "file": "textures/rooms/1110.png"
+    },
+    "1111": {
+      "file": "textures/rooms/1111.png"
+    }
     },
     "fonts": {
     },

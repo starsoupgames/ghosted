@@ -3,7 +3,7 @@
 #define CONE_WIDTH 75
 #define CONE_LENGTH 200
 #define ROOM_SIZE 960
-#define TRAP_RADIUS 500
+#define TRAP_RADIUS 120 // temp, should be 500px
 
 #pragma mark Constructors
 bool GameMap::init() {
@@ -145,21 +145,34 @@ bool GameMap::generateBasicMap(int numBatteries) {
     reset();
     
     /**
-     * 1. Create hard coded model that represent what type of rooms need to be where, no obstacles
-     * 2. Assign each room an ostacle layout
-     * 3. Call makeRoom() on each room+obstacle combo and add to _rooms
-     */
+    * 1. Create hard coded model that represent what type of rooms need to be where, no obstacles
+    * 2. Assign each room an ostacle layout
+    * 3. Call makeRoom() on each room+obstacle combo and add to _rooms
+    */
+    int spacing = 1120;
+    _rooms.push_back(GameRoom::alloc(Vec2(0, 0), { true, true, false, false }));
+    _rooms.push_back(GameRoom::alloc(Vec2(spacing, 0), { true, true, false, true }));
+    _rooms.push_back(GameRoom::alloc(Vec2(spacing*2, 0), { true, false, false, true }));
+    _rooms.push_back(GameRoom::alloc(Vec2(0, spacing), { true, true, true, false }));
+    _rooms.push_back(GameRoom::alloc(Vec2(spacing, spacing), { true, true, true, true }));
+    _rooms.push_back(GameRoom::alloc(Vec2(spacing*2, spacing), { true, false, true, true }));
+    _rooms.push_back(GameRoom::alloc(Vec2(0, spacing*2), { false, true, true, false }));
+    _rooms.push_back(GameRoom::alloc(Vec2(spacing, spacing * 2), { false, true, true, true }));
+    _rooms.push_back(GameRoom::alloc(Vec2(spacing*2, spacing * 2), { false, false, true, true }));
+
     return true;
 };
 
 void makeConnection(shared_ptr<GameRoom> room1, shared_ptr<GameRoom> room2) {
 }
 
+/*
 shared_ptr<GameRoom> makeRoom() {
     // call gameroom's init and pass in obstacle layout and door configuration
     RoomParser parser = RoomParser();
     return parser.parse("json/room.json", Vec2(0, 0));
 }
+*/
 
 bool GameMap::generateRandomMap() {
     reset();
@@ -169,6 +182,7 @@ bool GameMap::generateRandomMap() {
      * 3. Call makeRoom() on each room+obstacle combo and add to _rooms
      */
     
+    /*
     RoomParser parser = RoomParser();
     for (int i = 0; i < 3; i++) {
         for (int j = 0; j < 3; j++) {
@@ -182,6 +196,7 @@ bool GameMap::generateRandomMap() {
             _rooms.push_back(room);
         }
     }
+    */
     
     return true;
     

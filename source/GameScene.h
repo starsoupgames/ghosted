@@ -39,9 +39,6 @@ protected:
     shared_ptr<scene2::PolygonNode> _litFloorNode;
     /** Reference to the debug root of the scene graph */
     shared_ptr<scene2::SceneNode> _debugNode;
-    /** Reference to the win and lose message labels */
-    shared_ptr<scene2::Label> _ghostWinNode;
-    shared_ptr<scene2::Label> _palWinNode;
 
     /**offset for flashlight position**/
     //Vec2 _flashlightOffset = Vec2(0, -50);
@@ -72,6 +69,29 @@ protected:
     
     shared_ptr<scene2::SceneNode> _gameUI;
 
+#pragma mark Internal Object Management
+
+    /** Function to sort player node priorities */
+    bool comparePlayerPriority(const shared_ptr<Player>& p1, const shared_ptr<Player>& p2);
+
+    /**
+     * Adds the physics object to the physics world and loosely couples it to the scene graph
+     *
+     * @param obj    The physics object to add
+     * @param node   The scene graph node to attach it to
+     * @param zoff   The z-offset for drawing
+     * @param hide   True if the node should only be visible in a light source
+     */
+    void addObstacle(const shared_ptr<physics2::Obstacle>& obj, const shared_ptr<scene2::SceneNode>& node, float zoff, bool hide);
+
+    /** 
+     * Returns the active screen size of this scene.
+     * 
+     * This method is for graceful handling of different aspect ratios
+     */
+    Size computeActiveSize() const;
+
+#pragma mark -
 public:
 #pragma mark Constructors
     /**
@@ -173,5 +193,5 @@ public:
 
     void draw(const std::shared_ptr<SpriteBatch>& batch, const std::shared_ptr<SpriteBatch>& shaderBatch);
 };
-
+#pragma mark -
 #endif /* __GAME_SCENE_H__ */

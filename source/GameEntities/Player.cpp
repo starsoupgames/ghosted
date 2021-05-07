@@ -9,7 +9,7 @@ using namespace cugl;
 * @return a newly allocated Player at the given position
 */
 bool Player::init(const Vec2& pos) {
-    return GameEntity::init(pos, 25);
+    return GameEntity::init(pos);
 }
 
 /**
@@ -57,6 +57,7 @@ void Player::setNode(const std::shared_ptr<scene2::AnimationNode>& value) {
 void Player::update(float timestep) {
     _loc += _velocity;
     GameEntity::update(timestep);
+
 }
 
 /** Returns the current direction ENUM of the Player

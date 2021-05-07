@@ -7,16 +7,17 @@ using namespace cugl;
 /**
 * Returns a newly allocated GameEntity at the given position with given radius
 * 
-* @param pos Initial position in world coordinates
+* @param pos    Initial position in physics coordinates
 * @param radius The radius of the entity
 *
 * @return a newly allocated GameEntity at the given position with given radius
 */
-bool GameEntity::init(const Vec2& pos, const int radius) {
-    _radius = radius;
+bool GameEntity::init(const Vec2& pos) {
     _loc = pos;
+    
     return true;
 }
+
 
 /**
  * Disposes all resources and assets of this entity
@@ -40,6 +41,7 @@ void GameEntity::setNode(const std::shared_ptr<scene2::AnimationNode>& value) {
     }
 }
 
+
 /**
  * Updates the state of the model
  *
@@ -47,7 +49,9 @@ void GameEntity::setNode(const std::shared_ptr<scene2::AnimationNode>& value) {
  */
 
 void GameEntity::update(float timestep) {
+    //setPosition(0, 0);
     if (_animationNode != nullptr) _animationNode->setPosition(_loc);
+
 }
 
 /**

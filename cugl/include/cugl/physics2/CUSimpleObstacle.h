@@ -289,6 +289,7 @@ public:
      */
     virtual void setLinearVelocity(float x, float y) override {
         if (_body != nullptr) {
+            CULog("velocity being set");
             _body->SetLinearVelocity(b2Vec2(x,y));
         } else {
             _bodyinfo.linearVelocity.Set(x,y);

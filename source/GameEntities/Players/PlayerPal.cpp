@@ -32,7 +32,7 @@ void Pal::setNode(const std::shared_ptr<scene2::AnimationNode>& node, const std:
 void Pal::update(float timestep) {
     // Move the pal
     if (_spooked) {
-        updateVelocity(Vec2::ZERO);
+        _velocity = Vec2::ZERO;
     }
 
     processDirection();

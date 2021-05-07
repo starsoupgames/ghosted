@@ -78,7 +78,30 @@ public:
     
     /** @return the player model */
     shared_ptr<Player> getPlayer() { return _player; }
-    
+
+    /** Returns the list of players */
+    vector<shared_ptr<Player>> getPlayers() { return _players; }
+
+    /** Returns the ghost */
+    shared_ptr<Player> getGhost() {
+        for (auto& p : _players) {
+            if (p->getType() == constants::PlayerType::Ghost) {
+                return p;
+            }
+        }
+        return nullptr;
+    }
+
+    /** Returns the model associated with this body */
+    shared_ptr<Player> getModel(b2Body* body) {
+        for (auto& p : _players) {
+            if (p.get() == body->GetUserData()) {
+                return p;
+            }
+        }
+        return nullptr;
+    }
+
     Vec2 getWinRoomOrigin();
     
     /** Sets the player model */

@@ -77,7 +77,7 @@ public:
     }
 
     /** Creates a Ghost with the default values */
-    Ghost() : Player(6), _tagTimer(0) {};
+    Ghost() : Player(6, 1), _tagTimer(0) {};
 
     /** Releaes all resources allocated with this Ghost */
     ~Ghost() { }

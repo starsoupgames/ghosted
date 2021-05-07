@@ -12,10 +12,58 @@ using namespace std;
 
 /** 
  * Length and Width of the game world in Box2d units (meters).
- * For a map with 3x3 rooms, this means that each room should be ten meters,
- * as we are leaving 5 spare meters of space at the perimeter.
+ * For a map with 3x3 rooms, this means that each room should be 14 meters (1m per tile),
+ *  this means that out total dimensions for the physics world should be 42m x 42m
+ * 
+ * -----------------However----------------
+ * Right now there's no conversion from pixels to Box2d units, so 1m is effectively 1px
+ * For now, each room is 1120px by 1120px. For a 3x3 room, this results in a map of size
+ * 3360m x 3360m
  */
-#define DEFAULT_DIMENS  40.0f
+#define DEFAULT_WIDTH  42.0f
+#define DEFAULT_HEIGHT 42.0f
+
+#define PIXEL_WIDTH    3360.0f
+#define PIXEL_HEIGHT   3360.0f
+
+#define SCENE_WIDTH  1024
+#define SCENE_HEIGHT 576
+
+
+Vec2 WALLS[4][2][2][4] = {
+    {// north
+        {// door
+            {Vec2(0.05,14),Vec2(1.05,12),Vec2(6,12),Vec2(6,14)},
+            {Vec2(13.95,14),Vec2(8,14),Vec2(8,12),Vec2(12.95,12)}
+        },
+        {// wall
+            {Vec2(0,14),Vec2(1,12),Vec2(7,12),Vec2(7,14)},
+            {Vec2(14,14),Vec2(7.01,14),Vec2(7.01,12),Vec2(13,12)}
+        }
+    },
+    {// east
+        {// door
+            {Vec2(14,14),Vec2(13,12),Vec2(13,7),Vec2(14,7)},
+            {Vec2(13,0),Vec2(14,0),Vec2(14,5),Vec2(13,5)}
+        },
+        {// wall
+            {Vec2(14,14),Vec2(13,12),Vec2(13,6.01),Vec2(14,6.01)},
+            {Vec2(13,0),Vec2(14,0),Vec2(14,6),Vec2(13,6)}
+        }
+    },
+    {// south
+    },
+    {// west
+        {// door
+            {Vec2(0,14),Vec2(0,7),Vec2(1,7),Vec2(1,12)},
+            {Vec2(0,0),Vec2(1,0),Vec2(1,5),Vec2(0,5)}
+        },
+        {// wall
+            {Vec2(0,14),Vec2(0,6.01),Vec2(1,6.01),Vec2(1,12)},
+            {Vec2(0,0),Vec2(1,0),Vec2(1,6),Vec2(0,6)}
+        }
+    }
+};
 
 
 /**
@@ -33,42 +81,40 @@ using namespace std;
 bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
     if (!GameMode::init(assets, constants::GameMode::Game)) return false;
     
-    Size dimen = Application::get()->getDisplaySize();
-    dimen *= constants::SCENE_WIDTH / dimen.width;
-    Rect bounds = Application::get()->getSafeBounds();
-    // Background color
-    Application::get()->setClearColor(Color4f::BLACK);
-
-    // Init data models
-//    _networkData = NetworkData::alloc();
-//    _network->attachData(_networkData);
+    Size dimen = computeActiveSize();
 
     // Init the Box2d world
-    _world = physics2::ObstacleWorld::alloc(Rect(0, 0, DEFAULT_DIMENS, DEFAULT_DIMENS), Vec2(0, 0));
+    Rect box2dRect = Rect(0, 0, DEFAULT_WIDTH, DEFAULT_HEIGHT);
+    _world = physics2::ObstacleWorld::alloc(box2dRect, Vec2(0, 0));
     _world->activateCollisionCallbacks(true);
-    /**
     _world->onBeginContact = [this](b2Contact* contact) {
         _collision->beginContact(contact);
     };
     _world->beforeSolve = [this](b2Contact* contact, const b2Manifold* oldManifold) {
         _collision->beforeSolve(contact, oldManifold);
     };
-    */
-
+    
 
     // IMPORTANT: SCALING MUST BE UNIFORM
     // This means that we cannot change the aspect ratio of the physics world
     // Shift to center if a bad fit
-    /*
-    _scale = dimen.width == SCENE_WIDTH ? dimen.width / rect.size.width : dimen.height / rect.size.height;
-    Vec2 offset((dimen.width - SCENE_WIDTH) / 2.0f, (dimen.height - SCENE_HEIGHT) / 2.0f);
-    */
+    //_scale = dimen.width == SCENE_WIDTH ? dimen.width / box2dRect.size.width : dimen.height / box2dRect.size.height;
+    _scale = PIXEL_WIDTH / DEFAULT_WIDTH;
+
+    // the demos used offset to center the world node in the screen, I don't think we have to use this because
+    // we have a camera
+    //Vec2 offset((dimen.width - SCENE_WIDTH) / 2.0f, (dimen.height - SCENE_HEIGHT) / 2.0f);
+
+    _debugNode = scene2::SceneNode::alloc();
+    //_debugNode->setScale(_scale); // Debug node draws in PHYSICS coordinates
+
+    setDebug(true);
 
     _root = scene2::OrderedNode::allocWithOrder(scene2::OrderedNode::Order::ASCEND);
     //_root->addChild(_assets->get<scene2::SceneNode>("game"));
     _root->setContentSize(dimen);
     _root->doLayout();
-    addChild(_root);
+    addChild(_root, 0);
 
     _dimRoot = scene2::OrderedNode::allocWithOrder(scene2::OrderedNode::Order::ASCEND);
 //    _dimRoot->addChild(_assets->get<scene2::SceneNode>("game"));
@@ -79,6 +125,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
     _litRoot = scene2::OrderedNode::allocWithOrder(scene2::OrderedNode::Order::ASCEND);
     _litRoot->setContentSize(dimen);
     _litRoot->doLayout();
+    
     _root->addChild(_litRoot);
 
     _topRoot = scene2::OrderedNode::allocWithOrder(scene2::OrderedNode::Order::ASCEND);
@@ -87,7 +134,9 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
     _root->addChild(_topRoot);
 
     _gameMap = GameMap::alloc(_assets, _litRoot);
-    _gameMap->generateRandomMap();
+
+    _gameMap->generateBasicMap(0);
+    _collision->setGameMap(_gameMap);
 
     // Sets the textures of the room nodes and adds them to _root
     // Helper method that goes through all room objects, sets the textures of its nodes, and adds
@@ -95,12 +144,30 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
     // obstacles, and batteryslot
     shared_ptr<Texture> floorTexture = _assets->get<Texture>("dim_floor_texture");
     shared_ptr<Texture> litFloorTexture = _assets->get<Texture>("lit_floor_texture");
-    shared_ptr<Texture> doorTexture =_assets->get<Texture>("dim_door_texture");
-    shared_ptr<Texture> litDoorTexture = _assets->get<Texture>("lit_door_texture");
+
+    // shared_ptr<Texture> doorTexture =_assets->get<Texture>("dim_door_texture");
+    //shared_ptr<Texture> litDoorTexture = _assets->get<Texture>("lit_door_texture"); // TODO put this in for loop
+
     shared_ptr<Texture> slotTexture =_assets->get<Texture>("slot");
     for (auto& room : _gameMap->getRooms()) {
-        shared_ptr<scene2::PolygonNode> node = scene2::PolygonNode::allocWithTexture(floorTexture);
-        node->addChild(scene2::PolygonNode::allocWithTexture(doorTexture));
+        string roomCode = room->getDoorsStr();
+        shared_ptr<Texture> doorTexture = _assets->get<Texture>(roomCode);
+        shared_ptr<scene2::PolygonNode> node = scene2::PolygonNode::allocWithTexture(doorTexture);
+
+        shared_ptr<scene2::PolygonNode> floorNode = scene2::PolygonNode::allocWithTexture(floorTexture);
+        //offset for transformation matrix
+        Mat4 floorOffset = Mat4::createTranslation(Vec3(31.25, 0, 0));
+        //scale for transformation matrix
+        Mat4 floorScale = Mat4::createScale(Vec2(2.56, 2.56));
+        //multiply them all together to use them all
+        floorOffset = floorOffset.multiply(floorScale);
+        //floorNode->setScale(Vec2(5, 5));
+        floorNode->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
+        floorNode->setAlternateTransform(floorOffset);
+        floorNode->chooseAlternateTransform(true);
+        node->addChild(floorNode);
+
+
         node->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
         room->setNode(node);
         room->initContents(slotTexture, _root->getContentSize());
@@ -108,28 +175,61 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
         _dimRoot->addChild(node);
         node->setPosition(room->getOrigin());
 
+        // Create obstacles for walls
+        shared_ptr<scene2::PolygonNode> sprite;
+        int count = 0;
+        int wallRef;
+        Vec2 ranking = room->getRanking();
+        int xOffset = ranking.x * 14;
+        int yOffset = ranking.y * 14;
+        vector<Vec2> vertices;
+        SimpleTriangulator triangulator;
+        shared_ptr<physics2::PolygonObstacle> wallobj;
+
+        // Loop through doors of the room
+        for (auto& check : room->getDoors()) {
+            // Figure out if this should be a door or a wall
+            wallRef = check ? 0 : 1;
+            // Loop through the two obstacles inside the door list
+            if (count != 2) {
+                for (auto& obs : WALLS[count][wallRef]) {
+                    vertices.clear();
+                    for (auto& pos : obs) {
+                        vertices.push_back(Vec2(pos.x + xOffset, pos.y + yOffset));
+                    }
+                    Poly2 wall = Poly2(vertices);
+
+                    triangulator.set(wall);
+                    triangulator.calculate();
+                    wall = triangulator.getPolygon();
+                    wall.setGeometry(Geometry::SOLID);
+
+                    wallobj = physics2::PolygonObstacle::alloc(wall);
+                    wallobj->setName("Wall" + strtool::to_string(count) + strtool::to_string(wallRef));
+                    wallobj->setBodyType(b2_staticBody);
+                    wallobj->setDensity(0.0f);
+                    wallobj->setFriction(0);
+                    wallobj->setRestitution(0.1f);
+                    wallobj->setDebugColor(Color4::YELLOW);
+
+                    sprite = scene2::PolygonNode::alloc();
+                    CULog("Adding wall: ");
+                    //addObstacle(wallobj, sprite, 1, false);
+                }
+            }
+            count += 1;
+        
+        }
+
         //scene graph for lit versions of entities, or entities only visible under light
         shared_ptr<scene2::PolygonNode> litNode = scene2::PolygonNode::allocWithTexture(litFloorTexture);
-        litNode->addChild(scene2::PolygonNode::allocWithTexture(litDoorTexture));
+        litNode->setAlternateTransform(floorOffset);
+        litNode->chooseAlternateTransform(true);
+        //litNode->addChild(scene2::PolygonNode::allocWithTexture(litDoorTexture));
         litNode->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
         _litRoot->addChild(litNode);
         litNode->setPosition(room->getOrigin());
     }
-
-    // Initialize ending messages
-    _ghostWinNode = scene2::Label::alloc("The ghost wins!", _assets->get<Font>("gyparody"));
-    _ghostWinNode->setAnchor(Vec2::ANCHOR_CENTER);
-    _ghostWinNode->setPosition(dimen.width / 2.0f, dimen.height / 2.0f);
-    _ghostWinNode->setForeground(Color4::YELLOW);
-    _ghostWinNode->setVisible(false);
-    _root->addChild(_ghostWinNode);
-
-    _palWinNode = scene2::Label::alloc("The pals win!", _assets->get<Font>("gyparody"));
-    _palWinNode->setAnchor(Vec2::ANCHOR_CENTER);
-    _palWinNode->setPosition(dimen.width / 2.0f, dimen.height / 2.0f);
-    _palWinNode->setForeground(Color4::YELLOW);
-    _palWinNode->setVisible(false);
-    _root->addChild(_palWinNode);
 
     // Player models
     _assets->get<Texture>("pal_doe_texture")->setName("pal_sprite_doe");
@@ -139,24 +239,37 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 
     for (auto& s : { "doe", "seal", "tanuki" }) {
         auto palNode = scene2::AnimationNode::alloc(_assets->get<Texture>("pal_" + string(s) + "_texture"), 4, 24);
-        _topRoot->addChild(palNode);
 
         auto palShadowNode = scene2::PolygonNode::allocWithTexture(_assets->get<Texture>("pal_shadow_texture"));
         auto palSmokeNode = scene2::AnimationNode::alloc(_assets->get<Texture>("pal_smoke_texture"), 1, 19);
-
-        auto palModel = Pal::alloc(Vec2(100, 100));
+        
+        Vec2 spawn;
+        if (string(s) == "doe") {
+            spawn = Vec2(3, 2);
+        }
+        else if (string(s) == "seal") {
+            spawn = Vec2(11, 2);
+        }
+        else {
+            spawn = Vec2(3, 10);
+        }
+        auto palModel = Pal::alloc(spawn);
         palModel->setNode(palNode, palShadowNode, palSmokeNode);
+        _topRoot->addChild(palNode);
+
         _players.push_back(palModel);
     }
 
     auto ghostNode = scene2::AnimationNode::alloc(_assets->get<Texture>("ghost_texture"), 4, 24);
-    _litRoot->addChild(ghostNode);
+    ghostNode->setAnchor(Vec2::ANCHOR_CENTER);
+    ghostNode->setPriority(constants::Priority::Player);
 
     auto ghostShadowNode = scene2::PolygonNode::allocWithTexture(_assets->get<Texture>("ghost_shadow_texture"));
 
-    auto ghostModel = Ghost::alloc(Vec2(300, 100));
+    auto ghostModel = Ghost::alloc(Vec2(11, 10));
     ghostModel->setNode(ghostNode, ghostShadowNode);
     ghostModel->setTimer(0);
+    _litRoot->addChild(ghostNode);
     _players.push_back(ghostModel);
 
     _network->getData()->setPlayers(_players);
@@ -202,6 +315,10 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 //    _gameMap->getPlayer()->getNode()->addChild(_gameUI);
 
     
+    _litRoot->addChild(_debugNode, 1);
+
+    // Temp background color
+    Application::get()->setClearColor(Color4f::GRAY);
     return true;
 }
 
@@ -225,8 +342,45 @@ void GameScene::dispose() {
 }
 
 /** Function to sort player node priorities */
-bool comparePlayerPriority(const shared_ptr<Player>& p1, const shared_ptr<Player>& p2) {
+bool GameScene::comparePlayerPriority(const shared_ptr<Player>& p1, const shared_ptr<Player>& p2) {
     return p1->getLoc().y > p2->getLoc().y;
+}
+
+/**
+ * Adds the physics object to the physics world and loosely couples it to the scene graph
+ *
+ * @param obj    The physics object to add
+ * @param node   The scene graph node to attach it to
+ * @param zoff   The z-offset for drawing
+ * @param hide   True if the node should only be visible in a light source
+ */
+void GameScene::addObstacle(const shared_ptr<physics2::Obstacle>& obj, const shared_ptr<scene2::SceneNode>& node, float zoff, bool hide) {
+    _world->addObstacle(obj);
+    obj->setDebugScene(_debugNode);
+    
+    Vec2 test = obj->getPosition();
+    CULog("%f, %f", test.x, test.y);
+
+
+    // Position the scene graph node (enough for static objects)
+    node->setPosition(obj->getPosition() * _scale);
+    if (hide) {
+        _litRoot->addChild(node, zoff);
+    }
+    else {
+        _topRoot->addChild(node, zoff);
+    }
+    // Dynamic objects need constant updating
+    if (obj->getBodyType() == b2_dynamicBody) {
+        CULog("listener being added");
+        scene2::SceneNode* weak = node.get(); // No need for smart pointer in callback
+        obj->setListener([=](physics2::Obstacle* obs) {
+            CULog("Position in callback: ");
+            CULog("%f, %f", obj->getPosition().x, obj->getPosition().y);
+            weak->setPosition(obs->getPosition() * _scale);
+            weak->setAngle(obs->getAngle());
+            });
+    }
 }
 
 /**
@@ -237,8 +391,7 @@ bool comparePlayerPriority(const shared_ptr<Player>& p1, const shared_ptr<Player
  * @param timestep  The amount of time (in seconds) since the last frame
  */
 void GameScene::update(float timestep) {
-    Size dimen = Application::get()->getDisplaySize();
-    dimen *= constants::SCENE_WIDTH / dimen.width;
+    Size dimen = computeActiveSize();
     Vec2 center(dimen.width / 2, dimen.height / 2);
     
     auto player = _gameMap->getPlayer();
@@ -330,7 +483,7 @@ void GameScene::update(float timestep) {
     for (auto& p : _players) {
         if (p != nullptr) sortedPlayers.push_back(p);
     }
-    sort(sortedPlayers.begin(), sortedPlayers.end(), &comparePlayerPriority);
+    sort(sortedPlayers.begin(), sortedPlayers.end(), [this](const shared_ptr<Player>& p1, const shared_ptr<Player>& p2) { return comparePlayerPriority(p1, p2); }) ;
     CUAssertLog(sortedPlayers.size() < constants::PRIORITY_RANGE, "Number of players exceeds priority range.");
     for (unsigned i = 0; i < sortedPlayers.size(); ++i) {
         auto node = sortedPlayers[i]->getNode();
@@ -345,6 +498,7 @@ void GameScene::update(float timestep) {
     _root->setPosition(center - player->getLoc());
     
     // TODO: TEMPORARY WIN CODE
+    /*
     Vec2 winOrigin = _gameMap->getWinRoomOrigin() + (constants::ROOM_DIMENSIONS / 2);
     for (auto& p : _players) {
         if ((p->getLoc() - winOrigin).length() < 100) {
@@ -352,6 +506,7 @@ void GameScene::update(float timestep) {
             break;
         }
     }
+    */
     // Ghost wins
     bool allPalsSpooked = true;
     for (auto& p : _players) {
@@ -454,6 +609,25 @@ void GameScene::draw(const std::shared_ptr<SpriteBatch>& batch, const std::share
         _topRoot->render(batch, _root->getNodeToWorldTransform(), _color);
         batch->end();
     }
+}
+
+/**
+ * Returns the active screen size of this scene.
+ *
+ * This method is for graceful handling of different aspect
+ * ratios
+ */
+Size GameScene::computeActiveSize() const {
+    Size dimen = Application::get()->getDisplaySize();
+    float ratio1 = dimen.width / dimen.height;
+    float ratio2 = ((float)SCENE_WIDTH) / ((float)SCENE_HEIGHT);
+    if (ratio1 < ratio2) {
+        dimen *= SCENE_WIDTH / dimen.width;
+    }
+    else {
+        dimen *= SCENE_HEIGHT / dimen.height;
+    }
+    return dimen;
 }
 
 void GameScene::reset() {

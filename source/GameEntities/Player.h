@@ -91,7 +91,7 @@ public:
             _velocity += move.normalize() * ACCELERATION;
 
             // clamp to speed
-            if (!_velocity.isNearZero() && _velocity.length() > _speed) {
+            if (_velocity.length() > _speed) {
                 _velocity = _velocity.normalize() * _speed; // clamp to speed
             }
         }
@@ -101,9 +101,9 @@ public:
     }
 
     /** Creates a Player with the default values */
-    Player() : Player(5) {};
+    Player() : Player(5, 1) {};
 
-    Player(float speed) : GameEntity(), id(-1), _direction(Vec2(0.0f, -1.0f)), _speed(speed), _idle(true) {};
+    Player(float speed, float scale) : GameEntity(), id(-1), _direction(Vec2(0.0f, -1.0f)), _speed(speed), _idle(true) {};
 
     /** Releases all resources allocated with this Player */
     ~Player() { dispose(); }
@@ -114,7 +114,7 @@ public:
     /** Initializes a new Player at the given location */
     virtual bool init(const Vec2& pos);
 
-    /** Initializes a new Player at the origin */
+    /** Initializes a new Player at the origin with size zero */
     virtual bool init() { return init(Vec2::ZERO); }
 
     /** Get player type */
