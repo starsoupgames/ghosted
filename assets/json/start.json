@@ -68,7 +68,7 @@
                     "data": {
                         "upnode": "up",
                         "anchor": [ 0, 1 ],
-                        "scale": 0.75
+                        "scale": 1.5
                     },
                     "children": {
                         "up": {
@@ -93,7 +93,7 @@
                     "data": {
                         "upnode": "up",
                         "anchor": [ 0, 2.5 ],
-                        "scale": 0.75
+                        "scale": 1.5
                     },
                     "children": {
                         "up": {

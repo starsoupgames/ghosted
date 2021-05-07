@@ -88,7 +88,7 @@
                     "data": {
                         "texture": "Winner",
                         "anchor": [ 0.5, -4.5 ],
-                        "scale": 2
+                        "scale": 1
                     },
                     "layout": {
                         "x_anchor": "center",
@@ -153,7 +153,7 @@
                     "data": {
                         "upnode": "up",
                         "anchor": [ -2, -1 ],
-                        "scale": 1.5
+                        "scale": 1
                     },
                     "children": {
                         "up": {
@@ -222,7 +222,7 @@
                     "data": {
                         "texture": "doe",
                         "anchor": [ 1.2, 0.5 ],
-                        "scale": 2
+                        "scale": 1
                     },
                     "layout": {
                         "x_anchor": "center",
@@ -237,7 +237,7 @@
                     "data": {
                         "texture": "tanuki",
                         "anchor": [ -0.2, 0.5 ],
-                        "scale": 2
+                        "scale": 1
                     },
                     "layout": {
                         "x_anchor": "center",
@@ -252,7 +252,7 @@
                     "data": {
                         "texture": "seal",
                         "anchor": [ 0.5, 0.5 ],
-                        "scale": 2
+                        "scale": 1
                     },
                     "layout": {
                         "x_anchor": "center",
@@ -267,7 +267,7 @@
                     "data": {
                         "texture": "ghost",
                         "anchor": [ 0.5, 0.5 ],
-                        "scale": 2
+                        "scale": 1
                     },
                     "layout": {
                         "x_anchor": "center",
