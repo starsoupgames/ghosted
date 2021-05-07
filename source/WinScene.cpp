@@ -20,11 +20,8 @@ bool WinScene::init(const shared_ptr<AssetManager>& assets) {
     _quit = dynamic_pointer_cast<scene2::Button>(assets->get<scene2::SceneNode>("win_quitbutton"));
     
     _ghost = assets->get<scene2::SceneNode>("win_ghost");
-    
     _doe = assets->get<scene2::SceneNode>("win_doe");
-    
     _seal = assets->get<scene2::SceneNode>("win_seal");
-    
     _tanuki = assets->get<scene2::SceneNode>("win_tanuki");
     
     if (_quit == nullptr) {
@@ -39,7 +36,6 @@ bool WinScene::init(const shared_ptr<AssetManager>& assets) {
     if (_active) {
         _quit->activate();
     }
-    _mode = constants::GameMode::Win;
     return true;
 }
 
@@ -54,8 +50,9 @@ void WinScene::update(float timestep) {
     Size dimen = Application::get()->getDisplaySize();
     dimen *= constants::SCENE_WIDTH / dimen.width;
     _quit->setVisible(_quit->isActive());
-    // DEFAULT: pals win
-    if (_ghostWin) {
+
+    CUAssertLog(_winner != constants::PlayerType::Undefined, "Winner is undefined.");
+    if (_winner == constants::PlayerType::Ghost) {
         _doe->setVisible(false);
         _seal->setVisible(false);
         _tanuki->setVisible(false);

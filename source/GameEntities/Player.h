@@ -116,8 +116,8 @@ public:
     virtual bool init() { return init(Vec2::ZERO); }
 
     /** Get player type */
-    virtual uint8_t getType() {
-        return Type::Undefined;
+    virtual constants::PlayerType getType() {
+        return constants::PlayerType::Undefined;
     }
 
     /**
@@ -145,12 +145,6 @@ public:
      * Resets the Player back to its original settings
      */
     void reset();
-
-    enum Type {
-        Undefined = 0,
-        Pal = 1,
-        Ghost = 2
-    };
     
     /** Returns the current direction ENUM of the Player
      *

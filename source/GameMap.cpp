@@ -6,9 +6,6 @@
 
 #pragma mark Constructors
 bool GameMap::init() {
-    /** Initialize pal model */
-    _complete[0] = false;
-    _complete[1] = false;
     return true;
 }
 
@@ -53,7 +50,7 @@ void GameMap::update(float timestep) {
 /** Method to update player velocity and players */
 void GameMap::move(Vec2 move, Vec2 direction) {
     _player->updateVelocity(move);
-    if (_player->getType() == Player::Type::Pal) {
+    if (_player->getType() == constants::PlayerType::Pal) {
         if (direction != Vec2::ZERO) {
             _player->setDir(direction);
         }
@@ -69,7 +66,7 @@ void GameMap::move(Vec2 move, Vec2 direction) {
 void GameMap::handleInteract() {
     float range = 250.0f;
     // TODO use position, not node position
-    if (_player->getType() == Player::Type::Pal) {
+    if (_player->getType() == constants::PlayerType::Pal) {
         //  CODE FOR WHEN BATTERIES FULLY IMPLEMENTED
         /**
          * if (pal is close to the slot in their room):
@@ -93,7 +90,7 @@ void GameMap::handleInteract() {
             }
         }
     }
-    else if (_player->getType() == Player::Type::Ghost) {
+    else if (_player->getType() == constants::PlayerType::Ghost) {
         // CODE FOR WHEN TRAPS FULLY IMPLEMENTED
         shared_ptr<Trap> trap = nullptr;
         
@@ -156,7 +153,6 @@ bool GameMap::generateRandomMap() {
      * 2. Assign each room an ostacle layout
      * 3. Call makeRoom() on each room+obstacle combo and add to _rooms
      */
-    
     
     RoomParser parser = RoomParser();
     for (int i = 0; i < 3; i++) {

@@ -63,8 +63,6 @@ protected:
     shared_ptr<GameMap> _gameMap;
     vector<shared_ptr<Player>> _players;
 
-    bool _win;
-    bool _ghostWin;
     /** Whether or not debug mode is active */
     bool _debug;
 
@@ -76,7 +74,7 @@ public:
      * This constructor does not allocate any objects or start the game.
      * This allows us to use the object without a heap pointer.
      */
-    GameScene() : GameMode(constants::GameMode::Game) {}
+    GameScene() : GameMode(constants::GameMode::Game), _scale(1), _debug(false) {}
 
     /**
      * Disposes of all (non-static) resources allocated to this mode.
@@ -144,20 +142,6 @@ public:
      */
     void setCollision(shared_ptr<CollisionController> collision) {
         _collision = collision;
-    }
-    
-    /**
-     * Returns whether the pals have won
-     */
-    bool didWin() {
-        return _win;
-    }
-    
-    /**
-     * Returns whether the pals have won
-     */
-    bool didGhostWin() {
-        return _ghostWin;
     }
 
 #pragma mark -

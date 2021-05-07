@@ -99,8 +99,8 @@ public:
     void trigger();
 
     /** Get player type */
-    virtual uint8_t getType() override {
-        return Type::Ghost;
+    virtual constants::PlayerType getType() override {
+        return constants::PlayerType::Ghost;
     }
 
     /**

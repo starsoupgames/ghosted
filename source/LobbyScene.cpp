@@ -54,7 +54,7 @@ bool LobbyScene::init(const shared_ptr<AssetManager>& assets) {
         roomIDText->setPosition(dimen.width / 2, (dimen.height * 0.9));
         _root->addChildWithName(roomIDText, "roomIDText");
     }
-    _mode = constants::GameMode::Lobby;
+
     return true;
 }
 
@@ -99,6 +99,10 @@ void LobbyScene::update(float timestep) {
             numPlayersText->setPosition(dimen.width / 2, dimen.height / 2);
             _root->addChildWithName(numPlayersText, "numPlayers");
         }
+    }
+
+    if (_network->getData() != nullptr && _network->getData()->getStatus() == constants::MatchStatus::InProgress) {
+        _mode = constants::GameMode::Game;
     }
 
     // TODO join room failed, retry connection

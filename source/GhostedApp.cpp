@@ -145,20 +145,9 @@ void GhostedApp::update(float timestep) {
     }
     else if (_lobby.isActive()) {
         mode = _lobby.getMode();
-        if (_networkData->getStatus() == constants::MatchStatus::InProgress) {
-            mode = constants::GameMode::Game;
-        }
     }
     else if (_gameplay.isActive()) {
         mode = _gameplay.getMode();
-        if (_networkData->getStatus() == constants::MatchStatus::Ended) {
-            // mode = constants::GameMode::Game;
-        }
-        // Someone won the game
-        if (_gameplay.didWin()) {
-            _ghostWin = _gameplay.didGhostWin();
-            mode = constants::GameMode::Win;
-        }
     } else if (_win.isActive()) {
         mode = _win.getMode();
     }
@@ -193,6 +182,7 @@ void GhostedApp::update(float timestep) {
             _lobby.dispose();
             break;
         case constants::GameMode::Game:
+            _win.setWinner(_network->getData()->getWinner());
             _gameplay.dispose();
             break;
         case constants::GameMode::Win:
@@ -236,7 +226,8 @@ void GhostedApp::update(float timestep) {
             _gameplay.init(_assets);
             break;
         case constants::GameMode::Win:
-            _win.setWinner(_ghostWin);
+            _networkData->setStatus(constants::MatchStatus::Ended);
+            _win.setNetwork(_network);
             _win.init(_assets);
             break;
         }
@@ -277,6 +268,7 @@ void GhostedApp::update(float timestep) {
         _gameplay.update(timestep);
         break;
     case constants::GameMode::Win:
+        _network->update(timestep);
         _win.update(timestep);
         break;
     default:

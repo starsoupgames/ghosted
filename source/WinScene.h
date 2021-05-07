@@ -4,15 +4,15 @@
 
 #include <cugl/cugl.h>
 #include "GameMode.h"
+#include "NetworkController.h"
 
 using namespace std;
 using namespace cugl;
 
 class WinScene : public GameMode {
 private:
-    /** The asset manager for loading. */
-    std::shared_ptr<cugl::AssetManager> _assets;
-    
+    shared_ptr<NetworkController> _network;
+
     /** Escape to start screen */
     shared_ptr<scene2::Button> _quit;
     
@@ -23,9 +23,8 @@ private:
     
     shared_ptr<scene2::SceneNode> _ghost;
     
-    /** Default value is ghostWin = false (the pals win)
-        Ghost win is ghostWin = true */
-    bool _ghostWin;
+    /** Winner of the game */
+    constants::PlayerType _winner;
 
 public:
     /**
@@ -34,7 +33,7 @@ public:
      * This constructor does not allocate any objects or start the controller.
      * This allows us to use a controller without a heap pointer.
      */
-    WinScene() : GameMode(constants::GameMode::Win), _ghostWin(false) {};
+    WinScene() : GameMode(constants::GameMode::Win), _winner(constants::PlayerType::Undefined) {};
     
     /**
      * Disposes of all (non-static) resources allocated to this mode.
@@ -77,14 +76,17 @@ public:
      * @param value whether the scene is currently active
      */
     virtual void setActive(bool value) override;
+
+
+    void setNetwork(shared_ptr<NetworkController> network) {
+        _network = network;
+    }
     
     /**
      * Updates the winner for the win screen
-     *
-     * @param won = false means the pals won, true means the ghost won
      */
-    void setWinner(bool won) {
-        _ghostWin = won;
+    void setWinner(constants::PlayerType playerWon) {
+        _winner = playerWon;
     }
 };
 

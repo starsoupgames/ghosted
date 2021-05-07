@@ -58,6 +58,15 @@ struct PlayerData {
     ~PlayerData() { player = nullptr; interpolationData = nullptr; };
 };
 
+/** Win data */
+struct WinData {
+    constants::PlayerType winner;
+
+    WinData() {
+        this->winner = constants::PlayerType::Undefined;
+    }
+};
+
 /** Handles network data */
 class NetworkData {
 private:
@@ -73,15 +82,21 @@ private:
     /** Match status */
     uint8_t _status;
 
-    /** Player order */
+    /** Lobby data */
     shared_ptr<LobbyData> _lobbyData;
 
     /** Player data vector */
     vector<shared_ptr<PlayerData>> _players;
 
+    /** Win data */
+    shared_ptr<WinData> _winData;
+
     /** Functions to convert data types to byte vectors */
     void encodeByte(uint8_t b, vector<uint8_t>& out); // 1 byte
     uint8_t decodeByte(const vector<uint8_t>& bytes);
+
+    void encodeBool(bool b, vector<uint8_t>& out); // 1 byte
+    bool decodeBool(const vector<uint8_t>& bytes);
 
     // adapted from https://os.mbed.com/forum/helloworld/topic/2053/?page=1#comment-54126
     void encodeInt(int i, vector<uint8_t>& out); // 4 bytes
@@ -109,6 +124,10 @@ private:
     vector<uint8_t> convertMapData();
     void interpretMapData(const vector<uint8_t>& mapData);
 
+    /** Convert and interpret win data */
+    vector<uint8_t> convertWinData();
+    void interpretWinData(const int id, const vector<uint8_t>& winData);
+
 public:
     NetworkData() : _id(-1), _name("Player"), _hostID(0), _status(constants::MatchStatus::None) { };
 
@@ -117,6 +136,7 @@ public:
     void dispose() {
         _lobbyData = nullptr;
         _players.clear();
+        _winData = nullptr;
     }
 
     /** @return main player */
@@ -168,6 +188,18 @@ public:
     /** Set match status */
     void setStatus(const uint8_t status) {
         _status = status;
+    }
+
+    /** @return winner */
+    constants::PlayerType getWinner() {
+        if (_winData == nullptr) return constants::PlayerType::Undefined;
+        return _winData->winner;
+    }
+
+    /** Set winner */
+    void setWinner(const constants::PlayerType winner) {
+        if (_winData == nullptr) _winData = make_shared<WinData>();
+        _winData->winner = winner;
     }
 
     /** Serialize game data */

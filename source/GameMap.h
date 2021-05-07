@@ -28,11 +28,6 @@ private:
     /** The vector of slot pointers currently in the game */
     vector<shared_ptr<BatterySlot>> _slots;
     
-    /**
-     * The pair of bools representing if the game is complete
-     * and who won, repectively. True correponds to the Pals winning */
-    bool _complete [2];
-    
     bool assertValidMap();
     
 public:
@@ -63,9 +58,6 @@ public:
     
     /** Removes references for all rooms */
     void reset() { _rooms.clear(); }
-    
-    /** Returns whether or not the game is complete and who won */
-    bool* getComplete() { return _complete; }
     
     /** Returns the list of traps, delete after traps properly implemented */
     vector<shared_ptr<Trap>> getTraps() { return _traps; }

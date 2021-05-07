@@ -194,7 +194,7 @@ void GameScene::dispose() {
     GameMode::dispose();
     setActive(false);
 
-//    _input->dispose();
+    _input = nullptr;
     _collision = nullptr;
     _network = nullptr;
     _gameMap = nullptr;
@@ -202,7 +202,6 @@ void GameScene::dispose() {
     _visionNode = nullptr;
 
     _players.clear();
-    _ghostWin = false;
 }
 
 /** Function to sort player node priorities */
@@ -234,7 +233,7 @@ void GameScene::update(float timestep) {
     // Checks if the ghost should be revealed, commented out because no
     // tagging yet
     /**
-    if (_player->getType() == Player::Type::Pal) {
+    if (_player->getType() == constants::PlayerType::Pal) {
         _ghostNode->setVisible(_gameMap->getGhost()->getTagged());
     }
     */
@@ -242,7 +241,7 @@ void GameScene::update(float timestep) {
     auto player = _gameMap->getPlayer();
 
     // Delete after batteries implemented, will be handled in gamemap
-    if (player->getType() == Player::Type::Pal) {
+    if (player->getType() == constants::PlayerType::Pal) {
         if (!dynamic_pointer_cast<Pal>(player)->getSpooked()) {
             if (_input->getInteraction()) {
                 auto slotTexture = _assets->get<Texture>("slot");
@@ -274,7 +273,7 @@ void GameScene::update(float timestep) {
     // Checks if the ghost should be revealed, commented out because no
     // tagging yet
     /**
-    if (_player->getType() == Player::Type::Pal) {
+    if (_player->getType() == constants::PlayerType::Pal) {
         _ghostNode->setVisible(_gameMap->getGhost()->getTagged());
     }
     */
@@ -305,32 +304,23 @@ void GameScene::update(float timestep) {
 
     // Update camera
     _root->setPosition(center - player->getLoc());
-
-    // Check if a player has won
-    auto complete = _gameMap->getComplete();
-    if (complete[0]) {
-        // Pals win
-        _palWinNode->setVisible(complete[1]);
-        // Ghost wins
-        _ghostWinNode->setVisible(!complete[1]);
-    }
     
     // TODO: TEMPORARY WIN CODE
-    _win = false;
-    _ghostWin = false;
-    Vec2 winOrigin = _gameMap->getWinRoomOrigin();
-    winOrigin = winOrigin + (constants::ROOM_DIMENSIONS/2);
-    float distance = (player->getLoc() - winOrigin).length();
-    
-    if (distance < 100) {
-        _win = true;
-        _ghostWin = player->getType() == Player::Type::Ghost;
+    Vec2 winOrigin = _gameMap->getWinRoomOrigin() + (constants::ROOM_DIMENSIONS / 2);
+    for (auto& p : _players) {
+        if ((p->getLoc() - winOrigin).length() < 100) {
+            _network->getData()->setWinner(p->getType());
+            break;
+        }
     }
 
+    if (_network->getData()->getWinner() != constants::PlayerType::Undefined) {
+        _mode = constants::GameMode::Win;
+    }
 }
 
 void GameScene::updateVision(const std::shared_ptr<Player>& player) {
-    if (player->getType() != Player::Type::Pal) return;
+    if (player->getType() != constants::PlayerType::Pal) return;
     
     // TODO fix all of this
 
@@ -345,7 +335,7 @@ void GameScene::updateVision(const std::shared_ptr<Player>& player) {
 }
 
 void GameScene::draw(const std::shared_ptr<SpriteBatch>& batch, const std::shared_ptr<SpriteBatch>& shaderBatch) {
-    if (_gameMap->getPlayer()->getType() == Player::Type::Pal) {
+    if (_gameMap->getPlayer()->getType() == constants::PlayerType::Pal) {
         float roomLights[constants::MAX_ROOMS * 3];
         int i = 0;
         for (auto& room : _gameMap->getRooms()) {
@@ -362,7 +352,7 @@ void GameScene::draw(const std::shared_ptr<SpriteBatch>& batch, const std::share
         float palLights[constants::MAX_PALS * 4];
         i = 0;
         for (auto& player : _players) {
-            if (player != nullptr && player->getType() == Player::Type::Pal) {
+            if (player != nullptr && player->getType() == constants::PlayerType::Pal) {
                 palLights[i] = _root->getPosition().x + player->getLoc().x;
                 palLights[i + 1] = _root->getPosition().y + player->getLoc().y;
                 palLights[i + 2] = 1; // set to 1 if pal is active, 0 if not

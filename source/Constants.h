@@ -41,6 +41,12 @@ namespace constants {
         Win
     };
 
+    enum class PlayerType {
+        Undefined,
+        Pal,
+        Ghost
+    };
+
     /** Node priority levels */
     constexpr unsigned PRIORITY_RANGE = 100;
     enum Priority {

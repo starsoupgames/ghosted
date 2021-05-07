@@ -46,6 +46,15 @@ uint8_t NetworkData::decodeByte(const vector<uint8_t>& bytes) {
     return bytes[0];
 }
 
+void NetworkData::encodeBool(bool b, vector<uint8_t>& out) {
+    out.push_back(b);
+}
+
+bool NetworkData::decodeBool(const vector<uint8_t>& bytes) {
+    CUAssertLog(bytes.size() == 1, "decodeBool: Byte vector size is not equal to data type size.");
+    return (bool)bytes[0];
+}
+
 void NetworkData::encodeInt(int i, vector<uint8_t>& out) {
     int temp = marshall(i);
     unsigned char bytes[4];
@@ -194,6 +203,51 @@ void NetworkData::interpretMapData(const vector<uint8_t>& msg) {
 
 }
 
+vector<uint8_t> NetworkData::convertWinData() {
+    vector<uint8_t> result;
+    if (_id < 0) {
+        CULog("ID is not defined.");
+        return result;
+    }
+
+    uint8_t winner = 0;
+
+    if (_id == _hostID) {
+        if (_winData != nullptr) {
+            switch (_winData->winner) {
+            case constants::PlayerType::Undefined:
+                break;
+            case constants::PlayerType::Pal:
+                winner = 1;
+                break;
+            case constants::PlayerType::Ghost:
+                winner = 2;
+                break;
+            }
+        }
+    }
+    encodeByte(winner, result);
+
+    return result;
+}
+
+void NetworkData::interpretWinData(const int id, const vector<uint8_t>& msg) {
+    vector<vector<uint8_t>> splitMsg = split(msg, { 1 });
+    if (splitMsg.empty()) return;
+    if (id == _hostID) {
+        switch (decodeByte(splitMsg[0])) {
+        case 0:
+            break;
+        case 1:
+            setWinner(constants::PlayerType::Pal);
+            break;
+        case 2:
+            setWinner(constants::PlayerType::Ghost);
+            break;
+        }
+    }
+}
+
 vector<uint8_t> NetworkData::serializeData() {
     vector<uint8_t> result;
 
@@ -217,6 +271,8 @@ vector<uint8_t> NetworkData::serializeData() {
     case constants::MatchStatus::Paused:
         break;
     case constants::MatchStatus::Ended:
+        vector<uint8_t> winData = convertWinData(); // 1
+        result.insert(result.end(), winData.begin(), winData.end());
         break;
     }
 
@@ -231,7 +287,7 @@ void NetworkData::unserializeData(const vector<uint8_t>& msg) {
     auto status = metadata->status;
     if (status != _status) {
         if (metadata->id == _hostID) _status = metadata->status; // sync with host status
-        return;
+        else return;
     }
 
     switch (_status) {
@@ -253,6 +309,8 @@ void NetworkData::unserializeData(const vector<uint8_t>& msg) {
     case constants::MatchStatus::Paused:
         break;
     case constants::MatchStatus::Ended:
+        if (splitMsg.size() <= 1) break;
+        interpretWinData(metadata->id, splitMsg[1]);
         break;
     }
 }

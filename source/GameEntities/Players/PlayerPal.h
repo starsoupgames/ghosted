@@ -80,8 +80,8 @@ public:
     }
 
     /** Get player type */
-    virtual uint8_t getType() override {
-        return Type::Pal;
+    virtual constants::PlayerType getType() override {
+        return constants::PlayerType::Pal;
     }
 
     /**
