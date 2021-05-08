@@ -25,15 +25,6 @@
 		A4687393260BF31900F0E184 /* NetworkData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4687389260BF31800F0E184 /* NetworkData.cpp */; };
 		A4687394260BF31900F0E184 /* NetworkData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4687389260BF31800F0E184 /* NetworkData.cpp */; };
 		A4687395260BF31900F0E184 /* NetworkData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4687389260BF31800F0E184 /* NetworkData.cpp */; };
-		A4687396260BF31900F0E184 /* Obstacle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A468738D260BF31900F0E184 /* Obstacle.cpp */; };
-		A4687397260BF31900F0E184 /* Obstacle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A468738D260BF31900F0E184 /* Obstacle.cpp */; };
-		A4687398260BF31900F0E184 /* Obstacle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A468738D260BF31900F0E184 /* Obstacle.cpp */; };
-		A4687399260BF31900F0E184 /* BatterySlot.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4687390260BF31900F0E184 /* BatterySlot.cpp */; };
-		A468739A260BF31900F0E184 /* BatterySlot.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4687390260BF31900F0E184 /* BatterySlot.cpp */; };
-		A468739B260BF31900F0E184 /* BatterySlot.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4687390260BF31900F0E184 /* BatterySlot.cpp */; };
-		A468739C260BF31900F0E184 /* Trap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4687392260BF31900F0E184 /* Trap.cpp */; };
-		A468739D260BF31900F0E184 /* Trap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4687392260BF31900F0E184 /* Trap.cpp */; };
-		A468739E260BF31900F0E184 /* Trap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4687392260BF31900F0E184 /* Trap.cpp */; };
 		A46873AD260BF3CF00F0E184 /* NetworkController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A46873AC260BF3CF00F0E184 /* NetworkController.cpp */; };
 		A46873AE260BF3CF00F0E184 /* NetworkController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A46873AC260BF3CF00F0E184 /* NetworkController.cpp */; };
 		A46873AF260BF3CF00F0E184 /* NetworkController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A46873AC260BF3CF00F0E184 /* NetworkController.cpp */; };
@@ -85,6 +76,15 @@
 		A4BD192225F44EBB00FBD403 /* CollisionController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4BD190525F44EBA00FBD403 /* CollisionController.cpp */; };
 		A4BD192325F44EBB00FBD403 /* CollisionController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4BD190525F44EBA00FBD403 /* CollisionController.cpp */; };
 		A4BD192425F44EBB00FBD403 /* CollisionController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4BD190525F44EBA00FBD403 /* CollisionController.cpp */; };
+		A4CEDB8226458C4500E9E787 /* Obstacle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4CEDB7E26458C4500E9E787 /* Obstacle.cpp */; };
+		A4CEDB8326458C4500E9E787 /* Obstacle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4CEDB7E26458C4500E9E787 /* Obstacle.cpp */; };
+		A4CEDB8426458C4500E9E787 /* Obstacle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4CEDB7E26458C4500E9E787 /* Obstacle.cpp */; };
+		A4CEDB8526458C4500E9E787 /* BatterySlot.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4CEDB8026458C4500E9E787 /* BatterySlot.cpp */; };
+		A4CEDB8626458C4500E9E787 /* BatterySlot.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4CEDB8026458C4500E9E787 /* BatterySlot.cpp */; };
+		A4CEDB8726458C4500E9E787 /* BatterySlot.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4CEDB8026458C4500E9E787 /* BatterySlot.cpp */; };
+		A4CEDB9526458D8800E9E787 /* Trap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4CEDB9326458D8800E9E787 /* Trap.cpp */; };
+		A4CEDB9626458D8800E9E787 /* Trap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4CEDB9326458D8800E9E787 /* Trap.cpp */; };
+		A4CEDB9726458D8800E9E787 /* Trap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4CEDB9326458D8800E9E787 /* Trap.cpp */; };
 		A4F120C92623936200D621BB /* LobbyScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4F120C32623936200D621BB /* LobbyScene.cpp */; };
 		A4F120CA2623936200D621BB /* LobbyScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4F120C32623936200D621BB /* LobbyScene.cpp */; };
 		A4F120CB2623936200D621BB /* LobbyScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4F120C32623936200D621BB /* LobbyScene.cpp */; };
@@ -192,12 +192,6 @@
 		A4687389260BF31800F0E184 /* NetworkData.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NetworkData.cpp; sourceTree = "<group>"; };
 		A468738A260BF31800F0E184 /* NetworkData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetworkData.h; sourceTree = "<group>"; };
 		A468738B260BF31900F0E184 /* NetworkController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetworkController.h; sourceTree = "<group>"; };
-		A468738D260BF31900F0E184 /* Obstacle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Obstacle.cpp; sourceTree = "<group>"; };
-		A468738E260BF31900F0E184 /* Trap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Trap.h; sourceTree = "<group>"; };
-		A468738F260BF31900F0E184 /* BatterySlot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BatterySlot.h; sourceTree = "<group>"; };
-		A4687390260BF31900F0E184 /* BatterySlot.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BatterySlot.cpp; sourceTree = "<group>"; };
-		A4687391260BF31900F0E184 /* Obstacle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Obstacle.h; sourceTree = "<group>"; };
-		A4687392260BF31900F0E184 /* Trap.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Trap.cpp; sourceTree = "<group>"; };
 		A46873AC260BF3CF00F0E184 /* NetworkController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NetworkController.cpp; sourceTree = "<group>"; };
 		A4810AC22630BDA300EBF151 /* WinScene.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WinScene.h; sourceTree = "<group>"; };
 		A4810AC92630C07500EBF151 /* WinScene.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = WinScene.cpp; sourceTree = "<group>"; };
@@ -231,6 +225,12 @@
 		A4BD190625F44EBA00FBD403 /* GameRoom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameRoom.h; sourceTree = "<group>"; };
 		A4BD190825F44EBA00FBD403 /* LoadingScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoadingScene.h; sourceTree = "<group>"; };
 		A4BD190925F44EBB00FBD403 /* GameMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameMap.h; sourceTree = "<group>"; };
+		A4CEDB7E26458C4500E9E787 /* Obstacle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Obstacle.cpp; sourceTree = "<group>"; };
+		A4CEDB7F26458C4500E9E787 /* BatterySlot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BatterySlot.h; sourceTree = "<group>"; };
+		A4CEDB8026458C4500E9E787 /* BatterySlot.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BatterySlot.cpp; sourceTree = "<group>"; };
+		A4CEDB8126458C4500E9E787 /* Obstacle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Obstacle.h; sourceTree = "<group>"; };
+		A4CEDB9326458D8800E9E787 /* Trap.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Trap.cpp; sourceTree = "<group>"; };
+		A4CEDB9426458D8800E9E787 /* Trap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Trap.h; sourceTree = "<group>"; };
 		A4F120C32623936200D621BB /* LobbyScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LobbyScene.cpp; sourceTree = "<group>"; };
 		A4F120C72623936200D621BB /* LobbyScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LobbyScene.h; sourceTree = "<group>"; };
 		A4F120C82623936200D621BB /* Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Utils.h; sourceTree = "<group>"; };
@@ -362,22 +362,11 @@
 			path = Players;
 			sourceTree = "<group>";
 		};
-		A468738C260BF31900F0E184 /* RoomEntities */ = {
-			isa = PBXGroup;
-			children = (
-				A468738D260BF31900F0E184 /* Obstacle.cpp */,
-				A468738E260BF31900F0E184 /* Trap.h */,
-				A468738F260BF31900F0E184 /* BatterySlot.h */,
-				A4687390260BF31900F0E184 /* BatterySlot.cpp */,
-				A4687391260BF31900F0E184 /* Obstacle.h */,
-				A4687392260BF31900F0E184 /* Trap.cpp */,
-			);
-			path = RoomEntities;
-			sourceTree = "<group>";
-		};
 		A468B746260A74E300F0E184 /* GameEntities */ = {
 			isa = PBXGroup;
 			children = (
+				A4CEDB9326458D8800E9E787 /* Trap.cpp */,
+				A4CEDB9426458D8800E9E787 /* Trap.h */,
 				A4687373260BF2F400F0E184 /* BatteryCollectible.cpp */,
 				A4687372260BF2F400F0E184 /* BatteryCollectible.h */,
 				A4687370260BF2F300F0E184 /* Player.cpp */,
@@ -385,6 +374,17 @@
 				A4687375260BF2F400F0E184 /* Players */,
 			);
 			path = GameEntities;
+			sourceTree = "<group>";
+		};
+		A4CEDB7D26458C4500E9E787 /* RoomEntities */ = {
+			isa = PBXGroup;
+			children = (
+				A4CEDB7E26458C4500E9E787 /* Obstacle.cpp */,
+				A4CEDB7F26458C4500E9E787 /* BatterySlot.h */,
+				A4CEDB8026458C4500E9E787 /* BatterySlot.cpp */,
+				A4CEDB8126458C4500E9E787 /* Obstacle.h */,
+			);
+			path = RoomEntities;
 			sourceTree = "<group>";
 		};
 		EB22BDC325D0DE75002ACE41 /* Products */ = {
@@ -477,7 +477,7 @@
 			isa = PBXGroup;
 			children = (
 				EBBF18911D74904A008E2001 /* Ghosted (Mac).app */,
-				EB74548C1D74D75C002FBAE6 /* Ghosted (iOS).app */,
+				EB74548C1D74D75C002FBAE6 /* Ghosted.app */,
 				EB22BF5E25D0E8BC002ACE41 /* Ghosted (Sim).app */,
 			);
 			name = Products;
@@ -500,6 +500,7 @@
 		EBBF18B11D749176008E2001 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				A4CEDB7D26458C4500E9E787 /* RoomEntities */,
 				A4F120C32623936200D621BB /* LobbyScene.cpp */,
 				A4F120C72623936200D621BB /* LobbyScene.h */,
 				A4F120C82623936200D621BB /* Utils.h */,
@@ -519,7 +520,6 @@
 				A468738B260BF31900F0E184 /* NetworkController.h */,
 				A4687389260BF31800F0E184 /* NetworkData.cpp */,
 				A468738A260BF31800F0E184 /* NetworkData.h */,
-				A468738C260BF31900F0E184 /* RoomEntities */,
 				A468B746260A74E300F0E184 /* GameEntities */,
 				A4BD190525F44EBA00FBD403 /* CollisionController.cpp */,
 				A4BD18F425F44EB700FBD403 /* CollisionController.h */,
@@ -580,7 +580,7 @@
 			);
 			name = "Ghosted (iOS)";
 			productName = "CUGL Demo (iOS)";
-			productReference = EB74548C1D74D75C002FBAE6 /* Ghosted (iOS).app */;
+			productReference = EB74548C1D74D75C002FBAE6 /* Ghosted.app */;
 			productType = "com.apple.product-type.application";
 		};
 		EBBF18901D74904A008E2001 /* Ghosted (Mac) */ = {
@@ -721,10 +721,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A4CEDB9726458D8800E9E787 /* Trap.cpp in Sources */,
 				A4BD191B25F44EBB00FBD403 /* InputController.cpp in Sources */,
+				A4CEDB8426458C4500E9E787 /* Obstacle.cpp in Sources */,
 				A4B30877261A47D000563226 /* RoomEntity.cpp in Sources */,
+				A4CEDB8726458C4500E9E787 /* BatterySlot.cpp in Sources */,
 				A4B30908261D9B6600563226 /* JoinGameScene.cpp in Sources */,
-				A468739B260BF31900F0E184 /* BatterySlot.cpp in Sources */,
 				A4BD190C25F44EBB00FBD403 /* StartScene.cpp in Sources */,
 				EB9CDA3925D0EAB100EE1A09 /* main.cpp in Sources */,
 				A4B308F9261D98CC00563226 /* RoomParser.cpp in Sources */,
@@ -738,7 +740,6 @@
 				A4B3090B261D9B6600563226 /* CreateGameScene.cpp in Sources */,
 				A4BD191825F44EBB00FBD403 /* GameScene.cpp in Sources */,
 				A4BD191E25F44EBB00FBD403 /* GameRoom.cpp in Sources */,
-				A468739E260BF31900F0E184 /* Trap.cpp in Sources */,
 				A4687385260BF2F500F0E184 /* PlayerPal.cpp in Sources */,
 				A468737F260BF2F500F0E184 /* BatteryCollectible.cpp in Sources */,
 				A4810ACC2630C07500EBF151 /* WinScene.cpp in Sources */,
@@ -746,7 +747,6 @@
 				A4BD192425F44EBB00FBD403 /* CollisionController.cpp in Sources */,
 				A4BD190F25F44EBB00FBD403 /* GhostedApp.cpp in Sources */,
 				EB9CDA3925D0EAB100EE1A09 /* main.cpp in Sources */,
-				A4687398260BF31900F0E184 /* Obstacle.cpp in Sources */,
 				A4F120CB2623936200D621BB /* LobbyScene.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -755,10 +755,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A4CEDB9626458D8800E9E787 /* Trap.cpp in Sources */,
 				A4BD191A25F44EBB00FBD403 /* InputController.cpp in Sources */,
+				A4CEDB8326458C4500E9E787 /* Obstacle.cpp in Sources */,
 				A4B30876261A47D000563226 /* RoomEntity.cpp in Sources */,
+				A4CEDB8626458C4500E9E787 /* BatterySlot.cpp in Sources */,
 				A4B30907261D9B6600563226 /* JoinGameScene.cpp in Sources */,
-				A468739A260BF31900F0E184 /* BatterySlot.cpp in Sources */,
 				A4BD190B25F44EBB00FBD403 /* StartScene.cpp in Sources */,
 				EB7454AE1D74D891002FBAE6 /* main.cpp in Sources */,
 				A4B308F8261D98CC00563226 /* RoomParser.cpp in Sources */,
@@ -772,7 +774,6 @@
 				A4B3090A261D9B6600563226 /* CreateGameScene.cpp in Sources */,
 				A4BD191725F44EBB00FBD403 /* GameScene.cpp in Sources */,
 				A4BD191D25F44EBB00FBD403 /* GameRoom.cpp in Sources */,
-				A468739D260BF31900F0E184 /* Trap.cpp in Sources */,
 				A4687384260BF2F500F0E184 /* PlayerPal.cpp in Sources */,
 				A468737E260BF2F500F0E184 /* BatteryCollectible.cpp in Sources */,
 				A4810ACB2630C07500EBF151 /* WinScene.cpp in Sources */,
@@ -780,7 +781,6 @@
 				A4BD192325F44EBB00FBD403 /* CollisionController.cpp in Sources */,
 				A4BD190E25F44EBB00FBD403 /* GhostedApp.cpp in Sources */,
 				EB7454AE1D74D891002FBAE6 /* main.cpp in Sources */,
-				A4687397260BF31900F0E184 /* Obstacle.cpp in Sources */,
 				A4F120CA2623936200D621BB /* LobbyScene.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -789,10 +789,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A4CEDB9526458D8800E9E787 /* Trap.cpp in Sources */,
 				A4BD191925F44EBB00FBD403 /* InputController.cpp in Sources */,
+				A4CEDB8226458C4500E9E787 /* Obstacle.cpp in Sources */,
 				A4B30875261A47D000563226 /* RoomEntity.cpp in Sources */,
+				A4CEDB8526458C4500E9E787 /* BatterySlot.cpp in Sources */,
 				A4B30906261D9B6600563226 /* JoinGameScene.cpp in Sources */,
-				A4687399260BF31900F0E184 /* BatterySlot.cpp in Sources */,
 				A4BD190A25F44EBB00FBD403 /* StartScene.cpp in Sources */,
 				EB2BE9B61D74952A002FE78B /* main.cpp in Sources */,
 				A4B308F7261D98CC00563226 /* RoomParser.cpp in Sources */,
@@ -806,7 +808,6 @@
 				A4B30909261D9B6600563226 /* CreateGameScene.cpp in Sources */,
 				A4BD191625F44EBB00FBD403 /* GameScene.cpp in Sources */,
 				A4BD191C25F44EBB00FBD403 /* GameRoom.cpp in Sources */,
-				A468739C260BF31900F0E184 /* Trap.cpp in Sources */,
 				A4687383260BF2F500F0E184 /* PlayerPal.cpp in Sources */,
 				A468737D260BF2F500F0E184 /* BatteryCollectible.cpp in Sources */,
 				A4810ACA2630C07500EBF151 /* WinScene.cpp in Sources */,
@@ -814,7 +815,6 @@
 				A4BD192225F44EBB00FBD403 /* CollisionController.cpp in Sources */,
 				A4BD190D25F44EBB00FBD403 /* GhostedApp.cpp in Sources */,
 				EB2BE9B61D74952A002FE78B /* main.cpp in Sources */,
-				A4687396260BF31900F0E184 /* Obstacle.cpp in Sources */,
 				A4F120C92623936200D621BB /* LobbyScene.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -891,7 +891,7 @@
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_TEAM = 4SA9JDC229;
 				ENABLE_BITCODE = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -919,7 +919,7 @@
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_TEAM = 4SA9JDC229;
 				ENABLE_BITCODE = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;

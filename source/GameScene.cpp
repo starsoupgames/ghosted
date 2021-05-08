@@ -187,7 +187,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
         shared_ptr<physics2::PolygonObstacle> wallobj;
 
         // Loop through doors of the room
-        for (auto& check : room->getDoors()) {
+        for (auto check : room->getDoors()) {
             // Figure out if this should be a door or a wall
             wallRef = check ? 0 : 1;
             // Loop through the two obstacles inside the door list
@@ -276,7 +276,6 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
     _players = _network->getData()->getPlayers();
 
     _gameMap->setPlayer(_network->getData()->getPlayer()->player);
-    _gameMap->setPlayers(_network->getData()->getPlayers());
     
     vector<Vec2> coneShape;
     Vec2 tl(-CONE_WIDTH, CONE_LENGTH);
