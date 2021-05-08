@@ -240,6 +240,8 @@ void GhostedApp::update(float timestep) {
     }
     
     switch (_mode) {
+    case constants::GameMode::None:
+        break;
     case constants::GameMode::Loading:
         _loading.update(0.01f);
         break;

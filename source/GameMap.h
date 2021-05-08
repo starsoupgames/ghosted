@@ -108,7 +108,7 @@ public:
     void setPlayer(shared_ptr<Player>& player) { _player = player; }
     
     /** Sets the models for all players */
-    void setPlayers(vector<shared_ptr<Player>>& players) { _players = players; }
+    void setPlayers(vector<shared_ptr<Player>> players) { _players = players; }
     
     /** Adds a charged slot to _slots, delete after batteries properly implemented */
     void addSlot(shared_ptr<BatterySlot> slot) { _slots.push_back(slot); }

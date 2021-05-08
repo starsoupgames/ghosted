@@ -189,7 +189,7 @@ public:
     /**
      * Resets the gamescene
      */
-    void reset();
+    virtual void reset();
 
     void draw(const std::shared_ptr<SpriteBatch>& batch, const std::shared_ptr<SpriteBatch>& shaderBatch);
 };
