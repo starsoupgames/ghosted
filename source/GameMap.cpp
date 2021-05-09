@@ -12,6 +12,34 @@ bool GameMap::init() {
 
 #pragma mark Gameplay Handling
 
+/** Adds a trap to _traps, delete after traps properly implemented */
+void GameMap::addTrap(Vec2 pos) {
+    auto litRoot = _node->getChildByName("lit_root");
+    auto topRoot = _node->getChildByName("top_root");
+    auto trap = Trap::alloc(_player->getLoc());
+    trap->setArmed();
+    auto trapNode = scene2::PolygonNode::allocWithTexture(_assets->get<Texture>("ghost_shadow_texture"));
+    trapNode->setAnchor(Vec2::ANCHOR_CENTER);
+    //trapNode->setScale(0.25f); // TEMP
+    trapNode->setPosition(pos);
+    litRoot->addChild(trapNode);
+
+    auto chandelierNode = scene2::AnimationNode::alloc(_assets->get<Texture>("chandelier_texture"), 1, 19);
+    chandelierNode->setAnchor(Vec2::ANCHOR_BOTTOM_CENTER);
+    chandelierNode->setPriority(constants::Priority::Ceiling);
+    chandelierNode->setPosition(pos + constants::TRAP_CHANDELIER_OFFSET);
+    topRoot->addChild(chandelierNode);
+
+    auto trapRadiusNode = scene2::AnimationNode::alloc(_assets->get<Texture>("trap_radius"), 1, 1, 1);
+    trapRadiusNode->setVisible(false);
+    trapRadiusNode->setScale(0.5);
+    trapRadiusNode->setPosition(Vec2(trapNode->getWidth(), trapNode->getHeight()) * 0.5); // 1/2 * 4 because of 0.25 scale
+    trapNode->addChildWithName(trapRadiusNode, "radius");
+
+    trap->setNode(trapNode, chandelierNode);
+    _traps.push_back(trap);
+}
+
 /** Method to update the GameMap model, called by GameScene */
 void GameMap::update(float timestep) {
     vector<shared_ptr<Trap>> newTraps;

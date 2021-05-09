@@ -9,6 +9,8 @@ This Trap class contains information about the Trap's texture, whether or not it
 #define ARMING_TICKS 100
 #define TRIGGERING_TICKS 200
 #define TRAP_DURATION 30
+#define TRAP_ARMED 0
+#define TRAP_TRIGGERING_END 18
 
 using namespace std;
 using namespace cugl;
@@ -23,6 +25,15 @@ private:
 
     /** Done triggering */
     bool _doneTriggering;
+
+    /** Reference to the trap's sprite for drawing */
+    shared_ptr<scene2::PolygonNode> _node;
+
+    /** Reference to the trap's chandelier sprite for drawing */
+    shared_ptr<scene2::AnimationNode> _chandelierNode;
+
+    /**frames since last change for animation fps**/
+    int _timer;
 
 public:
 
@@ -61,9 +72,11 @@ public:
     void setTriggered() {
         if (doneArming() && !getTriggered()) {
             _triggering = TRIGGERING_TICKS;
-           _animationNode->setColor(Color4f::RED); // TEMP
         }
     }
+
+    /** Processes the frame for the animation */
+    virtual void processState();
 
     /** Creates a Trap with the default values */
     Trap() : GameEntity(), _arming(-1), _triggering(-1), _doneTriggering(false) {}
@@ -83,6 +96,12 @@ public:
         shared_ptr<Trap> result = make_shared<Trap>();
         return (result->init(pos) ? result : nullptr);
     };
+
+    /**
+     * @param node The Player node.
+     * @param shadow The Shadow node.
+     */
+    virtual void setNode(const shared_ptr<scene2::PolygonNode>& node, const std::shared_ptr<scene2::AnimationNode>& chandelier);
 
     void update(float timestep);
     

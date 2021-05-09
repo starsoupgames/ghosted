@@ -51,6 +51,9 @@
         "lit_door_texture": {
             "file": "textures/game/lit_door.png"
         },
+        "chandelier_texture": {
+            "file": "textures/game/envir_chandelier_frames.png"
+        },
         "dpad": {
             "file":     "textures/game/dpad.png",
             "wrapS":     "clamp",

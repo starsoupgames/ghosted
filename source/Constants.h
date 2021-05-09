@@ -21,6 +21,8 @@ namespace constants {
 
     const Vec2 PAL_SMOKE_OFFSET(-10, 0);
 
+    const Vec2 TRAP_CHANDELIER_OFFSET(0, -20);
+
 
     // Make sure to change values in lightShader.frag if you change these here
     /**maximum possible rooms generated in a map**/
@@ -54,6 +56,7 @@ namespace constants {
         Room = 100, // 100-199
         RoomEntity = 200, // 200-299
         Player = 300, // 300-399
+        Ceiling = 400, // 400-499
     };
 
     /** Status of the match */

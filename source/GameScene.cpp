@@ -114,29 +114,33 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
     //_root->addChild(_assets->get<scene2::SceneNode>("game"));
     _root->setContentSize(dimen);
     _root->doLayout();
+    _root->setName("root");
     addChild(_root, 0);
 
     _dimRoot = scene2::OrderedNode::allocWithOrder(scene2::OrderedNode::Order::ASCEND);
 //    _dimRoot->addChild(_assets->get<scene2::SceneNode>("game"));
     _dimRoot->setContentSize(dimen);
     _dimRoot->doLayout();
+    _dimRoot->setName("dim_root");
     _root->addChild(_dimRoot);
 
     _litRoot = scene2::OrderedNode::allocWithOrder(scene2::OrderedNode::Order::ASCEND);
     _litRoot->setContentSize(dimen);
     _litRoot->doLayout();
-    
+    _litRoot->setName("lit_root");
     _root->addChild(_litRoot);
 
     _topRoot = scene2::OrderedNode::allocWithOrder(scene2::OrderedNode::Order::ASCEND);
     _topRoot->setContentSize(dimen);
     _topRoot->doLayout();
+    _topRoot->setName("top_root");
     _root->addChild(_topRoot);
 
-    _gameMap = GameMap::alloc(_assets, _litRoot);
+    _gameMap = GameMap::alloc(_assets, _root);
 
     _gameMap->generateBasicMap(0);
     _collision->setGameMap(_gameMap);
+
 
     // Sets the textures of the room nodes and adds them to _root
     // Helper method that goes through all room objects, sets the textures of its nodes, and adds
@@ -461,6 +465,7 @@ void GameScene::update(float timestep) {
             _gameMap->handleInteract();
         }
     }
+
 
     // Checks if the ghost should be revealed, commented out because no
     // tagging yet

@@ -2,17 +2,41 @@
 
 using namespace cugl;
 
+void Trap::setNode(const shared_ptr<scene2::PolygonNode>& node, const std::shared_ptr<scene2::AnimationNode>& chandelier) {
+    _node = node;
+    _chandelierNode = chandelier;
+    if (_chandelierNode != nullptr) {
+        //_chandelierNode->setPosition(node->getNodeToWorldTransform().transformVector((Vec2(node->getWidth(), node->getHeight()) * 2)));
+        _timer = 0;
+        _chandelierNode->setFrame(TRAP_ARMED);
+    }
+    
+}
+
+void Trap::processState() {
+    unsigned int frame = _chandelierNode->getFrame();
+    if (_timer >= 2) {
+        _timer = 0;
+        _chandelierNode->setFrame(frame);
+        return;
+
+    }
+    if (getTriggered()) {
+        if (frame < TRAP_TRIGGERING_END) ++frame;
+    }
+    CUAssertLog(frame <= TRAP_TRIGGERING_END, "Frame out of range.");
+    ++_timer;
+    _chandelierNode->setFrame(frame);
+}
+
 void Trap::update(float timestep) {
     GameEntity::update(timestep);
     if (getTriggered()) {
         if (_triggering > 0) {
             _triggering--;
         }
-        if (doneTriggering()) {
-            _animationNode->setVisible(false);
-        }
-        else if (!justTriggered()) {
-            _animationNode->getChildByName("radius")->setVisible(false);
+        if (!justTriggered()) {
+            _node->getChildByName("radius")->setVisible(false);
         }
     }
     else if (getArmed()) {
@@ -20,9 +44,10 @@ void Trap::update(float timestep) {
             _arming--;
         }
         else if (doneArming()) {
-            _animationNode->getChildByName("radius")->setVisible(true);
+            _node->getChildByName("radius")->setVisible(true);
         }
     }
+    processState();
 }
 
 void Trap::dispose() {
@@ -32,7 +57,7 @@ void Trap::dispose() {
 void Trap::reset() {
     GameEntity::reset();
 
-    if (_animationNode != nullptr) {
-        _animationNode->setFrame(0);
+    if (_chandelierNode != nullptr) {
+        _chandelierNode->setFrame(0);
     }
 }
