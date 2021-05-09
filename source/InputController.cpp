@@ -249,8 +249,10 @@ void InputController::readLeft(const cugl::Vec2 pos) {
         // return as movement vector (x,y) normalize in move in PLAYER
         if (_movement != Vec2::ZERO) {
             if (std::fabsf(diff.length()) > 25) {
-                _ljoycenter = _ltouch.position;
+                _ljoycenter = this->touch2Screen(_ltouch.position);
                 _movement = Vec2(pos.x-_ltouch.position.x, _ltouch.position.y-pos.y);
+            } else {
+                _ltouch.position = pos;
             }
         } else {
             _movement = Vec2(pos.x-_ltouch.position.x, _ltouch.position.y-pos.y);
@@ -258,8 +260,8 @@ void InputController::readLeft(const cugl::Vec2 pos) {
         
     } else {
         _ljoystick = false;
-        _movement = Vec2::ZERO;
         _ltouch.position = pos;
+        _movement = Vec2::ZERO;
     }
 }
 
@@ -326,7 +328,7 @@ void InputController::touchBeganCB(const TouchEvent& event, bool focus) {
 
                 _ljoystick = true;
 //                _ljoycenter += Vec2(JSTICK_OFFSET, JSTICK_OFFSET);
-//                _ljoycenter = touch2Screen(event.position);
+                _ljoycenter = touch2Screen(event.position);
             }
             break;
         case Zone::RIGHT:

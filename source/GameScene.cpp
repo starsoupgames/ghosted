@@ -301,23 +301,15 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
     
     _root->addChild(_visionNode);
     
-    // Joystick UI
-    _leftnode = scene2::PolygonNode::allocWithTexture(_assets->get<Texture>("dpad_left"));
-    _leftnode->SceneNode::setAnchor(cugl::Vec2::ANCHOR_MIDDLE_RIGHT);
-    _leftnode->setScale(0.35f);
-    _leftnode->setVisible(false);
-    _topRoot->addChild(_leftnode);
-
-    _rightnode = scene2::PolygonNode::allocWithTexture(_assets->get<Texture>("dpad_right"));
-    _rightnode->SceneNode::setAnchor(cugl::Vec2::ANCHOR_MIDDLE_LEFT);
-    _rightnode->setScale(0.35f);
-    _rightnode->setVisible(false);
+    // Game UI
+//    _gameUI = scene2::OrderedNode::allocWithOrder(scene2::OrderedNode::Order::ASCEND);
+//    _gameUI->setContentSize(dimen);
+//    _gameUI->doLayout();
+//
+//    auto game = _assets->get<scene2::SceneNode>("game");
+//    _gameUI->addChild(game);
     
-    _topRoot->addChild(_rightnode);
-    
-//    _gameUI = _assets->get<scene2::SceneNode>("game");
-//    _gameMap->getPlayer()->getNode()->addChild(_gameUI);
-
+//    _root->addChild(_gameUI, 1);
     
     _litRoot->addChild(_debugNode, 1);
 
@@ -339,8 +331,6 @@ void GameScene::dispose() {
     _gameMap = nullptr;
     _root = nullptr;
     _visionNode = nullptr;
-    _leftnode = nullptr;
-    _rightnode = nullptr;
 
     _players.clear();
 }
@@ -408,31 +398,6 @@ void GameScene::update(float timestep) {
             updateVision(p);
         }
     }
-        
-    // FLOATING JOYSTICK UI
-//    if (_input->withJoystick()) {
-//        if (_input->getMove() != Vec2::ZERO) {
-//            CULog("SET LEFT");
-//            _leftnode->setVisible(true);
-//        } else {
-//            _leftnode->setVisible(false);
-//        }
-//
-//        if (_input->getDirection() != Vec2::ZERO) {
-//            _rightnode->setVisible(true);
-//        } else {
-//            _rightnode->setVisible(false);
-//        }
-//        auto player = _gameMap->getPlayer();
-//
-//        _leftnode->setPosition(_input->getLJoystick() - player->getLoc());
-//        utils::Log(_input->getLJoystick()  - _players[0]->getLoc());
-//        utils::Log(player->getLoc());
-//        _rightnode->setPosition(_input->getRJoystick());
-//    } else {
-//        _leftnode->setVisible(false);
-//        _rightnode->setVisible(false);
-//    }
 
     // Checks if the ghost should be revealed, commented out because no
     // tagging yet
@@ -500,7 +465,9 @@ void GameScene::update(float timestep) {
     }
 
     // Update camera
-    _root->setPosition(center - player->getLoc());
+    _litRoot->setPosition(center - player->getLoc());
+    _dimRoot->setPosition(center - player->getLoc());
+    _topRoot->setPosition(center - player->getLoc());
     
     // TODO: TEMPORARY WIN CODE
     /*
@@ -604,6 +571,7 @@ void GameScene::draw(const std::shared_ptr<SpriteBatch>& batch, const std::share
         batch->setBlendFunc(_srcFactor, _dstFactor);
         batch->setBlendEquation(_blendEquation);
         _topRoot->render(batch, _root->getNodeToWorldTransform(), _color);
+//        _gameUI->render(batch, _root->getNodeToWorldTransform(), _color);
         batch->end();
     }
     else {
@@ -612,6 +580,7 @@ void GameScene::draw(const std::shared_ptr<SpriteBatch>& batch, const std::share
         batch->setBlendEquation(_blendEquation);
         _litRoot->render(batch, _root->getNodeToWorldTransform(), _color);
         _topRoot->render(batch, _root->getNodeToWorldTransform(), _color);
+//        _gameUI->render(batch, _root->getNodeToWorldTransform(), _color);
         batch->end();
     }
 }

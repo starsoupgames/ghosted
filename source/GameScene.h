@@ -49,11 +49,6 @@ protected:
     /** The polygon node representing the vision cone */
     shared_ptr<scene2::PolygonNode> _visionNode;
     
-    /** Reference to the left joystick image */
-    std::shared_ptr<cugl::scene2::PolygonNode> _leftnode;
-    /** Reference to the right joystick image */
-    std::shared_ptr<cugl::scene2::PolygonNode> _rightnode;
-
     /** The Box2D world */
     shared_ptr<physics2::ObstacleWorld> _world;
 
