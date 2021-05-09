@@ -31,6 +31,12 @@ private:
     vector<shared_ptr<Trap>> _traps;
     /** The vector of slot pointers currently in the game */
     vector<shared_ptr<BatterySlot>> _slots;
+
+    /** The vector of battery spawnable coordinates */
+    vector<Vec2> _batteriesSpawnable;
+
+    /** The vector of battery spawnable coordinates */
+    vector<shared_ptr<Battery>> _batteries;
     
     bool assertValidMap();
     
@@ -40,7 +46,7 @@ public:
     
     ~GameMap() { dispose(); }
     
-    bool init();
+    bool init(const std::shared_ptr<cugl::AssetManager>& assets);
     
     /**
      * Disposes of all (non-static) resources allocated to this mode.
@@ -53,15 +59,17 @@ public:
         _traps.clear();
         _slots.clear();
     };
+
     
     /**
      * Allocates this model
      */
-    static shared_ptr<GameMap> alloc(shared_ptr<AssetManager>& assets, shared_ptr<scene2::OrderedNode>& node) {
+    static shared_ptr<GameMap> alloc(shared_ptr<AssetManager>& assets, shared_ptr<scene2::OrderedNode>& node, vector<Vec2> batterySpawnable) {
         shared_ptr<GameMap> result = make_shared<GameMap>();
-        if (!result->init()) return nullptr;
+        if (!result->init(assets)) return nullptr;
         result->_assets = assets;
         result->_node = node;
+        result->_batteriesSpawnable = batterySpawnable;
         return result;
     }
 #pragma mark -
@@ -136,6 +144,9 @@ public:
     
     /** Generates a random map */
     bool generateRandomMap();
+
+    /** Generates a random map with the coordinates of spawnable battery locations */
+    bool generateRandomMap(vector<Vec2> batterySpawns);
     
 #pragma mark -
     

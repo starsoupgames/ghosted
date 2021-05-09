@@ -98,8 +98,8 @@ public:
     };
 
     /**
-     * @param node The Player node.
-     * @param shadow The Shadow node.
+     * @param node The trap node.
+     * @param chandelier The chandelier node.
      */
     virtual void setNode(const shared_ptr<scene2::PolygonNode>& node, const std::shared_ptr<scene2::AnimationNode>& chandelier);
 

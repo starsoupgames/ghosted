@@ -172,7 +172,7 @@ float flashshade(vec4 pal, vec2 pos) {
     float palOuterRadius = 210.0;
     float d = dist(pal.xy, pos);
     //adjust 0.2 and 0.1 to make edge sharper
-    float inAngle = smoothstep(0.2, 0.1, sq(
+    float inAngle = smoothstep(0.5, 0.4, sq(
         dangle(pangle, mangle)
     ));
     if (d <= palRadius) {

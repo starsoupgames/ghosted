@@ -25,6 +25,18 @@ using namespace std;
 
 #define PIXEL_WIDTH    3360.0f
 #define PIXEL_HEIGHT   3360.0f
+vector<Vec2> BATTERY_SPAWNS = {
+    Vec2(0,3), 
+    Vec2(3,3), 
+    Vec2(6,3), 
+    Vec2(0,3), 
+    Vec2(3,6), 
+    Vec2(6,4), 
+    Vec2(0,6), 
+    Vec2(3,14), 
+    Vec2(6,14)
+};
+
 
 #define SCENE_WIDTH  1024
 #define SCENE_HEIGHT 576
@@ -66,6 +78,8 @@ Vec2 WALLS[4][2][2][4] = {
 };
 
 
+
+
 /**
  * Initializes the controller contents, and starts the game
  *
@@ -79,6 +93,12 @@ Vec2 WALLS[4][2][2][4] = {
  */
 
 bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
+    //temporary hardcoded coordinates, remove later
+    vector<Vec2> batteriesSpawnable;
+    batteriesSpawnable.push_back(Vec2(1500, 500));
+    batteriesSpawnable.push_back(Vec2(1500, 1500));
+    batteriesSpawnable.push_back(Vec2(500, 500));
+    batteriesSpawnable.push_back(Vec2(500, 1500));
     if (!GameMode::init(assets, constants::GameMode::Game)) return false;
     
     Size dimen = computeActiveSize();
@@ -100,6 +120,10 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
     // Shift to center if a bad fit
     //_scale = dimen.width == SCENE_WIDTH ? dimen.width / box2dRect.size.width : dimen.height / box2dRect.size.height;
     _scale = PIXEL_WIDTH / DEFAULT_WIDTH;
+    /*
+    _scale = dimen.width == SCENE_WIDTH ? dimen.width / rect.size.width : dimen.height / rect.size.height;
+    Vec2 offset((dimen.width - SCENE_WIDTH) / 2.0f, (dimen.height - SCENE_HEIGHT) / 2.0f);
+    */
 
     // the demos used offset to center the world node in the screen, I don't think we have to use this because
     // we have a camera
@@ -136,7 +160,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
     _topRoot->setName("top_root");
     _root->addChild(_topRoot);
 
-    _gameMap = GameMap::alloc(_assets, _root);
+    _gameMap = GameMap::alloc(_assets, _root, batteriesSpawnable);
 
     _gameMap->generateBasicMap(0);
     _collision->setGameMap(_gameMap);

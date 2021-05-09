@@ -14,9 +14,9 @@ using namespace cugl;
 
 class Battery : public GameEntity {
 private:
+	/** Reference to the trap's sprite for drawing */
+	shared_ptr<scene2::PolygonNode> _node;
 
-	/** Reference to the battery's texture */
-	shared_ptr<Texture> _batteryTexture;
 
 public:
 	/** Whether or not the battery should be drawn */
@@ -25,15 +25,33 @@ public:
 	/** Whether or not the battery needs to be deleted */
 	bool deleteFlag;
 
-	/** Returns the reference to the battery's texture */
-	const shared_ptr<Texture> getTexture() const {
-		return _batteryTexture;
-	}
 
 	/** Flags the battery for deletion. */
 	void destroy() {
 		deleteFlag = true;
 	}
+
+	/** Flags the battery for deletion. */
+	bool isDestroyed() {
+		return deleteFlag;
+	}
+
+	static std::shared_ptr<Battery> alloc() {
+		std::shared_ptr<Battery> result = std::make_shared<Battery>();
+		return (result->init(Vec2::ZERO) ? result : nullptr);
+	}
+
+	/**
+	* Returns a newly allocated Pal at the given position
+	* @param pos Initial position in world coordinates
+	*
+	* @return a newly allocated Pal at the given position
+	*/
+	static std::shared_ptr<Battery> alloc(const cugl::Vec2& pos) {
+		std::shared_ptr<Battery> result = std::make_shared<Battery>();
+		return (result->init(pos) ? result : nullptr);
+	}
+
 
 	/** Creates a Battery with the default values */
 	Battery() : GameEntity() {}
@@ -41,8 +59,12 @@ public:
 	/** Releases all resources allocated with this Battery */
 	~Battery() { dispose(); }
 
-	/** Releases all resources allocated with this Battery */
-	void dispose();
+	/**
+     * @param node The trap node.
+     * @param chandelier The chandelier node.
+     */
+    virtual void setNode(const shared_ptr<scene2::PolygonNode>& node);
+
 
 	/** Initializes a new Battery at the given location */
 	bool init(const Vec2& loc);

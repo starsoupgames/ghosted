@@ -4,9 +4,12 @@
 #define CONE_LENGTH 200
 #define ROOM_SIZE 960
 #define TRAP_RADIUS 120 // temp, should be 500px
+#define BATTERY_RADIUS 40 
+
 
 #pragma mark Constructors
-bool GameMap::init() {
+bool GameMap::init(const std::shared_ptr<cugl::AssetManager>& assets) {
+    _assets = assets;
     return true;
 }
 
@@ -66,6 +69,34 @@ void GameMap::update(float timestep) {
     for (auto& s : _slots) {
         s->update(timestep);
     }
+
+
+    //pal battery interactions
+    for (auto& p : _players) {
+        if (p->getType() == constants::PlayerType::Pal) {
+            for (auto& b : _batteries) {
+                Vec2 distance = b->getLoc() - _player->getLoc();
+                float minDistance = distance.length();
+                if (minDistance < BATTERY_RADIUS) {
+                    b->pickUp();
+                    int numBatteries = _player->getBatteries() + 1;
+                    _player->setBatteries(numBatteries);
+                    //CULog("%i", _player->getBatteries());
+                }
+
+            }
+        }
+    }
+
+    vector<shared_ptr<Battery>> newBatteries;
+    for (auto& b : _batteries) {
+        if (!b->isDestroyed()) {
+            newBatteries.push_back(b);
+        }
+    }
+    _batteries = newBatteries;
+
+
     _player->update(timestep);
 
     // If ghost is tagged, lower the tag timer
@@ -125,6 +156,7 @@ void GameMap::handleInteract() {
                 slot->getNode()->setColor(Color4f::GREEN);
             }
         }
+
     }
     else if (_player->getType() == constants::PlayerType::Ghost) {
         shared_ptr<Trap> trap = nullptr;
@@ -171,7 +203,7 @@ bool GameMap::assertValidMap() {
 
 bool GameMap::generateBasicMap(int numBatteries) {
     reset();
-    
+    auto litRoot = _node->getChildByName("lit_root");
     /**
     * 1. Create hard coded model that represent what type of rooms need to be where, no obstacles
     * 2. Assign each room an ostacle layout
@@ -187,6 +219,16 @@ bool GameMap::generateBasicMap(int numBatteries) {
     _rooms.push_back(GameRoom::alloc(Vec2(0, spacing*2), { false, true, true, false }));
     _rooms.push_back(GameRoom::alloc(Vec2(spacing, spacing * 2), { false, true, true, true }));
     _rooms.push_back(GameRoom::alloc(Vec2(spacing*2, spacing * 2), { false, false, true, true }));
+
+    for (auto& coor : _batteriesSpawnable) {
+        auto batteryNode = scene2::PolygonNode::allocWithTexture(_assets->get<Texture>("battery_texture"));
+        batteryNode->setPriority(constants::RoomEntity);
+        batteryNode->setPosition(coor);
+        litRoot->addChild(batteryNode);
+        auto batteryModel = Battery::alloc(coor);
+        batteryModel->setNode(batteryNode);
+        _batteries.push_back(batteryModel);
+    }
 
     return true;
 };
@@ -229,6 +271,36 @@ bool GameMap::generateRandomMap() {
     return true;
     
     
+}
+
+/** Generates a random map with the coordinates of spawnable battery locations */
+bool GameMap::generateRandomMap(vector<Vec2> batterySpawns) {
+    reset();
+    /**
+     * 1. Create random model that represent what type of rooms need to be where, no obstacles
+     * 2. Assign each room an ostacle layout
+     * 3. Call makeRoom() on each room+obstacle combo and add to _rooms
+     */
+
+
+    RoomParser parser = RoomParser();
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
+            shared_ptr<GameRoom> room = parser.parse("json/room.json", Vec2(i * 375, j * 375));
+
+            // set win room on top row
+            if (i == 2 && j == 2) {
+                room->setWinRoom(true);
+            }
+
+            _rooms.push_back(room);
+        }
+    }
+
+
+    return true;
+
+
 }
 
 Vec2 GameMap::getWinRoomOrigin() {

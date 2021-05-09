@@ -30,7 +30,7 @@ private:
 
 public:
     /** Returns the amount of batteries left */
-    int getBatteries() const {
+    virtual int getBatteries() const override {
         return _batteries;
     }
 
@@ -40,7 +40,7 @@ public:
     }
 
     /** Sets the amount of batteries */
-    void setBatteries(int num) {
+    virtual void setBatteries(int num) override{
         _batteries = num;
     }
 

@@ -2,6 +2,12 @@
 
 using namespace cugl;
 
+void Battery::setNode(const shared_ptr<scene2::PolygonNode>& node) {
+    _node = node;
+
+}
+
+
 /**
 * Returns a newly allocated Battery at the given location
 * @param loc Initial location in world coordinates
@@ -16,9 +22,11 @@ bool Battery::init(const Vec2& loc) {
     return true;
 }
 
+
 /**
- * Disposes all resources and assets of this battery
+ * Called when a battery on the floor collide
  */
-void Battery::dispose() {
-    _batteryTexture = nullptr;
+void Battery::pickUp() {
+    _node->setVisible(false);
+    destroy();
 }
