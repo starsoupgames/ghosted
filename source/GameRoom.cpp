@@ -1,25 +1,28 @@
 #include "GameRoom.h"
 
 using namespace std;
+using namespace cugl;
 
-bool GameRoom::init(const Vec2& origin, vector<bool> doors) {
-	// traps should be setVisible(false)
-	// slots should be setVisible(true)
-	// set obstacle nodes based on the passed in json
+bool GameRoom::init(const shared_ptr<AssetManager>& assets, const shared_ptr<scene2::OrderedNode>& node, const Vec2& origin, vector<bool> doors) {
+    _assets = assets;
+    _node = node;
+
     _ranking = Vec2(origin.x / 1120, origin.y / 1120);
-	_origin = origin;
-	_batterySpawns = vector<vector<int>>();
-	_doors = doors;
-	return true;
-}
+    _origin = origin;
+    _batterySpawns = vector<vector<int>>();
+    _doors = doors;
 
-void GameRoom::initContents(shared_ptr<Texture> slot, Size size) {
-    Vec2 center = Vec2(ROOM_DIMENSION/2, ROOM_DIMENSION/2);
+    auto slotNode = scene2::PolygonNode::allocWithTexture(_assets->get<Texture>("slot"));
+    slotNode->setScale(0.05f);
+    slotNode->setPosition(Vec2(ROOM_DIMENSION / 2, ROOM_DIMENSION / 2));
+    _node->addChild(slotNode);
+
     _slotModel = BatterySlot::alloc(_origin);
-    _slotModel->setTextures(slot, size/2);
-    _slotModel->getNode()->setScale(0.05f);
-    _slotModel->getNode()->setPosition(center);
-    _node->addChild(_slotModel->getNode());
+    _slotModel->setNode(slotNode);
+
+    // set obstacle nodes based on the passed in json
+
+    return true;
 }
 
 bool GameRoom::assertValidRoom() {

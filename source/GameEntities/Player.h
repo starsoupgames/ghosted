@@ -41,9 +41,6 @@ protected:
     /** Max speed */
     float _speed;
 
-    /** Player id */
-    unsigned id;
-
     /**frames since last change for animation fps**/
     int _timer;
 
@@ -109,7 +106,7 @@ public:
     /** Creates a Player with the default values */
     Player() : Player(5, 1) {};
 
-    Player(float speed, float scale) : GameEntity(), id(-1), _direction(Vec2(0.0f, -1.0f)), _speed(speed), _idle(true) {};
+    Player(float speed, float scale) : GameEntity(), _direction(Vec2(0.0f, -1.0f)), _speed(speed), _idle(true) {};
 
     /** Releases all resources allocated with this Player */
     ~Player() { dispose(); }

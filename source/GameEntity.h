@@ -1,4 +1,6 @@
 #pragma once
+#ifndef __GAME_ENTITY_H__
+#define __GAME_ENTITY_H__
 /**
 
 This class is the superclass which all other GameEntities subclass. It contains their texture, and location, and a node
@@ -21,7 +23,7 @@ protected:
 	int _radius;
 
 	/** Reference to the entity's sprite for drawing */
-	shared_ptr<scene2::AnimationNode> _animationNode;
+	shared_ptr<scene2::AnimationNode> _node;
 
 public:
 
@@ -98,7 +100,7 @@ public:
 	 *
 	 * @return a reference to film strip representing this pal.
 	 */
-	std::shared_ptr<cugl::scene2::AnimationNode>& getNode() { return _animationNode; }
+	std::shared_ptr<cugl::scene2::AnimationNode>& getNode() { return _node; }
 
 	/**
 	 * Sets the film strip representing this pal.
@@ -125,3 +127,4 @@ public:
 	void reset();
 };
 
+#endif

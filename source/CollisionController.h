@@ -30,20 +30,10 @@ public:
      */
     ~CollisionController() { dispose(); };
 
-    bool init();
-
     /**
     * Disposes of all (non-static) resources allocated to this controller.
     */
     virtual void dispose();
-
-    /**
-     * Allocates this collision controller
-     */
-    static shared_ptr<CollisionController> alloc() {
-        shared_ptr<CollisionController> result = make_shared<CollisionController>();
-        return (result->init() ? result : nullptr);
-    }
 
 #pragma mark -
 #pragma mark State Access

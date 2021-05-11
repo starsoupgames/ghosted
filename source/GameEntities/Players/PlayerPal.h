@@ -53,7 +53,12 @@ public:
     Pal() : Player(5, 1), _batteries(0), _spooked(false) {};
 
     /** Releases all resources allocated with this Pal */
-    ~Pal() { }
+    ~Pal() { dispose(); }
+
+    virtual void dispose() {
+        Player::dispose();
+        _smokeNode = nullptr;
+    }
 
     /**
     * @return a newly allocated Pal at the origin.

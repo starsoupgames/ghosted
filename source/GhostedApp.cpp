@@ -198,7 +198,7 @@ void GhostedApp::update(float timestep) {
             break;
         case constants::GameMode::Start:
             _network = make_shared<NetworkController>(); // reset network controller
-            _collision = CollisionController::alloc();
+            _collision = make_shared<CollisionController>(); // reset collision controller
             _networkData = make_shared<NetworkData>(); // reset network data
             _network->attachData(_networkData);
             if (_input == nullptr) {

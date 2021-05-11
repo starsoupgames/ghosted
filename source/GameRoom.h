@@ -21,10 +21,12 @@ using namespace cugl;
  */
 class GameRoom {
 private:
+    shared_ptr<AssetManager> _assets;
+
     /** The node containing the nodes for the floor + wall, slot, cable,
      * and obstacles.
      */
-    shared_ptr<scene2::PolygonNode> _node;
+    shared_ptr<scene2::OrderedNode> _node;
     
     /** The nodes for the floor + wall, slot, and cable */
     // These should only be alloc'd with position, as textures will be set in GameScene
@@ -55,18 +57,11 @@ public:
 
     ~GameRoom() { }
 
-    bool init(const Vec2& origin, vector<bool> doors);
-    
-    void initContents(shared_ptr<Texture> slot, Size size);
+    bool init(const shared_ptr<AssetManager>& assets, const shared_ptr<scene2::OrderedNode>& node, const Vec2& origin, vector<bool> doors);
 
-    static shared_ptr<GameRoom> alloc() {
+    static shared_ptr<GameRoom> alloc(const shared_ptr<AssetManager>& assets, const shared_ptr<scene2::OrderedNode>& node, const Vec2& origin, vector<bool> doors) {
         shared_ptr<GameRoom> result = make_shared<GameRoom>();
-        return (result->init(Vec2(0, 0), { true, true, true, true }) ? result : nullptr);
-    }
-
-    static shared_ptr<GameRoom> alloc(const Vec2& origin, vector<bool> doors) {
-        shared_ptr<GameRoom> result = make_shared<GameRoom>();
-        return (result->init(origin, doors) ? result : nullptr);
+        return (result->init(assets, node, origin, doors) ? result : nullptr);
     }
     
     // Gets the coordinates of the origin of this room
@@ -76,11 +71,7 @@ public:
     Vec2 getRanking() { return _ranking; }
 
     // Gets the scene node
-    shared_ptr<scene2::PolygonNode> getNode() { return _node; };
-    
-    void setNode(shared_ptr<scene2::PolygonNode> node) {
-        _node = node;
-    }
+    shared_ptr<scene2::OrderedNode> getNode() { return _node; };
 
     // Gets the list of battery spawns
     vector<vector<int>> getBatterySpawns() { return _batterySpawns; };

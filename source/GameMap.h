@@ -46,7 +46,7 @@ public:
     
     ~GameMap() { dispose(); }
     
-    bool init(const std::shared_ptr<cugl::AssetManager>& assets);
+    bool init(const shared_ptr<AssetManager>& assets, shared_ptr<scene2::OrderedNode>& node, vector<Vec2> batterySpawnable);
     
     /**
      * Disposes of all (non-static) resources allocated to this mode.
@@ -55,9 +55,11 @@ public:
         _assets = nullptr;
         _node = nullptr;
         _player = nullptr;
+        _players.clear();
         _rooms.clear();
         _traps.clear();
         _slots.clear();
+        _batteries.clear();
     };
 
     
@@ -66,11 +68,7 @@ public:
      */
     static shared_ptr<GameMap> alloc(shared_ptr<AssetManager>& assets, shared_ptr<scene2::OrderedNode>& node, vector<Vec2> batterySpawnable) {
         shared_ptr<GameMap> result = make_shared<GameMap>();
-        if (!result->init(assets)) return nullptr;
-        result->_assets = assets;
-        result->_node = node;
-        result->_batteriesSpawnable = batterySpawnable;
-        return result;
+        return (result->init(assets, node, batterySpawnable) ? result : nullptr);
     }
 #pragma mark -
 #pragma mark State Access

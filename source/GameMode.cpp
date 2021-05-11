@@ -59,7 +59,8 @@ bool GameMode::init(const std::shared_ptr<AssetManager>& assets, constants::Game
  * Disposes of all (non-static) resources allocated to this mode.
  */
 void GameMode::dispose() {
-    _assets = nullptr;
     Scene2::dispose();
     setActive(false);
+    _assets = nullptr;
+    _root = nullptr;
 }

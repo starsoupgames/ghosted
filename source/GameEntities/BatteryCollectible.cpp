@@ -4,7 +4,6 @@ using namespace cugl;
 
 void Battery::setNode(const shared_ptr<scene2::PolygonNode>& node) {
     _node = node;
-
 }
 
 

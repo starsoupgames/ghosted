@@ -17,6 +17,7 @@ bool Player::init(const Vec2& pos) {
  */
 void Player::dispose() {
     _node = nullptr;
+    _shadow = nullptr;
 }
 
 /**

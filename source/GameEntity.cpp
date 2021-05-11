@@ -23,7 +23,7 @@ bool GameEntity::init(const Vec2& pos) {
  * Disposes all resources and assets of this entity
  */
 void GameEntity::dispose() {
-    _animationNode = nullptr;
+    _node = nullptr;
 }
 
 /**
@@ -34,10 +34,10 @@ void GameEntity::dispose() {
  * @param value The pal film strip.
  */
 void GameEntity::setNode(const std::shared_ptr<scene2::AnimationNode>& value) {
-    _animationNode = value;
-    if (_animationNode != nullptr) {
-        _animationNode->setPosition(_loc);
-        _animationNode->setAnchor(Vec2::ANCHOR_CENTER);
+    _node = value;
+    if (_node != nullptr) {
+        _node->setPosition(_loc);
+        _node->setAnchor(Vec2::ANCHOR_CENTER);
     }
 }
 
@@ -50,7 +50,7 @@ void GameEntity::setNode(const std::shared_ptr<scene2::AnimationNode>& value) {
 
 void GameEntity::update(float timestep) {
     //setPosition(0, 0);
-    if (_animationNode != nullptr) _animationNode->setPosition(_loc);
+    if (_node != nullptr) _node->setPosition(_loc);
 
 }
 

@@ -197,8 +197,6 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 
 
         node->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
-        room->setNode(node);
-        room->initContents(slotTexture, _root->getContentSize());
         _gameMap->addSlot(room->getSlot());
         _dimRoot->addChild(node);
         node->setPosition(room->getOrigin());
@@ -241,7 +239,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
                     wallobj->setDebugColor(Color4::YELLOW);
 
                     sprite = scene2::PolygonNode::alloc();
-                    CULog("Adding wall: ");
+                    //CULog("Adding wall: ");
                     //addObstacle(wallobj, sprite, 1, false);
                 }
             }
@@ -355,8 +353,10 @@ void GameScene::dispose() {
     _gameMap = nullptr;
     _root = nullptr;
     _visionNode = nullptr;
+    // get rid of other nodes
 
     _players.clear();
+    _world = nullptr;
 }
 
 /** Function to sort player node priorities */
@@ -431,28 +431,8 @@ void GameScene::update(float timestep) {
     }
     */
 
-    // Delete after batteries implemented, will be handled in gamemap
-    if (player->getType() == constants::PlayerType::Pal) {
-        if (!dynamic_pointer_cast<Pal>(player)->getSpooked()) {
-            if (_input->getInteraction()) {
-                auto slotTexture = _assets->get<Texture>("slot");
-                shared_ptr<BatterySlot> slot = BatterySlot::alloc(Vec2(0, 100));
-                slot->setTextures(slotTexture, _root->getContentSize());
-                slot->getNode()->setScale(0.05f);
-                _root->addChild(slot->getNode());
-                slot->getNode()->setVisible(true);
-                slot->setLoc(player->getLoc());
-                slot->setCharge();
-                slot->getNode()->setColor(Color4f::GREEN);
-                _gameMap->addSlot(slot);
-                _gameMap->handleInteract();
-            }
-        }
-    }
-    else {
-        if (_input->getInteraction()) {
-            _gameMap->handleInteract();
-        }
+    if (_input->getInteraction()) {
+        _gameMap->handleInteract();
     }
 
 

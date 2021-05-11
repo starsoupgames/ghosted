@@ -152,9 +152,6 @@
     <ClCompile Include="..\..\source\RoomEntities\BatterySlot.cpp">
       <Filter>Source Files\RoomEntities</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\source\RoomEntities\Obstacle.cpp">
-      <Filter>Source Files\RoomEntities</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\source\RoomEntity.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -199,6 +196,9 @@
     </ClCompile>
     <ClCompile Include="..\..\source\GameEntities\Trap.cpp">
       <Filter>Source Files\GameEntities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\RoomEntities\Obstacle.cpp">
+      <Filter>Source Files\RoomEntities</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

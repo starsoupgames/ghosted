@@ -17,6 +17,12 @@ using namespace cugl;
 
 class Trap : public GameEntity {
 private:
+    /** Reference to the trap's sprite for drawing */
+    shared_ptr<scene2::PolygonNode> _node;
+
+    /** Reference to the trap's chandelier sprite for drawing */
+    shared_ptr<scene2::AnimationNode> _chandelierNode;
+
     /** Progress while arming */
     int _arming;
 
@@ -25,12 +31,6 @@ private:
 
     /** Done triggering */
     bool _doneTriggering;
-
-    /** Reference to the trap's sprite for drawing */
-    shared_ptr<scene2::PolygonNode> _node;
-
-    /** Reference to the trap's chandelier sprite for drawing */
-    shared_ptr<scene2::AnimationNode> _chandelierNode;
 
     /**frames since last change for animation fps**/
     int _timer;
@@ -101,7 +101,7 @@ public:
      * @param node The trap node.
      * @param chandelier The chandelier node.
      */
-    virtual void setNode(const shared_ptr<scene2::PolygonNode>& node, const std::shared_ptr<scene2::AnimationNode>& chandelier);
+    void setNode(const shared_ptr<scene2::PolygonNode>& node, const std::shared_ptr<scene2::AnimationNode>& chandelier);
 
     void update(float timestep);
     

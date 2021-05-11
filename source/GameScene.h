@@ -29,6 +29,8 @@ protected:
     /** Controller for handling networking */
     shared_ptr<NetworkController> _network;
 
+    shared_ptr<GameMap> _gameMap;
+
     // VIEW
     /** Root node */
     shared_ptr<scene2::OrderedNode> _root;
@@ -37,6 +39,7 @@ protected:
     shared_ptr<scene2::OrderedNode> _litRoot;
     shared_ptr<scene2::PolygonNode> _floorNode;
     shared_ptr<scene2::PolygonNode> _litFloorNode;
+    shared_ptr<scene2::SceneNode> _gameUI;
     /** Reference to the debug root of the scene graph */
     shared_ptr<scene2::SceneNode> _debugNode;
 
@@ -56,13 +59,10 @@ protected:
     float _scale;
 
     // MODEL
-    shared_ptr<GameMap> _gameMap;
     vector<shared_ptr<Player>> _players;
 
     /** Whether or not debug mode is active */
     bool _debug;
-    
-    shared_ptr<scene2::SceneNode> _gameUI;
 
 #pragma mark Internal Object Management
 

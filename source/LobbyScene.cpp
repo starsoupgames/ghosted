@@ -24,7 +24,6 @@ bool LobbyScene::init(const shared_ptr<AssetManager>& assets) {
     _start->addListener([=](const string& name, bool down) {
         if (!down) {
             _mode = constants::GameMode::Game;
-            _network->startGame();
         }
         });
     
@@ -101,8 +100,18 @@ void LobbyScene::update(float timestep) {
         }
     }
 
-    if (_network->getData() != nullptr && _network->getData()->getStatus() == constants::MatchStatus::InProgress) {
-        _mode = constants::GameMode::Game;
+    if (_network != nullptr) {
+        auto networkData = _network->getData();
+        if (networkData != nullptr) {
+            if (networkData->getStatus() == constants::MatchStatus::InProgress) {
+                _mode = constants::GameMode::Game;
+            }
+        }
+
+        if (!(_network->getStatus() == CUNetworkConnection::NetStatus::Pending || _network->getStatus() == CUNetworkConnection::NetStatus::Connected)) {
+            CULog("Error connecting to network.");
+            _mode = constants::GameMode::JoinGame;
+        }
     }
 
     // TODO join room failed, retry connection
@@ -117,7 +126,6 @@ void LobbyScene::dispose() {
     _network = nullptr;
     _start = nullptr;
     _escape = nullptr;
-    _root->removeChildByName("roomIDText");
 }
 
 /**

@@ -1,15 +1,16 @@
 #include "GameMap.h"
 
-#define CONE_WIDTH 75
-#define CONE_LENGTH 200
-#define ROOM_SIZE 960
 #define TRAP_RADIUS 120 // temp, should be 500px
 #define BATTERY_RADIUS 40 
 
+using namespace std;
+using namespace cugl;
 
 #pragma mark Constructors
-bool GameMap::init(const std::shared_ptr<cugl::AssetManager>& assets) {
+bool GameMap::init(const shared_ptr<AssetManager>& assets, shared_ptr<scene2::OrderedNode>& node, vector<Vec2> batterySpawnable) {
     _assets = assets;
+    _node = node;
+    _batteriesSpawnable = batterySpawnable;
     return true;
 }
 
@@ -33,7 +34,7 @@ void GameMap::addTrap(Vec2 pos) {
     chandelierNode->setPosition(pos + constants::TRAP_CHANDELIER_OFFSET);
     topRoot->addChild(chandelierNode);
 
-    auto trapRadiusNode = scene2::AnimationNode::alloc(_assets->get<Texture>("trap_radius"), 1, 1, 1);
+    auto trapRadiusNode = scene2::PolygonNode::allocWithTexture(_assets->get<Texture>("trap_radius"));
     trapRadiusNode->setVisible(false);
     trapRadiusNode->setScale(0.5);
     trapRadiusNode->setPosition(Vec2(trapNode->getWidth(), trapNode->getHeight()) * 0.5); // 1/2 * 4 because of 0.25 scale
@@ -75,12 +76,13 @@ void GameMap::update(float timestep) {
     for (auto& p : _players) {
         if (p->getType() == constants::PlayerType::Pal) {
             for (auto& b : _batteries) {
-                Vec2 distance = b->getLoc() - _player->getLoc();
+                Vec2 distance = b->getLoc() - p->getLoc();
                 float minDistance = distance.length();
-                if (minDistance < BATTERY_RADIUS) {
+                if (minDistance < BATTERY_RADIUS && !b->isDestroyed()) {
                     b->pickUp();
-                    int numBatteries = _player->getBatteries() + 1;
-                    _player->setBatteries(numBatteries);
+                    auto pal = dynamic_pointer_cast<Pal>(p);
+                    int numBatteries = pal->getBatteries() + 1;
+                    pal->setBatteries(numBatteries);
                     //CULog("%i", _player->getBatteries());
                 }
 
@@ -133,7 +135,7 @@ void GameMap::move(Vec2 move, Vec2 direction) {
 void GameMap::handleInteract() {
     float range = 250.0f;
     // TODO use position, not node position
-    if (_player->getType() == constants::PlayerType::Pal) {
+    if (_player->getType() == constants::PlayerType::Pal && !dynamic_pointer_cast<Pal>(_player)->getSpooked()) {
         //  CODE FOR WHEN BATTERIES FULLY IMPLEMENTED
         /**
          * if (pal is close to the slot in their room):
@@ -143,6 +145,7 @@ void GameMap::handleInteract() {
          */
         shared_ptr<BatterySlot> slot = nullptr;
         
+        // TODO fix this
         for (auto room = _rooms.begin(); room != _rooms.end(); ++room) {
             Vec2 slotPos = (*room)->getOrigin() + (*room)->getSlot()->getNode()->getPosition();
             Vec2 distance = slotPos - _player->getNode()->getPosition();
@@ -210,15 +213,15 @@ bool GameMap::generateBasicMap(int numBatteries) {
     * 3. Call makeRoom() on each room+obstacle combo and add to _rooms
     */
     int spacing = 1120;
-    _rooms.push_back(GameRoom::alloc(Vec2(0, 0), { true, true, false, false }));
-    _rooms.push_back(GameRoom::alloc(Vec2(spacing, 0), { true, true, false, true }));
-    _rooms.push_back(GameRoom::alloc(Vec2(spacing*2, 0), { true, false, false, true }));
-    _rooms.push_back(GameRoom::alloc(Vec2(0, spacing), { true, true, true, false }));
-    _rooms.push_back(GameRoom::alloc(Vec2(spacing, spacing), { true, true, true, true }));
-    _rooms.push_back(GameRoom::alloc(Vec2(spacing*2, spacing), { true, false, true, true }));
-    _rooms.push_back(GameRoom::alloc(Vec2(0, spacing*2), { false, true, true, false }));
-    _rooms.push_back(GameRoom::alloc(Vec2(spacing, spacing * 2), { false, true, true, true }));
-    _rooms.push_back(GameRoom::alloc(Vec2(spacing*2, spacing * 2), { false, false, true, true }));
+    _rooms.push_back(GameRoom::alloc(_assets, _node, Vec2(0, 0), { true, true, false, false }));
+    _rooms.push_back(GameRoom::alloc(_assets, _node, Vec2(spacing, 0), { true, true, false, true }));
+    _rooms.push_back(GameRoom::alloc(_assets, _node, Vec2(spacing*2, 0), { true, false, false, true }));
+    _rooms.push_back(GameRoom::alloc(_assets, _node, Vec2(0, spacing), { true, true, true, false }));
+    _rooms.push_back(GameRoom::alloc(_assets, _node, Vec2(spacing, spacing), { true, true, true, true }));
+    _rooms.push_back(GameRoom::alloc(_assets, _node, Vec2(spacing*2, spacing), { true, false, true, true }));
+    _rooms.push_back(GameRoom::alloc(_assets, _node, Vec2(0, spacing*2), { false, true, true, false }));
+    _rooms.push_back(GameRoom::alloc(_assets, _node, Vec2(spacing, spacing * 2), { false, true, true, true }));
+    _rooms.push_back(GameRoom::alloc(_assets, _node, Vec2(spacing*2, spacing * 2), { false, false, true, true }));
 
     for (auto& coor : _batteriesSpawnable) {
         auto batteryNode = scene2::PolygonNode::allocWithTexture(_assets->get<Texture>("battery_texture"));
@@ -283,10 +286,10 @@ bool GameMap::generateRandomMap(vector<Vec2> batterySpawns) {
      */
 
 
-    RoomParser parser = RoomParser();
+    shared_ptr<RoomParser> parser = RoomParser::alloc(_assets, _node);
     for (int i = 0; i < 3; i++) {
         for (int j = 0; j < 3; j++) {
-            shared_ptr<GameRoom> room = parser.parse("json/room.json", Vec2(i * 375, j * 375));
+            shared_ptr<GameRoom> room = parser->parse("json/room.json", Vec2(i * 375, j * 375));
 
             // set win room on top row
             if (i == 2 && j == 2) {
