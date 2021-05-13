@@ -48,9 +48,6 @@ protected:
     
     /** Reference to all the nodes for the rooms */
     vector<shared_ptr<scene2::PolygonNode>> _roomNodes;
-
-    /** The polygon node representing the vision cone */
-    shared_ptr<scene2::PolygonNode> _visionNode;
     
     /** The Box2D world */
     shared_ptr<physics2::ObstacleWorld> _world;

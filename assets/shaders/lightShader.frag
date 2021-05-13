@@ -147,8 +147,8 @@ float roomshade(vec3 light, vec2 pos) {
     if (light.z == 0.0f) return a;
     vec2 room = light.xy - pos;
     //sharpness of outer circle edge
-    float roomRadius = 200.0;
-    float roomOuterRadius = 210.0;
+    float roomRadius = 432.0;
+    float roomOuterRadius = roomRadius + 10.0;
     float rD = dist(light.xy, pos);
     if (rD <= roomRadius) {
         a = 1.0;

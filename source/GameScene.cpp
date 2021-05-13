@@ -176,7 +176,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
     // shared_ptr<Texture> doorTexture =_assets->get<Texture>("dim_door_texture");
     //shared_ptr<Texture> litDoorTexture = _assets->get<Texture>("lit_door_texture"); // TODO put this in for loop
 
-    shared_ptr<Texture> slotTexture =_assets->get<Texture>("slot");
+    shared_ptr<Texture> slotTexture =_assets->get<Texture>("slot_empty");
     for (auto& room : _gameMap->getRooms()) {
         string roomCode = room->getDoorsStr();
         shared_ptr<Texture> doorTexture = _assets->get<Texture>(roomCode);
@@ -316,12 +316,6 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
     coneShape.push_back(tl);
     coneShape.push_back(tr);
 
-    _visionNode = scene2::PolygonNode::alloc(coneShape);
-    _visionNode->setColor(Color4f(1, 1, 1, .2));
-    _visionNode->setAnchor(Vec2::ANCHOR_CENTER);
-    _visionNode->setPriority(constants::Priority::Player);
-    
-    _root->addChild(_visionNode);
     
     // Game UI
 //    _gameUI = scene2::OrderedNode::allocWithOrder(scene2::OrderedNode::Order::ASCEND);
@@ -352,8 +346,6 @@ void GameScene::dispose() {
     _network = nullptr;
     _gameMap = nullptr;
     _root = nullptr;
-    _visionNode = nullptr;
-    // get rid of other nodes
 
     _players.clear();
     _world = nullptr;
@@ -510,8 +502,6 @@ void GameScene::updateVision(const std::shared_ptr<Player>& player) {
     angle = fmod(angle - M_PI_2, 2*M_PI);
     if (angle < 0) angle += 2 * M_PI;
 
-    _visionNode->setAngle(angle);
-    _visionNode->setPosition(player->getLoc());
 }
 
 void GameScene::draw(const std::shared_ptr<SpriteBatch>& batch, const std::shared_ptr<SpriteBatch>& shaderBatch) {
@@ -519,8 +509,10 @@ void GameScene::draw(const std::shared_ptr<SpriteBatch>& batch, const std::share
         float roomLights[constants::MAX_ROOMS * 3];
         int i = 0;
         for (auto& room : _gameMap->getRooms()) {
-            roomLights[i] = _root->getPosition().x + room->getOrigin().x + constants::ROOM_CENTER.x;
-            roomLights[i + 1] = _root->getPosition().y + room->getOrigin().y + constants::ROOM_CENTER.x;
+            Vec2 slotPos = room->getSlot()->getLoc();
+            CULog("%f, %f", slotPos.x, slotPos.y);
+            roomLights[i] = _dimRoot->getPosition().x + slotPos.x;
+            roomLights[i + 1] = _dimRoot->getPosition().y + slotPos.y;
             roomLights[i + 2] = room->getLight() ? 1 : 0; // set to 1 if room's light is on, 0 if not
             i += 3;
         }
@@ -533,8 +525,12 @@ void GameScene::draw(const std::shared_ptr<SpriteBatch>& batch, const std::share
         i = 0;
         for (auto& player : _players) {
             if (player != nullptr && player->getType() == constants::PlayerType::Pal) {
-                palLights[i] = _root->getPosition().x + player->getLoc().x;
-                palLights[i + 1] = _root->getPosition().y + player->getLoc().y;
+                palLights[i] = _topRoot->getPosition().x + player->getNode()->getPosition().x;
+                palLights[i + 1] = _topRoot->getPosition().y + player->getNode()->getPosition().y;
+                /*Mat4 globalTransform = player->getNode()->getNodeToWorldTransform();
+                Vec2 pos = globalTransform.transformVector(player->getNode()->getPosition());
+                palLights[i] = pos.x;
+                palLights[i + 1] = pos.y;*/
                 palLights[i + 2] = 1; // set to 1 if pal is active, 0 if not
 
                 // because vision cone is broken

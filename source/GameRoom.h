@@ -4,11 +4,10 @@
 #define __GAME_ROOM_H__
 #include <cugl/cugl.h>
 #include "RoomEntities/BatterySlot.h"
+#include "Constants.h"
 
-using namespace cugl;
 
-// prev value: 600 (outdated?)
-constexpr int ROOM_DIMENSION = 375;
+constexpr int ROOM_DIMENSION = 960;
 
 using namespace std;
 using namespace cugl;

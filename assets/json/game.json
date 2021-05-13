@@ -30,8 +30,8 @@
         "trap_radius": {
             "file": "textures/player/trap_radius.png"
         },
-        "slot": {
-            "file": "textures/logo.png"
+        "slot_empty": {
+            "file": "textures/game/envir_batterybox_empty.png"
         },
         "dim_floor_texture": {
             "file": "textures/game/dim_floor.png"

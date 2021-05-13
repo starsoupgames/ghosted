@@ -12,12 +12,13 @@ bool GameRoom::init(const shared_ptr<AssetManager>& assets, const shared_ptr<sce
     _batterySpawns = vector<vector<int>>();
     _doors = doors;
 
-    auto slotNode = scene2::PolygonNode::allocWithTexture(_assets->get<Texture>("slot"));
+    auto slotNode = scene2::PolygonNode::allocWithTexture(_assets->get<Texture>("slot_empty"));
     slotNode->setScale(0.05f);
     slotNode->setPosition(Vec2(ROOM_DIMENSION / 2, ROOM_DIMENSION / 2));
+    slotNode->setPriority(constants::Priority::RoomEntity);
     _node->addChild(slotNode);
 
-    _slotModel = BatterySlot::alloc(_origin);
+    _slotModel = BatterySlot::alloc(Vec2(ROOM_DIMENSION / 2, ROOM_DIMENSION / 2));
     _slotModel->setNode(slotNode);
 
     // set obstacle nodes based on the passed in json

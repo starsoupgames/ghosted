@@ -147,7 +147,7 @@ void GameMap::handleInteract() {
         
         // TODO fix this
         for (auto room = _rooms.begin(); room != _rooms.end(); ++room) {
-            Vec2 slotPos = (*room)->getOrigin() + (*room)->getSlot()->getNode()->getPosition();
+            Vec2 slotPos = (*room)->getOrigin() + (*room)->getSlot()->getLoc();
             Vec2 distance = slotPos - _player->getNode()->getPosition();
             if (distance.length() < range) {
                 slot = (*room)->getSlot();
@@ -212,7 +212,10 @@ bool GameMap::generateBasicMap(int numBatteries) {
     * 2. Assign each room an ostacle layout
     * 3. Call makeRoom() on each room+obstacle combo and add to _rooms
     */
+    
+
     int spacing = 1120;
+    auto roomNode1 = scene2::PolygonNode::allocWithTexture(_assets->get<Texture>("battery_texture"));
     _rooms.push_back(GameRoom::alloc(_assets, _node, Vec2(0, 0), { true, true, false, false }));
     _rooms.push_back(GameRoom::alloc(_assets, _node, Vec2(spacing, 0), { true, true, false, true }));
     _rooms.push_back(GameRoom::alloc(_assets, _node, Vec2(spacing*2, 0), { true, false, false, true }));
@@ -225,7 +228,7 @@ bool GameMap::generateBasicMap(int numBatteries) {
 
     for (auto& coor : _batteriesSpawnable) {
         auto batteryNode = scene2::PolygonNode::allocWithTexture(_assets->get<Texture>("battery_texture"));
-        batteryNode->setPriority(constants::RoomEntity);
+        batteryNode->setPriority(constants::Priority::RoomEntity);
         batteryNode->setPosition(coor);
         litRoot->addChild(batteryNode);
         auto batteryModel = Battery::alloc(coor);
