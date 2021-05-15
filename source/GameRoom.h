@@ -39,6 +39,9 @@ private:
     /** Where in the grid of rooms this room is */
     Vec2 _ranking;
 
+    /** If this room has layouts, delete after all rooms have layouts */
+    bool _layout;
+
     bool _winRoom;
     
     /** Possible locations within the room where batteries can spawn */
@@ -100,6 +103,9 @@ public:
     void setWinRoom(bool exit) { _winRoom = exit; };
     bool getWinRoom() { return _winRoom; };
     
+    /** Returns the layout of the room */
+    bool getLayout() { return _layout; };
+
     // Comparison operator
     friend bool operator<(const shared_ptr<GameRoom>& l, const shared_ptr<GameRoom>& r) {
         if (l->_origin.x != r->_origin.x) {

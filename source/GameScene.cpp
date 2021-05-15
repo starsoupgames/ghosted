@@ -162,7 +162,8 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 
     _gameMap = GameMap::alloc(_assets, _root, batteriesSpawnable);
 
-    _gameMap->generateBasicMap(0);
+    // _gameMap->generateBasicMap(0);
+    _gameMap->generateRandomMap();
     _collision->setGameMap(_gameMap);
 
 
@@ -175,6 +176,8 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 
     // shared_ptr<Texture> doorTexture =_assets->get<Texture>("dim_door_texture");
     //shared_ptr<Texture> litDoorTexture = _assets->get<Texture>("lit_door_texture"); // TODO put this in for loop
+
+    shared_ptr<RoomParser> parser = make_shared<RoomParser>();
 
     shared_ptr<Texture> slotTexture =_assets->get<Texture>("slot_empty");
     for (auto& room : _gameMap->getRooms()) {
@@ -194,24 +197,46 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
         floorNode->setAlternateTransform(floorOffset);
         floorNode->chooseAlternateTransform(true);
         node->addChild(floorNode);
-
-
         node->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
         _gameMap->addSlot(room->getSlot());
         _dimRoot->addChild(node);
         node->setPosition(room->getOrigin());
 
+        // Ranking used to offset positions
+        Vec2 ranking = room->getRanking();
+        int xOffset = (ranking.x * 1120) + 80;
+        int yOffset = ranking.y * 1120;
+        // Draw furniture
+
+        string path = parser->pickLayout(roomCode);
+        shared_ptr<LayoutMetadata> roomData = parser->getLayoutData(path);
+        for (auto& obs : roomData->obstacles) {
+            // Get texture with name
+            shared_ptr<Texture> obsTexture = _assets->get<Texture>(obs.name);
+            shared_ptr<scene2::PolygonNode> node = scene2::PolygonNode::allocWithTexture(obsTexture);
+            // Flip if required
+            node->flipHorizontal(obs.flip);
+            // Get position, multiply by pixel size of each tile, and then add the offsets
+            Vec2 position = Vec2((obs.position.x * 80) + xOffset, (obs.position.y * 80) + yOffset);
+            node->setPosition(position);
+            // Do something with hitboxes
+            Vec2 hitbox = obs.hitbox;
+            // Add to scene graph
+            _topRoot->addChild(node);
+        }
+
+
+
         // Create obstacles for walls
         shared_ptr<scene2::PolygonNode> sprite;
         int count = 0;
         int wallRef;
-        Vec2 ranking = room->getRanking();
-        int xOffset = ranking.x * 14;
-        int yOffset = ranking.y * 14;
+        xOffset = ranking.x * 14;
+        yOffset = ranking.y * 14;
         vector<Vec2> vertices;
         SimpleTriangulator triangulator;
         shared_ptr<physics2::PolygonObstacle> wallobj;
-
+        /**
         // Loop through doors of the room
         for (auto check : room->getDoors()) {
             // Figure out if this should be a door or a wall
@@ -246,6 +271,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
             count += 1;
         
         }
+        */
 
         //scene graph for lit versions of entities, or entities only visible under light
         shared_ptr<scene2::PolygonNode> litNode = scene2::PolygonNode::allocWithTexture(litFloorTexture);

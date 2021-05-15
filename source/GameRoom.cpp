@@ -6,7 +6,6 @@ using namespace cugl;
 bool GameRoom::init(const shared_ptr<AssetManager>& assets, const shared_ptr<scene2::OrderedNode>& node, const Vec2& origin, vector<bool> doors) {
     _assets = assets;
     _node = node;
-
     _ranking = Vec2(origin.x / 1120, origin.y / 1120);
     _origin = origin;
     _batterySpawns = vector<vector<int>>();

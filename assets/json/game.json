@@ -1,132 +1,162 @@
 {
-    "textures": {
-        "pal_texture": {
-            "file": "textures/player/Pal_Base_Body_Frames.png"
-        },
-        "ghost_texture": {
-            "file": "textures/player/Ghost_Frames.png"
-        },
-        "pal_doe_texture": {
-            "file": "textures/player/Pal_Doe_Frames.png"
-        },
-        "pal_seal_texture": {
-            "file": "textures/player/Pal_Seal_Frames.png"
-        },
-        "pal_tanuki_texture": {
-            "file": "textures/player/Pal_Tanuki_Frames.png"
-        },
-        "pal_shadow_texture": {
-            "file": "textures/player/Pal_Shadow.png"
-        },
-        "ghost_shadow_texture": {
-            "file": "textures/player/Ghost_Shadow.png"
-        },
-        "pal_smoke_texture": {
-            "file": "textures/player/Pal_Smoke_Frames.png"
-        },
-        "trap": {
-            "file": "textures/play.png"
-        },
-        "trap_radius": {
-            "file": "textures/player/trap_radius.png"
-        },
-        "slot_empty": {
-            "file": "textures/game/envir_batterybox_empty.png"
-        },
-        "dim_floor_texture": {
-            "file": "textures/game/dim_floor.png"
-        },
-        "lit_floor_texture": {
-            "file": "textures/game/lit_floor.png"
-        },
-        "dim_wall_texture": {
-            "file": "textures/game/dim_wall.png"
-        },
-        "lit_wall_texture": {
-            "file": "textures/game/lit_wall.png"
-        },
-        "dim_door_texture": {
-            "file": "textures/game/dim_door.png"
-        },
-        "lit_door_texture": {
-            "file": "textures/game/lit_door.png"
-        },
-        "chandelier_texture": {
-            "file": "textures/game/envir_chandelier_frames.png"
-        },
-        "dpad": {
-            "file":     "textures/game/dpad.png",
-            "wrapS":     "clamp",
-            "wrapT":     "clamp",
-            "atlas":     {
-                "up"   : [0,     0, 127, 127],
-                "down" : [128,   0, 255, 127],
-                "left" : [0,   128, 127, 255],
-                "right": [128, 128, 255, 255]
-            }
-        },
-        "doehead": {
-          "file": "textures/game/doehead.png"
-        },
-        "tanukihead": {
-          "file": "textures/game/tanukihead.png"
-        },
-        "sealhead": {
-            "file":   "textures/game/sealhead.png"
-        },
-        "bat": {
-          "file": "textures/game/bat.png"
-        },
-        "battery_texture": {
-            "file": "textures/game/envir_battery_batch.png"
-        },    
-        "0001": {
-          "file": "textures/rooms/0001.png"
-        },
-        "0010": {
-          "file": "textures/rooms/0010.png"
-        },
-        "0011": {
-          "file": "textures/rooms/0011.png"
-        },
-        "0100": {
-          "file": "textures/rooms/0100.png"
-        },
-        "0101": {
-          "file": "textures/rooms/0101.png"
-        },
-        "0110": {
-          "file": "textures/rooms/0110.png"
-        },
-        "0111": {
-          "file": "textures/rooms/0111.png"
-        },
-        "1000": {
-          "file": "textures/rooms/1000.png"
-        },
-        "1001": {
-          "file": "textures/rooms/1001.png"
-        },
-        "1010": {
-          "file": "textures/rooms/1010.png"
-        },
-        "1011": {
-          "file": "textures/rooms/1011.png"
-        },
-        "1100": {
-          "file": "textures/rooms/1100.png"
-        },
-        "1101": {
-          "file": "textures/rooms/1101.png"
-        },
-        "1110": {
-          "file": "textures/rooms/1110.png"
-        },
-        "1111": {
-          "file": "textures/rooms/1111.png"
-        }
-        
+  "textures": {
+    "pal_texture": {
+      "file": "textures/player/Pal_Base_Body_Frames.png"
     },
+    "ghost_texture": {
+      "file": "textures/player/Ghost_Frames.png"
+    },
+    "pal_doe_texture": {
+      "file": "textures/player/Pal_Doe_Frames.png"
+    },
+    "pal_seal_texture": {
+      "file": "textures/player/Pal_Seal_Frames.png"
+    },
+    "pal_tanuki_texture": {
+      "file": "textures/player/Pal_Tanuki_Frames.png"
+    },
+    "pal_shadow_texture": {
+      "file": "textures/player/Pal_Shadow.png"
+    },
+    "ghost_shadow_texture": {
+      "file": "textures/player/Ghost_Shadow.png"
+    },
+    "pal_smoke_texture": {
+      "file": "textures/player/Pal_Smoke_Frames.png"
+    },
+    "trap": {
+      "file": "textures/play.png"
+    },
+    "trap_radius": {
+      "file": "textures/player/trap_radius.png"
+    },
+    "slot_empty": {
+      "file": "textures/game/envir_batterybox_empty.png"
+    },
+    "dim_floor_texture": {
+      "file": "textures/game/dim_floor.png"
+    },
+    "lit_floor_texture": {
+      "file": "textures/game/lit_floor.png"
+    },
+    "dim_wall_texture": {
+      "file": "textures/game/dim_wall.png"
+    },
+    "lit_wall_texture": {
+      "file": "textures/game/lit_wall.png"
+    },
+    "dim_door_texture": {
+      "file": "textures/game/dim_door.png"
+    },
+    "lit_door_texture": {
+      "file": "textures/game/lit_door.png"
+    },
+    "chandelier_texture": {
+      "file": "textures/game/envir_chandelier_frames.png"
+    },
+    "dpad": {
+      "file": "textures/game/dpad.png",
+      "wrapS": "clamp",
+      "wrapT": "clamp",
+      "atlas": {
+        "up": [ 0, 0, 127, 127 ],
+        "down": [ 128, 0, 255, 127 ],
+        "left": [ 0, 128, 127, 255 ],
+        "right": [ 128, 128, 255, 255 ]
+      }
+    },
+    "doehead": {
+      "file": "textures/game/doehead.png"
+    },
+    "tanukihead": {
+      "file": "textures/game/tanukihead.png"
+    },
+    "sealhead": {
+      "file": "textures/game/sealhead.png"
+    },
+    "bat": {
+      "file": "textures/game/bat.png"
+    },
+    "battery_texture": {
+      "file": "textures/game/envir_battery_batch.png"
+    },
+    "0001": {
+      "file": "textures/rooms/0001.png"
+    },
+    "0010": {
+      "file": "textures/rooms/0010.png"
+    },
+    "0011": {
+      "file": "textures/rooms/0011.png"
+    },
+    "0100": {
+      "file": "textures/rooms/0100.png"
+    },
+    "0101": {
+      "file": "textures/rooms/0101.png"
+    },
+    "0110": {
+      "file": "textures/rooms/0110.png"
+    },
+    "0111": {
+      "file": "textures/rooms/0111.png"
+    },
+    "1000": {
+      "file": "textures/rooms/1000.png"
+    },
+    "1001": {
+      "file": "textures/rooms/1001.png"
+    },
+    "1010": {
+      "file": "textures/rooms/1010.png"
+    },
+    "1011": {
+      "file": "textures/rooms/1011.png"
+    },
+    "1100": {
+      "file": "textures/rooms/1100.png"
+    },
+    "1101": {
+      "file": "textures/rooms/1101.png"
+    },
+    "1110": {
+      "file": "textures/rooms/1110.png"
+    },
+    "1111": {
+      "file": "textures/rooms/1111.png"
+    },
+    "armchair1_down": {
+      "file": "textures/obstacles/armchair1/armchair1_down.png"
+    },
+    "armchair1_right": {
+      "file": "textures/obstacles/armchair1/armchair1_right.png"
+    },
+    "armchair1_up": {
+      "file": "textures/obstacles/armchair1/armchair1_up.png"
+    },
+    "bench2_down": {
+      "file": "textures/obstacles/bench2/bench2_down.png"
+    },
+    "bench2_right": {
+      "file": "textures/obstacles/bench2/bench2_right.png"
+    },
+    "piano1_down": {
+      "file": "textures/obstacles/piano1/piano1_down.png"
+    },
+    "couch1_down": {
+      "file": "textures/obstacles/couch1/couch1_down.png"
+    },
+    "couch1_right": {
+      "file": "textures/obstacles/couch1/couch1_right.png"
+    },
+    "couch1_up": {
+      "file": "textures/obstacles/couch1/couch1_up.png"
+    },
+    "stool1_down": {
+      "file": "textures/obstacles/stool1/stool1_down.png"
+    }
+
+  },
     "fonts": {
     },
     "scene2s": {

@@ -252,30 +252,28 @@ shared_ptr<GameRoom> makeRoom() {
 
 bool GameMap::generateRandomMap() {
     reset();
-    /**
-     * 1. Create random model that represent what type of rooms need to be where, no obstacles
-     * 2. Assign each room an ostacle layout
-     * 3. Call makeRoom() on each room+obstacle combo and add to _rooms
-     */
-    
-    /*
-    RoomParser parser = RoomParser();
-    for (int i = 0; i < 3; i++) {
-        for (int j = 0; j < 3; j++) {
-            shared_ptr<GameRoom> room = parser.parse("json/room.json", Vec2(i * 375, j * 375));
-            
-            // set win room on top row
-            if (i == 2 && j == 2) {
-                room->setWinRoom(true);
-            }
-            
-            _rooms.push_back(room);
-        }
+    auto litRoot = _node->getChildByName("lit_root");
+
+    int spacing = 1120;
+
+    shared_ptr<RoomParser> parser = make_shared<RoomParser>();
+    shared_ptr<MapMetadata> mapData = parser->getMapData(parser->pickMap());
+
+    for (auto& room : mapData->rooms) {
+        _rooms.push_back(GameRoom::alloc(_assets, _node, Vec2(room.rank.x * spacing, room.rank.y * spacing), room.doors));
     }
-    */
-    
-    return true;
-    
+
+    for (auto& coor : _batteriesSpawnable) {
+        auto batteryNode = scene2::PolygonNode::allocWithTexture(_assets->get<Texture>("battery_texture"));
+        batteryNode->setPriority(constants::RoomEntity);
+        batteryNode->setPosition(coor);
+        litRoot->addChild(batteryNode);
+        auto batteryModel = Battery::alloc(coor);
+        batteryModel->setNode(batteryNode);
+        _batteries.push_back(batteryModel);
+    }
+
+    return true;   
     
 }
 
@@ -288,7 +286,7 @@ bool GameMap::generateRandomMap(vector<Vec2> batterySpawns) {
      * 3. Call makeRoom() on each room+obstacle combo and add to _rooms
      */
 
-
+    /**
     shared_ptr<RoomParser> parser = RoomParser::alloc(_assets, _node);
     for (int i = 0; i < 3; i++) {
         for (int j = 0; j < 3; j++) {
@@ -302,7 +300,7 @@ bool GameMap::generateRandomMap(vector<Vec2> batterySpawns) {
             _rooms.push_back(room);
         }
     }
-
+    */
 
     return true;
 

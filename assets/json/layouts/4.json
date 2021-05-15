@@ -1,0 +1,51 @@
+{
+    "obstacles": [
+        {
+            "name": "couch1_right",
+            "flip": false,
+            "position": [ 3, 5 ],
+            "hitbox": [ 2, 2 ]
+        },
+        {
+            "name": "couch1_right",
+            "flip": true,
+            "position": [ 8, 5 ],
+            "hitbox": [ 2, 2 ]
+        },
+        {
+            "name": "stool1_down",
+            "flip": false,
+            "position": [ 7, 6 ],
+            "hitbox": [ 1, 1 ]
+        },
+        {
+            "name": "stool1_down",
+            "flip": false,
+            "position": [ 4, 3 ],
+            "hitbox": [ 1, 1 ]
+        },
+        {
+            "name": "stool1_down",
+            "flip": false,
+            "position": [ 4, 6 ],
+            "hitbox": [ 1, 1 ]
+        },
+        {
+            "name": "stool1_down",
+            "flip": false,
+            "position": [ 7, 3 ],
+            "hitbox": [ 1, 1 ]
+        }
+    ],
+    "spawns": [
+        {
+            "position": [ 7, 7 ]
+        },
+        {
+            "position": [ 1, 1 ]
+        },
+        {
+            "position": [ 10, 10 ]
+        }
+    ]
+}

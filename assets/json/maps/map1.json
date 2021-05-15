@@ -1,0 +1,72 @@
+{
+  "rooms": [
+    {
+      "doors": [
+        true, true, false, false
+      ],
+      "rank": [0, 0]
+    },
+    {
+      "doors": [
+        true, true, false, true
+      ],
+      "rank": [1, 0]
+    },
+    {
+      "doors": [
+        true, false, false, true
+      ],
+      "rank": [2, 0]
+    },
+    {
+      "doors": [
+        true, true, true, false
+      ],
+      "rank": [0, 1]
+    },
+    {
+      "doors": [
+        true, true, true, true
+      ],
+      "rank": [1, 1]
+    },
+    {
+      "doors": [
+        true, false, true, true
+      ],
+      "rank": [2, 1]
+    },
+    {
+      "doors": [
+        false, true, true, false
+      ],
+      "rank": [0, 2]
+    },
+    {
+      "doors": [
+        false, true, true, true
+      ],
+      "rank": [1, 2]
+    },
+    {
+      "doors": [
+        false, false, true, true
+      ],
+      "rank": [2, 2]
+    }
+  ],
+  "spawns": [
+    {
+      "start": [0, 0],
+      "end": [1, 2]
+    },
+    {
+      "start": [1, 1],
+      "end": [0, 2]
+    },
+    {
+      "start": [0, 1],
+      "end": [2, 2]
+    }
+  ]
+}
