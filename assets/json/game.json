@@ -39,6 +39,12 @@
     "lit_floor_texture": {
       "file": "textures/game/lit_floor.png"
     },
+    "dim_floor1_texture": {
+      "file": "textures/game/envir_floor1a_batch.png"
+    },
+    "lit_floor1_texture": {
+      "file": "textures/game/envir_floor1b_batch.png"
+    },
     "dim_wall_texture": {
       "file": "textures/game/dim_wall.png"
     },

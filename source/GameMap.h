@@ -4,7 +4,6 @@
 #define __GAME_MAP_H__
 #include <cugl/cugl.h>
 #include "GameRoom.h"
-#include "RoomParser.h"
 #include "GameEntities/Players/PlayerPal.h"
 #include "GameEntities/Players/PlayerGhost.h"
 #include "GameEntities/BatteryCollectible.h"

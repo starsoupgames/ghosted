@@ -4,6 +4,7 @@
 #define __GAME_ROOM_H__
 #include <cugl/cugl.h>
 #include "RoomEntities/BatterySlot.h"
+#include "RoomParser.h"
 #include "Constants.h"
 
 
@@ -26,6 +27,9 @@ private:
      * and obstacles.
      */
     shared_ptr<scene2::OrderedNode> _node;
+
+    /** Root node for GameScene */
+    shared_ptr<scene2::OrderedNode> _root;
     
     /** The nodes for the floor + wall, slot, and cable */
     // These should only be alloc'd with position, as textures will be set in GameScene
@@ -61,11 +65,18 @@ public:
 
     bool init(const shared_ptr<AssetManager>& assets, const shared_ptr<scene2::OrderedNode>& node, const Vec2& origin, vector<bool> doors);
 
+    bool init(const shared_ptr<AssetManager>& assets, const Vec2& origin, vector<bool> doors);
+
     static shared_ptr<GameRoom> alloc(const shared_ptr<AssetManager>& assets, const shared_ptr<scene2::OrderedNode>& node, const Vec2& origin, vector<bool> doors) {
         shared_ptr<GameRoom> result = make_shared<GameRoom>();
         return (result->init(assets, node, origin, doors) ? result : nullptr);
     }
     
+    static shared_ptr<GameRoom> alloc(const shared_ptr<AssetManager>& assets, const Vec2& origin, vector<bool> doors) {
+        shared_ptr<GameRoom> result = make_shared<GameRoom>();
+        return (result->init(assets, origin, doors) ? result : nullptr);
+    }
+
     // Gets the coordinates of the origin of this room
     Vec2 getOrigin() { return _origin; }
 
@@ -74,6 +85,16 @@ public:
 
     // Gets the scene node
     shared_ptr<scene2::OrderedNode> getNode() { return _node; };
+
+    /**
+     * @param value The Player node.
+     */
+    void setNode(const shared_ptr<scene2::OrderedNode>& value);
+
+    /**
+     * @param value The Player node.
+     */
+    void setRoot(const shared_ptr<scene2::OrderedNode>& value);
 
     // Gets the list of battery spawns
     vector<vector<int>> getBatterySpawns() { return _batterySpawns; };
@@ -98,6 +119,9 @@ public:
     shared_ptr<BatterySlot> getSlot() { return _slotModel; };
     
     bool getLight() { return _slotModel->getCharge() > 0;};
+
+    /** Populates the room with obstacles from the parser */
+    void addObstacles(const shared_ptr<RoomParser>& parser);
     
     /** Is this room the exit room? */
     void setWinRoom(bool exit) { _winRoom = exit; };

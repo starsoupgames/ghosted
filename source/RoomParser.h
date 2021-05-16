@@ -1,7 +1,6 @@
 #pragma once
 
 #include <cugl/cugl.h>
-#include "GameRoom.h"
 using namespace std;
 using namespace cugl;
 

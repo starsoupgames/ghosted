@@ -259,8 +259,22 @@ bool GameMap::generateRandomMap() {
     shared_ptr<RoomParser> parser = make_shared<RoomParser>();
     shared_ptr<MapMetadata> mapData = parser->getMapData(parser->pickMap());
 
+    int i = 0;
     for (auto& room : mapData->rooms) {
-        _rooms.push_back(GameRoom::alloc(_assets, _node, Vec2(room.rank.x * spacing, room.rank.y * spacing), room.doors));
+        auto node = scene2::OrderedNode::allocWithOrder(scene2::OrderedNode::Order::ASCEND);
+        auto origin = Vec2(room.rank.x * spacing, room.rank.y * spacing);
+        node->setContentSize(constants::ROOM_DIMENSIONS);
+        node->doLayout();
+        node->setName("room_" + to_string(i));
+        //node->setPosition(origin);
+        litRoot->addChild(node);
+        auto r = GameRoom::alloc(_assets, origin, room.doors);
+        //_rooms.push_back(GameRoom::alloc(_assets, node, Vec2(room.rank.x * spacing, room.rank.y * spacing), room.doors));
+        r->setNode(node);
+        r->setRoot(_node);
+        r->addObstacles(parser);
+        addSlot(r->getSlot());
+        _rooms.push_back(r);
     }
 
     for (auto& coor : _batteriesSpawnable) {

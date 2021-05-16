@@ -15,13 +15,13 @@ namespace constants {
 
     constexpr uint8_t NETWORK_TICKS = 5;
 
-    const Vec2 ROOM_DIMENSIONS (375, 375);
-
     const Vec2 ROOM_CENTER (187.5, 187.5);
 
     const Vec2 PAL_SMOKE_OFFSET(-10, 0);
 
     const Vec2 TRAP_CHANDELIER_OFFSET(0, -20);
+
+    const Size ROOM_DIMENSIONS(960, 960);
 
 
     // Make sure to change values in lightShader.frag if you change these here
