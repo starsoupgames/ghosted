@@ -46,12 +46,6 @@ protected:
 
 public:
 
-    /** Returns the amount of batteries left. Only overriden in Pal */
-    virtual int getBatteries() const { return 0; }
-
-    /** Sets the amount of batteries. Only overriden in Pal */
-    virtual void setBatteries(int num) { }
-
     /** Returns the reference to the animation node */
     const shared_ptr <scene2::AnimationNode> getNode() const {
         return _node;

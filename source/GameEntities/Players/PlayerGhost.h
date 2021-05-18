@@ -73,6 +73,7 @@ public:
 
     /** Sets whether or not a Ghost is spooking */
     void setSpooking(bool spooking) {
+        _spookingTimer = 0;
         _spooking = spooking;
     }
 

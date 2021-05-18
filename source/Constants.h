@@ -13,11 +13,11 @@ using namespace cugl;
 namespace constants {
     constexpr unsigned SCENE_WIDTH = 1024;
 
-    constexpr uint8_t NETWORK_TICKS = 5;
+    constexpr uint8_t NETWORK_TICKS = 2; // must be >1 for interpolation
 
     const Vec2 ROOM_CENTER (187.5, 187.5);
 
-    const Vec2 PAL_SMOKE_OFFSET(-10, 0);
+    const Vec2 PAL_EFFECT_OFFSET(-10, 0);
 
     const Vec2 TRAP_CHANDELIER_OFFSET(0, -20);
 

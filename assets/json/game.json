@@ -21,8 +21,8 @@
     "ghost_shadow_texture": {
       "file": "textures/player/Ghost_Shadow.png"
     },
-    "pal_smoke_texture": {
-      "file": "textures/player/Pal_Smoke_Frames.png"
+    "pal_effect_texture": {
+      "file": "textures/player/Pal_Effect_Frames.png"
     },
     "trap": {
       "file": "textures/play.png"

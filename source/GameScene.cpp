@@ -188,10 +188,10 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
     _assets->get<Texture>("ghost_texture")->setName("ghost_sprite");
 
     for (auto& s : { "doe", "seal", "tanuki" }) {
-        auto palNode = scene2::AnimationNode::alloc(_assets->get<Texture>("pal_" + string(s) + "_texture"), 4, 24);
+        auto palNode = scene2::AnimationNode::alloc(_assets->get<Texture>("pal_" + string(s) + "_texture"), 6, 24);
 
         auto palShadowNode = scene2::PolygonNode::allocWithTexture(_assets->get<Texture>("pal_shadow_texture"));
-        auto palSmokeNode = scene2::AnimationNode::alloc(_assets->get<Texture>("pal_smoke_texture"), 1, 19);
+        auto palSmokeNode = scene2::AnimationNode::alloc(_assets->get<Texture>("pal_effect_texture"), 2, 19);
         
         Vec2 spawn;
         if (string(s) == "doe") {
@@ -389,16 +389,11 @@ void GameScene::update(float timestep) {
     _dimRoot->setPosition(center - player->getLoc());
     _topRoot->setPosition(center - player->getLoc());
     
-    // TODO: TEMPORARY WIN CODE
-    /*
-    Vec2 winOrigin = _gameMap->getWinRoomOrigin() + (constants::ROOM_DIMENSIONS / 2);
-    for (auto& p : _players) {
-        if ((p->getLoc() - winOrigin).length() < 100) {
-            _network->getData()->setWinner(p->getType());
-            break;
-        }
-    }
-    */
+
+
+    // Pal wins
+
+
     // Ghost wins
     bool allPalsSpooked = true;
     for (auto& p : _players) {
@@ -417,9 +412,10 @@ void GameScene::update(float timestep) {
 
 void GameScene::updateVision(const std::shared_ptr<Player>& player) {
     if (player->getType() != constants::PlayerType::Pal) return;
+
     
     // TODO fix all of this
-
+    
     Vec2 dir = player->getDir();
     // convert degrees to radians
     float angle = atan2(dir.y, dir.x);
@@ -434,7 +430,6 @@ void GameScene::draw(const std::shared_ptr<SpriteBatch>& batch, const std::share
         int i = 0;
         for (auto& room : _gameMap->getRooms()) {
             Vec2 slotPos = room->getSlot()->getLoc();
-            CULog("%f, %f", slotPos.x, slotPos.y);
             roomLights[i] = _dimRoot->getPosition().x + slotPos.x;
             roomLights[i + 1] = _dimRoot->getPosition().y + slotPos.y;
             roomLights[i + 2] = room->getLight() ? 1 : 0; // set to 1 if room's light is on, 0 if not

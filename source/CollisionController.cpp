@@ -23,14 +23,6 @@ void CollisionController::beginContact(b2Contact* contact) {
     b2Body* body1 = contact->GetFixtureA()->GetBody();
     b2Body* body2 = contact->GetFixtureB()->GetBody();
 
-    // Handles ghost and pal spooking
-    bool check1 = body1->GetUserData() != _gameMap->getGhost().get();
-    bool check2 = body2->GetUserData() == _gameMap->getGhost().get();
-    if (check1 && check2) {
-        shared_ptr<Player> palModel = _gameMap->getModel(body1);
-        dynamic_pointer_cast<Pal>(palModel)->setSpooked(!dynamic_pointer_cast<Ghost>(_gameMap->getGhost())->getTagged());
-    }
-
     // Must handle ghost and vision cone tagging
 }
 

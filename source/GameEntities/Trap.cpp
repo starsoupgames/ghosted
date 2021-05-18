@@ -35,7 +35,11 @@ void Trap::update(float timestep) {
         if (_triggering > 0) {
             _triggering--;
         }
-        if (!justTriggered()) {
+        if (doneTriggering()) {
+            _node->setVisible(false);
+            _chandelierNode->setVisible(false);
+        }
+        else if (!justTriggered()) {
             _node->getChildByName("radius")->setVisible(false);
         }
     }

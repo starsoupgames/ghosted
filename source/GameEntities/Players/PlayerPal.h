@@ -10,8 +10,20 @@ using namespace cugl;
 #define IMG_SPOOKED_START 94 // Idle spooked frame
 #define IMG_SPOOKED_END 95 // Last idle spooked frame
 #define IMG_SMOKE_FRAME_START 75 // Frame for smoke to start (refers to pal texture)
-#define IMG_SMOKE_END 18 // Last smoke frame (refers to smoke texture, NOT pal texture)
 
+#define IMG_UNSPOOK_START 96 // First unspooking frame
+#define IMG_UNSPOOK_END 116 // Last unspooking frame
+#define IMG_HELP_START 117 // First help frame
+#define IMG_HELP_END 135 // Last help frame
+
+/** Pal effect sprite numbers */
+#define IMG_SMOKE_START 0 // First smoke frame (refers to effect texture, NOT pal texture)
+#define IMG_SMOKE_END 18 // Last smoke frame (refers to effect texture, NOT pal texture)
+#define IMG_HEART_START 19 // First heart frame (refers to effect texture, NOT pal texture)
+#define IMG_HEART_END 27 // Last heart frame (refers to effect texture, NOT pal texture)
+
+/** pal helping ticks **/
+#define HELPING_TICKS 100
 
 /**
 This PlayerPal class contains information about the Pal's texture, the amount of batteries it has,
@@ -25,39 +37,125 @@ private:
     /** Whether a Pal is spooked or not */
     bool _spooked;
 
+    /** Spook flag for networking */
+    bool _spookFlag;
+
+    /** Unspook flag for networking */
+    bool _unspookFlag;
+
+    /** Progress while helping */
+    int _helping;
+
+    /** Progress for a pal being unspooked */
+    int _unspooking;
+
     /** Reference to the animation node */
-    shared_ptr<scene2::AnimationNode> _smokeNode;
+    shared_ptr<scene2::AnimationNode> _effectNode;
+
+    /** Sets whether or not the pal is done being unspooked */
+    bool doneUnspooking() const {
+        return _unspooking == 0;
+    }
+
+    /** Returns whether or not a Pal is being unspooked */
+    bool getUnspooking() const {
+        return _unspooking > 0;
+    }
+
+    /** Processes the direction for the animation */
+    virtual void processDirection() override;
+
+    /** Processes the timing for a pal helping */
+    virtual void processHelping();
 
 public:
     /** Returns the amount of batteries left */
-    virtual int getBatteries() const override {
+    int getBatteries() const {
         return _batteries;
     }
 
-    /** Returns whether or not a Pal is spooed */
+    /** Sets the amount of batteries */
+    void setBatteries(int num) {
+        _batteries = num;
+    }
+
+    /** Returns whether or not a Pal is spooked */
     bool getSpooked() const {
         return _spooked;
     }
 
-    /** Sets the amount of batteries */
-    virtual void setBatteries(int num) override{
-        _batteries = num;
-    }
-
     /** Sets whether or not a Pal is spooked */
     void setSpooked(bool spooked) {
-        _spooked = spooked;
+        if (_spooked == spooked) return;
+        if (!(_spookFlag || _unspookFlag)) {
+            spooked ? setSpookFlag() : setUnspookFlag();
+        }
+        updateSpooked();
+    }
+
+    /** Updates whether or not a Pal is spooked */
+    void updateSpooked() {
+        if (_spookFlag) {
+            _spooked = true;
+        }
+        if (_unspookFlag) {
+            if (_spooked) {
+                _unspooking = HELPING_TICKS;
+            }
+            _spooked = false;
+        }
+        _spookFlag = false;
+        _unspookFlag = false;
+    }
+
+    /** Returns spook flag */
+    bool getSpookFlag() const {
+        return _spookFlag;
+    }
+
+    /** Sets spookFlag */
+    void setSpookFlag() {
+        if (_spooked || getUnspooking()) return;
+        _spookFlag = true;
+    }
+
+    /** Returns unspook flag */
+    bool getUnspookFlag() const {
+        return _unspookFlag;
+    }
+
+    /** Sets spookFlag */
+    void setUnspookFlag() {
+        if (!_spooked) return;
+        _unspookFlag = true;
+    }
+
+    /** Returns whether or not a Pal is helping */
+    bool getHelping() const {
+        return _helping > 0;
+    }
+
+    /** Sets the pal as helping */
+    void setHelping() {
+        if (!getHelping()) {
+            _helping = HELPING_TICKS;
+        }
+    }
+
+    /** Sets whether or not the trap is done triggering */
+    bool doneHelping() const {
+        return _helping == 0;
     }
 
     /** Creates a Pal with the default values */
-    Pal() : Player(5, 1), _batteries(0), _spooked(false) {};
+    Pal() : Player(5, 1), _batteries(0), _spooked(false), _spookFlag(false), _unspookFlag(false), _helping(0), _unspooking(0) {};
 
     /** Releases all resources allocated with this Pal */
     ~Pal() { dispose(); }
 
     virtual void dispose() {
         Player::dispose();
-        _smokeNode = nullptr;
+        _effectNode = nullptr;
     }
 
     /**
@@ -72,9 +170,6 @@ public:
         shared_ptr<Pal> result = make_shared<Pal>();
         return (result->init(pos) ? result : nullptr);
     };
-
-    /** Processes the direction for the animation */
-    virtual void processDirection() override;
 
     /** Increments/decrements the battery counter */
     void addBattery(int num) {

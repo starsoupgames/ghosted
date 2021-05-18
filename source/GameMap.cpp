@@ -55,7 +55,7 @@ void GameMap::update(float timestep) {
                     if ((t->getLoc() - p->getLoc()).length() < TRAP_RADIUS) {
                         auto pal = dynamic_pointer_cast<Pal>(p);
                         if (!pal->getSpooked()) {
-                            pal->setSpooked(true);
+                            pal->setSpookFlag();
                         }
                     }
                 }
@@ -98,7 +98,6 @@ void GameMap::update(float timestep) {
     }
     _batteries = newBatteries;
 
-
     _player->update(timestep);
 
     // If ghost is tagged, lower the tag timer
@@ -120,7 +119,8 @@ void GameMap::update(float timestep) {
 void GameMap::move(Vec2 move, Vec2 direction) {
     _player->updateVelocity(move);
     if (_player->getType() == constants::PlayerType::Pal) {
-        if (direction != Vec2::ZERO) {
+        // if pal is helping, freeze the vision cone direction
+        if (direction != Vec2::ZERO && !dynamic_pointer_cast<Pal>(_player)->getHelping()) {
             _player->setDir(direction);
         }
     }
@@ -143,6 +143,25 @@ void GameMap::handleInteract() {
          *	slot->getNode()->setColor(Color4f::GREEN);
          *   _slots.push_back(slot);
          */
+        shared_ptr<Pal> pal = nullptr;
+        float minDistance = numeric_limits<float>::infinity();
+        for (auto& p : _players) {
+            if (p->getType() == constants::PlayerType::Pal && p != _player && dynamic_pointer_cast<Pal>(p)->getSpooked()) {
+                Vec2 distance = p->getLoc() - _player->getLoc();
+                if (distance.length() < minDistance) {
+                    pal = dynamic_pointer_cast<Pal>(p);
+                    minDistance = distance.length();
+                }
+            }
+        }
+        if (minDistance < range) {
+            dynamic_pointer_cast<Pal>(_player)->setHelping();
+            dynamic_pointer_cast<Pal>(pal)->setUnspookFlag();
+            return;
+        }
+
+
+
         shared_ptr<BatterySlot> slot = nullptr;
         
         // TODO fix this
@@ -179,7 +198,12 @@ void GameMap::handleInteract() {
         }
         else {
             if (minDistance < TRAP_RADIUS) {
+                
                 trap->setTriggered();
+                if (trap->justTriggered()) {
+                    dynamic_pointer_cast<Ghost>(_player)->setSpooking(true);
+                }
+                
             }
             else {
                 addTrap(_player->getLoc());
