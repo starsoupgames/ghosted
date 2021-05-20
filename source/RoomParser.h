@@ -51,23 +51,27 @@ struct RoomMetadata {
 };
 
 /** Metadata representing a map, contains information about the rooms and
- *  possible spawns
+ *  the spawns
  */
 struct MapMetadata {
     vector<RoomMetadata> rooms;
-    vector<vector<Vec2>> spawns;
+    Vec2 start;
+    Vec2 end;
 
-    MapMetadata(vector<RoomMetadata> rooms, vector<vector<Vec2>> spawns) {
+    MapMetadata(vector<RoomMetadata> rooms, Vec2 start, Vec2 end) {
         this->rooms = rooms;
-        this->spawns = spawns;
+        this->start = start;
+        this->end = end;
     }
 };
 
 class RoomParser {
  
 private:
+    template <typename T>
+
     /** Returns the index to a random element of a list of floats */
-    int getRandIndex(vector<float> lst);
+    int getRandIndex(vector<T> lst);
 
 public:
     shared_ptr<AssetManager> _assets;
@@ -98,6 +102,8 @@ public:
     /** Takes in a json file and returns the room layout */
     shared_ptr<LayoutMetadata>getLayoutData(string file);
 
-    /** Takes in a json file and returns the corresponding map */
+    /** Takes in a json file and returns the corresponding map.
+     *  Also picks a start room and end room combination.
+     */
     shared_ptr<MapMetadata> getMapData(string file);
 };

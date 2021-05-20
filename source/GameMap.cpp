@@ -240,6 +240,7 @@ bool GameMap::generateBasicMap(int numBatteries) {
 
     int spacing = 1120;
     auto roomNode1 = scene2::PolygonNode::allocWithTexture(_assets->get<Texture>("battery_texture"));
+    /**
     _rooms.push_back(GameRoom::alloc(_assets, _node, Vec2(0, 0), { true, true, false, false }));
     _rooms.push_back(GameRoom::alloc(_assets, _node, Vec2(spacing, 0), { true, true, false, true }));
     _rooms.push_back(GameRoom::alloc(_assets, _node, Vec2(spacing*2, 0), { true, false, false, true }));
@@ -249,6 +250,7 @@ bool GameMap::generateBasicMap(int numBatteries) {
     _rooms.push_back(GameRoom::alloc(_assets, _node, Vec2(0, spacing*2), { false, true, true, false }));
     _rooms.push_back(GameRoom::alloc(_assets, _node, Vec2(spacing, spacing * 2), { false, true, true, true }));
     _rooms.push_back(GameRoom::alloc(_assets, _node, Vec2(spacing*2, spacing * 2), { false, false, true, true }));
+    */
 
     for (auto& coor : _batteriesSpawnable) {
         auto batteryNode = scene2::PolygonNode::allocWithTexture(_assets->get<Texture>("battery_texture"));
@@ -283,6 +285,9 @@ bool GameMap::generateRandomMap() {
     shared_ptr<RoomParser> parser = make_shared<RoomParser>();
     shared_ptr<MapMetadata> mapData = parser->getMapData(parser->pickMap());
 
+    _startRank = mapData->start;
+    _endRank = mapData->end;
+
     int i = 0;
     for (auto& room : mapData->rooms) {
         auto node = scene2::OrderedNode::allocWithOrder(scene2::OrderedNode::Order::ASCEND);
@@ -292,11 +297,11 @@ bool GameMap::generateRandomMap() {
         node->setName("room_" + to_string(i));
         //node->setPosition(origin);
         litRoot->addChild(node);
-        auto r = GameRoom::alloc(_assets, origin, room.doors);
+        auto r = GameRoom::alloc(_assets, origin, room.doors, room.rank);
         //_rooms.push_back(GameRoom::alloc(_assets, node, Vec2(room.rank.x * spacing, room.rank.y * spacing), room.doors));
         r->setNode(node);
         r->setRoot(_node);
-        r->addObstacles(parser);
+        r->addObstacles(parser, room.rank == _endRank);
         addSlot(r->getSlot());
         _rooms.push_back(r);
     }
@@ -315,35 +320,6 @@ bool GameMap::generateRandomMap() {
     
 }
 
-/** Generates a random map with the coordinates of spawnable battery locations */
-bool GameMap::generateRandomMap(vector<Vec2> batterySpawns) {
-    reset();
-    /**
-     * 1. Create random model that represent what type of rooms need to be where, no obstacles
-     * 2. Assign each room an ostacle layout
-     * 3. Call makeRoom() on each room+obstacle combo and add to _rooms
-     */
-
-    /**
-    shared_ptr<RoomParser> parser = RoomParser::alloc(_assets, _node);
-    for (int i = 0; i < 3; i++) {
-        for (int j = 0; j < 3; j++) {
-            shared_ptr<GameRoom> room = parser->parse("json/room.json", Vec2(i * 375, j * 375));
-
-            // set win room on top row
-            if (i == 2 && j == 2) {
-                room->setWinRoom(true);
-            }
-
-            _rooms.push_back(room);
-        }
-    }
-    */
-
-    return true;
-
-
-}
 
 Vec2 GameMap::getWinRoomOrigin() {
     for (shared_ptr r : _rooms) {

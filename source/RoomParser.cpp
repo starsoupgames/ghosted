@@ -4,14 +4,16 @@
 
 using namespace cugl;
 
+template <typename T>
+
 /** Returns the index to a random element of a list of floats */
-int RoomParser::getRandIndex(vector<float> lst) {
+int RoomParser::getRandIndex(vector<T> lst) {
     // https://cpppatterns.com/patterns/choose-random-element.html
     std::random_device random_device;
     std::mt19937 engine{ random_device() };
     std::uniform_int_distribution<int> dist(0, lst.size() - 1);
-    int random_element = lst[dist(engine)];
-    return random_element;
+    //int random_element = lst[dist(engine)];
+    return dist(engine);
 }
 
 
@@ -19,18 +21,18 @@ int RoomParser::getRandIndex(vector<float> lst) {
 string RoomParser::pickLayout(string code) {
     shared_ptr<JsonReader> reader = JsonReader::alloc("json/layouts/layouts.json");
     shared_ptr<JsonValue> value = reader->readJson();
-    vector<float> layouts = value->get(code)->asFloatArray();
+    vector<int> layouts = value->get(code)->asIntArray();
 
-    return "json/layouts/" + to_string(getRandIndex(layouts)) + ".json";
+    return "json/layouts/" + to_string(layouts[getRandIndex(layouts)]) + ".json";
 }
 
 /** Returns the path to a random map layout */
 string RoomParser::pickMap() {
     shared_ptr<JsonReader> reader = JsonReader::alloc("json/maps/mapcount.json");
     shared_ptr<JsonValue> value = reader->readJson();
-    vector<float> layouts = value->get("maps")->asFloatArray();
+    vector<int> layouts = value->get("maps")->asIntArray();
 
-    return "json/maps/map" + to_string(getRandIndex(layouts)) + ".json";
+    return "json/maps/map" + to_string(layouts[getRandIndex(layouts)]) + ".json";
 }
 
 /** Takes in a json file and returns the layout metadata */
@@ -59,10 +61,11 @@ shared_ptr<LayoutMetadata> RoomParser::getLayoutData(string file) {
     return make_shared<LayoutMetadata>(obstaclesData, spawnData);
 }
 
-/** Takes in a json file and returns the corresponding map */
+/** Takes in a json file and returns the corresponding map.
+ *  Also picks a start room and end room combination.
+ */
 shared_ptr<MapMetadata> RoomParser::getMapData(string file) {
     vector<RoomMetadata> rooms = {};
-    vector<vector<Vec2>> spawns = {};
 
     shared_ptr<JsonReader> reader = JsonReader::alloc(file);
     shared_ptr<JsonValue> value = reader->readJson();
@@ -75,16 +78,12 @@ shared_ptr<MapMetadata> RoomParser::getMapData(string file) {
         Vec2 rank = Vec2(temp[0], temp[1]);
         rooms.push_back(RoomMetadata(doors, rank));
     }
-    // Then add spawns
-    shared_ptr<JsonValue> spawnData = value->get("spawns");
-    for (auto& pos : spawnData->_children) {
-        vector<Vec2> pair = {};
-        vector<float> temp = pos->get("start")->asFloatArray();
-        pair.push_back(Vec2(temp[0], temp[1]));
-        temp = pos->get("end")->asFloatArray();
-        pair.push_back(Vec2(temp[0], temp[1]));
+    // Then pick a spawn
 
-        spawns.push_back(pair);
-    }
-    return make_shared<MapMetadata>(rooms, spawns);
+    vector<shared_ptr<JsonValue>> spawnData = value->get("spawns")->_children;
+    shared_ptr<JsonValue> randSpawn = spawnData[getRandIndex(spawnData)];
+    Vec2 start = Vec2(randSpawn->get("start")->asIntArray()[0], randSpawn->get("start")->asIntArray()[1]);
+    Vec2 end = Vec2(randSpawn->get("end")->asIntArray()[0], randSpawn->get("end")->asIntArray()[1]);
+    return make_shared<MapMetadata>(rooms, start, end);
+
 }

@@ -3,10 +3,10 @@
 using namespace std;
 using namespace cugl;
 
-bool GameRoom::init(const shared_ptr<AssetManager>& assets, const shared_ptr<scene2::OrderedNode>& node, const Vec2& origin, vector<bool> doors) {
+bool GameRoom::init(const shared_ptr<AssetManager>& assets, const shared_ptr<scene2::OrderedNode>& node, const Vec2& origin, vector<bool> doors, Vec2 ranking) {
     _assets = assets;
     _node = node;
-    _ranking = Vec2(origin.x / 1120, origin.y / 1120);
+    _ranking = ranking;
     _origin = origin;
     _batterySpawns = vector<vector<int>>();
     _doors = doors;
@@ -25,10 +25,11 @@ bool GameRoom::init(const shared_ptr<AssetManager>& assets, const shared_ptr<sce
     return true;
 };
 
-bool GameRoom::init(const shared_ptr<AssetManager>& assets, const Vec2& origin, vector<bool> doors) {
+bool GameRoom::init(const shared_ptr<AssetManager>& assets, const Vec2& origin, vector<bool> doors, Vec2 ranking) {
     _assets = assets;
     _doors = doors;
     _origin = origin;
+    _ranking = ranking;
 
     // set obstacle nodes based on the passed in json
 
@@ -51,7 +52,7 @@ void GameRoom::setRoot(const shared_ptr<scene2::OrderedNode>& value) {
     _root = value;
 };
 
-void GameRoom::addObstacles(const shared_ptr<RoomParser>& parser) {
+void GameRoom::addObstacles(const shared_ptr<RoomParser>& parser, bool end) {
     auto litRoot = _root->getChildByName("lit_root");
     auto dimRoot = _root->getChildByName("dim_root");
     auto topRoot = _root->getChildByName("top_root");
@@ -74,12 +75,21 @@ void GameRoom::addObstacles(const shared_ptr<RoomParser>& parser) {
     node->setPosition(getOrigin());
 
     // Ranking used to offset positions
-    Vec2 ranking = getRanking();
-    int xOffset = (ranking.x * 1120) + 80;
-    int yOffset = ranking.y * 1120;
-    // Draw furniture
+    //int xOffset = (ranking.x * 1120) + 80;
+    //int yOffset = ranking.y * 1120;
 
-    string path = parser->pickLayout(roomCode);
+    // Quick fix to offset bug using magic numbers, change after Golden Master
+    Vec2 offset = Vec2(100, 80);
+
+    // Draw furniture
+    string path;
+    if (end) {
+        CULog("building end room");
+        path = "json/layouts/end.json";
+    }
+    else {
+        path = parser->pickLayout(roomCode);
+    }
     shared_ptr<LayoutMetadata> roomData = parser->getLayoutData(path);
     for (auto& obs : roomData->obstacles) {
         // Get texture with name
@@ -88,7 +98,7 @@ void GameRoom::addObstacles(const shared_ptr<RoomParser>& parser) {
         // Flip if required
         obsNode->flipHorizontal(obs.flip);
         // Get position, multiply by pixel size of each tile, and then add the offsets
-        Vec2 position = Vec2((obs.position.x * 80), (obs.position.y * 80)).add(_origin);
+        Vec2 position = Vec2((obs.position.x * constants::TILE_SIZE), (obs.position.y * constants::TILE_SIZE)).add(_origin) + offset;
         obsNode->setPosition(position);
         // Do something with hitboxes
         Vec2 hitbox = obs.hitbox;

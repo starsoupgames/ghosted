@@ -37,6 +37,12 @@ private:
     /** The vector of battery spawnable coordinates */
     vector<shared_ptr<Battery>> _batteries;
     
+    /** The ranking of the start room */
+    Vec2 _startRank;
+
+    /** The ranking of the end room */
+    Vec2 _endRank;
+
     bool assertValidMap();
     
 public:
@@ -105,6 +111,16 @@ public:
             }
         }
         return nullptr;
+    }
+
+    /** Returns the ranking of the starting room */
+    Vec2 getStartRank() {
+        return _startRank;
+    }
+
+    /** Returns the ranking of the end room */
+    Vec2 getEndRank() {
+        return _endRank;
     }
 
     Vec2 getWinRoomOrigin();

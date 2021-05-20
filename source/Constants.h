@@ -23,6 +23,7 @@ namespace constants {
 
     const Size ROOM_DIMENSIONS(960, 960);
 
+    const int TILE_SIZE = 80;
 
     // Make sure to change values in lightShader.frag if you change these here
     /**maximum possible rooms generated in a map**/

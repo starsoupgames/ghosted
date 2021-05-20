@@ -160,6 +160,18 @@
     },
     "stool1_down": {
       "file": "textures/obstacles/stool1/stool1_down.png"
+    },
+    "clock1_down": {
+      "file": "textures/obstacles/clock1/clock1_down.png"
+    },
+    "books1_right": {
+      "file": "textures/obstacles/books1/books1_right.png"
+    },
+    "books1_down": {
+      "file": "textures/obstacles/books1/books1_down.png"
+    },
+    "teleporter0": {
+      "file": "textures/obstacles/teleporter/teleporter0.png"
     }
 
   },

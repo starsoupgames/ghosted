@@ -1,0 +1,72 @@
+{
+    "obstacles": [
+        {
+            "name": "clock1_down",
+            "flip": false,
+            "position": [ 0, 0 ],
+            "hitbox": [ 1, 1 ]
+        },
+        {
+            "name": "clock1_down",
+            "flip": false,
+            "position": [ 11.5, 0 ],
+            "hitbox": [ 1, 1 ]
+        },
+        {
+            "name": "clock1_down",
+            "flip": false,
+            "position": [ 0, 11 ],
+            "hitbox": [ 1, 1 ]
+        },
+        {
+            "name": "clock1_down",
+            "flip": false,
+            "position": [ 11.5, 11 ],
+            "hitbox": [ 1, 1 ]
+        },
+        {
+            "name": "books1_right",
+            "flip": false,
+            "position": [ 0, 2 ],
+            "hitbox": [ 1, 2 ]
+        },
+        {
+            "name": "books1_right",
+            "flip": false,
+            "position": [ 11.5, 2 ],
+            "hitbox": [ 1, 2 ]
+        },
+        {
+            "name": "books1_right",
+            "flip": false,
+            "position": [ 0, 8 ],
+            "hitbox": [ 1, 2 ]
+        },
+        {
+            "name": "books1_right",
+            "flip": false,
+            "position": [ 11.6, 8 ],
+            "hitbox": [ 1, 2 ]
+        },
+        {
+            "name": "books1_down",
+            "flip": false,
+            "position": [ 2, 12 ],
+            "hitbox": [ 2, 1 ]
+        },
+        {
+            "name": "books1_down",
+            "flip": false,
+            "position": [ 8, 12 ],
+            "hitbox": [ 2, 1 ]
+        },
+        {
+            "name": "teleporter0",
+            "flip": false,
+            "position": [ 6, 5 ],
+            "hitbox": [ 4, 4 ]
+        }
+    ],
+    "spawns": [
+    ]
+}

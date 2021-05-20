@@ -63,18 +63,18 @@ public:
 
     ~GameRoom() { }
 
-    bool init(const shared_ptr<AssetManager>& assets, const shared_ptr<scene2::OrderedNode>& node, const Vec2& origin, vector<bool> doors);
+    bool init(const shared_ptr<AssetManager>& assets, const shared_ptr<scene2::OrderedNode>& node, const Vec2& origin, vector<bool> doors, Vec2 ranking);
 
-    bool init(const shared_ptr<AssetManager>& assets, const Vec2& origin, vector<bool> doors);
+    bool init(const shared_ptr<AssetManager>& assets, const Vec2& origin, vector<bool> doors, Vec2 ranking);
 
-    static shared_ptr<GameRoom> alloc(const shared_ptr<AssetManager>& assets, const shared_ptr<scene2::OrderedNode>& node, const Vec2& origin, vector<bool> doors) {
+    static shared_ptr<GameRoom> alloc(const shared_ptr<AssetManager>& assets, const shared_ptr<scene2::OrderedNode>& node, const Vec2& origin, vector<bool> doors, Vec2 ranking) {
         shared_ptr<GameRoom> result = make_shared<GameRoom>();
-        return (result->init(assets, node, origin, doors) ? result : nullptr);
+        return (result->init(assets, node, origin, doors, ranking) ? result : nullptr);
     }
     
-    static shared_ptr<GameRoom> alloc(const shared_ptr<AssetManager>& assets, const Vec2& origin, vector<bool> doors) {
+    static shared_ptr<GameRoom> alloc(const shared_ptr<AssetManager>& assets, const Vec2& origin, vector<bool> doors, Vec2 ranking) {
         shared_ptr<GameRoom> result = make_shared<GameRoom>();
-        return (result->init(assets, origin, doors) ? result : nullptr);
+        return (result->init(assets, origin, doors, ranking) ? result : nullptr);
     }
 
     // Gets the coordinates of the origin of this room
@@ -120,8 +120,10 @@ public:
     
     bool getLight() { return _slotModel->getCharge() > 0;};
 
-    /** Populates the room with obstacles from the parser */
-    void addObstacles(const shared_ptr<RoomParser>& parser);
+    /** Populates the room with obstacles from the parser. If end is true,
+     *  uses end.json's layout for obstacles 
+     */
+    void addObstacles(const shared_ptr<RoomParser>& parser, bool end);
     
     /** Is this room the exit room? */
     void setWinRoom(bool exit) { _winRoom = exit; };
