@@ -93,6 +93,8 @@ Vec2 WALLS[4][2][2][4] = {
  */
 
 bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
+    if (!GameMode::init(assets, constants::GameMode::Game, "game")) return false;
+
     //temporary hardcoded coordinates, remove later
     vector<Vec2> batteriesSpawnable;
     batteriesSpawnable.push_back(Vec2(1500, 500));
@@ -262,7 +264,6 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
  * Disposes of all(non - static) resources allocated to this mode.
  */
 void GameScene::dispose() {
-    GameMode::dispose();
     setActive(false);
 
     _input = nullptr;
@@ -273,6 +274,8 @@ void GameScene::dispose() {
 
     _players.clear();
     _world = nullptr;
+
+    GameMode::dispose();
 }
 
 /** Function to sort player node priorities */

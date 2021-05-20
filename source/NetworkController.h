@@ -65,7 +65,7 @@ public:
 
     /** Start the game */
     void startGame() {
-        if (_host && _connection != nullptr) _connection->startGame();
+        // if (_host && _connection != nullptr) _connection->startGame();
         if (_data != nullptr) _data->setStatus(constants::MatchStatus::InProgress);
     }
 

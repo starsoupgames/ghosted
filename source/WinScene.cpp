@@ -70,13 +70,13 @@ void WinScene::update(float timestep) {
  * Disposes of all (non-static) resources allocated to this mode.
  */
 void WinScene::dispose() {
-    GameMode::dispose();
     setActive(false);
     _quit = nullptr;
     _ghost = nullptr;
     _doe = nullptr;
     _seal = nullptr;
     _tanuki = nullptr;
+    GameMode::dispose();
 }
 
 /**

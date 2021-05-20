@@ -36,6 +36,8 @@ bool LobbyScene::init(const shared_ptr<AssetManager>& assets) {
             _mode = constants::GameMode::Start;
         }
         });
+
+    _numPlayers = 0;
     
     _host = _roomID == "";
     if (_host) {
@@ -103,29 +105,49 @@ void LobbyScene::update(float timestep) {
     if (_network != nullptr) {
         auto networkData = _network->getData();
         if (networkData != nullptr) {
-            if (networkData->getStatus() == constants::MatchStatus::InProgress) {
+            if (_network->isConnected() && networkData->getStatus() == constants::MatchStatus::InProgress) {
                 _mode = constants::GameMode::Game;
             }
         }
 
-        if (!(_network->getStatus() == CUNetworkConnection::NetStatus::Pending || _network->getStatus() == CUNetworkConnection::NetStatus::Connected)) {
-            CULog("Error connecting to network.");
-            _mode = constants::GameMode::JoinGame;
+        switch (_network->getStatus()) {
+        case CUNetworkConnection::NetStatus::Disconnected:
+            CULog("Disconnected");
+            break;
+        case CUNetworkConnection::NetStatus::Pending:
+            break;
+        case CUNetworkConnection::NetStatus::Connected:
+            break;
+        case CUNetworkConnection::NetStatus::Reconnecting:
+            CULog("Reconnecting");
+            break;
+        case CUNetworkConnection::NetStatus::RoomNotFound:
+            CULog("RoomNotFound");
+            break;
+        case CUNetworkConnection::NetStatus::ApiMismatch:
+            CULog("ApiMismatch");
+            break;
+        case CUNetworkConnection::NetStatus::GenericError:
+            CULog("GenericError");
+            break;
+        default:
+            _mode = _network->isHost() ? constants::GameMode::Start : constants::GameMode::JoinGame;
         }
     }
-
-    // TODO join room failed, retry connection
 }
 
 /**
  * Disposes of all (non-static) resources allocated to this mode.
  */
 void LobbyScene::dispose() {
-    GameMode::dispose();
     setActive(false);
     _network = nullptr;
     _start = nullptr;
     _escape = nullptr;
+
+    _root->removeChildByName("roomIDText");
+    _root->removeChildByName("numPlayers");
+    GameMode::dispose();
 }
 
 /**

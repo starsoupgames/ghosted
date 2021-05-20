@@ -49,10 +49,10 @@ bool StartScene::init(const shared_ptr<AssetManager>& assets) {
  * Disposes of all (non-static) resources allocated to this mode.
  */
 void StartScene::dispose() {
-    GameMode::dispose();
     setActive(false);
     _create = nullptr;
     _join = nullptr;
+    GameMode::dispose();
 }
 
 /**
