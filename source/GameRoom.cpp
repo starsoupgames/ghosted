@@ -52,7 +52,7 @@ void GameRoom::setRoot(const shared_ptr<scene2::OrderedNode>& value) {
     _root = value;
 };
 
-void GameRoom::addObstacles(const shared_ptr<RoomParser>& parser, bool end) {
+void GameRoom::addObstacles(const shared_ptr<RoomParser>& parser, int end) {
     auto litRoot = _root->getChildByName("lit_root");
     auto dimRoot = _root->getChildByName("dim_root");
     auto topRoot = _root->getChildByName("top_root");
@@ -83,9 +83,13 @@ void GameRoom::addObstacles(const shared_ptr<RoomParser>& parser, bool end) {
 
     // Draw furniture
     string path;
-    if (end) {
-        CULog("building end room");
+    if (end == 1) {
         path = "json/layouts/end.json";
+        CULog("generating end room");
+    }
+    else if (end == 2) {
+        path = "json/layouts/start.json";
+        CULog("generating start room");
     }
     else {
         path = parser->pickLayout(roomCode);

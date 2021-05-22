@@ -289,6 +289,7 @@ bool GameMap::generateRandomMap() {
     _endRank = mapData->end;
 
     int i = 0;
+    int type = 0;
     for (auto& room : mapData->rooms) {
         auto node = scene2::OrderedNode::allocWithOrder(scene2::OrderedNode::Order::ASCEND);
         auto origin = Vec2(room.rank.x * spacing, room.rank.y * spacing);
@@ -301,9 +302,16 @@ bool GameMap::generateRandomMap() {
         //_rooms.push_back(GameRoom::alloc(_assets, node, Vec2(room.rank.x * spacing, room.rank.y * spacing), room.doors));
         r->setNode(node);
         r->setRoot(_node);
-        r->addObstacles(parser, room.rank == _endRank);
+        if (room.rank == _endRank) {
+            type = 1;
+        }
+        else if (room.rank == _startRank) {
+            type = 2;
+        }
+        r->addObstacles(parser, type);
         addSlot(r->getSlot());
         _rooms.push_back(r);
+        type = 0;
     }
 
     for (auto& coor : _batteriesSpawnable) {

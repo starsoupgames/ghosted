@@ -122,17 +122,8 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
     // Shift to center if a bad fit
     //_scale = dimen.width == SCENE_WIDTH ? dimen.width / box2dRect.size.width : dimen.height / box2dRect.size.height;
     _scale = PIXEL_WIDTH / DEFAULT_WIDTH;
-    /*
-    _scale = dimen.width == SCENE_WIDTH ? dimen.width / rect.size.width : dimen.height / rect.size.height;
-    Vec2 offset((dimen.width - SCENE_WIDTH) / 2.0f, (dimen.height - SCENE_HEIGHT) / 2.0f);
-    */
-
-    // the demos used offset to center the world node in the screen, I don't think we have to use this because
-    // we have a camera
-    //Vec2 offset((dimen.width - SCENE_WIDTH) / 2.0f, (dimen.height - SCENE_HEIGHT) / 2.0f);
 
     _debugNode = scene2::SceneNode::alloc();
-    //_debugNode->setScale(_scale); // Debug node draws in PHYSICS coordinates
 
     setDebug(true);
 
@@ -189,21 +180,24 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
     _assets->get<Texture>("pal_tanuki_texture")->setName("pal_sprite_tanuki");
     _assets->get<Texture>("ghost_texture")->setName("ghost_sprite");
 
+    Vec2 spawnOffset = _gameMap->getStartRank() * constants::WALL_DIMENSIONS;
+
     for (auto& s : { "doe", "seal", "tanuki" }) {
         auto palNode = scene2::AnimationNode::alloc(_assets->get<Texture>("pal_" + string(s) + "_texture"), 6, 24);
 
         auto palShadowNode = scene2::PolygonNode::allocWithTexture(_assets->get<Texture>("pal_shadow_texture"));
         auto palSmokeNode = scene2::AnimationNode::alloc(_assets->get<Texture>("pal_effect_texture"), 2, 19);
         
-        Vec2 spawn;
+
+        Vec2 spawn = spawnOffset;
         if (string(s) == "doe") {
-            spawn = Vec2(3, 2);
+            spawn += Vec2(440, 420);
         }
         else if (string(s) == "seal") {
-            spawn = Vec2(11, 2);
+            spawn += Vec2(680, 420);
         }
         else {
-            spawn = Vec2(3, 10);
+            spawn += Vec2(560, 360);
         }
         auto palModel = Pal::alloc(spawn);
         palModel->setNode(palNode, palShadowNode, palSmokeNode);
@@ -218,7 +212,9 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 
     auto ghostShadowNode = scene2::PolygonNode::allocWithTexture(_assets->get<Texture>("ghost_shadow_texture"));
 
-    auto ghostModel = Ghost::alloc(Vec2(11, 10));
+    
+
+    auto ghostModel = Ghost::alloc(Vec2(560, 560)+(_gameMap->getEndRank()*constants::WALL_DIMENSIONS));
     ghostModel->setNode(ghostNode, ghostShadowNode);
     ghostModel->setTimer(0);
     _litRoot->addChild(ghostNode);

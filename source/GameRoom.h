@@ -123,7 +123,7 @@ public:
     /** Populates the room with obstacles from the parser. If end is true,
      *  uses end.json's layout for obstacles 
      */
-    void addObstacles(const shared_ptr<RoomParser>& parser, bool end);
+    void addObstacles(const shared_ptr<RoomParser>& parser, int end);
     
     /** Is this room the exit room? */
     void setWinRoom(bool exit) { _winRoom = exit; };
