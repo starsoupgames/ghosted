@@ -83,7 +83,6 @@ void GameMap::update(float timestep) {
                     auto pal = dynamic_pointer_cast<Pal>(p);
                     int numBatteries = pal->getBatteries() + 1;
                     pal->setBatteries(numBatteries);
-                    //CULog("%i", _player->getBatteries());
                 }
 
             }
@@ -117,6 +116,21 @@ void GameMap::update(float timestep) {
 
 /** Method to update player velocity and players */
 void GameMap::move(Vec2 move, Vec2 direction) {
+    Vec2 velocity = _player->predictVelocity(move);
+    Vec2 loc = _player->getLoc() + velocity + Vec2(-20, -10);
+    
+    Rect hitbox = Rect(loc, constants::PLAYER_HITBOX_DIMENSIONS);
+    
+    for (auto& room : getRooms()) {
+        for (auto& wall : room->getWalls()) {
+            if (hitbox.doesIntersect(wall)) {
+                _player->updateVelocity(Vec2::ZERO);
+                _player->setDir(move);
+                return;
+            }
+            
+        }
+    }
     _player->updateVelocity(move);
     if (_player->getType() == constants::PlayerType::Pal) {
         // if pal is helping, freeze the vision cone direction
@@ -296,10 +310,8 @@ bool GameMap::generateRandomMap() {
         node->setContentSize(constants::ROOM_DIMENSIONS);
         node->doLayout();
         node->setName("room_" + to_string(i));
-        //node->setPosition(origin);
         litRoot->addChild(node);
         auto r = GameRoom::alloc(_assets, origin, room.doors, room.rank);
-        //_rooms.push_back(GameRoom::alloc(_assets, node, Vec2(room.rank.x * spacing, room.rank.y * spacing), room.doors));
         r->setNode(node);
         r->setRoot(_node);
         if (room.rank == _endRank) {

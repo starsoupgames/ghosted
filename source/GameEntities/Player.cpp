@@ -50,6 +50,15 @@ void Player::setNode(const std::shared_ptr<scene2::AnimationNode>& value) {
     }
 }
 
+void Player::setHitbox(const std::shared_ptr<scene2::PolygonNode>& value) {
+    _hitbox = value;
+    if (_node != nullptr && _hitbox != nullptr && _shadow != nullptr) {
+        _hitbox->setPosition(Vec2(_node->getWidth() / 2, 0));
+        _hitbox->setPriority(_node->getPriority() + 100);
+        _node->addChildWithName(_hitbox, "hitbox");
+    }
+}
+
 /**
  * Updates the state of the model
  *
@@ -83,6 +92,28 @@ uint8_t Player::isDirection() {
   return dir;
 }
 
+Vec2 Player::predictVelocity(Vec2 move) {
+    // subtract drag
+    Vec2 velocity = _velocity;
+    if (velocity.length() <= DRAG) {
+        velocity = Vec2::ZERO;
+    }
+    else {
+        velocity -= velocity.normalize() * DRAG;
+    }
+
+    if (!move.isNearZero()) {
+        // add acceleration
+        velocity += move.normalize() * ACCELERATION;
+
+        // clamp to speed
+        if (velocity.length() > _speed) {
+            velocity = velocity.normalize() * _speed; // clamp to speed
+        }
+    }
+
+    return velocity;
+}
 
 /**
  * Resets the pal back to its original settings

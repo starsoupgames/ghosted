@@ -36,6 +36,7 @@ private:
     shared_ptr<scene2::PolygonNode> _roomNode;
     shared_ptr<BatterySlot> _slotModel;
     shared_ptr<scene2::PolygonNode> _cableNode;
+    vector<Rect> _wallNodes;
     
     /** The origin of the room. Distance from (0,0) of the map to room's bottom left corner */
     Vec2 _origin;
@@ -55,6 +56,9 @@ private:
     vector<bool> _doors;
     
     bool assertValidRoom();
+
+    // Gets the walls of the room
+    void addWalls();
     
     bool assertRoomIsAdjacent(const shared_ptr<GameRoom>& room);
     
@@ -82,6 +86,9 @@ public:
 
     // Gets the ranking of the room
     Vec2 getRanking() { return _ranking; }
+
+    // Gets the walls of the room
+    vector<Rect> getWalls() { return _wallNodes; }
 
     // Gets the scene node
     shared_ptr<scene2::OrderedNode> getNode() { return _node; };

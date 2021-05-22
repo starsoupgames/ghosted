@@ -11,6 +11,8 @@ bool GameRoom::init(const shared_ptr<AssetManager>& assets, const shared_ptr<sce
     _batterySpawns = vector<vector<int>>();
     _doors = doors;
 
+    _node->setAnchor(Vec2::ANCHOR_BOTTOM_CENTER);
+
     auto slotNode = scene2::PolygonNode::allocWithTexture(_assets->get<Texture>("slot_empty"));
     slotNode->setScale(0.05f);
     slotNode->setPosition(Vec2(ROOM_DIMENSION / 2, ROOM_DIMENSION / 2));
@@ -19,9 +21,6 @@ bool GameRoom::init(const shared_ptr<AssetManager>& assets, const shared_ptr<sce
 
     _slotModel = BatterySlot::alloc(Vec2(ROOM_DIMENSION / 2, ROOM_DIMENSION / 2));
     _slotModel->setNode(slotNode);
-
-    // set obstacle nodes based on the passed in json
-
     return true;
 };
 
@@ -30,20 +29,18 @@ bool GameRoom::init(const shared_ptr<AssetManager>& assets, const Vec2& origin, 
     _doors = doors;
     _origin = origin;
     _ranking = ranking;
-
-    // set obstacle nodes based on the passed in json
-
     return true;
 }
 
 void GameRoom::setNode(const shared_ptr<scene2::OrderedNode>& value) {
     _node = value;
+    _node->setPosition(getOrigin());
+    _node->setAnchor(Vec2::ANCHOR_BOTTOM_CENTER);
     auto slotNode = scene2::PolygonNode::allocWithTexture(_assets->get<Texture>("slot_empty"));
     slotNode->setScale(0.05f);
     slotNode->setPosition(Vec2(ROOM_DIMENSION / 2, ROOM_DIMENSION / 2));
     slotNode->setPriority(constants::Priority::RoomEntity);
     _node->addChild(slotNode);
-
     _slotModel = BatterySlot::alloc(Vec2(ROOM_DIMENSION / 2, ROOM_DIMENSION / 2));
     _slotModel->setNode(slotNode);
 };
@@ -62,24 +59,28 @@ void GameRoom::addObstacles(const shared_ptr<RoomParser>& parser, int end) {
     string roomCode = getDoorsStr();
     shared_ptr<Texture> doorTexture = _assets->get<Texture>(roomCode);
     shared_ptr<scene2::PolygonNode> node = scene2::PolygonNode::allocWithTexture(doorTexture);
+    node->setPriority(constants::Priority::Room);
 
     shared_ptr<scene2::PolygonNode> floorNode = scene2::PolygonNode::allocWithTexture(floorTexture);
-    //offset for transformation matrix
-    Mat4 floorOffset = Mat4::createTranslation(Vec3(80, 0, 0));
     floorNode->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
-    floorNode->setAlternateTransform(floorOffset);
-    floorNode->chooseAlternateTransform(true);
+    floorNode->setPosition(floorNode->getPosition() + Vec2(80, 0));
+    floorNode->setPriority(constants::Priority::Room);
     node->addChild(floorNode);
     node->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
-    dimRoot->addChild(node);
     node->setPosition(getOrigin());
+    dimRoot->addChild(node);
+    
+    //scene graph for lit versions of entities, or entities only visible under light
+    shared_ptr<scene2::PolygonNode> litFloorNode = scene2::PolygonNode::allocWithTexture(litFloorTexture);
+    litFloorNode->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
+    litFloorNode->setPosition(litFloorNode->getPosition() + Vec2(80, 0));
+    litFloorNode->setPriority(constants::Priority::Room);
 
-    // Ranking used to offset positions
-    //int xOffset = (ranking.x * 1120) + 80;
-    //int yOffset = ranking.y * 1120;
-
-    // Quick fix to offset bug using magic numbers, change after Golden Master
-    Vec2 offset = Vec2(100, 80);
+    shared_ptr<scene2::PolygonNode> litDoorNode = scene2::PolygonNode::allocWithTexture(doorTexture);
+    litDoorNode->addChild(litFloorNode);
+    litDoorNode->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
+    _node->addChild(litDoorNode);
+    litDoorNode->setPriority(constants::Priority::Room);
 
     // Draw furniture
     string path;
@@ -100,28 +101,20 @@ void GameRoom::addObstacles(const shared_ptr<RoomParser>& parser, int end) {
         shared_ptr<Texture> obsTexture = _assets->get<Texture>(obs.name);
         shared_ptr<scene2::PolygonNode> obsNode = scene2::PolygonNode::allocWithTexture(obsTexture);
         // Flip if required
-        obsNode->flipHorizontal(obs.flip);
+        if (obs.flip) {
+            obsNode->setScale(Vec2(-1, 1));
+        }
         // Get position, multiply by pixel size of each tile, and then add the offsets
-        Vec2 position = Vec2((obs.position.x * constants::TILE_SIZE), (obs.position.y * constants::TILE_SIZE)).add(_origin) + offset;
+        Vec2 position = Vec2((obs.position.x * constants::TILE_SIZE), (obs.position.y * constants::TILE_SIZE));
         obsNode->setPosition(position);
+        obsNode->setPriority(constants::Priority::RoomEntity);
         // Do something with hitboxes
         Vec2 hitbox = obs.hitbox;
         // Add to scene graph
-        topRoot->addChild(obsNode);
+        litFloorNode->addChild(obsNode);
     }
 
-    //scene graph for lit versions of entities, or entities only visible under light
-    shared_ptr<scene2::PolygonNode> litFloorNode = scene2::PolygonNode::allocWithTexture(litFloorTexture);
-    litFloorNode->setAlternateTransform(floorOffset);
-    litFloorNode->chooseAlternateTransform(true);
-    litFloorNode->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
-
-    shared_ptr<scene2::PolygonNode> litDoorNode = scene2::PolygonNode::allocWithTexture(doorTexture);
-    litDoorNode->addChild(litFloorNode);
-    litDoorNode->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
-    _node->addChild(litDoorNode);
-    litDoorNode->setPosition(getOrigin());
-
+    addWalls();
 };
 
 bool GameRoom::assertValidRoom() {
@@ -139,3 +132,205 @@ bool GameRoom::assertRoomIsAdjacent(const shared_ptr<GameRoom>& room) {
     }
     return false;
 };
+
+void GameRoom::addWalls() {
+    //doors in order of north east south and west
+    auto topRoot = _root->getChildByName("top_root");
+
+    int dir = 0;
+    for (auto door : getDoors()) {
+        switch (dir) {
+        case constants::DoorDirection::North:
+            {
+                if (door) {
+                    auto wallDimensions = Size(480, 80);
+                    Vec2 wallPos = Vec2(0, constants::ROOM_DIMENSIONS.height).add(_origin);
+                    auto wallRect = Rect(wallPos, wallDimensions);
+                    auto wallNode = scene2::PolygonNode::alloc(wallRect);
+                    wallNode->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
+                    wallNode->setColor(Color4f::BLUE);
+
+                    wallNode->setPosition(wallPos);
+                    wallNode->setPriority(constants::Priority::Room);
+                    wallNode->setVisible(false);
+                    topRoot->addChild(wallNode);
+                    _wallNodes.push_back(wallRect);
+
+                    Vec2 wallPos2 = Vec2((constants::ROOM_DIMENSIONS.width / 2 + 160), constants::ROOM_DIMENSIONS.height).add(_origin);
+                    auto wallRect2 = Rect(wallPos2, wallDimensions);
+                    auto wallNode2 = scene2::PolygonNode::alloc(wallRect2);
+                    wallNode2->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
+                    wallNode2->setColor(Color4f::BLUE);
+
+                    wallNode2->setPosition(wallPos2);
+                    wallNode2->setPriority(constants::Priority::Room);
+                    wallNode2->setVisible(false);
+                    topRoot->addChild(wallNode2);
+                    _wallNodes.push_back(wallRect2);
+                    break;
+
+                }
+                else {
+                    auto wallDimensions = Size(1120, 80);
+                    Vec2 wallPos = Vec2(0, constants::ROOM_DIMENSIONS.height).add(_origin);
+                    auto wallRect = Rect(wallPos, wallDimensions);
+                    auto wallNode = scene2::PolygonNode::alloc(wallRect);
+                    wallNode->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
+                    wallNode->setColor(Color4f::BLUE);
+
+                    wallNode->setPosition(wallPos);
+                    wallNode->setPriority(constants::Priority::Room);
+                    wallNode->setVisible(false);
+                    topRoot->addChild(wallNode);
+                    _wallNodes.push_back(wallRect);
+                    break;
+                }
+            }
+        case constants::DoorDirection::East:
+            {
+                if (door) {
+                    auto wallDimensions = Size(80, 480);
+                    Vec2 wallPos = Vec2(constants::ROOM_DIMENSIONS.width + 80, -80).add(_origin);
+                    auto wallRect = Rect(wallPos, wallDimensions);
+                    auto wallNode = scene2::PolygonNode::alloc(wallRect);
+                    wallNode->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
+                    wallNode->setColor(Color4f::BLUE);
+
+                    wallNode->setPosition(wallPos);
+                    wallNode->setPriority(constants::Priority::Room);
+                    wallNode->setVisible(false);
+                    topRoot->addChild(wallNode);
+                    _wallNodes.push_back(wallRect);
+
+                    Vec2 wallPos2 = Vec2(constants::ROOM_DIMENSIONS.width + 80, constants::ROOM_DIMENSIONS.height / 2 + 80).add(_origin);
+                    auto wallRect2 = Rect(wallPos2, wallDimensions);
+                    auto wallNode2 = scene2::PolygonNode::alloc(wallRect2);
+                    wallNode2->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
+                    wallNode2->setColor(Color4f::BLUE);
+
+                    wallNode2->setPosition(wallPos2);
+                    wallNode2->setPriority(constants::Priority::Room);
+                    wallNode2->setVisible(false);
+                    topRoot->addChild(wallNode2);
+                    _wallNodes.push_back(wallRect2);
+                    break;
+
+                }
+                else {
+                    //rightmost wall
+                    auto wallDimensions = Size(80, 1120);
+                    Vec2 wallPos = Vec2(constants::ROOM_DIMENSIONS.width, 0).add(_origin);
+                    auto wallRect = Rect(wallPos, wallDimensions);
+                    auto wallNode = scene2::PolygonNode::alloc(wallRect);
+                    wallNode->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
+                    wallNode->setColor(Color4f::BLUE);
+
+                    wallNode->setPosition(wallPos);
+                    wallNode->setPriority(constants::Priority::Room);
+                    wallNode->setVisible(false);
+                    topRoot->addChild(wallNode);
+                    _wallNodes.push_back(wallRect);
+                    break;
+                }
+
+            }
+        case constants::DoorDirection::South:
+            {
+                if (door) {
+                    auto wallDimensions = Size(480, 80);
+                    Vec2 wallPos = Vec2(0, -80).add(_origin);
+                    Vec2 wallRectPos = Vec2(160, -80).add(_origin);
+                    auto wallRect = Rect(wallPos, wallDimensions);
+                    auto wallNode = scene2::PolygonNode::alloc(wallRect);
+                    wallNode->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
+                    wallNode->setColor(Color4f::BLUE);
+
+                    wallNode->setPosition(wallPos);
+                    wallNode->setPriority(constants::Priority::Room);
+                    wallNode->setVisible(false);
+                    topRoot->addChild(wallNode);
+                    _wallNodes.push_back(wallRect);
+
+                    Vec2 wallPos2 = Vec2((constants::ROOM_DIMENSIONS.width / 2 + 160), -80).add(_origin);
+                    Vec2 wallRectPos2 = Vec2(constants::ROOM_DIMENSIONS.width / 2 + 80, 0).add(_origin);
+                    auto wallRect2 = Rect(wallPos2, wallDimensions);
+                    auto wallNode2 = scene2::PolygonNode::alloc(wallRect2);
+                    wallNode2->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
+                    wallNode2->setColor(Color4f::BLUE);
+
+                    wallNode2->setPosition(wallPos2);
+                    wallNode2->setPriority(constants::Priority::Room);
+                    wallNode2->setVisible(false);
+                    topRoot->addChild(wallNode2);
+                    _wallNodes.push_back(wallRect2);
+                    break;
+                }
+                else {
+                    //bottommost wall
+                    auto wallDimensions = Size(1120, 80);
+                    Vec2 wallPos = Vec2(0, -80).add(_origin);
+                    auto wallRect = Rect(wallPos, wallDimensions);
+                    auto wallNode = scene2::PolygonNode::alloc(wallRect);
+                    wallNode->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
+                    wallNode->setColor(Color4f::BLUE);
+
+                    wallNode->setPosition(wallPos);
+                    wallNode->setPriority(constants::Priority::Room);
+                    wallNode->setVisible(false);
+                    topRoot->addChild(wallNode);
+                    _wallNodes.push_back(wallRect);
+                    break;
+
+                }
+            }
+        case constants::DoorDirection::West:
+            {
+                if (door) {
+                    auto wallDimensions = Size(80, 480);
+                    Vec2 wallPos = Vec2(0, -80).add(_origin);
+                    auto wallRect = Rect(wallPos, wallDimensions);
+                    auto wallNode = scene2::PolygonNode::alloc(wallRect);
+                    wallNode->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
+                    wallNode->setColor(Color4f::BLUE);
+
+                    wallNode->setPosition(wallPos);
+                    wallNode->setPriority(constants::Priority::Room);
+                    wallNode->setVisible(false);
+                    topRoot->addChild(wallNode);
+                    _wallNodes.push_back(wallRect);
+
+                    Vec2 wallPos2 = Vec2(0, constants::ROOM_DIMENSIONS.height / 2 + 80).add(_origin);
+                    auto wallRect2 = Rect(wallPos2, wallDimensions);
+                    auto wallNode2 = scene2::PolygonNode::alloc(wallRect2);
+                    wallNode2->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
+                    wallNode2->setColor(Color4f::BLUE);
+
+                    wallNode2->setPosition(wallPos2);
+                    wallNode2->setPriority(constants::Priority::Room);
+                    wallNode2->setVisible(false);
+                    topRoot->addChild(wallNode2);
+                    _wallNodes.push_back(wallRect2);
+                    break;
+                }
+                else {
+                    //leftmost wall
+                    auto wallDimensions = Size(80, 1120);
+                    Vec2 wallPos = Vec2(0, 0).add(_origin);
+                    auto wallRect = Rect(wallPos, wallDimensions);
+                    auto wallNode = scene2::PolygonNode::alloc(wallRect);
+                    wallNode->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
+                    wallNode->setColor(Color4f::BLUE);
+
+                    wallNode->setPosition(wallPos);
+                    wallNode->setPriority(constants::Priority::Room);
+                    wallNode->setVisible(false);
+                    topRoot->addChild(wallNode);
+                    _wallNodes.push_back(wallRect);
+                    break;
+                }
+            }
+        }
+        ++dir;
+    }
+
+}

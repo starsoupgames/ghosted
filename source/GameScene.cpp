@@ -184,6 +184,9 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 
     for (auto& s : { "doe", "seal", "tanuki" }) {
         auto palNode = scene2::AnimationNode::alloc(_assets->get<Texture>("pal_" + string(s) + "_texture"), 6, 24);
+        auto hitboxNode = scene2::PolygonNode::alloc(Rect(Vec2 (0, 0), constants::PLAYER_HITBOX_DIMENSIONS));
+        hitboxNode->setColor(Color4f::BLUE);
+        hitboxNode->setVisible(false);
 
         auto palShadowNode = scene2::PolygonNode::allocWithTexture(_assets->get<Texture>("pal_shadow_texture"));
         auto palSmokeNode = scene2::AnimationNode::alloc(_assets->get<Texture>("pal_effect_texture"), 2, 19);
@@ -201,7 +204,10 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
         }
         auto palModel = Pal::alloc(spawn);
         palModel->setNode(palNode, palShadowNode, palSmokeNode);
+        palModel->setHitbox(hitboxNode);
+        hitboxNode->setVisible(true);
         _topRoot->addChild(palNode);
+
 
         _players.push_back(palModel);
     }
@@ -211,11 +217,15 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
     ghostNode->setPriority(constants::Priority::Player);
 
     auto ghostShadowNode = scene2::PolygonNode::allocWithTexture(_assets->get<Texture>("ghost_shadow_texture"));
+    auto hitboxNode = scene2::PolygonNode::alloc(Rect(Vec2(0, 0), constants::PLAYER_HITBOX_DIMENSIONS));
+    hitboxNode->setColor(Color4f::BLUE);
+    hitboxNode->setVisible(false);
 
     
 
     auto ghostModel = Ghost::alloc(Vec2(560, 560)+(_gameMap->getEndRank()*constants::WALL_DIMENSIONS));
     ghostModel->setNode(ghostNode, ghostShadowNode);
+    ghostModel->setHitbox(hitboxNode);
     ghostModel->setTimer(0);
     _litRoot->addChild(ghostNode);
     _players.push_back(ghostModel);
@@ -445,10 +455,6 @@ void GameScene::draw(const std::shared_ptr<SpriteBatch>& batch, const std::share
             if (player != nullptr && player->getType() == constants::PlayerType::Pal) {
                 palLights[i] = _topRoot->getPosition().x + player->getNode()->getPosition().x;
                 palLights[i + 1] = _topRoot->getPosition().y + player->getNode()->getPosition().y;
-                /*Mat4 globalTransform = player->getNode()->getNodeToWorldTransform();
-                Vec2 pos = globalTransform.transformVector(player->getNode()->getPosition());
-                palLights[i] = pos.x;
-                palLights[i + 1] = pos.y;*/
                 palLights[i + 2] = 1; // set to 1 if pal is active, 0 if not
 
                 // because vision cone is broken

@@ -26,6 +26,8 @@ namespace constants {
     const Size WALL_DIMENSIONS(1120, 1120);
 
     const int TILE_SIZE = 80;
+    const Size PLAYER_HITBOX_DIMENSIONS(39, 24);
+
 
     // Make sure to change values in lightShader.frag if you change these here
     /**maximum possible rooms generated in a map**/
@@ -69,6 +71,14 @@ namespace constants {
         InProgress = 2, // game is ongoing
         Paused = 3, // player disconnected, game paused
         Ended = 4 // game ended
+    };
+
+    /** Status of the match */
+    enum DoorDirection {
+        North = 0,
+        East = 1,
+        South = 2, 
+        West = 3
     };
 }
 
