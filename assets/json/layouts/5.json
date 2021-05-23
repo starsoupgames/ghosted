@@ -1,0 +1,160 @@
+{
+    "obstacles": [
+      {
+          "name": "piano1_down",
+          "flip": false,
+          "position": [ 6, 10.5 ],
+          "hitbox": [ 4, 2 ]
+      },
+      {
+          "name": "books1_down",
+          "flip": false,
+          "position": [ 3, 13 ],
+          "hitbox": [ 2, 1 ]
+      },
+      {
+          "name": "books1_down",
+          "flip": false,
+          "position": [ 9, 13 ],
+          "hitbox": [ 2, 1 ]
+      },
+      {
+          "name": "books1_down",
+          "flip": false,
+          "position": [ 1, 13 ],
+          "hitbox": [ 2, 1 ]
+      },
+      {
+          "name": "books1_down",
+          "flip": false,
+          "position": [ 11, 13 ],
+          "hitbox": [ 2, 1 ]
+      },
+      {
+          "name": "books1_down",
+          "flip": false,
+          "position": [ 11, 13 ],
+          "hitbox": [ 2, 1 ]
+      },
+      {
+          "name": "chair2_up",
+          "flip": false,
+          "position": [ 2.5, 2 ],
+          "hitbox": [ 1, 1 ]
+      },
+      {
+          "name": "chair2_up",
+          "flip": false,
+          "position": [ 3.5, 2 ],
+          "hitbox": [ 1, 1 ]
+      },
+      {
+          "name": "chair2_up",
+          "flip": false,
+          "position": [ 4.5, 2 ],
+          "hitbox": [ 1, 1 ]
+      },
+      {
+          "name": "chair2_up",
+          "flip": false,
+          "position": [ 2.5, 4 ],
+          "hitbox": [ 1, 1 ]
+      },
+      {
+          "name": "chair2_up",
+          "flip": false,
+          "position": [ 3.5, 4 ],
+          "hitbox": [ 1, 1 ]
+      },
+      {
+          "name": "chair2_up",
+          "flip": false,
+          "position": [ 4.5, 4 ],
+          "hitbox": [ 1, 1 ]
+      },
+      {
+          "name": "chair2_up",
+          "flip": false,
+          "position": [ 2.5, 6 ],
+          "hitbox": [ 1, 1 ]
+      },
+      {
+          "name": "chair2_up",
+          "flip": false,
+          "position": [ 3.5, 6 ],
+          "hitbox": [ 1, 1 ]
+      },
+      {
+          "name": "chair2_up",
+          "flip": false,
+          "position": [ 4.5, 6 ],
+          "hitbox": [ 1, 1 ]
+      },
+      {
+          "name": "chair2_up",
+          "flip": false,
+          "position": [ 7.5, 6 ],
+          "hitbox": [ 1, 1 ]
+      },
+      {
+          "name": "chair2_up",
+          "flip": false,
+          "position": [ 8.5, 6 ],
+          "hitbox": [ 1, 1 ]
+      },
+      {
+          "name": "chair2_up",
+          "flip": false,
+          "position": [ 9.5, 6 ],
+          "hitbox": [ 1, 1 ]
+      },
+      {
+          "name": "chair2_up",
+          "flip": false,
+          "position": [ 7.5, 4 ],
+          "hitbox": [ 1, 1 ]
+      },
+      {
+          "name": "chair2_up",
+          "flip": false,
+          "position": [ 8.5, 4 ],
+          "hitbox": [ 1, 1 ]
+      },
+      {
+          "name": "chair2_up",
+          "flip": false,
+          "position": [ 9.5, 4 ],
+          "hitbox": [ 1, 1 ]
+      },
+      {
+          "name": "chair2_up",
+          "flip": false,
+          "position": [ 7.5, 2 ],
+          "hitbox": [ 1, 1 ]
+      },
+      {
+          "name": "chair2_up",
+          "flip": false,
+          "position": [ 8.5, 2 ],
+          "hitbox": [ 1, 1 ]
+      },
+      {
+          "name": "chair2_up",
+          "flip": false,
+          "position": [ 9.5, 2 ],
+          "hitbox": [ 1, 1 ]
+      }
+
+    ],
+    "spawns": [
+        {
+            "position": [ 6, 7 ]
+        },
+        {
+            "position": [ 1, 7 ]
+        },
+        {
+            "position": [ 11, 7 ]
+        }
+    ]
+}

@@ -140,41 +140,51 @@
     "armchair1_up": {
       "file": "textures/obstacles/armchair1/armchair1_up.png"
     },
-    "bench2_down": {
-      "file": "textures/obstacles/bench2/bench2_down.png"
-    },
-    "bench2_right": {
-      "file": "textures/obstacles/bench2/bench2_right.png"
-    },
-    "piano1_down": {
-      "file": "textures/obstacles/piano1/piano1_down.png"
-    },
-    "couch1_down": {
-      "file": "textures/obstacles/couch1/couch1_down.png"
-    },
-    "couch1_right": {
-      "file": "textures/obstacles/couch1/couch1_right.png"
-    },
-    "couch1_up": {
-      "file": "textures/obstacles/couch1/couch1_up.png"
-    },
-    "stool1_down": {
-      "file": "textures/obstacles/stool1/stool1_down.png"
-    },
-    "clock1_down": {
-      "file": "textures/obstacles/clock1/clock1_down.png"
-    },
-    "books1_right": {
-      "file": "textures/obstacles/books1/books1_right.png"
-    },
-    "books1_down": {
-      "file": "textures/obstacles/books1/books1_down.png"
-    },
-    "teleporter0": {
-      "file": "textures/obstacles/teleporter/teleporter0.png"
-    }
 
+  "chair2_down": {
+    "file": "textures/obstacles/chair2/chair2_down.png"
   },
+  "chair2_right": {
+    "file": "textures/obstacles/chair2/chair2_right.png"
+  },
+  "chair2_up": {
+    "file": "textures/obstacles/chair2/chair2_up.png"
+  },
+  "bench2_down": {
+    "file": "textures/obstacles/bench2/bench2_down.png"
+  },
+  "bench2_right": {
+    "file": "textures/obstacles/bench2/bench2_right.png"
+  },
+  "piano1_down": {
+    "file": "textures/obstacles/piano1/piano1_down.png"
+  },
+  "couch1_down": {
+    "file": "textures/obstacles/couch1/couch1_down.png"
+  },
+  "couch1_right": {
+    "file": "textures/obstacles/couch1/couch1_right.png"
+  },
+  "couch1_up": {
+    "file": "textures/obstacles/couch1/couch1_up.png"
+  },
+  "stool1_down": {
+    "file": "textures/obstacles/stool1/stool1_down.png"
+  },
+  "clock1_down": {
+    "file": "textures/obstacles/clock1/clock1_down.png"
+  },
+  "books1_right": {
+    "file": "textures/obstacles/books1/books1_right.png"
+  },
+  "books1_down": {
+    "file": "textures/obstacles/books1/books1_down.png"
+  },
+  "teleporter0": {
+    "file": "textures/obstacles/teleporter/teleporter0.png"
+  }
+
+},
     "fonts": {
     },
     "scene2s": {
