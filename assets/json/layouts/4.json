@@ -3,37 +3,37 @@
         {
             "name": "couch1_right",
             "flip": false,
-            "position": [ 3.5, 5 ],
+            "position": [ 3.5, 6 ],
             "hitbox": [ 2, 2 ]
         },
         {
             "name": "couch1_right",
             "flip": true,
-            "position": [ 8.5, 5 ],
+            "position": [ 8.5, 6 ],
             "hitbox": [ 2, 2 ]
         },
         {
             "name": "stool1_down",
             "flip": false,
-            "position": [ 7.5, 6 ],
+            "position": [ 7.5, 7.5 ],
             "hitbox": [ 1, 1 ]
         },
         {
             "name": "stool1_down",
             "flip": false,
-            "position": [ 4.5, 3 ],
+            "position": [ 4.5, 4 ],
             "hitbox": [ 1, 1 ]
         },
         {
             "name": "stool1_down",
             "flip": false,
-            "position": [ 4.5, 6 ],
+            "position": [ 4.5, 7.5 ],
             "hitbox": [ 1, 1 ]
         },
         {
             "name": "stool1_down",
             "flip": false,
-            "position": [ 7.5, 3 ],
+            "position": [ 7.5, 4 ],
             "hitbox": [ 1, 1 ]
         }
     ],

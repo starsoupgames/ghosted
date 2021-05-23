@@ -179,6 +179,9 @@
   "books1_down": {
     "file": "textures/obstacles/books1/books1_down.png"
   },
+  "coffeetable1_down": {
+    "file":  "textures/obstacles/coffeetable1/coffeetable1_down.png"
+  },
   "teleporter0": {
     "file": "textures/obstacles/teleporter/teleporter0.png"
   }
