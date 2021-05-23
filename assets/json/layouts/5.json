@@ -1,0 +1,46 @@
+{
+    "obstacles": [
+      {
+          "name": "piano1_down",
+          "flip": false,
+          "position": [ 6, 10.5 ],
+          "hitbox": [ 4, 2 ]
+      },
+      {
+          "name": "books1_down",
+          "flip": false,
+          "position": [ 3, 13 ],
+          "hitbox": [ 2, 1 ]
+      },
+      {
+          "name": "books1_down",
+          "flip": false,
+          "position": [ 9, 13 ],
+          "hitbox": [ 2, 1 ]
+      },
+      {
+          "name": "books1_down",
+          "flip": false,
+          "position": [ 1, 13 ],
+          "hitbox": [ 2, 1 ]
+      },
+      {
+          "name": "books1_down",
+          "flip": false,
+          "position": [ 11, 13 ],
+          "hitbox": [ 2, 1 ]
+      },
+      {
+          "name": "books1_down",
+          "flip": false,
+          "position": [ 11, 13 ],
+          "hitbox": [ 2, 1 ]
+      },
+
+    ],
+    "spawns": [
+        {
+            "position": [ 7, 7 ]
+        }
+    ]
+}
