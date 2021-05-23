@@ -3,7 +3,7 @@
 #define __OBSTACLE_H__
 
 #include <cugl/cugl.h>
-#include "RoomEntity.h"
+#include "../RoomEntity.h"
 using namespace std;
 using namespace cugl;
 

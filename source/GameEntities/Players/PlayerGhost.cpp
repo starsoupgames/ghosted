@@ -28,6 +28,8 @@ void Ghost::update(float timestep) {
     else if (getSpooking() && _spookingTimer >= 48) {
         setSpooking(false);
     }
+    //CULog("shadowwww %f, %f", _shadow->getPosition().x, _shadow->getPosition().y);
+
 
     processDirection();
 

@@ -29,6 +29,9 @@ protected:
     /** Reference to the animation node */
     shared_ptr<scene2::PolygonNode> _shadow;
 
+    /** Reference to the hitbox node */
+    shared_ptr<scene2::PolygonNode> _hitbox;
+
     /** Whether we are idle */
     bool _idle;
 
@@ -97,6 +100,8 @@ public:
         setIdle(_velocity.isNearZero());
     }
 
+    Vec2 predictVelocity(Vec2 Move);
+
     /** Creates a Player with the default values */
     Player() : Player(5, 1) {};
 
@@ -129,6 +134,12 @@ public:
      * @param value The Player node.
      */
     void setNode(const shared_ptr<scene2::AnimationNode>& value);
+
+
+    /**
+     * @param value The Hitbox node.
+     */
+    void setHitbox(const shared_ptr<scene2::PolygonNode>& value);
 
     /**
      * Updates the state of the model

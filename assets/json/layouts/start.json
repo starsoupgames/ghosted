@@ -1,0 +1,9 @@
+{
+    "obstacles": [
+    ],
+    "spawns": [
+        {
+            "position": [ 7, 7 ]
+        }
+    ]
+}
