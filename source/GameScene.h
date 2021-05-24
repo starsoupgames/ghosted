@@ -28,6 +28,8 @@ protected:
     shared_ptr<CollisionController> _collision;
     /** Controller for handling networking */
     shared_ptr<NetworkController> _network;
+    /** Audio controller */
+    shared_ptr<AudioController> _audio;
 
     shared_ptr<GameMap> _gameMap;
 
@@ -160,6 +162,13 @@ public:
      */
     void setCollision(shared_ptr<CollisionController> collision) {
         _collision = collision;
+    }
+    
+    /**
+     * Sets the pointer to the audio controller
+     */
+    void setAudio(shared_ptr<AudioController> audio) {
+        _audio = audio;
     }
 
 #pragma mark -

@@ -43,6 +43,8 @@ bool GameMode::init(const std::shared_ptr<AssetManager>& assets, constants::Game
     // Initialize the scene to a locked width
     Size dimen = Application::get()->getDisplaySize();
     dimen *= constants::SCENE_WIDTH / dimen.width; // Lock the game to a reasonable resolution
+    
+    _mute = false;
 
     _root = assets->get<scene2::SceneNode>(node);
     if (_root == nullptr) {

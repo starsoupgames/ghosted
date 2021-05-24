@@ -57,6 +57,7 @@ void GhostedApp::onStartup() {
     // Create an asset manager to load all assets
     _assets = AssetManager::alloc();
     _mode = constants::GameMode::Loading;
+    _mute = false;
     
     buildScene();
     buildShader();
@@ -104,6 +105,7 @@ void GhostedApp::onShutdown() {
     _networkData = nullptr;
     _input = nullptr;
     _collision = nullptr;
+    _audio = nullptr;
     
     _loadKeys = false;
     
@@ -115,7 +117,37 @@ void GhostedApp::onShutdown() {
 #endif
     Input::deactivate<TextInput>();
     Input::deactivate<Keyboard>();
+    AudioEngine::stop();
     Application::onShutdown();
+}
+
+/**
+ * The method called when the application is suspended and put in the background.
+ *
+ * When this method is called, you should store any state that you do not
+ * want to be lost.  There is no guarantee that an application will return
+ * from the background; it may be terminated instead.
+ *
+ * If you are using audio, it is critical that you pause it on suspension.
+ * Otherwise, the audio thread may persist while the application is in
+ * the background.
+ */
+void GhostedApp::onSuspend() {
+    AudioEngine::get()->pause();
+}
+
+/**
+ * The method called when the application resumes and put in the foreground.
+ *
+ * If you saved any state before going into the background, now is the time
+ * to restore it. This guarantees that the application looks the same as
+ * when it was suspended.
+ *
+ * If you are using audio, you should use this method to resume any audio
+ * paused before app suspension.
+ */
+void GhostedApp::onResume() {
+    AudioEngine::get()->resume();
 }
 
 /**
@@ -205,24 +237,34 @@ void GhostedApp::update(float timestep) {
                 _input = make_shared<InputController>();
                 _input->init(Application::get()->getSafeBounds());
             }
+            if (_audio == nullptr) {
+                _audio = make_shared<AudioController>();
+                _audio->init(_assets);
+                _audio->setMenuMusic(true);
+            }
             _start.init(_assets);
+            _start.setMute(_mute);
             break;
         case constants::GameMode::CreateGame:
             _create.init(_assets);
+//            _create.setMute(_mute);
             break;
         case constants::GameMode::JoinGame:
             _join.init(_assets);
+//            _join.setMute(_mute);
             break;
         case constants::GameMode::Lobby:
             _networkData->setStatus(constants::MatchStatus::Waiting);
             _lobby.setNetwork(_network);
             _lobby.init(_assets);
+//            _lobby.setMute(_mute);
             break;
         case constants::GameMode::Game:
             _network->startGame();
             _gameplay.setNetwork(_network);
             _gameplay.setInput(_input);
             _gameplay.setCollision(_collision);
+            _gameplay.setAudio(_audio);
             _gameplay.init(_assets);
             break;
         case constants::GameMode::Win:
@@ -246,15 +288,23 @@ void GhostedApp::update(float timestep) {
         _loading.update(0.01f);
         break;
     case constants::GameMode::Start:
+            CULog("UPDATING START");
         _start.update(timestep);
+        _mute = _start.getMute();
+        if (_audio != nullptr) {
+            _audio->setMute(_mute);
+            _audio->update(timestep);
+        }
         break;
     case constants::GameMode::CreateGame:
         _create.update(timestep);
         break;
     case constants::GameMode::JoinGame:
+//        _mute = _join.getMute();
         _join.update(timestep);
         break;
     case constants::GameMode::Lobby:
+//        _mute = _lobby.getMute();
         _network->update(timestep);
         _lobby.update(timestep);
         break;
@@ -264,6 +314,7 @@ void GhostedApp::update(float timestep) {
             _gameplay.setNetwork(_network);
             _gameplay.setInput(_input);
             _gameplay.setCollision(_collision);
+            _gameplay.setAudio(_audio);
             _gameplay.init(_assets);
         }
         _network->update(timestep);
@@ -326,10 +377,13 @@ void GhostedApp::buildScene() {
 
     _assets->attach<Font>(FontLoader::alloc()->getHook());
     _assets->attach<Texture>(TextureLoader::alloc()->getHook());
+    _assets->attach<Sound>(SoundLoader::alloc()->getHook());
     _assets->attach<scene2::SceneNode>(Scene2Loader::alloc()->getHook());
 
     _loading.init(_assets);
-
+    
+    AudioEngine::start(24);
+    
     // Queue up the other assets
     _assets->loadDirectoryAsync("json/assets.json", nullptr);
     _assets->loadDirectoryAsync("json/start.json", nullptr);

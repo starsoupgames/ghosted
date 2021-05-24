@@ -15,6 +15,7 @@ This Trap class contains information about the Trap's texture, whether or not it
 #define SMOKE_START 0
 #define SMOKE_END 7
 
+
 using namespace std;
 using namespace cugl;
 
@@ -46,6 +47,10 @@ public:
     /** Returns whether or not the trap is armed */
     bool getArmed() const {
         return _arming >= 0;
+    }
+    
+    bool justArmed() const {
+        return _arming > ARMING_TICKS - TRAP_DURATION;
     }
 
     /** Sets whether or not the trap is done triggering */

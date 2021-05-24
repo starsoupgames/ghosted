@@ -12,6 +12,7 @@ class StartScene : public GameMode {
 private:
     shared_ptr<scene2::Button> _create;
     shared_ptr<scene2::Button> _join;
+    shared_ptr<scene2::Button> _muteButton;
 
 public:
     /**
@@ -54,6 +55,10 @@ public:
      * @param value whether the scene is currently active
      */
     virtual void setActive(bool value) override;
+    
+    bool getMute() {
+        return _mute;
+    }
 };
 
 #endif /* __START_SCENE_H__ */

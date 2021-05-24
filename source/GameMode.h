@@ -14,6 +14,8 @@ protected:
 
     /** The game mode enum value. */
     constants::GameMode _mode;
+    
+    bool _mute;
 
     /** The game mode's root node. */
     shared_ptr<scene2::SceneNode> _root;
@@ -25,7 +27,7 @@ public:
      * This constructor does not allocate any objects or start the controller.
      * This allows us to use a controller without a heap pointer.
      */
-    GameMode() : GameMode(constants::GameMode::None) {}
+    GameMode() : GameMode(constants::GameMode::None)  {}
 
     GameMode(constants::GameMode mode) : Scene2(), _mode(mode) {}
 
@@ -62,6 +64,12 @@ public:
     constants::GameMode getMode() {
         return _mode;
     };
+    
+    bool getMute() { return _mute; };
+    
+    void setMute(bool m) {
+        _mute = m;
+    }
 };
 
 #endif /* __GAME_MODE_H__ */

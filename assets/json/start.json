@@ -60,7 +60,7 @@
                         "absolute": true
                     }
                 },
-                "settings": {
+                "muteButton": {
                     "type": "Button",
                     "format": {
                         "type": "Anchored"

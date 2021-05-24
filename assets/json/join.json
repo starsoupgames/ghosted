@@ -50,56 +50,6 @@
                         "y_anchor": "fill"
                     }
                 },
-                "newsettings": {
-                    "type": "Button",
-                    "format": {
-                        "type": "Anchored"
-                    },
-                    "data": {
-                        "upnode": "up",
-                        "anchor": [ 0, 1 ],
-                        "scale": 1.5
-                    },
-                    "children": {
-                        "up": {
-                            "type": "Image",
-                            "data": {
-                                "texture": "newsettings"
-                            }
-                        }
-                    },
-                    "layout": {
-                        "x_anchor": "right",
-                        "y_anchor": "top",
-                        "y_offset": -0.1,
-                        "x_offset": -0.1
-                    }
-                },
-                "newinfo": {
-                    "type": "Button",
-                    "format": {
-                        "type": "Anchored"
-                    },
-                    "data": {
-                        "upnode": "up",
-                        "anchor": [ 0, 2.5 ],
-                        "scale": 1.5
-                    },
-                    "children": {
-                        "up": {
-                            "type": "Image",
-                            "data": {
-                                "texture": "newinfo"
-                            }
-                        }
-                    },
-                    "layout": {
-                        "x_anchor": "right",
-                        "y_anchor": "top",
-                        "y_offset": -0.1,
-                        "x_offset": -0.1
-                    }
-                },
                 "back": {
                     "type": "Button",
                     "format": {

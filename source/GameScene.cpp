@@ -340,6 +340,12 @@ void GameScene::update(float timestep) {
             updateVision(p);
         }
     }
+    
+//    for (auto& t : _gameMap->getTraps()) {
+//        if (t != nullptr) {
+//            _audio->setTrapSound(t);
+//        }
+//    }
 
     // Checks if the ghost should be revealed, commented out because no
     // tagging yet

@@ -8,6 +8,7 @@
 #include "GameEntities/Players/PlayerGhost.h"
 #include "GameEntities/BatteryCollectible.h"
 #include "GameEntities/Trap.h"
+#include "AudioController.h"
 
 using namespace std;
 using namespace cugl;

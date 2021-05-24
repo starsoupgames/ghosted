@@ -6,4 +6,8 @@ Release
 Debug
 x86
 x64
+<<<<<<< HEAD
+Lib
+=======
 Lib/
+>>>>>>> e954a1e783dbc7542c1b0e02d7199d8c5d9b2c9c

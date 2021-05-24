@@ -199,6 +199,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\source\AudioController.h" />
     <ClInclude Include="..\..\source\CollisionController.h" />
     <ClInclude Include="..\..\source\Constants.h" />
     <ClInclude Include="..\..\source\GameEntities\BatteryCollectible.h" />
@@ -229,6 +230,7 @@
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\source\AudioController.cpp" />
     <ClCompile Include="..\..\source\CollisionController.cpp" />
     <ClCompile Include="..\..\source\CreateGameScene.cpp" />
     <ClCompile Include="..\..\source\GameEntities\BatteryCollectible.cpp" />

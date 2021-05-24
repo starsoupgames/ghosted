@@ -7,8 +7,6 @@
 *.tlog
 *.recipe
 .vs/
-Debug
-Release
 
 # XCode
 *.DS_Store

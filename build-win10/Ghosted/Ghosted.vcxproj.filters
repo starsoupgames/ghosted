@@ -120,6 +120,9 @@
     <ClInclude Include="..\..\source\GameEntities\Trap.h">
       <Filter>Header Files\GameEntities</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\source\AudioController.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\main.cpp">
@@ -199,6 +202,9 @@
     </ClCompile>
     <ClCompile Include="..\..\source\RoomEntities\Obstacle.cpp">
       <Filter>Source Files\RoomEntities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\AudioController.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
