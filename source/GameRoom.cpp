@@ -3,16 +3,7 @@
 using namespace std;
 using namespace cugl;
 
-bool GameRoom::init(const shared_ptr<AssetManager>& assets, const shared_ptr<scene2::OrderedNode>& node, const Vec2& origin, vector<bool> doors, Vec2 ranking) {
-    _assets = assets;
-    _node = node;
-    _ranking = ranking;
-    _origin = origin;
-    _batterySpawns = vector<Vec2>();
-    _doors = doors;
-
-    _node->setAnchor(Vec2::ANCHOR_BOTTOM_CENTER);
-
+bool GameRoom::createSlotNode() {
     auto slotNode = scene2::PolygonNode::allocWithTexture(_assets->get<Texture>("slot_empty"));
     slotNode->setScale(0.05f);
     slotNode->setPosition(Vec2(ROOM_DIMENSION / 2, ROOM_DIMENSION / 2));
@@ -22,13 +13,30 @@ bool GameRoom::init(const shared_ptr<AssetManager>& assets, const shared_ptr<sce
     _slotModel = BatterySlot::alloc(Vec2(ROOM_DIMENSION / 2, ROOM_DIMENSION / 2));
     _slotModel->setNode(slotNode);
     return true;
+}
+
+bool GameRoom::init(const shared_ptr<AssetManager>& assets, vector<bool> doors, Vec2 ranking, int layout) {
+    init(assets, doors, ranking);
+    _layout = layout;
+
+    return true;
 };
 
-bool GameRoom::init(const shared_ptr<AssetManager>& assets, const Vec2& origin, vector<bool> doors, Vec2 ranking) {
+bool GameRoom::init(const shared_ptr<AssetManager>& assets, const shared_ptr<scene2::OrderedNode>& node, vector<bool> doors, Vec2 ranking) {
+    _node = node;
+    init(assets, doors, ranking);
+
+    _node->setAnchor(Vec2::ANCHOR_BOTTOM_CENTER);
+    createSlotNode();
+    return true;
+};
+
+bool GameRoom::init(const shared_ptr<AssetManager>& assets, vector<bool> doors, Vec2 ranking) {
     _assets = assets;
     _doors = doors;
-    _origin = origin;
+    _origin = ranking * constants::WALL_DIMENSIONS;
     _ranking = ranking;
+    _batterySpawns = vector<Vec2>();
     return true;
 }
 
@@ -86,15 +94,18 @@ void GameRoom::addObstacles(const shared_ptr<RoomParser>& parser, int end) {
     string path;
     if (end == 1) {
         path = "json/layouts/end.json";
-        CULog("generating end room");
+        _layout = -1*end;
     }
     else if (end == 2) {
         path = "json/layouts/start.json";
-        CULog("generating start room");
+        _layout = -1 * end;
     }
     else {
-        path = parser->pickLayout(roomCode);
+        vector<string> temp = parser->pickLayout(roomCode);
+        path = temp[1];
+        _layout = stoi(temp[0]);
     }
+
     shared_ptr<LayoutMetadata> roomData = parser->getLayoutData(path);
     for (auto& obs : roomData->obstacles) {
         // Get texture with name

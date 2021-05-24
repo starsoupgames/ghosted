@@ -13,6 +13,36 @@
 using namespace std;
 using namespace cugl;
 
+/** Metadata for networking that represents a room. Contains information
+ *  about the room's ranking, its door configuration, and which layout it
+ *  is using.
+ */
+struct RoomNetworkdata {
+    vector<bool> doors;
+    Vec2 rank;
+    int layout;
+
+    RoomNetworkdata(vector<bool> doors, Vec2 rank, int layout) {
+        this->doors = doors;
+        this->rank = rank;
+        this->layout = layout;
+    }
+};
+
+/** Metadata for networking that represents a map. Contains information about the rooms
+ *  in the map and the coordinates of batteries that will be spawned in.
+ */
+struct MapNetworkdata {
+    vector<shared_ptr<RoomNetworkdata>> rooms;
+    vector<Vec2> batteries;
+
+    MapNetworkdata(vector<shared_ptr<RoomNetworkdata>> rooms, vector<Vec2> batteries) {
+        this->rooms = rooms;
+        this->batteries = batteries;
+    }
+};
+
+
 /** Class modeling a game map. */
 class GameMap {
 private:
@@ -37,6 +67,9 @@ private:
 
     /** The vector of batteries */
     vector<shared_ptr<Battery>> _batteries;
+
+    /** The metadata represeting the map */
+    shared_ptr<MapMetadata> _mapData;
     
     /** The ranking of the start room */
     Vec2 _startRank;
@@ -46,6 +79,7 @@ private:
 
     bool assertValidMap();
     
+
 public:
 #pragma mark Constructors
     GameMap() { }
@@ -160,11 +194,15 @@ public:
     /** Generates a random map */
     bool generateRandomMap();
 
-    /** Generates a random map with the coordinates of spawnable battery locations */
-    bool generateRandomMap(vector<Vec2> batterySpawns);
+    bool readNetworkMap(shared_ptr<MapNetworkdata> networkData);
     
 #pragma mark -
-    
+#pragma mark Networking
+
+    /** Constructs metadata to send over the network for map generation */
+    shared_ptr<MapNetworkdata> makeNetworkMap();
+
+#pragma mark -
 };
 
 #endif /** __GAME_MAP_H__ */

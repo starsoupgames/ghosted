@@ -289,14 +289,6 @@ bool GameMap::generateBasicMap(int numBatteries) {
 void makeConnection(shared_ptr<GameRoom> room1, shared_ptr<GameRoom> room2) {
 }
 
-/*
-shared_ptr<GameRoom> makeRoom() {
-    // call gameroom's init and pass in obstacle layout and door configuration
-    RoomParser parser = RoomParser();
-    return parser.parse("json/room.json", Vec2(0, 0));
-}
-*/
-
 bool GameMap::generateRandomMap() {
     reset();
     auto litRoot = _node->getChildByName("lit_root");
@@ -304,21 +296,21 @@ bool GameMap::generateRandomMap() {
     int spacing = 1120;
 
     shared_ptr<RoomParser> parser = make_shared<RoomParser>();
-    shared_ptr<MapMetadata> mapData = parser->getMapData(parser->pickMap());
+    _mapData = parser->getMapData(parser->pickMap());
 
-    _startRank = mapData->start;
-    _endRank = mapData->end;
+    _startRank = _mapData->start;
+    _endRank = _mapData->end;
 
     int i = 0;
     int type = 0;
-    for (auto& room : mapData->rooms) {
+    for (auto& room : _mapData->rooms) {
         auto node = scene2::OrderedNode::allocWithOrder(scene2::OrderedNode::Order::ASCEND);
         auto origin = Vec2(room.rank.x * spacing, room.rank.y * spacing);
         node->setContentSize(constants::ROOM_DIMENSIONS);
         node->doLayout();
         node->setName("room_" + to_string(i));
         litRoot->addChild(node);
-        auto r = GameRoom::alloc(_assets, origin, room.doors, room.rank);
+        auto r = GameRoom::alloc(_assets, room.doors, room.rank);
         r->setNode(node);
         r->setRoot(_node);
         if (room.rank == _endRank) {
@@ -330,9 +322,8 @@ bool GameMap::generateRandomMap() {
         r->addObstacles(parser, type);
 
         for (auto& coord : r->getBatterySpawns()) {
+            // Adjust the coordinates of this room's battery spawns
             Vec2 finalCoord = (coord * constants::TILE_SIZE) + Vec2(80, 0) + r->getOrigin();
-            //Mat4 matTranslate = r->getNode()->getNodeToWorldTransform();
-            //finalCoord = matTranslate.transformVector(finalCoord);
             _batteriesSpawnable.push_back(finalCoord);
         }
 
@@ -341,9 +332,12 @@ bool GameMap::generateRandomMap() {
         type = 0;
     }
 
+    // Pick random batteries
+
     static auto rng = default_random_engine{};
     shuffle(_batteriesSpawnable.begin(), _batteriesSpawnable.end(), rng);
-    for (int i = 0; i < mapData->numBatteries; i++) {
+    for (int i = 0; i < _mapData->numBatteries; i++) {
+        // This node stuff should be moved to battery
         auto batteryNode = scene2::PolygonNode::allocWithTexture(_assets->get<Texture>("battery_texture"));
         batteryNode->setAnchor(Vec2::ANCHOR_BOTTOM_CENTER);
         batteryNode->setPriority(constants::RoomEntity);
@@ -369,4 +363,33 @@ Vec2 GameMap::getWinRoomOrigin() {
     }
     // default
     return _rooms[8]->getOrigin();
+}
+
+
+/** Constructs metadata to send over the network for map generation */
+shared_ptr<MapNetworkdata> GameMap::makeNetworkMap() {
+    vector<shared_ptr<RoomNetworkdata>> rooms;
+    for (auto& room : _rooms) {
+        rooms.push_back(make_shared<RoomNetworkdata>(room->getDoors(), room->getRanking(), room->getLayout()));
+    }
+
+    vector<Vec2> batteries;
+    for (auto& battery : _batteries) {
+        batteries.push_back(battery->getLoc());
+    }
+    return make_shared<MapNetworkdata>(rooms, batteries);
+}
+
+/** Takes in the network metadata and updates the GameMap model */
+bool GameMap::readNetworkMap(shared_ptr<MapNetworkdata> networkData) {
+    _rooms.clear();
+
+    for (auto& room : networkData->rooms) {
+        _rooms.push_back(GameRoom::alloc(_assets, room->doors, room->rank, room->layout));
+    }
+    for (auto& coord : networkData->batteries) {
+        auto batteryModel = Battery::alloc(coord);
+        _batteries.push_back(batteryModel);
+    }
+    return true;;
 }

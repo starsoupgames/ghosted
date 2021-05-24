@@ -95,8 +95,10 @@ public:
         _node = nullptr;
     }
 
-    /** Takes in a door configuration and returns the path to an obstacle layout */
-    string pickLayout(string code);
+    /** Takes in a door configuration and returns the path to an obstacle layout,
+     *  as well as the string that represents which layout was chosen. 
+     */
+    vector<string> pickLayout(string code);
 
     /** Returns the path to a random map layout */
     string pickMap();
@@ -109,16 +111,5 @@ public:
      */
     shared_ptr<MapMetadata> getMapData(string file);
 
-    /** Constructs an array of ints that represents the map metadata for networking purposes
-     *  The first element is a list that represents the door configurations. Each room is represented
-     *  by 6 ints. The first 2 ints represent the ranking of the room, and the last 4 represent whether
-     *  the corresponding cardinal direction has a door
-     * 
-     *  [x value, y value, north, south, east, west, x value, y value, north, south, east, west, ...]
-     *  
-     *  The second list represents which obstacle layout is used by that room. The two lists should be ordered
-     *  the same, so the first element of this second list represents the layout of the room described by the 
-     *  first six elements of the previous list.
-     */
-    vector<vector<int>> makeNetworkMap(MapMetadata map);
+
 };

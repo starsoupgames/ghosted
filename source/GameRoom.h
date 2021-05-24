@@ -44,8 +44,8 @@ private:
     /** Where in the grid of rooms this room is */
     Vec2 _ranking;
 
-    /** If this room has layouts, delete after all rooms have layouts */
-    bool _layout;
+    /** Which layout this room is using. -1 if end room, -2 if start room */
+    int _layout;
 
     bool _winRoom;
     
@@ -61,24 +61,33 @@ private:
     void addWalls();
     
     bool assertRoomIsAdjacent(const shared_ptr<GameRoom>& room);
+
+    bool createSlotNode();
     
 public:
     GameRoom() {}
-
+    
     ~GameRoom() { }
 
-    bool init(const shared_ptr<AssetManager>& assets, const shared_ptr<scene2::OrderedNode>& node, const Vec2& origin, vector<bool> doors, Vec2 ranking);
+    bool init(const shared_ptr<AssetManager>& assets, const shared_ptr<scene2::OrderedNode>& node, vector<bool> doors, Vec2 ranking);
 
-    bool init(const shared_ptr<AssetManager>& assets, const Vec2& origin, vector<bool> doors, Vec2 ranking);
-
-    static shared_ptr<GameRoom> alloc(const shared_ptr<AssetManager>& assets, const shared_ptr<scene2::OrderedNode>& node, const Vec2& origin, vector<bool> doors, Vec2 ranking) {
+    bool init(const shared_ptr<AssetManager>& assets, vector<bool> doors, Vec2 ranking);
+    
+    bool init(const shared_ptr<AssetManager>& assets, vector<bool> doors, Vec2 ranking, int layout);
+    
+    static shared_ptr<GameRoom> alloc(const shared_ptr<AssetManager>& assets, vector<bool> doors, Vec2 ranking, int layout) {
         shared_ptr<GameRoom> result = make_shared<GameRoom>();
-        return (result->init(assets, node, origin, doors, ranking) ? result : nullptr);
+        return (result->init(assets, doors, ranking, layout) ? result : nullptr);
+    }
+
+    static shared_ptr<GameRoom> alloc(const shared_ptr<AssetManager>& assets, const shared_ptr<scene2::OrderedNode>& node, vector<bool> doors, Vec2 ranking) {
+        shared_ptr<GameRoom> result = make_shared<GameRoom>();
+        return (result->init(assets, node, doors, ranking) ? result : nullptr);
     }
     
-    static shared_ptr<GameRoom> alloc(const shared_ptr<AssetManager>& assets, const Vec2& origin, vector<bool> doors, Vec2 ranking) {
+    static shared_ptr<GameRoom> alloc(const shared_ptr<AssetManager>& assets, vector<bool> doors, Vec2 ranking) {
         shared_ptr<GameRoom> result = make_shared<GameRoom>();
-        return (result->init(assets, origin, doors, ranking) ? result : nullptr);
+        return (result->init(assets, doors, ranking) ? result : nullptr);
     }
 
     // Gets the coordinates of the origin of this room
@@ -137,7 +146,7 @@ public:
     bool getWinRoom() { return _winRoom; };
     
     /** Returns the layout of the room */
-    bool getLayout() { return _layout; };
+    int getLayout() { return _layout; };
 
     // Comparison operator
     friend bool operator<(const shared_ptr<GameRoom>& l, const shared_ptr<GameRoom>& r) {

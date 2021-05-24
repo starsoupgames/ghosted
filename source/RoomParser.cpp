@@ -17,13 +17,18 @@ int RoomParser::getRandIndex(vector<T> lst) {
 }
 
 
-/** Takes in a door configuration and returns the path to an obstacle layout */
-string RoomParser::pickLayout(string code) {
+/** Takes in a door configuration and returns the path to an obstacle layout,
+ *  as well as the string that represents which layout was chosen.
+ */
+vector<string> RoomParser::pickLayout(string code) {
+    vector<string> output;
     shared_ptr<JsonReader> reader = JsonReader::alloc("json/layouts/layouts.json");
     shared_ptr<JsonValue> value = reader->readJson();
     vector<int> layouts = value->get(code)->asIntArray();
-
-    return "json/layouts/" + to_string(layouts[getRandIndex(layouts)]) + ".json";
+    string result = to_string(layouts[getRandIndex(layouts)]);
+    output.push_back(result);
+    output.push_back("json/layouts/" + result + ".json");
+    return output;
 }
 
 /** Returns the path to a random map layout */
