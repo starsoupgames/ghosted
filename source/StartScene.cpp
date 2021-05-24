@@ -54,7 +54,7 @@ bool StartScene::init(const shared_ptr<AssetManager>& assets) {
         _join->activate();
         _muteButton->activate();
     }
-    _mode = constants::GameMode::Start;
+
     return true;
 }
 

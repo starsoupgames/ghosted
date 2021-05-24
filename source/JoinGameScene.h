@@ -5,12 +5,15 @@
 #include <cugl/cugl.h>
 #include "GameMode.h"
 #include "Utils.h"
+#include "NetworkController.h"
 
 using namespace std;
 using namespace cugl;
 
 class JoinGameScene : public GameMode {
 private:
+    shared_ptr<NetworkController> _network;
+
     shared_ptr<scene2::Button> _next;
     shared_ptr<scene2::Button> _back;
     
@@ -66,6 +69,10 @@ public:
      * @param value whether the scene is currently active
      */
     virtual void setActive(bool value) override;
+
+    void setNetwork(shared_ptr<NetworkController> network) {
+        _network = network;
+    }
 };
 
 #endif /* __JOIN_GAME_SCENE_H__ */

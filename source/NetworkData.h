@@ -4,12 +4,11 @@
 #define __NETWORK_DATA_H__
 #include <cugl/cugl.h>
 #include "Constants.h"
+#include "NetworkUtils.h"
+#include "GameMap.h"
 #include "GameEntities/Player.h"
 #include "GameEntities/Players/PlayerPal.h"
 #include "GameEntities/Players/PlayerGhost.h"
-
-/** The precision to multiply floating point numbers by */
-constexpr float FLOAT_PRECISION = 100.0f;
 
 using namespace std;
 
@@ -52,12 +51,22 @@ struct PlayerData {
     shared_ptr<Player> player; // NetworkData does not own this player
     shared_ptr<InterpolationData> interpolationData;
 
-    PlayerData(int id, shared_ptr<Player> player) {
+    PlayerData(int id, shared_ptr<Player>& player) {
         this->id = id;
         this->player = player;
         this->interpolationData = make_shared<InterpolationData>(player->getLoc());
     }
     ~PlayerData() { player = nullptr; interpolationData = nullptr; };
+};
+
+/** Map data */
+struct MapData {
+    shared_ptr<GameMap> map;
+
+    MapData(shared_ptr<GameMap>& map) {
+        this->map = map;
+    }
+    ~MapData() { map = nullptr; };
 };
 
 /** Win data */
@@ -90,25 +99,11 @@ private:
     /** Player data vector */
     vector<shared_ptr<PlayerData>> _players;
 
+    /** Map data */
+    shared_ptr<MapData> _mapData;
+
     /** Win data */
     shared_ptr<WinData> _winData;
-
-    /** Functions to convert data types to byte vectors */
-    void encodeByte(uint8_t b, vector<uint8_t>& out); // 1 byte
-    uint8_t decodeByte(const vector<uint8_t>& bytes);
-
-    void encodeBool(bool b, vector<uint8_t>& out); // 1 byte
-    bool decodeBool(const vector<uint8_t>& bytes);
-
-    // adapted from https://os.mbed.com/forum/helloworld/topic/2053/?page=1#comment-54126
-    void encodeInt(int i, vector<uint8_t>& out); // 4 bytes
-    int decodeInt(const vector<uint8_t>& bytes);
-    
-    void encodeFloat(float f, vector<uint8_t>& out); // 4 bytes
-    float decodeFloat(const vector<uint8_t>& bytes);
-
-    void encodeVector(const Vec2& v, vector<uint8_t>& out); // 8 bytes
-    Vec2 decodeVector(const vector<uint8_t>& bytes);
 
     /** Convert metadata */
     vector<uint8_t> convertMetadata();
@@ -124,7 +119,7 @@ private:
 
     /** Convert and interpret map data */
     vector<uint8_t> convertMapData();
-    void interpretMapData(const vector<uint8_t>& mapData);
+    void interpretMapData(const int id, const vector<uint8_t>& mapData);
 
     /** Convert and interpret win data */
     vector<uint8_t> convertWinData();
@@ -167,7 +162,7 @@ public:
     }
 
     /** Set players as player data vector */
-    void setPlayers(const vector<shared_ptr<Player>>& players) {
+    void setPlayers(vector<shared_ptr<Player>> players) {
         CUAssertLog(players.size() == 4, "Players vector is not size 4.");
         _players = vector<shared_ptr<PlayerData>>(4, nullptr);
         for (int i = 0; i < 4; ++i) {
@@ -180,6 +175,11 @@ public:
                 }
             }
         }
+    }
+
+    /** Set game map */
+    void setGameMap(shared_ptr<GameMap> gameMap) {
+        _mapData = make_shared<MapData>(gameMap);
     }
 
     /** @return match status */

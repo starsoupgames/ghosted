@@ -10,6 +10,8 @@
 #include "GameEntities/Trap.h"
 #include "AudioController.h"
 
+#define TRAP_RADIUS 120 // temp, should be 500px
+
 using namespace std;
 using namespace cugl;
 
@@ -121,6 +123,30 @@ public:
     
     /** Returns the list of traps, delete after traps properly implemented */
     vector<shared_ptr<Trap>> getTraps() { return _traps; }
+
+    /** Sets traps */
+    void setTraps(const vector<Vec2>& trapPositions) {
+        vector<shared_ptr<Trap>> newTraps;
+        vector<Vec2> newTrapPositions;
+        for (auto& pos : trapPositions) {
+            bool trapExists = false;
+            for (auto& trap : _traps) {
+                if (trap->getLoc().distance(pos) < TRAP_RADIUS && find(newTraps.begin(), newTraps.end(), trap) == newTraps.end()) {
+                    trapExists = true;
+                    newTraps.push_back(trap);
+                    break;
+                }
+            }
+
+            if (!trapExists) {
+                newTrapPositions.push_back(pos);
+            }
+        }
+        _traps = newTraps;
+        for (auto& pos : newTrapPositions) {
+            addTrap(pos);
+        }
+    }
     
     /** @return the player model */
     shared_ptr<Player> getPlayer() { return _player; }

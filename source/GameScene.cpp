@@ -226,6 +226,8 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
     _network->getData()->setPlayers(_players);
     _players = _network->getData()->getPlayers();
 
+    _network->getData()->setGameMap(_gameMap);
+
     _gameMap->setPlayer(_network->getData()->getPlayer()->player);
     _gameMap->setPlayers(_network->getData()->getPlayers());
     

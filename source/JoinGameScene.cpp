@@ -56,6 +56,7 @@ bool JoinGameScene::init(const shared_ptr<AssetManager>& assets) {
         _back->activate();
         _next->activate();
     }
+
     return true;
 }
 

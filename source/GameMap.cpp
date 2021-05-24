@@ -1,6 +1,5 @@
 #include "GameMap.h"
 
-#define TRAP_RADIUS 120 // temp, should be 500px
 #define BATTERY_RADIUS 40 
 
 using namespace std;
@@ -46,6 +45,7 @@ void GameMap::addTrap(Vec2 pos) {
     trapNode->addChildWithName(trapRadiusNode, "radius");
 
     trap->setNode(trapNode, chandelierNode, smokeNode);
+    trap->setLoc(pos);
     _traps.push_back(trap);
 }
 
@@ -70,7 +70,6 @@ void GameMap::update(float timestep) {
             newTraps.push_back(t);
         }
     }
-    _traps.clear();
     _traps = newTraps;
     for (auto& s : _slots) {
         s->update(timestep);

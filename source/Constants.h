@@ -17,6 +17,8 @@ namespace constants {
 
     const Vec2 ROOM_CENTER (187.5, 187.5);
 
+    const int SLOT_CHARGE = 5;
+
     const Vec2 PAL_EFFECT_OFFSET(-10, 0);
 
     const Vec2 TRAP_CHANDELIER_OFFSET(0, -20);

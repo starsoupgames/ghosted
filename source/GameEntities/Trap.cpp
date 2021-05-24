@@ -74,7 +74,13 @@ void Trap::update(float timestep) {
 
 void Trap::dispose() {
     GameEntity::dispose();
+    if (_node != nullptr) {
+        _node->dispose();
+    }
     _node = nullptr;
+    if (_chandelierNode != nullptr) {
+        _chandelierNode->dispose();
+    }
     _chandelierNode = nullptr;
 }
 

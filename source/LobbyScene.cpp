@@ -111,27 +111,23 @@ void LobbyScene::update(float timestep) {
         }
 
         switch (_network->getStatus()) {
-        case CUNetworkConnection::NetStatus::Disconnected:
-            CULog("Disconnected");
-            break;
         case CUNetworkConnection::NetStatus::Pending:
             break;
         case CUNetworkConnection::NetStatus::Connected:
             break;
+        case CUNetworkConnection::NetStatus::Disconnected:
+            CULog("Disconnected");
         case CUNetworkConnection::NetStatus::Reconnecting:
             CULog("Reconnecting");
-            break;
         case CUNetworkConnection::NetStatus::RoomNotFound:
             CULog("RoomNotFound");
-            break;
         case CUNetworkConnection::NetStatus::ApiMismatch:
             CULog("ApiMismatch");
-            break;
         case CUNetworkConnection::NetStatus::GenericError:
             CULog("GenericError");
-            break;
         default:
             _mode = _network->isHost() ? constants::GameMode::Start : constants::GameMode::JoinGame;
+            _network->disconnect();
         }
     }
 }

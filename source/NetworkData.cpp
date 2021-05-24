@@ -1,8 +1,8 @@
 #include "NetworkData.h"
-#include "Utils.h"
 
 using namespace std;
 using namespace cugl;
+using namespace NetworkUtils;
 
 shared_ptr<PlayerData> NetworkData::getPlayer() {
     return getPlayer(_id);
@@ -16,85 +16,6 @@ shared_ptr<PlayerData> NetworkData::getPlayer(int id) {
     }
     return nullptr;
 };
-
-/** Split byte vector at certain points */
-vector<vector<uint8_t>> split(const vector<uint8_t>& bytes, const vector<unsigned>& sizes) {
-    bool raiseError = false;
-    int index = 0;
-    for (auto& size : sizes) {
-        index += size;
-        if (bytes.size() < index) {
-            raiseError = true;
-        }
-    }
-    vector<vector<uint8_t>> result;
-    if (raiseError) {
-        CULogError("Byte vector is too small. Byte vector size: %d. Expected size: %d.", bytes.size(), index);
-        return result;
-    }
-    index = 0;
-    for (auto& size : sizes) {
-        result.push_back(vector(bytes.begin() + index, bytes.begin() + index + size));
-        index += size;
-    }
-    if (index != bytes.size()) {
-        result.push_back(vector(bytes.begin() + index, bytes.begin() + bytes.size()));
-    }
-    return result;
-}
-
-void NetworkData::encodeByte(uint8_t b, vector<uint8_t>& out) {
-    out.push_back(b);
-}
-
-uint8_t NetworkData::decodeByte(const vector<uint8_t>& bytes) {
-    CUAssertLog(bytes.size() == 1, "decodeByte: Byte vector size is not equal to data type size.");
-    return bytes[0];
-}
-
-void NetworkData::encodeBool(bool b, vector<uint8_t>& out) {
-    out.push_back(b);
-}
-
-bool NetworkData::decodeBool(const vector<uint8_t>& bytes) {
-    CUAssertLog(bytes.size() == 1, "decodeBool: Byte vector size is not equal to data type size.");
-    return (bool)bytes[0];
-}
-
-void NetworkData::encodeInt(int i, vector<uint8_t>& out) {
-    int temp = marshall(i);
-    unsigned char bytes[4];
-    bytes[0] = (temp >> 24) & 0xFF;
-    bytes[1] = (temp >> 16) & 0xFF;
-    bytes[2] = (temp >> 8) & 0xFF;
-    bytes[3] = temp & 0xFF;
-    out.insert(out.end(), begin(bytes), end(bytes));
-}
-
-int NetworkData::decodeInt(const vector<uint8_t>& bytes) {
-    CUAssertLog(bytes.size() == sizeof(int), "decodeInt: Byte vector size is not equal to data type size.");
-    int32_t i = (bytes[0] << 24) + (bytes[1] << 16) + (bytes[2] << 8) + bytes[3];
-    return marshall(i);
-}
-
-void NetworkData::encodeFloat(float f, vector<uint8_t>& out) {
-    encodeInt(static_cast<int>(f * FLOAT_PRECISION), out);
-}
-
-float NetworkData::decodeFloat(const vector<uint8_t>& bytes) {
-    return static_cast<float>(decodeInt(bytes)) / FLOAT_PRECISION;
-}
-
-void NetworkData::encodeVector(const Vec2& v, vector<uint8_t>& out) {
-    encodeFloat(v.x, out);
-    encodeFloat(v.y, out);
-}
-
-Vec2 NetworkData::decodeVector(const vector<uint8_t>& bytes) {
-    CUAssertLog(bytes.size() == 2 * sizeof(float), "decodeVector: Byte vector size is not equal to data type size.");
-    vector<vector<uint8_t>> splitBytes = split(bytes, { 4, 4 });
-    return Vec2(decodeFloat(splitBytes[0]), decodeFloat(splitBytes[1]));
-}
 
 vector<uint8_t> NetworkData::convertMetadata() {
     vector<uint8_t> result;
@@ -172,6 +93,16 @@ vector<uint8_t> NetworkData::convertPlayerData() {
 
     auto player = playerData->player;
 
+    // number of batteries/traps
+    if (player->getType() == constants::PlayerType::Pal) {
+        auto pal = dynamic_pointer_cast<Pal>(player);
+        encodeInt(pal->getBatteries(), result);
+    }
+    else {
+        auto ghost = dynamic_pointer_cast<Ghost>(player);
+        encodeInt(ghost->getTraps(), result);
+    }
+
     // player location
     encodeVector(player->getLoc(), result);
 
@@ -229,14 +160,25 @@ void NetworkData::interpretPlayerData(const int id, const vector<uint8_t>& playe
         return;
     }
 
-    vector<vector<uint8_t>> splitPlayerData = split(playerData, { 8, 8, 4 });
+    vector<vector<uint8_t>> splitPlayerData = split(playerData, { 4, 8, 8, 4 });
     if (splitPlayerData.empty()) return;
-    Vec2 location = decodeVector(splitPlayerData[0]);
-    Vec2 direction = decodeVector(splitPlayerData[1]);
 
     auto otherPlayer = otherPlayerData->player;
 
+    // number of batteries/traps
+    if (otherPlayer->getType() == constants::PlayerType::Pal) {
+        auto pal = dynamic_pointer_cast<Pal>(otherPlayer);
+        pal->setBatteries(decodeInt(splitPlayerData[0]));
+    }
+    else {
+        auto ghost = dynamic_pointer_cast<Ghost>(otherPlayer);
+        ghost->setTraps(decodeInt(splitPlayerData[0]));
+    }
+
     // location and direction
+    Vec2 location = decodeVector(splitPlayerData[1]);
+    Vec2 direction = decodeVector(splitPlayerData[2]);
+
     otherPlayer->setDir(direction);
     otherPlayerData->interpolationData->ticksSinceReceived = 0;
     otherPlayerData->interpolationData->oldPosition = otherPlayer->getLoc();
@@ -244,7 +186,7 @@ void NetworkData::interpretPlayerData(const int id, const vector<uint8_t>& playe
     otherPlayer->setIdle((location - otherPlayer->getLoc()).length() < 1.f);
 
     // more complicated player data
-    splitPlayerData = split(splitPlayerData[2], { 1, 1, 1, 1 });
+    splitPlayerData = split(splitPlayerData[3], { 1, 1, 1, 1 });
     for (unsigned i = 0; i < _players.size(); i++) {
         auto p = _players[i];
         auto targetPlayer = p->player;
@@ -280,11 +222,58 @@ void NetworkData::interpretPlayerData(const int id, const vector<uint8_t>& playe
 
 vector<uint8_t> NetworkData::convertMapData() {
     vector<uint8_t> result;
+    if (_id < 0) {
+        CULog("Player id is not defined.");
+        return result;
+    }
+
+    if (_id == _hostID) {
+        vector<Vec2> trapPositions;
+        vector<bool> trapTriggered;
+        for (auto& trap : _mapData->map->getTraps()) {
+            trapPositions.push_back(trap->getLoc());
+            trapTriggered.push_back(trap->getTriggered());
+        };
+        encodeVec2List(trapPositions, result);
+        encodeBoolList(trapTriggered, result);
+    }
+
     return result;
 }
 
-void NetworkData::interpretMapData(const vector<uint8_t>& msg) {
+void NetworkData::interpretMapData(const int id, const vector<uint8_t>& msg) {
+    if (msg.empty()) return;
 
+    if (id == _hostID && _mapData != nullptr) {
+        // this only works if ghost is host
+        vector<vector<uint8_t>> splitMsg = split(msg, { 4 });
+        if (splitMsg.empty()) return;
+
+        unsigned numTraps = decodeInt(splitMsg[0]);
+        vector<Vec2> trapPositions;
+        if (numTraps > 0) {
+            splitMsg = split(splitMsg[1], { numTraps * 8 });
+            trapPositions = decodeVec2List(numTraps, splitMsg[0]);
+        }
+        _mapData->map->setTraps(trapPositions);
+
+        splitMsg = split(splitMsg[1], { 4 });
+        if (splitMsg.empty()) return;
+
+        CUAssertLog(numTraps == decodeInt(splitMsg[0]), "Expected different number of traps");
+        numTraps = decodeInt(splitMsg[0]);
+        vector<bool> trapTriggered;
+        if (numTraps > 0) {
+            splitMsg = split(splitMsg[1], { numTraps * 1 });
+            trapTriggered = decodeBoolList(numTraps, splitMsg[0]);
+        }
+        for (unsigned i = 0; i < numTraps; i++) {
+            auto trap = _mapData->map->getTraps()[i];
+            if (trapTriggered[i] && !trap->getTriggered()) {
+                trap->setTriggered();
+            }
+        }
+    }
 }
 
 vector<uint8_t> NetworkData::convertWinData() {
@@ -345,10 +334,10 @@ vector<uint8_t> NetworkData::serializeData() {
         break;
     }
     case constants::MatchStatus::InProgress: {
-        vector<uint8_t> playerData = convertPlayerData(); // 20
+        vector<uint8_t> playerData = convertPlayerData(); // 24
         result.insert(result.end(), playerData.begin(), playerData.end());
 
-        vector<uint8_t> mapData = convertMapData(); // 0
+        vector<uint8_t> mapData = convertMapData(); // variable
         result.insert(result.end(), mapData.begin(), mapData.end());
         break;
     }
@@ -384,10 +373,11 @@ void NetworkData::unserializeData(const vector<uint8_t>& msg) {
     }
     case constants::MatchStatus::InProgress: {
         if (splitMsg.size() <= 1) break;
-        splitMsg = split(splitMsg[1], { 20, 0 });
+        splitMsg = split(splitMsg[1], { 24 });
         if (splitMsg.empty()) break;
         interpretPlayerData(metadata->id, splitMsg[0]);
-        interpretMapData(splitMsg[1]);
+        if (splitMsg.size() < 2) break;
+        interpretMapData(metadata->id, splitMsg[1]);
         break;
     }
     case constants::MatchStatus::Paused:

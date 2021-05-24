@@ -5,6 +5,7 @@ This BatterySlot class contains information about the BatterySlot's texture and 
 
 #include <cugl/cugl.h>
 #include "../RoomEntity.h"
+#include "../Constants.h"
 using namespace std;
 using namespace cugl;
 
@@ -23,7 +24,7 @@ public:
     
     /** Returns the amount of charge the battery has */
     void setCharge() {
-        _charge = 5;
+        _charge = constants::SLOT_CHARGE;
     }
 
     /** Updates the battery slot's charge */

@@ -192,6 +192,8 @@ void GhostedApp::update(float timestep) {
     }
 
     if (_mode != mode) {
+        if (_networkData != nullptr) _networkData->setStatus(constants::MatchStatus::None);
+
         // leaving mode
         switch (_mode) {
         case constants::GameMode::None:
@@ -229,8 +231,8 @@ void GhostedApp::update(float timestep) {
         case constants::GameMode::Loading:
             break;
         case constants::GameMode::Start:
-            _network = make_shared<NetworkController>(); // reset network controller
             _collision = make_shared<CollisionController>(); // reset collision controller
+            _network = make_shared<NetworkController>(); // reset network controller
             _networkData = make_shared<NetworkData>(); // reset network data
             _network->attachData(_networkData);
             if (_input == nullptr) {

@@ -219,6 +219,7 @@
     <ClInclude Include="..\..\source\LobbyScene.h" />
     <ClInclude Include="..\..\source\NetworkController.h" />
     <ClInclude Include="..\..\source\NetworkData.h" />
+    <ClInclude Include="..\..\source\NetworkUtils.h" />
     <ClInclude Include="..\..\source\RoomEntities\BatterySlot.h" />
     <ClInclude Include="..\..\source\RoomEntities\Obstacle.h" />
     <ClInclude Include="..\..\source\RoomEntity.h" />
