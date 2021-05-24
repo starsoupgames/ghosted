@@ -2,7 +2,7 @@
 
 using namespace cugl;
 
-void Trap::setNode(const shared_ptr<scene2::PolygonNode>& node, const std::shared_ptr<scene2::AnimationNode>& chandelier) {
+void Trap::setNode(const shared_ptr<scene2::PolygonNode>& node, const std::shared_ptr<scene2::AnimationNode>& chandelier, const std::shared_ptr<scene2::AnimationNode>& smoke) {
     _node = node;
     _chandelierNode = chandelier;
     if (_chandelierNode != nullptr) {
@@ -10,11 +10,16 @@ void Trap::setNode(const shared_ptr<scene2::PolygonNode>& node, const std::share
         _timer = 0;
         _chandelierNode->setFrame(TRAP_ARMED);
     }
-    
+    _smokeNode = smoke;
+    if (_smokeNode != nullptr) {
+        _smokeNode->setFrame(SMOKE_START);
+        _smokeNode->setVisible(false);
+    }
 }
 
 void Trap::processState() {
     unsigned int frame = _chandelierNode->getFrame();
+    unsigned int smokeFrame = _smokeNode->getFrame();
     if (_timer >= 2) {
         _timer = 0;
         _chandelierNode->setFrame(frame);
@@ -23,9 +28,22 @@ void Trap::processState() {
     }
     if (getTriggered()) {
         if (frame < TRAP_TRIGGERING_END) ++frame;
+        if (frame >= SMOKE_FRAME_START) {
+            if (smokeFrame == 0) {
+                _smokeNode->setVisible(true);
+                ++smokeFrame;
+            }
+            else if (smokeFrame < SMOKE_END) {
+               ++smokeFrame;
+            }
+            else {
+                _smokeNode->setVisible(false);
+            }
+        }
     }
     CUAssertLog(frame <= TRAP_TRIGGERING_END, "Frame out of range.");
     ++_timer;
+    _smokeNode->setFrame(smokeFrame);
     _chandelierNode->setFrame(frame);
 }
 

@@ -112,6 +112,19 @@ void GameRoom::addObstacles(const shared_ptr<RoomParser>& parser, int end) {
         Vec2 hitbox = obs.hitbox;
         // Add to scene graph
         litFloorNode->addChild(obsNode);
+
+        // Now to the same for the dim version
+        // Get texture with name
+        shared_ptr<Texture> obsDimTexture = _assets->get<Texture>(obs.name +"_dim");
+        shared_ptr<scene2::PolygonNode> obsDimNode = scene2::PolygonNode::allocWithTexture(obsDimTexture);
+        // Flip if required
+        if (obs.flip) {
+            obsDimNode->setScale(Vec2(-1, 1));
+        }
+        obsDimNode->setPosition(Vec2(80, 0).add(position));
+        obsDimNode->setPriority(constants::Priority::RoomEntity);
+        // Add to scene graph
+        node->addChild(obsDimNode);
     }
 
     addWalls();

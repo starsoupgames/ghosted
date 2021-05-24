@@ -11,6 +11,9 @@ This Trap class contains information about the Trap's texture, whether or not it
 #define TRAP_DURATION 30
 #define TRAP_ARMED 0
 #define TRAP_TRIGGERING_END 18
+#define SMOKE_FRAME_START 10
+#define SMOKE_START 0
+#define SMOKE_END 7
 
 using namespace std;
 using namespace cugl;
@@ -22,6 +25,9 @@ private:
 
     /** Reference to the trap's chandelier sprite for drawing */
     shared_ptr<scene2::AnimationNode> _chandelierNode;
+
+    /** Reference to the trap's smoke sprite for drawing */
+    shared_ptr<scene2::AnimationNode> _smokeNode;
 
     /** Progress while arming */
     int _arming;
@@ -101,7 +107,7 @@ public:
      * @param node The trap node.
      * @param chandelier The chandelier node.
      */
-    void setNode(const shared_ptr<scene2::PolygonNode>& node, const std::shared_ptr<scene2::AnimationNode>& chandelier);
+    void setNode(const shared_ptr<scene2::PolygonNode>& node, const std::shared_ptr<scene2::AnimationNode>& chandelier, const std::shared_ptr<scene2::AnimationNode>& smoke);
 
     void update(float timestep);
     

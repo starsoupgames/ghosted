@@ -21,6 +21,8 @@ namespace constants {
 
     const Vec2 TRAP_CHANDELIER_OFFSET(0, -20);
 
+    const Vec2 TRAP_SMOKE_OFFSET(0, -220);
+
     const Size ROOM_DIMENSIONS(960, 960);
 
     const Size WALL_DIMENSIONS(1120, 1120);

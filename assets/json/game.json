@@ -60,6 +60,9 @@
     "chandelier_texture": {
       "file": "textures/game/envir_chandelier_frames.png"
     },
+    "chandelier_smoke_texture": {
+      "file": "textures/game/envir_chandelier_smoke_frames.png"
+    },
     "dpad": {
       "file": "textures/game/dpad.png",
       "wrapS": "clamp",
@@ -134,57 +137,393 @@
     "armchair1_down": {
       "file": "textures/obstacles/armchair1/armchair1_down.png"
     },
+    "armchair1_down_dim": {
+      "file": "textures/obstacles/armchair1/armchair1_down_dim.png"
+    },
     "armchair1_right": {
       "file": "textures/obstacles/armchair1/armchair1_right.png"
+    },
+    "armchair1_right_dim": {
+      "file": "textures/obstacles/armchair1/armchair1_right_dim.png"
     },
     "armchair1_up": {
       "file": "textures/obstacles/armchair1/armchair1_up.png"
     },
-  "chair2_down": {
-    "file": "textures/obstacles/chair2/chair2_down.png"
-  },
-  "chair2_right": {
-    "file": "textures/obstacles/chair2/chair2_right.png"
-  },
-  "chair2_up": {
-    "file": "textures/obstacles/chair2/chair2_up.png"
-  },
-  "bench2_down": {
-    "file": "textures/obstacles/bench2/bench2_down.png"
-  },
-  "bench2_right": {
-    "file": "textures/obstacles/bench2/bench2_right.png"
-  },
-  "piano1_down": {
-    "file": "textures/obstacles/piano1/piano1_down.png"
-  },
-  "couch1_down": {
-    "file": "textures/obstacles/couch1/couch1_down.png"
-  },
-  "couch1_right": {
-    "file": "textures/obstacles/couch1/couch1_right.png"
-  },
-  "couch1_up": {
-    "file": "textures/obstacles/couch1/couch1_up.png"
-  },
-  "stool1_down": {
-    "file": "textures/obstacles/stool1/stool1_down.png"
-  },
-  "clock1_down": {
-    "file": "textures/obstacles/clock1/clock1_down.png"
-  },
-  "books1_right": {
-    "file": "textures/obstacles/books1/books1_right.png"
-  },
-  "books1_down": {
-    "file": "textures/obstacles/books1/books1_down.png"
-  },
-  "coffeetable1_down": {
-    "file":  "textures/obstacles/coffeetable1/coffeetable1_down.png"
-  },
-  "teleporter0": {
-    "file": "textures/obstacles/teleporter/teleporter0.png"
-  }
+    "armchair1_up_dim": {
+      "file": "textures/obstacles/armchair1/armchair1_up_dim.png"
+    },
+    "armchair2_down": {
+      "file": "textures/obstacles/armchair2/armchair2_down.png"
+    },
+    "armchair2_down_dim": {
+      "file": "textures/obstacles/armchair2/armchair2_down_dim.png"
+    },
+    "armchair2_right": {
+      "file": "textures/obstacles/armchair2/armchair2_right.png"
+    },
+    "armchair2_right_dim": {
+      "file": "textures/obstacles/armchair2/armchair2_right_dim.png"
+    },
+    "armchair2_up": {
+      "file": "textures/obstacles/armchair2/armchair2_up.png"
+    },
+    "armchair2_up_dim": {
+      "file": "textures/obstacles/armchair2/armchair2_up_dim.png"
+    },
+    "armchair3_down": {
+      "file": "textures/obstacles/armchair3/armchair3_down.png"
+    },
+    "armchair3_down_dim": {
+      "file": "textures/obstacles/armchair3/armchair3_down_dim.png"
+    },
+    "armchair3_right": {
+      "file": "textures/obstacles/armchair3/armchair3_right.png"
+    },
+    "armchair3_right_dim": {
+      "file": "textures/obstacles/armchair3/armchair3_right_dim.png"
+    },
+    "armchair3_up": {
+      "file": "textures/obstacles/armchair3/armchair3_up.png"
+    },
+    "armchair3_up_dim": {
+      "file": "textures/obstacles/armchair3/armchair3_up_dim.png"
+    },
+    "bed1_down": {
+      "file": "textures/obstacles/bed1/bed1_down.png"
+    },
+    "bed1_down_dim": {
+      "file": "textures/obstacles/bed1/bed1_down_dim.png"
+    },
+    "bed2_down": {
+      "file": "textures/obstacles/bed2/bed2_down.png"
+    },
+    "bed2_down_dim": {
+      "file": "textures/obstacles/bed2/bed2_down_dim.png"
+    },
+    "bench1_down": {
+      "file": "textures/obstacles/bench1/bench1_down.png"
+    },
+    "bench1_down_dim": {
+      "file": "textures/obstacles/bench1/bench1_down_dim.png"
+    },
+    "bench1_right": {
+      "file": "textures/obstacles/bench1/bench1_right.png"
+    },
+    "bench1_right_dim": {
+      "file": "textures/obstacles/bench1/bench1_right_dim.png"
+    },
+    "bench1_up": {
+      "file": "textures/obstacles/bench1/bench1_up.png"
+    },
+    "bench1_up_dim": {
+      "file": "textures/obstacles/bench1/bench1_up_dim.png"
+    },
+    "bench2_down": {
+      "file": "textures/obstacles/bench2/bench2_down.png"
+    },
+    "bench2_down_dim": {
+      "file": "textures/obstacles/bench2/bench2_down_dim.png"
+    },
+    "bench2_right": {
+      "file": "textures/obstacles/bench2/bench2_right.png"
+    },
+    "bench2_right_dim": {
+      "file": "textures/obstacles/bench2/bench2_right_dim.png"
+    },
+    "books1_right": {
+      "file": "textures/obstacles/books1/books1_right.png"
+    },
+    "books1_right_dim": {
+      "file": "textures/obstacles/books1/books1_right_dim.png"
+    },
+    "books1_down": {
+      "file": "textures/obstacles/books1/books1_down.png"
+    },
+    "books1_down_dim": {
+      "file": "textures/obstacles/books1/books1_down_dim.png"
+    },
+    "books2_right": {
+      "file": "textures/obstacles/books2/books2_right.png"
+    },
+    "books2_right_dim": {
+      "file": "textures/obstacles/books2/books2_right_dim.png"
+    },
+    "books2_down": {
+      "file": "textures/obstacles/books2/books2_down.png"
+    },
+    "books2_down_dim": {
+      "file": "textures/obstacles/books2/books2_down_dim.png"
+    },
+    "chair1_down": {
+      "file": "textures/obstacles/chair1/chair1_down.png"
+    },
+    "chair1_down_dim": {
+      "file": "textures/obstacles/chair1/chair1_down_dim.png"
+    },
+    "chair1_right": {
+      "file": "textures/obstacles/chair1/chair1_right.png"
+    },
+    "chair1_right_dim": {
+      "file": "textures/obstacles/chair1/chair1_right_dim.png"
+    },
+    "chair1_up": {
+      "file": "textures/obstacles/chair1/chair1_up.png"
+    },
+    "chair1_up_dim": {
+      "file": "textures/obstacles/chair1/chair1_up_dim.png"
+    },
+    "chair2_down": {
+      "file": "textures/obstacles/chair2/chair2_down.png"
+    },
+    "chair2_down_dim": {
+      "file": "textures/obstacles/chair2/chair2_down_dim.png"
+    },
+    "chair2_right": {
+      "file": "textures/obstacles/chair2/chair2_right.png"
+    },
+    "chair2_right_dim": {
+      "file": "textures/obstacles/chair2/chair2_right_dim.png"
+    },
+    "chair2_up": {
+      "file": "textures/obstacles/chair2/chair2_up.png"
+    },
+    "chair2_up_dim": {
+      "file": "textures/obstacles/chair2/chair2_up_dim.png"
+    },
+    "chair3_down": {
+      "file": "textures/obstacles/chair3/chair3_down.png"
+    },
+    "chair3_down_dim": {
+      "file": "textures/obstacles/chair3/chair3_down_dim.png"
+    },
+    "chair3_right": {
+      "file": "textures/obstacles/chair3/chair3_right.png"
+    },
+    "chair3_right_dim": {
+      "file": "textures/obstacles/chair3/chair3_right_dim.png"
+    },
+    "chair3_up": {
+      "file": "textures/obstacles/chair3/chair3_up.png"
+    },
+    "chair3_up_dim": {
+      "file": "textures/obstacles/chair3/chair3_up_dim.png"
+    },
+    "clock1_down": {
+      "file": "textures/obstacles/clock1/clock1_down.png"
+    },
+    "clock1_down_dim": {
+      "file": "textures/obstacles/clock1/clock1_down_dim.png"
+    },
+    "coffeetable1_down": {
+      "file": "textures/obstacles/coffeetable1/coffeetable1_down.png"
+    },
+    "coffeetable1_down_dim": {
+      "file": "textures/obstacles/coffeetable1/coffeetable1_down_dim.png"
+    },
+    "coffeetable2_down": {
+      "file": "textures/obstacles/coffeetable2/coffeetable2_down.png"
+    },
+    "coffeetable2_down_dim": {
+      "file": "textures/obstacles/coffeetable2/coffeetable2_down_dim.png"
+    },
+    "coffeetable3_down": {
+      "file": "textures/obstacles/coffeetable3/coffeetable3_down.png"
+    },
+    "coffeetable3_down_dim": {
+      "file": "textures/obstacles/coffeetable3/coffeetable3_down_dim.png"
+    },
+    "coffeetable4_down": {
+      "file": "textures/obstacles/coffeetable4/coffeetable4_down.png"
+    },
+    "coffeetable4_down_dim": {
+      "file": "textures/obstacles/coffeetable4/coffeetable4_down_dim.png"
+    },
+    "couch1_down": {
+      "file": "textures/obstacles/couch1/couch1_down.png"
+    },
+    "couch1_down_dim": {
+      "file": "textures/obstacles/couch1/couch1_down_dim.png"
+    },
+    "couch1_right": {
+      "file": "textures/obstacles/couch1/couch1_right.png"
+    },
+    "couch1_right_dim": {
+      "file": "textures/obstacles/couch1/couch1_right_dim.png"
+    },
+    "couch1_up": {
+      "file": "textures/obstacles/couch1/couch1_up.png"
+    },
+    "couch1_up_dim": {
+      "file": "textures/obstacles/couch1/couch1_up_dim.png"
+    },
+    "couch2_down": {
+      "file": "textures/obstacles/couch2/couch2_down.png"
+    },
+    "couch2_down_dim": {
+      "file": "textures/obstacles/couch2/couch2_down_dim.png"
+    },
+    "couch2_right": {
+      "file": "textures/obstacles/couch2/couch2_right.png"
+    },
+    "couch2_right_dim": {
+      "file": "textures/obstacles/couch2/couch2_right_dim.png"
+    },
+    "couch2_up": {
+      "file": "textures/obstacles/couch2/couch2_up.png"
+    },
+    "couch2_up_dim": {
+      "file": "textures/obstacles/couch2/couch2_up_dim.png"
+    },
+    "desk1_down": {
+      "file": "textures/obstacles/desk1/desk1_down.png"
+    },
+    "desk1_down_dim": {
+      "file": "textures/obstacles/desk1/desk1_down_dim.png"
+    },
+    "desk2_down": {
+      "file": "textures/obstacles/desk2/desk2_down.png"
+    },
+    "desk2_down_dim": {
+      "file": "textures/obstacles/desk2/desk2_down_dim.png"
+    },
+    "desk3_down": {
+      "file": "textures/obstacles/desk3/desk3_down.png"
+    },
+    "desk3_down_dim": {
+      "file": "textures/obstacles/desk3/desk3_down_dim.png"
+    },
+    "dresser1_down": {
+      "file": "textures/obstacles/dresser1/dresser1_down.png"
+    },
+    "dresser1_down_dim": {
+      "file": "textures/obstacles/dresser1/dresser1_down_dim.png"
+    },
+    "dresser1_right": {
+      "file": "textures/obstacles/dresser1/dresser1_right.png"
+    },
+    "dresser1_right_dim": {
+      "file": "textures/obstacles/dresser1/dresser1_right_dim.png"
+    },
+    "dresser2_down": {
+      "file": "textures/obstacles/dresser2/dresser2_down.png"
+    },
+    "dresser2_down_dim": {
+      "file": "textures/obstacles/dresser2/dresser2_down_dim.png"
+    },
+    "dresser3_down": {
+      "file": "textures/obstacles/dresser3/dresser3_down.png"
+    },
+    "dresser3_down_dim": {
+      "file": "textures/obstacles/dresser3/dresser3_down_dim.png"
+    },
+    "dresser4_down": {
+      "file": "textures/obstacles/dresser4/dresser4_down.png"
+    },
+    "dresser4_down_dim": {
+      "file": "textures/obstacles/dresser4/dresser4_down_dim.png"
+    },
+    "dresser5_down": {
+      "file": "textures/obstacles/dresser5/dresser5_down.png"
+    },
+    "dresser5_down_dim": {
+      "file": "textures/obstacles/dresser5/dresser5_down_dim.png"
+    },
+    "dresser6_down": {
+      "file": "textures/obstacles/dresser6/dresser6_down.png"
+    },
+    "dresser6_down_dim": {
+      "file": "textures/obstacles/dresser6/dresser6_down_dim.png"
+    },
+    "lamp1_down": {
+      "file": "textures/obstacles/lamp1/lamp1_down.png"
+    },
+    "lamp1_down_dim": {
+      "file": "textures/obstacles/lamp1/lamp1_down_dim.png"
+    },
+    "lamp2_down": {
+      "file": "textures/obstacles/lamp2/lamp2_down.png"
+    },
+    "lamp2_down_dim": {
+      "file": "textures/obstacles/lamp2/lamp2_down_dim.png"
+    },
+    "lamp3_down": {
+      "file": "textures/obstacles/lamp3/lamp3_down.png"
+    },
+    "lamp3_down_dim": {
+      "file": "textures/obstacles/lamp3/lamp3_down_dim.png"
+    },
+    "piano1_down": {
+      "file": "textures/obstacles/piano1/piano1_down.png"
+    },
+    "piano1_down_dim": {
+      "file": "textures/obstacles/piano1/piano1_down_dim.png"
+    },
+    "rug1_down": {
+      "file": "textures/obstacles/rug1/rug1_down.png"
+    },
+    "rug1_down_dim": {
+      "file": "textures/obstacles/rug1/rug1_down_dim.png"
+    },
+    "rug1_right": {
+      "file": "textures/obstacles/rug1/rug1_right.png"
+    },
+    "rug1_right_dim": {
+      "file": "textures/obstacles/rug1/rug1_right_dim.png"
+    },
+    "stand1_down": {
+      "file": "textures/obstacles/stand1/stand1_down.png"
+    },
+    "stand1_down_dim": {
+      "file": "textures/obstacles/stand1/stand1_down_dim.png"
+    },
+    "stool1_down": {
+      "file": "textures/obstacles/stool1/stool1_down.png"
+    },
+    "stool1_down_dim": {
+      "file": "textures/obstacles/stool1/stool1_down_dim.png"
+    },
+    "stool2_down": {
+      "file": "textures/obstacles/stool2/stool2_down.png"
+    },
+    "stool2_down_dim": {
+      "file": "textures/obstacles/stool2/stool2_down_dim.png"
+    },
+    "table1_down": {
+      "file": "textures/obstacles/table1/table1_down.png"
+    },
+    "table1_down_dim": {
+      "file": "textures/obstacles/table1/table1_down_dim.png"
+    },
+    "table1_right": {
+      "file": "textures/obstacles/table1/table1_right.png"
+    },
+    "table1_right_dim": {
+      "file": "textures/obstacles/table1/table1_right_dim.png"
+    },
+    "table2_down": {
+      "file": "textures/obstacles/table2/table2_down.png"
+    },
+    "table2_down_dim": {
+      "file": "textures/obstacles/table2/table2_down_dim.png"
+    },
+    "table3_down": {
+      "file": "textures/obstacles/table3/table3_down.png"
+    },
+    "table3_down_dim": {
+      "file": "textures/obstacles/table3/table3_down_dim.png"
+    },
+    "table3_right": {
+      "file": "textures/obstacles/table3/table3_right.png"
+    },
+    "table3_right_dim": {
+      "file": "textures/obstacles/table3/table3_right_dim.png"
+    },
+    "teleporter0": {
+      "file": "textures/obstacles/teleporter/teleporter0.png"
+    },
+    "teleporter0_dim": {
+      "file": "textures/obstacles/teleporter/teleporter0_dim.png"
+    }
 
 },
     "fonts": {

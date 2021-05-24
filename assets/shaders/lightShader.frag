@@ -197,7 +197,7 @@ void main(void) {
         frag_color = result;
 
     } else {
-        float a = 1.0;
+        float a = result.w;
         
         for (int i = 0; i < 3; i++) {
             float flashcolor = flashshade(uPlayers[i], outPosition);

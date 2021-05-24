@@ -34,13 +34,19 @@ void GameMap::addTrap(Vec2 pos) {
     chandelierNode->setPosition(pos + constants::TRAP_CHANDELIER_OFFSET);
     topRoot->addChild(chandelierNode);
 
+    auto smokeNode = scene2::AnimationNode::alloc(_assets->get<Texture>("chandelier_smoke_texture"), 1, 8);
+    smokeNode->setAnchor(Vec2::ANCHOR_BOTTOM_CENTER);
+    smokeNode->setPriority(constants::Priority::Ceiling);
+    smokeNode->setPosition(pos + constants::TRAP_SMOKE_OFFSET);
+    topRoot->addChild(smokeNode);
+
     auto trapRadiusNode = scene2::PolygonNode::allocWithTexture(_assets->get<Texture>("trap_radius"));
     trapRadiusNode->setVisible(false);
     trapRadiusNode->setScale(0.5);
     trapRadiusNode->setPosition(Vec2(trapNode->getWidth(), trapNode->getHeight()) * 0.5); // 1/2 * 4 because of 0.25 scale
     trapNode->addChildWithName(trapRadiusNode, "radius");
 
-    trap->setNode(trapNode, chandelierNode);
+    trap->setNode(trapNode, chandelierNode, smokeNode);
     _traps.push_back(trap);
 }
 
@@ -122,13 +128,15 @@ void GameMap::move(Vec2 move, Vec2 direction) {
     Rect hitbox = Rect(loc, constants::PLAYER_HITBOX_DIMENSIONS);
     
     for (auto& room : getRooms()) {
+        if (_player->getType() == constants::PlayerType::Pal) {
+            //obstacle collision here
+        }
         for (auto& wall : room->getWalls()) {
             if (hitbox.doesIntersect(wall)) {
                 _player->updateVelocity(Vec2::ZERO);
                 _player->setDir(move);
                 return;
             }
-            
         }
     }
     _player->updateVelocity(move);
