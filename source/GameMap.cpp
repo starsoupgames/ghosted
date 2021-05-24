@@ -330,7 +330,9 @@ bool GameMap::generateRandomMap() {
         r->addObstacles(parser, type);
 
         for (auto& coord : r->getBatterySpawns()) {
-            Vec2 finalCoord = (coord * constants::TILE_SIZE) + (room.rank * constants::WALL_DIMENSIONS);
+            Vec2 finalCoord = (coord * constants::TILE_SIZE) + Vec2(80, 0) + r->getOrigin();
+            //Mat4 matTranslate = r->getNode()->getNodeToWorldTransform();
+            //finalCoord = matTranslate.transformVector(finalCoord);
             _batteriesSpawnable.push_back(finalCoord);
         }
 

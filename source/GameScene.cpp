@@ -255,7 +255,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
     _litRoot->addChild(_debugNode, 1);
 
     // Temp background color
-    Application::get()->setClearColor(Color4f::GRAY);
+    Application::get()->setClearColor(Color4f::BLACK);
     return true;
 }
 

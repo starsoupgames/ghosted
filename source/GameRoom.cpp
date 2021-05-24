@@ -234,7 +234,7 @@ void GameRoom::addWalls() {
                 else {
                     //rightmost wall
                     auto wallDimensions = Size(80, 1120);
-                    Vec2 wallPos = Vec2(constants::ROOM_DIMENSIONS.width, 0).add(_origin);
+                    Vec2 wallPos = Vec2(constants::ROOM_DIMENSIONS.width + 80, 0).add(_origin);
                     auto wallRect = Rect(wallPos, wallDimensions);
                     auto wallNode = scene2::PolygonNode::alloc(wallRect);
                     wallNode->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);

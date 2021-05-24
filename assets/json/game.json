@@ -523,6 +523,12 @@
     },
     "teleporter0_dim": {
       "file": "textures/obstacles/teleporter/teleporter0_dim.png"
+    },
+    "teleporter1": {
+      "file": "textures/obstacles/teleporter/teleporter1.png"
+    },
+    "teleporter1_dim": {
+      "file": "textures/obstacles/teleporter/teleporter1_dim.png"
     }
 
 },

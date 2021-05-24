@@ -94,7 +94,7 @@ public:
     shared_ptr<scene2::OrderedNode> getNode() { return _node; };
 
     /**
-     * @param value The Player node.
+     * @param value The Room node.
      */
     void setNode(const shared_ptr<scene2::OrderedNode>& value);
 
