@@ -34,7 +34,7 @@ private:
     /** The vector of battery spawnable coordinates */
     vector<Vec2> _batteriesSpawnable;
 
-    /** The vector of battery spawnable coordinates */
+    /** The vector of batteries */
     vector<shared_ptr<Battery>> _batteries;
     
     /** The ranking of the start room */
@@ -51,7 +51,7 @@ public:
     
     ~GameMap() { dispose(); }
     
-    bool init(const shared_ptr<AssetManager>& assets, shared_ptr<scene2::OrderedNode>& node, vector<Vec2> batterySpawnable);
+    bool init(const shared_ptr<AssetManager>& assets, shared_ptr<scene2::OrderedNode>& node);
     
     /**
      * Disposes of all (non-static) resources allocated to this mode.
@@ -71,9 +71,9 @@ public:
     /**
      * Allocates this model
      */
-    static shared_ptr<GameMap> alloc(shared_ptr<AssetManager>& assets, shared_ptr<scene2::OrderedNode>& node, vector<Vec2> batterySpawnable) {
+    static shared_ptr<GameMap> alloc(shared_ptr<AssetManager>& assets, shared_ptr<scene2::OrderedNode>& node) {
         shared_ptr<GameMap> result = make_shared<GameMap>();
-        return (result->init(assets, node, batterySpawnable) ? result : nullptr);
+        return (result->init(assets, node) ? result : nullptr);
     }
 #pragma mark -
 #pragma mark State Access

@@ -8,7 +8,7 @@ bool GameRoom::init(const shared_ptr<AssetManager>& assets, const shared_ptr<sce
     _node = node;
     _ranking = ranking;
     _origin = origin;
-    _batterySpawns = vector<vector<int>>();
+    _batterySpawns = vector<Vec2>();
     _doors = doors;
 
     _node->setAnchor(Vec2::ANCHOR_BOTTOM_CENTER);
@@ -127,6 +127,8 @@ void GameRoom::addObstacles(const shared_ptr<RoomParser>& parser, int end) {
         node->addChild(obsDimNode);
     }
 
+    // Add batteries
+    _batterySpawns = roomData->spawns;
     addWalls();
 };
 

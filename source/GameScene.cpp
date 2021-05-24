@@ -94,13 +94,6 @@ Vec2 WALLS[4][2][2][4] = {
 
 bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
     if (!GameMode::init(assets, constants::GameMode::Game, "game")) return false;
-
-    //temporary hardcoded coordinates, remove later
-    vector<Vec2> batteriesSpawnable;
-    batteriesSpawnable.push_back(Vec2(1500, 500));
-    batteriesSpawnable.push_back(Vec2(1500, 1500));
-    batteriesSpawnable.push_back(Vec2(500, 500));
-    batteriesSpawnable.push_back(Vec2(500, 1500));
     if (!GameMode::init(assets, constants::GameMode::Game)) return false;
     
     Size dimen = computeActiveSize();
@@ -153,7 +146,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
     _topRoot->setName("top_root");
     _root->addChild(_topRoot);
 
-    _gameMap = GameMap::alloc(_assets, _root, batteriesSpawnable);
+    _gameMap = GameMap::alloc(_assets, _root);
 
     // _gameMap->generateBasicMap(0);
     _gameMap->generateRandomMap();

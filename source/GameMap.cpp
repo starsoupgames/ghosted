@@ -7,10 +7,9 @@ using namespace std;
 using namespace cugl;
 
 #pragma mark Constructors
-bool GameMap::init(const shared_ptr<AssetManager>& assets, shared_ptr<scene2::OrderedNode>& node, vector<Vec2> batterySpawnable) {
+bool GameMap::init(const shared_ptr<AssetManager>& assets, shared_ptr<scene2::OrderedNode>& node) {
     _assets = assets;
     _node = node;
-    _batteriesSpawnable = batterySpawnable;
     return true;
 }
 
@@ -329,19 +328,30 @@ bool GameMap::generateRandomMap() {
             type = 2;
         }
         r->addObstacles(parser, type);
+
+        for (auto& coord : r->getBatterySpawns()) {
+            Vec2 finalCoord = (coord * constants::TILE_SIZE) + (room.rank * constants::WALL_DIMENSIONS);
+            _batteriesSpawnable.push_back(finalCoord);
+        }
+
         addSlot(r->getSlot());
         _rooms.push_back(r);
         type = 0;
     }
 
-    for (auto& coor : _batteriesSpawnable) {
+    static auto rng = default_random_engine{};
+    shuffle(_batteriesSpawnable.begin(), _batteriesSpawnable.end(), rng);
+    for (int i = 0; i < mapData->numBatteries; i++) {
         auto batteryNode = scene2::PolygonNode::allocWithTexture(_assets->get<Texture>("battery_texture"));
+        batteryNode->setAnchor(Vec2::ANCHOR_BOTTOM_CENTER);
         batteryNode->setPriority(constants::RoomEntity);
-        batteryNode->setPosition(coor);
+        Vec2 coord = _batteriesSpawnable.back();
+        batteryNode->setPosition(coord);
         litRoot->addChild(batteryNode);
-        auto batteryModel = Battery::alloc(coor);
+        auto batteryModel = Battery::alloc(coord);
         batteryModel->setNode(batteryNode);
         _batteries.push_back(batteryModel);
+        _batteriesSpawnable.pop_back();
     }
 
     return true;   

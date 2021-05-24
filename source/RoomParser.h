@@ -50,18 +50,20 @@ struct RoomMetadata {
     }
 };
 
-/** Metadata representing a map, contains information about the rooms and
- *  the spawns
+/** Metadata representing a map, contains information about the rooms, 
+ *  where the start and end room are, and how many batteries to spawn
  */
 struct MapMetadata {
     vector<RoomMetadata> rooms;
     Vec2 start;
     Vec2 end;
+    int numBatteries;
 
-    MapMetadata(vector<RoomMetadata> rooms, Vec2 start, Vec2 end) {
+    MapMetadata(vector<RoomMetadata> rooms, Vec2 start, Vec2 end, int numBatteries) {
         this->rooms = rooms;
         this->start = start;
         this->end = end;
+        this->numBatteries = numBatteries;
     }
 };
 
@@ -106,4 +108,17 @@ public:
      *  Also picks a start room and end room combination.
      */
     shared_ptr<MapMetadata> getMapData(string file);
+
+    /** Constructs an array of ints that represents the map metadata for networking purposes
+     *  The first element is a list that represents the door configurations. Each room is represented
+     *  by 6 ints. The first 2 ints represent the ranking of the room, and the last 4 represent whether
+     *  the corresponding cardinal direction has a door
+     * 
+     *  [x value, y value, north, south, east, west, x value, y value, north, south, east, west, ...]
+     *  
+     *  The second list represents which obstacle layout is used by that room. The two lists should be ordered
+     *  the same, so the first element of this second list represents the layout of the room described by the 
+     *  first six elements of the previous list.
+     */
+    vector<vector<int>> makeNetworkMap(MapMetadata map);
 };

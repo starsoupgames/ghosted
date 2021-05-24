@@ -50,7 +50,7 @@ private:
     bool _winRoom;
     
     /** Possible locations within the room where batteries can spawn */
-    vector<vector<int>> _batterySpawns;
+    vector<Vec2> _batterySpawns;
     
     // List of bools that represent which side has a door and which doesn't. In order of North, East, South, and West
     vector<bool> _doors;
@@ -104,7 +104,7 @@ public:
     void setRoot(const shared_ptr<scene2::OrderedNode>& value);
 
     // Gets the list of battery spawns
-    vector<vector<int>> getBatterySpawns() { return _batterySpawns; };
+    vector<Vec2> getBatterySpawns() { return _batterySpawns; };
 
     // Gets the list of doors
     vector<bool> getDoors() { return _doors; };

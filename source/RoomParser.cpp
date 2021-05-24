@@ -84,6 +84,6 @@ shared_ptr<MapMetadata> RoomParser::getMapData(string file) {
     shared_ptr<JsonValue> randSpawn = spawnData[getRandIndex(spawnData)];
     Vec2 start = Vec2(randSpawn->get("start")->asIntArray()[0], randSpawn->get("start")->asIntArray()[1]);
     Vec2 end = Vec2(randSpawn->get("end")->asIntArray()[0], randSpawn->get("end")->asIntArray()[1]);
-    return make_shared<MapMetadata>(rooms, start, end);
+    return make_shared<MapMetadata>(rooms, start, end, value->get("batteries")->asInt());
 
 }
