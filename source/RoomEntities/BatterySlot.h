@@ -11,11 +11,22 @@ using namespace cugl;
 
 class BatterySlot : public RoomEntity {
 private:
+    shared_ptr<scene2::PolygonNode> _nodeOn;
+    shared_ptr<scene2::PolygonNode> _nodeOff;
 
     /** Level of charge remaining */
     float _charge;
 
+    bool _activate;
+
 public:
+    void activate() {
+        _activate = true;
+    }
+
+    bool activated() {
+        return _activate;
+    }
 
     /** Returns the amount of charge the battery has */
     float getCharge() const {
@@ -25,18 +36,19 @@ public:
     /** Returns the amount of charge the battery has */
     void setCharge() {
         _charge = constants::SLOT_CHARGE;
+        _activate = false;
     }
 
     /** Updates the battery slot's charge */
     void update(float timestep);
 
     /** Creates a BatterySlot with the default values */
-    BatterySlot() : RoomEntity(), _charge(0) {}
+    BatterySlot() : RoomEntity(), _charge(0), _activate(false) {}
 
     /** Releases all resources allocated with this Battery Slot */
     ~BatterySlot() { dispose(); }
     
-    void setNode(const shared_ptr<scene2::PolygonNode>&);
+    void setNode(const shared_ptr<scene2::PolygonNode>& nodeOn, const shared_ptr<scene2::PolygonNode>& nodeOff);
     
     /**
     * @return a newly allocated Trap at the origin.

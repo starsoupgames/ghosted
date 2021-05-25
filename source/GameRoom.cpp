@@ -1,8 +1,9 @@
 #include "GameRoom.h"
 
+constexpr int ROOM_DIMENSION = 960;
+
 using namespace std;
 using namespace cugl;
-
 
 bool GameRoom::init(const shared_ptr<AssetManager>& assets, vector<bool> doors, Vec2 ranking, int layout) {
     init(assets, doors, ranking);
@@ -14,8 +15,6 @@ bool GameRoom::init(const shared_ptr<AssetManager>& assets, vector<bool> doors, 
 bool GameRoom::init(const shared_ptr<AssetManager>& assets, const shared_ptr<scene2::OrderedNode>& node, vector<bool> doors, Vec2 ranking) {
     _node = node;
     init(assets, doors, ranking);
-
-    _node->setAnchor(Vec2::ANCHOR_BOTTOM_CENTER);
     return true;
 }
 
@@ -26,24 +25,30 @@ bool GameRoom::init(const shared_ptr<AssetManager>& assets, vector<bool> doors, 
     _origin = ranking * constants::WALL_DIMENSIONS;
     _winRoom = false;
     _ranking = ranking;
-    _batterySpawns = vector<Vec2>();
     _slotModel = BatterySlot::alloc(Vec2(ROOM_DIMENSION / 2, ROOM_DIMENSION / 2));
     return true;
 }
 
 void GameRoom::setNode(const shared_ptr<scene2::OrderedNode>& value) {
     _node = value;
-    _node->setPosition(getOrigin());
+    _node->setPosition(_origin);
     _node->setAnchor(Vec2::ANCHOR_BOTTOM_CENTER);
-    if (!_winRoom) {
-        auto slotNode = scene2::PolygonNode::allocWithTexture(_assets->get<Texture>("slot_empty"));
-        slotNode->setScale(0.05f);
-        slotNode->setPosition(Vec2(ROOM_DIMENSION / 2, ROOM_DIMENSION / 2));
-        slotNode->setPriority(constants::Priority::RoomEntity);
-        _node->addChild(slotNode);
-        _slotModel = BatterySlot::alloc(Vec2(ROOM_DIMENSION / 2, ROOM_DIMENSION / 2));
-        _slotModel->setNode(slotNode);
-    }
+
+    auto slotNodeOn = scene2::PolygonNode::allocWithTexture(_assets->get<Texture>("slot_full"));
+    slotNodeOn->setPosition(Vec2(ROOM_DIMENSION / 2, ROOM_DIMENSION / 2));
+    slotNodeOn->setAnchor(Vec2::ANCHOR_CENTER);
+    slotNodeOn->setPriority(constants::Priority::RoomEntity);
+    slotNodeOn->setVisible(false);
+    _node->addChild(slotNodeOn);
+
+    auto slotNodeOff = scene2::PolygonNode::allocWithTexture(_assets->get<Texture>("slot_empty"));
+    slotNodeOff->setPosition(Vec2(ROOM_DIMENSION / 2, ROOM_DIMENSION / 2));
+    slotNodeOff->setAnchor(Vec2::ANCHOR_CENTER);
+    slotNodeOff->setPriority(constants::Priority::RoomEntity);
+    _node->addChild(slotNodeOff);
+
+    _slotModel->setLoc(_origin + Vec2(ROOM_DIMENSION / 2, ROOM_DIMENSION / 2));
+    _slotModel->setNode(slotNodeOn, slotNodeOff);
 };
 
 void GameRoom::setRoot(const shared_ptr<scene2::OrderedNode>& value) {
@@ -152,22 +157,6 @@ void GameRoom::addObstacles() {
     }
 
     addWalls();
-};
-
-bool GameRoom::assertValidRoom() {
-    if ((int)_origin.x % ROOM_DIMENSION != 0) return false;
-    if ((int)_origin.y % ROOM_DIMENSION != 0) return false;
-    return true;
-};
-
-bool GameRoom::assertRoomIsAdjacent(const shared_ptr<GameRoom>& room) {
-    Vec2 diff = _origin - room->_origin;
-    // check if within square
-    if (diff.x <= ROOM_DIMENSION && diff.y <= ROOM_DIMENSION) {
-        // return false if horizontal diff
-        return abs(diff.x) == abs(diff.y);
-    }
-    return false;
 };
 
 void GameRoom::addWalls() {

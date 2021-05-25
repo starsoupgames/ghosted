@@ -433,12 +433,15 @@ void GameScene::draw(const std::shared_ptr<SpriteBatch>& batch, const std::share
         float roomLights[constants::MAX_ROOMS * 3];
         int i = 0;
         for (auto& room : _gameMap->getRooms()) {
-            Vec2 slotPos = room->getSlot()->getLoc();
-            roomLights[i] = _dimRoot->getPosition().x + slotPos.x;
-            roomLights[i + 1] = _dimRoot->getPosition().y + slotPos.y;
-            roomLights[i + 2] = room->getLight() ? 1 : 0; // set to 1 if room's light is on, 0 if not
+            auto s = room->getSlot();
+            if (s != nullptr) {
+                Vec2 slotPos = room->getSlot()->getLoc();
+                roomLights[i] = _dimRoot->getPosition().x + slotPos.x;
+                roomLights[i + 1] = _dimRoot->getPosition().y + slotPos.y;
+                roomLights[i + 2] = room->getLight() ? 1 : 0; // set to 1 if room's light is on, 0 if not
+            }
             i += 3;
-        }
+        };
         //just to fill rest of values if the number of rooms < MAX_ROOMS
         for (int j = i; j < (constants::MAX_ROOMS * 3); ++j) {
             roomLights[j] = 0;

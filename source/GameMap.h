@@ -10,6 +10,7 @@
 #include "GameEntities/Trap.h"
 #include "AudioController.h"
 
+#define SLOT_RADIUS 500
 #define TRAP_RADIUS 120 // temp, should be 500px
 
 using namespace std;

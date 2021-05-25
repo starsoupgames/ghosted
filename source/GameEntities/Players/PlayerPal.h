@@ -149,7 +149,7 @@ public:
     }
 
     /** Creates a Pal with the default values */
-    Pal() : Player(5, 1), _batteries(0), _spooked(false), _spookFlag(false), _unspookFlag(false), _helping(0), _unspooking(0) {};
+    Pal() : Player(7, 1), _batteries(0), _spooked(false), _spookFlag(false), _unspookFlag(false), _helping(0), _unspooking(0) {};
 
     /** Releases all resources allocated with this Pal */
     ~Pal() { dispose(); }

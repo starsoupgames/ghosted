@@ -290,7 +290,6 @@ void GhostedApp::update(float timestep) {
         _loading.update(0.01f);
         break;
     case constants::GameMode::Start:
-            CULog("UPDATING START");
         _start.update(timestep);
         _mute = _start.getMute();
         if (_audio != nullptr) {

@@ -7,9 +7,6 @@
 #include "RoomParser.h"
 #include "Constants.h"
 
-
-constexpr int ROOM_DIMENSION = 960;
-
 using namespace std;
 using namespace cugl;
 
@@ -54,14 +51,9 @@ private:
     
     // List of bools that represent which side has a door and which doesn't. In order of North, East, South, and West
     vector<bool> _doors;
-    
-    bool assertValidRoom();
 
     // Gets the walls of the room
     void addWalls();
-    
-    bool assertRoomIsAdjacent(const shared_ptr<GameRoom>& room);
-
     
 public:
     GameRoom() {}
@@ -133,7 +125,9 @@ public:
     
     shared_ptr<BatterySlot> getSlot() { return _slotModel; };
     
-    bool getLight() { return _slotModel->getCharge() > 0;};
+    bool getLight() { 
+        return _slotModel->getCharge() > 0;
+    };
 
     /** Populates the room with obstacles */
     void addObstacles();

@@ -134,6 +134,7 @@ public:
         _lobbyData = nullptr;
         _players.clear();
         _winData = nullptr;
+        _mapData = nullptr;
     }
 
     /** @return main player */

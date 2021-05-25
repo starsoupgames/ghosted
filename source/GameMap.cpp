@@ -80,16 +80,17 @@ void GameMap::update(float timestep) {
     //pal battery interactions
     for (auto& p : _players) {
         if (p->getType() == constants::PlayerType::Pal) {
-            for (auto& b : _batteries) {
-                Vec2 distance = b->getLoc() - p->getLoc();
-                float minDistance = distance.length();
-                auto pal = dynamic_pointer_cast<Pal>(p);
-                if (minDistance < BATTERY_RADIUS && !b->isDestroyed() && pal->getBatteries() < constants::MAX_BATTERIES) {
-                    b->pickUp();
-                    int numBatteries = pal->getBatteries() + 1;
-                    pal->setBatteries(numBatteries);
+            auto pal = dynamic_pointer_cast<Pal>(p);
+            if (pal->getBatteries() < constants::MAX_BATTERIES) {
+                for (auto& b : _batteries) {
+                    Vec2 distance = b->getLoc() - p->getLoc();
+                    float minDistance = distance.length();
+                    if (minDistance < BATTERY_RADIUS && !b->isDestroyed()) {
+                        b->pickUp();
+                        int numBatteries = pal->getBatteries() + 1;
+                        pal->setBatteries(numBatteries);
+                    }
                 }
-
             }
         }
     }
@@ -155,10 +156,8 @@ void GameMap::move(Vec2 move, Vec2 direction) {
 /** Helper method to handle the "interact" input from the players */
 void GameMap::handleInteract() {
     float range = 250.0f;
-    // TODO use position, not node position
     if (_player->getType() == constants::PlayerType::Pal && !dynamic_pointer_cast<Pal>(_player)->getSpooked()) {
-        
-        shared_ptr<Pal> pal = nullptr;
+        shared_ptr<Pal> pal;
         float minDistance = numeric_limits<float>::infinity();
         for (auto& p : _players) {
             if (p->getType() == constants::PlayerType::Pal && p != _player && dynamic_pointer_cast<Pal>(p)->getSpooked()) {
@@ -175,40 +174,37 @@ void GameMap::handleInteract() {
             return;
         }
 
+        pal = dynamic_pointer_cast<Pal>(_player);
 
-
-        shared_ptr<BatterySlot> slot = nullptr;
-        
-        Vec2 playerPos = _player->getNode()->getPosition();
-        // TODO fix this
-        int battCount = dynamic_pointer_cast<Pal>(_player)->getBatteries();
-        for (auto room = _rooms.begin(); room != _rooms.end(); ++room) {
-            Vec2 slotPos = (*room)->getOrigin() + (*room)->getSlot()->getLoc();
-            Vec2 distance = slotPos - playerPos;
-            
-            if ((distance.length() < range) && ((*room)->getRanking() != _endRank) && (battCount > 0)) {
-                slot = (*room)->getSlot();
-                dynamic_pointer_cast<Pal>(_player)->setBatteries(battCount-1);
+        shared_ptr<BatterySlot> slot;
+        minDistance = numeric_limits<float>::infinity();
+        for (auto& room : _rooms) {
+            auto s = room->getSlot();
+            if (s == nullptr) continue;
+            Vec2 distance = s->getLoc() - _player->getLoc();
+            if (distance.length() < minDistance) {
+                slot = s;
+                minDistance = distance.length();
             }
         }
-        if (slot != nullptr) {
-            if (slot->getCharge() <= 0) {
-                slot->setCharge();
-                slot->getNode()->setColor(Color4f::GREEN);
+        if (slot != nullptr && minDistance < SLOT_RADIUS) {
+            if (slot->getCharge() <= 0 && !slot->activated() && pal->getBatteries() > 0) {
+                slot->activate();
+                pal->setBatteries(pal->getBatteries() - 1);
             }
         }
 
         // Check if pal is in range of teleporter
         Vec2 tpPos = _endRank * constants::WALL_LENGTH + constants::TELEPORTER_POS;
-        Vec2 distance = tpPos - playerPos;
-        if (distance.length() < range && (battCount > 0)) {
+        Vec2 distance = tpPos - _player->getLoc();
+        if (distance.length() < range && pal->getBatteries() > 0) {
             _teleCount -= 1;
-            dynamic_pointer_cast<Pal>(_player)->setBatteries(battCount - 1);
+            pal->setBatteries(pal->getBatteries() - 1);
         }
 
     }
     else if (_player->getType() == constants::PlayerType::Ghost) {
-        shared_ptr<Trap> trap = nullptr;
+        shared_ptr<Trap> trap;
         
         float minDistance = numeric_limits<float>::infinity();
         for (auto& t : _traps) {

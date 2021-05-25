@@ -227,7 +227,13 @@ vector<uint8_t> NetworkData::convertMapData() {
         return result;
     }
 
+    if (_mapData == nullptr || _mapData->map == nullptr) {
+        CULog("Game map is not defined.");
+        return result;
+    };
+
     if (_id == _hostID) {
+        // traps
         vector<Vec2> trapPositions;
         vector<bool> trapTriggered;
         for (auto& trap : _mapData->map->getTraps()) {
@@ -236,6 +242,22 @@ vector<uint8_t> NetworkData::convertMapData() {
         };
         encodeVec2List(trapPositions, result);
         encodeBoolList(trapTriggered, result);
+
+        // room lights status
+        vector<bool> roomsLit;
+        for (auto& room : _mapData->map->getRooms()) {
+            roomsLit.push_back(room->getLight());
+        }
+        encodeBoolList(roomsLit, result);
+    }
+    else {
+        // room lights activated
+        vector<bool> roomsLit;
+        for (auto& room : _mapData->map->getRooms()) {
+            if (room->getSlot() == nullptr) roomsLit.push_back(false);
+            else roomsLit.push_back(room->getSlot()->activated());
+        }
+        encodeBoolList(roomsLit, result);
     }
 
     return result;
@@ -244,8 +266,11 @@ vector<uint8_t> NetworkData::convertMapData() {
 void NetworkData::interpretMapData(const int id, const vector<uint8_t>& msg) {
     if (msg.empty()) return;
 
-    if (id == _hostID && _mapData != nullptr) {
-        // this only works if ghost is host
+    if (_mapData == nullptr || _mapData->map == nullptr) return;
+
+    // this only works if ghost is host
+    if (id == _hostID) {
+        // host data
         vector<vector<uint8_t>> splitMsg = split(msg, { 4 });
         if (splitMsg.empty()) return;
 
@@ -272,6 +297,40 @@ void NetworkData::interpretMapData(const int id, const vector<uint8_t>& msg) {
             if (trapTriggered[i] && !trap->getTriggered()) {
                 trap->setTriggered();
             }
+        }
+
+        splitMsg = split(splitMsg[1], { 4 });
+        if (splitMsg.empty()) return;
+
+        unsigned numRooms = decodeInt(splitMsg[0]);
+        vector<bool> roomsLit;
+        if (numRooms > 0) {
+            splitMsg = split(splitMsg[1], { numRooms * 1 });
+            roomsLit = decodeBoolList(numRooms, splitMsg[0]);
+        }
+        for (unsigned i = 0; i < numRooms && i < _mapData->map->getRooms().size(); i++) {
+            auto room = _mapData->map->getRooms()[i];
+            if (roomsLit[i] && !room->getLight() && room->getSlot() != nullptr) {
+                room->getSlot()->setCharge();
+            };
+        }
+    }
+    else if (_id == _hostID) {
+        // host receiving data
+        vector<vector<uint8_t>> splitMsg = split(msg, { 4 });
+        if (splitMsg.empty()) return;
+
+        unsigned numRooms = decodeInt(splitMsg[0]);
+        vector<bool> roomsLit;
+        if (numRooms > 0) {
+            splitMsg = split(splitMsg[1], { numRooms * 1 });
+            roomsLit = decodeBoolList(numRooms, splitMsg[0]);
+        }
+        for (unsigned i = 0; i < numRooms && i < _mapData->map->getRooms().size(); i++) {
+            auto room = _mapData->map->getRooms()[i];
+            if (roomsLit[i] && !room->getLight() && room->getSlot() != nullptr) {
+                room->getSlot()->setCharge();
+            };
         }
     }
 }

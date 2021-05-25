@@ -103,7 +103,7 @@ public:
     Vec2 predictVelocity(Vec2 Move);
 
     /** Creates a Player with the default values */
-    Player() : Player(5, 1) {};
+    Player() : Player(8, 1) {};
 
     Player(float speed, float scale) : GameEntity(), _direction(Vec2(0.0f, -1.0f)), _speed(speed), _idle(true) {};
 
