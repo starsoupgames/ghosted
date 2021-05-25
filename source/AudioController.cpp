@@ -39,17 +39,19 @@ void AudioController::setTrapSound(shared_ptr<Trap> t) {
 }
 
 void AudioController::update(float timestep) {
-    if (AudioEngine::get()->isActive(MENU_MUSIC) && _menuMusic.size() > 0) {
-        if (_mute && AudioEngine::get()->getVolume(MENU_MUSIC) > 0.0f) {
-            AudioEngine::get()->setVolume(MENU_MUSIC, 0.0f);
-        } else if (!_mute) {
-            AudioEngine::get()->setVolume(MENU_MUSIC, 0.75f);
+    if (AudioEngine::get()->getMusicQueue()->getState() == AudioEngine::State::PLAYING && _menuMusic.size() > 0) {
+        if (_mute && AudioEngine::get()->getMusicQueue()->getVolume() > 0.0f) {
+            AudioEngine::get()->getMusicQueue()->setVolume(0.0f);
+        } else if (!_mute && AudioEngine::get()->getMusicQueue()->getVolume() <= 0.0f) {
+            AudioEngine::get()->getMusicQueue()->setVolume(1.0f);
         }
     }
     
-    if (!AudioEngine::get()->isActive(_menuMusic) && _menuMusic.size() > 0) {
-        auto musicsource = _assets->get<Sound>(_menuMusic);
-        AudioEngine::get()->play(_menuMusic,musicsource,true,musicsource->getVolume());
+    if (!(AudioEngine::get()->getMusicQueue()->getState() == AudioEngine::State::PLAYING)
+ && _menuMusic.size() > 0) {
+        auto musicsource = _assets->get<Sound>(MENU_MUSIC);
+        AudioEngine::get()->getMusicQueue()->play(musicsource, true);
+//        AudioEngine::get()->play(_menuMusic,musicsource,true,musicsource->getVolume());
     } else if (_menuMusic.size() <= 0) {
         if (AudioEngine::get()->isActive(MENU_MUSIC)) {
             AudioEngine::get()->clear(MENU_MUSIC);

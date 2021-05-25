@@ -24,6 +24,13 @@
     },
     "fonts": {
     },
+    "sounds": {
+        "menu": {
+            "type":     "sample",
+            "file":     "sounds/ghosted.wav",
+            "volume":   0.3
+        }
+    },
     "scene2s": {
         "start": {
             "type": "Node",

@@ -554,11 +554,6 @@
             "type":     "sample",
             "file":     "sounds/trigger.wav",
             "volume":   0.5
-        },
-        "menu": {
-            "type":     "sample",
-            "file":     "sounds/ghosted.wav",
-            "volume":   0.3
         }
     },
     "fonts": {
