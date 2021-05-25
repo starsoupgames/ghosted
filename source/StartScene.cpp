@@ -41,8 +41,19 @@ bool StartScene::init(const shared_ptr<AssetManager>& assets) {
     if (_muteButton == nullptr) {
         return false;
     }
-
+    
     _muteButton->addListener([=](const string& name, bool down) {
+        if (!down) {
+            _mute = !_mute;
+        }
+        });
+    
+    _unmuteButton = dynamic_pointer_cast<scene2::Button>(assets->get<scene2::SceneNode>("start_unmuteButton"));
+    if (_unmuteButton == nullptr) {
+        return false;
+    }
+    
+    _unmuteButton->addListener([=](const string& name, bool down) {
         if (!down) {
             _mute = !_mute;
         }
@@ -58,15 +69,55 @@ bool StartScene::init(const shared_ptr<AssetManager>& assets) {
             _mode = constants::GameMode::Info;
         }
         });
-
+    
     if (_active) {
         _create->activate();
         _join->activate();
-        _muteButton->activate();
         _info->activate();
+        if (_mute == false) {
+            _unmuteButton->setVisible(false);
+            if (_unmuteButton->isActive()) {
+                _unmuteButton->deactivate();
+            }
+            _muteButton->setVisible(true);
+            if (!_muteButton->isActive()) {
+                _muteButton->activate();
+            }
+        } else {
+            _muteButton->setVisible(false);
+            if (_muteButton->isActive()) {
+                _muteButton->deactivate();
+            }
+            _unmuteButton->setVisible(true);
+            if (!_unmuteButton->isActive()) {
+                _unmuteButton->activate();
+            }
+        }
     }
 
     return true;
+}
+
+void StartScene::update(float timestep) {
+    if (_mute == false) {
+        _unmuteButton->setVisible(false);
+        if (_unmuteButton->isActive()) {
+            _unmuteButton->deactivate();
+        }
+        _muteButton->setVisible(true);
+        if (!_muteButton->isActive()) {
+            _muteButton->activate();
+        }
+    } else {
+        _muteButton->setVisible(false);
+        if (_muteButton->isActive()) {
+            _muteButton->deactivate();
+        }
+        _unmuteButton->setVisible(true);
+        if (!_unmuteButton->isActive()) {
+            _unmuteButton->activate();
+        }
+    }
 }
 
 /**
@@ -78,6 +129,8 @@ void StartScene::dispose() {
     _join = nullptr;
     _muteButton->clearListeners();
     _muteButton = nullptr;
+    _unmuteButton->clearListeners();
+    _unmuteButton = nullptr;
     _info = nullptr;
     GameMode::dispose();
 }
@@ -96,8 +149,24 @@ void StartScene::setActive(bool value) {
         if (!_join->isActive()) {
             _join->activate();
         }
-        if (!_muteButton->isActive()) {
-            _muteButton->activate();
+        if (_mute == false) {
+            _unmuteButton->setVisible(false);
+            if (_unmuteButton->isActive()) {
+                _unmuteButton->deactivate();
+            }
+            _muteButton->setVisible(true);
+            if (!_muteButton->isActive()) {
+                _muteButton->activate();
+            }
+        } else {
+            _muteButton->setVisible(false);
+            if (_muteButton->isActive()) {
+                _muteButton->deactivate();
+            }
+            _unmuteButton->setVisible(true);
+            if (!_unmuteButton->isActive()) {
+                _unmuteButton->activate();
+            }
         }
         if (!_info->isActive()) {
             _info->activate();
@@ -112,6 +181,9 @@ void StartScene::setActive(bool value) {
         }
         if (_muteButton->isActive()) {
             _muteButton->deactivate();
+        }
+        if (_unmuteButton->isActive()) {
+            _unmuteButton->deactivate();
         }
         if (_info->isActive()) {
             _info->deactivate();

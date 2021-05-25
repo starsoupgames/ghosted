@@ -9,8 +9,11 @@
         "ghosted_logo": {
             "file": "textures/start/ghosted_logo.png"
         },
-        "mute": {
+        "unmute": {
             "file": "textures/start/unmute_full.png"
+        },
+        "mute": {
+            "file": "textures/start/muted_full.png"
         },
         "information": {
             "file": "textures/start/information.png"
@@ -82,6 +85,31 @@
                             "type": "Image",
                             "data": {
                                 "texture": "mute"
+                            }
+                        }
+                    },
+                    "layout": {
+                        "x_anchor": "right",
+                        "y_anchor": "top",
+                        "y_offset": -0.1,
+                        "x_offset": -0.1
+                    }
+                },
+                "unmuteButton": {
+                    "type": "Button",
+                    "format": {
+                        "type": "Anchored"
+                    },
+                    "data": {
+                        "upnode": "up2",
+                        "anchor": [ 0, 1 ],
+                        "scale": 0.8
+                    },
+                    "children": {
+                        "up2": {
+                            "type": "Image",
+                            "data": {
+                                "texture": "unmute"
                             }
                         }
                     },

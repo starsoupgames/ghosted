@@ -13,6 +13,7 @@ private:
     shared_ptr<scene2::Button> _create;
     shared_ptr<scene2::Button> _join;
     shared_ptr<scene2::Button> _muteButton;
+    shared_ptr<scene2::Button> _unmuteButton;
     shared_ptr<scene2::Button> _info;
 
 public:
@@ -49,6 +50,11 @@ public:
      * Disposes of all (non-static) resources allocated to this mode.
      */
     virtual void dispose() override;
+    
+    /**
+     * @param timestep  The amount of time (in seconds) since the last frame
+     */
+    void update(float timestep) override;
 
     /**
      * Sets whether the scene is currently active
