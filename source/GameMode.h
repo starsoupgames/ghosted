@@ -16,6 +16,8 @@ protected:
     constants::GameMode _mode;
     
     bool _mute;
+    
+    shared_ptr<scene2::AnchoredLayout> _manager;
 
     /** The game mode's root node. */
     shared_ptr<scene2::SceneNode> _root;
@@ -70,6 +72,10 @@ public:
     void setMute(bool m) {
         _mute = m;
     }
+    
+    shared_ptr<scene2::SceneNode> getModeRoot() { return _root; }
+    
+    shared_ptr<scene2::AnchoredLayout> getManager() { return _manager; }
 };
 
 #endif /* __GAME_MODE_H__ */

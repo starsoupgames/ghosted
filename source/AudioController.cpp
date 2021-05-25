@@ -43,7 +43,7 @@ void AudioController::update(float timestep) {
         if (_mute && AudioEngine::get()->getVolume(MENU_MUSIC) > 0.0f) {
             AudioEngine::get()->setVolume(MENU_MUSIC, 0.0f);
         } else if (!_mute) {
-            AudioEngine::get()->setVolume(MENU_MUSIC, 0.4f);
+            AudioEngine::get()->setVolume(MENU_MUSIC, 0.75f);
         }
     }
     

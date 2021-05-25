@@ -50,9 +50,17 @@ bool GameMode::init(const std::shared_ptr<AssetManager>& assets, constants::Game
     if (_root == nullptr) {
         return false;
     }
+    
+    _manager = make_shared<scene2::AnchoredLayout>();
+    _manager->initWithData(assets->get<JsonValue>(node));
+    
     _root->setContentSize(dimen);
     _root->doLayout(); // This rearranges the children to fit the screen
-    addChild(_root);
+    _root->setPriority(constants::Priority::UI);
+    _root->setName(node);
+    if (node != "game") {
+        addChildWithName(_root, node);
+    }
 
     return true;
 }

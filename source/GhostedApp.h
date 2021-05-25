@@ -43,6 +43,7 @@
 #include "LobbyScene.h"
 #include "GameScene.h"
 #include "WinScene.h"
+#include "InfoScene.h"
 
 
 
@@ -86,6 +87,7 @@ protected:
     LobbyScene _lobby;
     GameScene _gameplay;
     WinScene _win;
+    InfoScene _info;
 
     constants::GameMode _mode;
     uint8_t _status;

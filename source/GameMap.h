@@ -57,6 +57,11 @@ private:
 
     shared_ptr<scene2::OrderedNode> _node;
     
+    shared_ptr<scene2::OrderedNode> litRoot;
+    shared_ptr<scene2::OrderedNode> dimRoot;
+    shared_ptr<scene2::OrderedNode> topRoot;
+    
+    
     /** All the rooms in the map */
     vector<shared_ptr<GameRoom>> _rooms;
     
@@ -98,15 +103,19 @@ public:
     
     ~GameMap() { dispose(); }
     
-    bool init(const shared_ptr<AssetManager>& assets, shared_ptr<scene2::OrderedNode>& node);
+    bool init(const shared_ptr<AssetManager>& assets, shared_ptr<scene2::OrderedNode>& lit, shared_ptr<scene2::OrderedNode>& dim, shared_ptr<scene2::OrderedNode>& top);
     
     /**
      * Disposes of all (non-static) resources allocated to this mode.
      */
     virtual void dispose() {
         _assets = nullptr;
-        _node = nullptr;
         _player = nullptr;
+        
+        litRoot = nullptr;
+        dimRoot = nullptr;
+        topRoot = nullptr;
+        
         _players.clear();
         _rooms.clear();
         _traps.clear();
@@ -114,14 +123,21 @@ public:
         _batteries.clear();
     };
 
+    /**
+     * Allocates this model
+     */
+    static shared_ptr<GameMap> alloc(shared_ptr<AssetManager>& assets, shared_ptr<scene2::OrderedNode>& lit, shared_ptr<scene2::OrderedNode>& dim, shared_ptr<scene2::OrderedNode>& top) {
+        shared_ptr<GameMap> result = make_shared<GameMap>();
+        return (result->init(assets, lit, dim, top) ? result : nullptr);
+    }
     
     /**
      * Allocates this model
      */
-    static shared_ptr<GameMap> alloc(shared_ptr<AssetManager>& assets, shared_ptr<scene2::OrderedNode>& node) {
-        shared_ptr<GameMap> result = make_shared<GameMap>();
-        return (result->init(assets, node) ? result : nullptr);
-    }
+//    static shared_ptr<GameMap> alloc(shared_ptr<AssetManager>& assets, shared_ptr<scene2::OrderedNode>& node) {
+//        shared_ptr<GameMap> result = make_shared<GameMap>();
+//        return (result->init(assets, node) ? result : nullptr);
+//    }
 #pragma mark -
 #pragma mark State Access
     

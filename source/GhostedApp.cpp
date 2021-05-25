@@ -182,6 +182,8 @@ void GhostedApp::update(float timestep) {
         mode = _gameplay.getMode();
     } else if (_win.isActive()) {
         mode = _win.getMode();
+    } else if (_info.isActive()) {
+        mode = _info.getMode();
     }
     else {
         mode = constants::GameMode::Start;
@@ -221,6 +223,9 @@ void GhostedApp::update(float timestep) {
             break;
         case constants::GameMode::Win:
             _win.dispose();
+            break;
+        case constants::GameMode::Info:
+            _info.dispose();
             break;
         }
 
@@ -274,7 +279,10 @@ void GhostedApp::update(float timestep) {
             _win.setNetwork(_network);
             _win.init(_assets);
             break;
-        }
+        case constants::GameMode::Info:
+            _info.init(_assets, _mode);
+            break;
+    }
 
         _mode = mode;
     }
@@ -325,6 +333,9 @@ void GhostedApp::update(float timestep) {
         _network->update(timestep);
         _win.update(timestep);
         break;
+    case constants::GameMode::Info:
+        _info.update(timestep);
+        break;
     default:
         CULogError("No corresponding mode.");
         break;
@@ -360,6 +371,9 @@ void GhostedApp::draw() {
     case constants::GameMode::Win:
         _win.render(_batch);
         break;
+    case constants::GameMode::Info:
+        _info.render(_batch);
+        break;
     case constants::GameMode::Game:
         _gameplay.draw(_batch, _shaderBatch);
         break;
@@ -380,6 +394,7 @@ void GhostedApp::buildScene() {
     _assets->attach<Texture>(TextureLoader::alloc()->getHook());
     _assets->attach<Sound>(SoundLoader::alloc()->getHook());
     _assets->attach<scene2::SceneNode>(Scene2Loader::alloc()->getHook());
+    _assets->attach<JsonValue>(JsonLoader::alloc()->getHook());
 
     _loading.init(_assets);
     
@@ -392,6 +407,7 @@ void GhostedApp::buildScene() {
     _assets->loadDirectoryAsync("json/game.json", nullptr);
     _assets->loadDirectoryAsync("json/lobby.json", nullptr);
     _assets->loadDirectoryAsync("json/win.json", nullptr);
+    _assets->loadDirectoryAsync("json/info.json", nullptr);
 }
 
 /**

@@ -1,0 +1,173 @@
+{
+  "textures": {
+    "background": {
+      "file": "textures/info/background1.png"
+    },
+    "xbutton": {
+      "file": "textures/info/xbutton.png"
+    },
+    "ghostgameplay": {
+      "file": "textures/info/ghostgameplay.png"
+    },
+    "palsgameplay": {
+      "file": "textures/info/palsgameplay.png"
+    },
+    "palslabel": {
+      "file": "textures/info/palslabel2.png"
+    },
+    "ghostlabel": {
+      "file": "textures/info/ghostlabel.png"
+    }
+  },
+    "fonts": {
+      "gyparody": {
+        "file": "fonts/gyparody-hv.ttf",
+        "size": 48
+      }
+    },
+
+  "scene2s": {
+    "info": {
+      "type": "Node",
+      "comment": "This is the root node of Ghosted's alpha release",
+      "format": {
+        "type": "Anchored"
+      },
+      "children": {
+
+        "backdrop": {
+          "type": "Image",
+          "data": {
+            "texture": "background",
+            "anchor": [ 0, 0.5 ]
+          },
+          "layout": {
+            "x_anchor": "left",
+            "y_anchor": "fill"
+          }
+        },
+        "palsgameplay": {
+          "type": "Button",
+          "format": {
+            "type": "Anchored"
+          },
+          "data": {
+            "upnode": "up",
+            "anchor": [ 0.5, 0.5 ],
+            "scale": 1.25
+          },
+          "children": {
+            "up": {
+              "type": "Image",
+              "data": {
+                "texture": "palsgameplay"
+              }
+            }
+          },
+          "layout": {
+            "x_anchor": "center",
+            "y_anchor": "middle"
+          }
+        },
+        "ghostgameplay": {
+          "type": "Button",
+          "format": {
+            "type": "Anchored"
+          },
+          "data": {
+            "upnode": "up",
+            "anchor": [ 0.5, 0.5 ],
+            "scale": 1.25
+          },
+          "children": {
+            "up": {
+              "type": "Image",
+              "data": {
+                "texture": "ghostgameplay"
+              }
+            }
+          },
+          "layout": {
+            "x_anchor": "center",
+            "y_anchor": "middle"
+          }
+        },
+        "palslabel": {
+          "type": "Button",
+          "format": {
+            "type": "Anchored"
+          },
+          "data": {
+            "upnode": "up",
+            "anchor": [ 0, 1 ],
+            "scale": 1.5
+          },
+          "children": {
+            "up": {
+              "type": "Image",
+              "data": {
+                "texture": "palslabel"
+              }
+            }
+          },
+          "layout": {
+            "x_anchor": "left",
+            "y_anchor": "top",
+            "y_offset": -0.1,
+            "x_offset": 0.1
+          }
+        },
+        "ghostlabel": {
+          "type": "Button",
+          "format": {
+            "type": "Anchored"
+          },
+          "data": {
+            "upnode": "up",
+            "anchor": [ 0, 1 ],
+            "scale": 1.5
+          },
+          "children": {
+            "up": {
+              "type": "Image",
+              "data": {
+                "texture": "ghostlabel"
+              }
+            }
+          },
+          "layout": {
+            "x_anchor": "left",
+            "y_anchor": "top",
+            "y_offset": -0.1,
+            "x_offset": 0.2
+          }
+        },
+        "xbutton": {
+          "type": "Button",
+          "format": {
+            "type": "Anchored"
+          },
+          "data": {
+            "upnode": "up",
+            "anchor": [0, 1 ],
+            "scale": 1.5
+          },
+          "children": {
+            "up": {
+              "type": "Image",
+              "data": {
+                "texture": "xbutton"
+              }
+            }
+          },
+          "layout": {
+            "x_anchor": "left",
+            "y_anchor": "top",
+            "x_offset": 0.02,
+            "y_offset": -0.02
+          }
+        }
+      }
+    }
+  }
+}

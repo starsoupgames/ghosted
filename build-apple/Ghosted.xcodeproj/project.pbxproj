@@ -28,6 +28,9 @@
 		A46873AD260BF3CF00F0E184 /* NetworkController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A46873AC260BF3CF00F0E184 /* NetworkController.cpp */; };
 		A46873AE260BF3CF00F0E184 /* NetworkController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A46873AC260BF3CF00F0E184 /* NetworkController.cpp */; };
 		A46873AF260BF3CF00F0E184 /* NetworkController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A46873AC260BF3CF00F0E184 /* NetworkController.cpp */; };
+		A4713A77265B8042005690E3 /* InfoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4713A76265B8042005690E3 /* InfoScene.cpp */; };
+		A4713A78265B8042005690E3 /* InfoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4713A76265B8042005690E3 /* InfoScene.cpp */; };
+		A4713A79265B8042005690E3 /* InfoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4713A76265B8042005690E3 /* InfoScene.cpp */; };
 		A4810ACA2630C07500EBF151 /* WinScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4810AC92630C07500EBF151 /* WinScene.cpp */; };
 		A4810ACB2630C07500EBF151 /* WinScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4810AC92630C07500EBF151 /* WinScene.cpp */; };
 		A4810ACC2630C07500EBF151 /* WinScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4810AC92630C07500EBF151 /* WinScene.cpp */; };
@@ -199,6 +202,8 @@
 		A468738A260BF31800F0E184 /* NetworkData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetworkData.h; sourceTree = "<group>"; };
 		A468738B260BF31900F0E184 /* NetworkController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetworkController.h; sourceTree = "<group>"; };
 		A46873AC260BF3CF00F0E184 /* NetworkController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NetworkController.cpp; sourceTree = "<group>"; };
+		A4713A76265B8042005690E3 /* InfoScene.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = InfoScene.cpp; sourceTree = "<group>"; };
+		A4713A80265B804F005690E3 /* InfoScene.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InfoScene.h; sourceTree = "<group>"; };
 		A4810AC22630BDA300EBF151 /* WinScene.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WinScene.h; sourceTree = "<group>"; };
 		A4810AC92630C07500EBF151 /* WinScene.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = WinScene.cpp; sourceTree = "<group>"; };
 		A481D994265373CF00352BF7 /* AudioController.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AudioController.cpp; sourceTree = "<group>"; };
@@ -553,6 +558,8 @@
 				A4810AC92630C07500EBF151 /* WinScene.cpp */,
 				A481D994265373CF00352BF7 /* AudioController.cpp */,
 				A481D99F2653744500352BF7 /* AudioController.h */,
+				A4713A76265B8042005690E3 /* InfoScene.cpp */,
+				A4713A80265B804F005690E3 /* InfoScene.h */,
 			);
 			name = Source;
 			path = ../source;
@@ -751,6 +758,7 @@
 				A4BD191225F44EBB00FBD403 /* GameEntity.cpp in Sources */,
 				A4687395260BF31900F0E184 /* NetworkData.cpp in Sources */,
 				A4BD191525F44EBB00FBD403 /* LoadingScene.cpp in Sources */,
+				A4713A79265B8042005690E3 /* InfoScene.cpp in Sources */,
 				A4687382260BF2F500F0E184 /* PlayerGhost.cpp in Sources */,
 				A4B308F6261D98CC00563226 /* GameMap.cpp in Sources */,
 				A4B3090B261D9B6600563226 /* CreateGameScene.cpp in Sources */,
@@ -786,6 +794,7 @@
 				A4BD191125F44EBB00FBD403 /* GameEntity.cpp in Sources */,
 				A4687394260BF31900F0E184 /* NetworkData.cpp in Sources */,
 				A4BD191425F44EBB00FBD403 /* LoadingScene.cpp in Sources */,
+				A4713A78265B8042005690E3 /* InfoScene.cpp in Sources */,
 				A4687381260BF2F500F0E184 /* PlayerGhost.cpp in Sources */,
 				A4B308F5261D98CC00563226 /* GameMap.cpp in Sources */,
 				A4B3090A261D9B6600563226 /* CreateGameScene.cpp in Sources */,
@@ -821,6 +830,7 @@
 				A4BD191025F44EBB00FBD403 /* GameEntity.cpp in Sources */,
 				A4687393260BF31900F0E184 /* NetworkData.cpp in Sources */,
 				A4BD191325F44EBB00FBD403 /* LoadingScene.cpp in Sources */,
+				A4713A77265B8042005690E3 /* InfoScene.cpp in Sources */,
 				A4687380260BF2F500F0E184 /* PlayerGhost.cpp in Sources */,
 				A4B308F4261D98CC00563226 /* GameMap.cpp in Sources */,
 				A4B30909261D9B6600563226 /* CreateGameScene.cpp in Sources */,

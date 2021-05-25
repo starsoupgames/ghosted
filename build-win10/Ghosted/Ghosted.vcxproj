@@ -213,6 +213,7 @@
     <ClInclude Include="..\..\source\GameRoom.h" />
     <ClInclude Include="..\..\source\GameScene.h" />
     <ClInclude Include="..\..\source\GhostedApp.h" />
+    <ClInclude Include="..\..\source\InfoScene.h" />
     <ClInclude Include="..\..\source\InputController.h" />
     <ClInclude Include="..\..\source\JoinGameScene.h" />
     <ClInclude Include="..\..\source\LoadingScene.h" />
@@ -245,6 +246,7 @@
     <ClCompile Include="..\..\source\GameRoom.cpp" />
     <ClCompile Include="..\..\source\GameScene.cpp" />
     <ClCompile Include="..\..\source\GhostedApp.cpp" />
+    <ClCompile Include="..\..\source\InfoScene.cpp" />
     <ClCompile Include="..\..\source\InputController.cpp" />
     <ClCompile Include="..\..\source\JoinGameScene.cpp" />
     <ClCompile Include="..\..\source\LoadingScene.cpp" />

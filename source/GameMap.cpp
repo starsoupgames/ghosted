@@ -6,9 +6,11 @@ using namespace std;
 using namespace cugl;
 
 #pragma mark Constructors
-bool GameMap::init(const shared_ptr<AssetManager>& assets, shared_ptr<scene2::OrderedNode>& node) {
+bool GameMap::init(const shared_ptr<AssetManager>& assets, shared_ptr<scene2::OrderedNode>& lit, shared_ptr<scene2::OrderedNode>& dim, shared_ptr<scene2::OrderedNode>& top) {
     _assets = assets;
-    _node = node;
+    litRoot = lit;
+    dimRoot = dim;
+    topRoot = top;
     _teleCount = 4;
     return true;
 }
@@ -17,8 +19,6 @@ bool GameMap::init(const shared_ptr<AssetManager>& assets, shared_ptr<scene2::Or
 
 /** Adds a trap to _traps, delete after traps properly implemented */
 void GameMap::addTrap(Vec2 pos) {
-    auto litRoot = _node->getChildByName("lit_root");
-    auto topRoot = _node->getChildByName("top_root");
     auto trap = Trap::alloc(_player->getLoc());
     trap->setArmed();
     auto trapNode = scene2::PolygonNode::allocWithTexture(_assets->get<Texture>("ghost_shadow_texture"));
@@ -187,19 +187,18 @@ void GameMap::handleInteract() {
                 minDistance = distance.length();
             }
         }
-        if (slot != nullptr && minDistance < SLOT_RADIUS) {
-            if (slot->getCharge() <= 0 && !slot->activated() && pal->getBatteries() > 0) {
-                slot->activate();
-                pal->setBatteries(pal->getBatteries() - 1);
-            }
-        }
-
+        
         // Check if pal is in range of teleporter
         Vec2 tpPos = _endRank * constants::WALL_LENGTH + constants::TELEPORTER_POS;
         Vec2 distance = tpPos - _player->getLoc();
         if (distance.length() < range && pal->getBatteries() > 0) {
             _teleCount -= 1;
             pal->setBatteries(pal->getBatteries() - 1);
+        } else if (slot != nullptr && minDistance < SLOT_RADIUS) {
+            if (slot->getCharge() <= 0 && !slot->activated() && pal->getBatteries() > 0) {
+                slot->activate();
+                pal->setBatteries(pal->getBatteries() - 1);
+            }
         }
 
     }
@@ -252,8 +251,6 @@ bool GameMap::assertValidMap() {
 };
 
 void GameMap::makeNodes() {
-    auto litRoot = _node->getChildByName("lit_root");
-
     // Rooms
     for (auto& room : _rooms) {
         auto node = scene2::OrderedNode::allocWithOrder(scene2::OrderedNode::Order::ASCEND);
@@ -263,7 +260,7 @@ void GameMap::makeNodes() {
         node->setName("room_" + to_string(room->getLayout()));
         litRoot->addChild(node);
         room->setNode(node);
-        room->setRoot(_node);
+        room->setRoot(litRoot, dimRoot, topRoot);
         room->addObstacles();
     }
 

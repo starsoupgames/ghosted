@@ -119,34 +119,39 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
     _debugNode = scene2::SceneNode::alloc();
 
     setDebug(true);
-
+    
+//    _root->allocWithOrder(scene2::OrderedNode::Order::ASCEND);
+//    _root->setOrder(scene2::OrderedNode::Order::ASCEND);
+    _gameUI = getModeRoot();
     _root = scene2::OrderedNode::allocWithOrder(scene2::OrderedNode::Order::ASCEND);
-    //_root->addChild(_assets->get<scene2::SceneNode>("game"));
+//    _root->addChild(_assets->get<scene2::SceneNode>("game"));
     _root->setContentSize(dimen);
     _root->doLayout();
     _root->setName("root");
-    addChild(_root, 0);
+    addChild(_root);
+    
+    _root->addChild(_gameUI, 1);
 
     _dimRoot = scene2::OrderedNode::allocWithOrder(scene2::OrderedNode::Order::ASCEND);
 //    _dimRoot->addChild(_assets->get<scene2::SceneNode>("game"));
     _dimRoot->setContentSize(dimen);
     _dimRoot->doLayout();
     _dimRoot->setName("dim_root");
-    _root->addChild(_dimRoot);
+//    _root->addChild(_dimRoot);
 
     _litRoot = scene2::OrderedNode::allocWithOrder(scene2::OrderedNode::Order::ASCEND);
     _litRoot->setContentSize(dimen);
     _litRoot->doLayout();
     _litRoot->setName("lit_root");
-    _root->addChild(_litRoot);
+//    _root->addChild(_litRoot);
 
     _topRoot = scene2::OrderedNode::allocWithOrder(scene2::OrderedNode::Order::ASCEND);
     _topRoot->setContentSize(dimen);
     _topRoot->doLayout();
     _topRoot->setName("top_root");
-    _root->addChild(_topRoot);
+//    _root->addChild(_topRoot);
 
-    _gameMap = GameMap::alloc(_assets, _root);
+    _gameMap = GameMap::alloc(_assets, _litRoot, _dimRoot, _topRoot);
 
     // _gameMap->generateBasicMap(0);
     _gameMap->generateRandomMap();
@@ -231,6 +236,10 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
     _gameMap->setPlayer(_network->getData()->getPlayer()->player);
     _gameMap->setPlayers(_network->getData()->getPlayers());
     
+    if (_network->getData()->getPlayer()->player->getType() == constants::PlayerType::Ghost) {
+        _gameUI->setVisible(false);
+    }
+    
     vector<Vec2> coneShape;
     Vec2 tl(-CONE_WIDTH, CONE_LENGTH);
     Vec2 tr(CONE_WIDTH, CONE_LENGTH);
@@ -249,9 +258,13 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 //    _gameUI->setContentSize(dimen);
 //    _gameUI->doLayout();
 //
-//    auto game = _assets->get<scene2::SceneNode>("game");
+//    getModeRoot()->addChild(_gameUI);
 //    _gameUI->addChild(game);
     
+//    _gameUI = assets->get<scene2::SceneNode>("game");
+//    _gameUI->setContentSize(dimen);
+//    _gameUI->doLayout();
+//
 //    _root->addChild(_gameUI, 1);
     
     _litRoot->addChild(_debugNode, 1);
@@ -341,6 +354,59 @@ void GameScene::update(float timestep) {
         if (p != nullptr) {
             updateVision(p);
         }
+    }
+    
+    for (int batt = 1; batt <= 9; batt++) {
+        string b = "game_bat" + to_string(batt);
+        if(_assets->get<scene2::SceneNode>(b)->isVisible()) {
+                _assets->get<scene2::SceneNode>(b)->setVisible(false);
+        }
+    }
+    
+    // pal batteries UI
+    for (int i = 1; i <= 3; i++) {
+        if (_network->getData()->getPlayer(i) != nullptr) {
+            auto p = _network->getData()->getPlayer(i);
+            auto pal = dynamic_pointer_cast<Pal>(p->player);
+            
+            switch (i) {
+                case 1: { // doe
+                    for (int j = 1; j <= pal->getBatteries(); j++) {
+                        string b = "game_bat" + to_string(j);
+                        if(!_assets->get<scene2::SceneNode>(b)->isVisible()) {
+                                _assets->get<scene2::SceneNode>(b)->setVisible(true);
+                        }
+                    };
+//                    // remove batteries backwards
+//                    for (int j = 0; j <= 3-pal->getBatteries(); j++) {
+//                        string b = "game_bat" + to_string(3-j);
+//                        if (_assets->get<scene2::SceneNode>(b)->isVisible()) {
+//                            _assets->get<scene2::SceneNode>(b)->setVisible(false);
+//                        }
+//                    };
+                    break;
+                }
+                case 2: { // tanuki
+                    for (int j = 1; j <= pal->getBatteries(); j++) {
+                        for (int j = 1; j <= pal->getBatteries(); j++) {
+                            string b = "game_bat" + to_string(j+3);
+                            _assets->get<scene2::SceneNode>(b)->setVisible(true);
+                        };
+                    };
+                    break;
+                }
+                case 3: {// seal
+                    for (int j = 1; j <= pal->getBatteries(); j++) {
+                        for (int j = 1; j <= pal->getBatteries(); j++) {
+                            string b = "game_bat" + to_string(j+6);
+                            _assets->get<scene2::SceneNode>(b)->setVisible(true);
+                        };
+                    };
+                    break;
+                }
+            }
+        }
+        
     }
     
 //    for (auto& t : _gameMap->getTraps()) {
@@ -494,6 +560,12 @@ void GameScene::draw(const std::shared_ptr<SpriteBatch>& batch, const std::share
         batch->setBlendEquation(_blendEquation);
         _topRoot->render(batch, _root->getNodeToWorldTransform(), _color);
 //        _gameUI->render(batch, _root->getNodeToWorldTransform(), _color);
+        
+        batch->begin(_camera->getCombined());
+        batch->setBlendFunc(_srcFactor, _dstFactor);
+        batch->setBlendEquation(_blendEquation);
+        _root->render(batch, _root->getNodeToWorldTransform(), _color);
+//        getModeRoot()->draw(batch, _root->getNodeToWorldTransform(), _color);
         batch->end();
     }
     else {
@@ -502,6 +574,8 @@ void GameScene::draw(const std::shared_ptr<SpriteBatch>& batch, const std::share
         batch->setBlendEquation(_blendEquation);
         _litRoot->render(batch, _root->getNodeToWorldTransform(), _color);
         _topRoot->render(batch, _root->getNodeToWorldTransform(), _color);
+        _root->render(batch, _root->getNodeToWorldTransform(), _color);
+//        getChildByName("game")->draw(batch, _root->getNodeToWorldTransform(), _color);
 //        _gameUI->render(batch, _root->getNodeToWorldTransform(), _color);
         batch->end();
     }

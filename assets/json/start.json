@@ -9,8 +9,8 @@
         "ghosted_logo": {
             "file": "textures/start/ghosted_logo.png"
         },
-        "settings": {
-            "file": "textures/start/settings.png"
+        "mute": {
+            "file": "textures/start/unmute_full.png"
         },
         "information": {
             "file": "textures/start/information.png"
@@ -68,13 +68,13 @@
                     "data": {
                         "upnode": "up",
                         "anchor": [ 0, 1 ],
-                        "scale": 1.5
+                        "scale": 0.8
                     },
                     "children": {
                         "up": {
                             "type": "Image",
                             "data": {
-                                "texture": "settings"
+                                "texture": "mute"
                             }
                         }
                     },

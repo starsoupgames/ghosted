@@ -51,8 +51,10 @@ void GameRoom::setNode(const shared_ptr<scene2::OrderedNode>& value) {
     _slotModel->setNode(slotNodeOn, slotNodeOff);
 };
 
-void GameRoom::setRoot(const shared_ptr<scene2::OrderedNode>& value) {
-    _root = value;
+void GameRoom::setRoot(const shared_ptr<scene2::OrderedNode>& lit, const shared_ptr<scene2::OrderedNode>& dim, const shared_ptr<scene2::OrderedNode>& top) {
+    litRoot = lit;
+    dimRoot = dim;
+    topRoot = top;
 };
 
 void GameRoom::pickLayout(const shared_ptr<RoomParser>& parser, int type) {
@@ -79,10 +81,6 @@ void GameRoom::pickLayout(const shared_ptr<RoomParser>& parser, int type) {
 
 
 void GameRoom::addObstacles() {
-    auto litRoot = _root->getChildByName("lit_root");
-    auto dimRoot = _root->getChildByName("dim_root");
-    auto topRoot = _root->getChildByName("top_root");
-
     shared_ptr<Texture> floorTexture = _assets->get<Texture>("dim_floor1_texture");
     shared_ptr<Texture> litFloorTexture = _assets->get<Texture>("lit_floor1_texture");
     string roomCode = getDoorsStr();
@@ -160,9 +158,6 @@ void GameRoom::addObstacles() {
 };
 
 void GameRoom::addWalls() {
-    //doors in order of north east south and west
-    auto topRoot = _root->getChildByName("top_root");
-
     int dir = 0;
     for (auto door : getDoors()) {
         switch (dir) {

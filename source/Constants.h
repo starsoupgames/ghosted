@@ -56,7 +56,8 @@ namespace constants {
         JoinGame,
         Lobby,
         Game,
-        Win
+        Win,
+        Info
     };
 
     enum class PlayerType {
@@ -73,6 +74,7 @@ namespace constants {
         RoomEntity = 200, // 200-299
         Player = 300, // 300-399
         Ceiling = 400, // 400-499
+        UI = 500 // 500-599
     };
 
     /** Status of the match */

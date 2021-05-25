@@ -28,6 +28,10 @@ private:
     /** Root node for GameScene */
     shared_ptr<scene2::OrderedNode> _root;
     
+    shared_ptr<scene2::OrderedNode> litRoot;
+    shared_ptr<scene2::OrderedNode> dimRoot;
+    shared_ptr<scene2::OrderedNode> topRoot;
+    
     /** The nodes for the floor + wall, slot, and cable */
     // These should only be alloc'd with position, as textures will be set in GameScene
     shared_ptr<scene2::PolygonNode> _roomNode;
@@ -98,10 +102,15 @@ public:
      */
     void setNode(const shared_ptr<scene2::OrderedNode>& value);
 
+//    /**
+//     * @param value The Player node.
+//     */
+//    void setRoot(const shared_ptr<scene2::OrderedNode>& value);
+    
     /**
      * @param value The Player node.
      */
-    void setRoot(const shared_ptr<scene2::OrderedNode>& value);
+    void setRoot(const shared_ptr<scene2::OrderedNode>& lit, const shared_ptr<scene2::OrderedNode>& dim, const shared_ptr<scene2::OrderedNode>& top);
 
     // Gets the list of battery spawns
     vector<Vec2> getBatterySpawns() { return _batterySpawns; };

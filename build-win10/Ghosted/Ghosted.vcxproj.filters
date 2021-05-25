@@ -126,6 +126,9 @@
     <ClInclude Include="..\..\source\NetworkUtils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\source\InfoScene.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\main.cpp">
@@ -207,6 +210,9 @@
       <Filter>Source Files\RoomEntities</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\AudioController.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\InfoScene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -45,7 +45,17 @@ bool StartScene::init(const shared_ptr<AssetManager>& assets) {
     _muteButton->addListener([=](const string& name, bool down) {
         if (!down) {
             _mute = !_mute;
-            CULog("MUTING BUTTON %d", _mute);
+        }
+        });
+    
+    _info = dynamic_pointer_cast<scene2::Button>(assets->get<scene2::SceneNode>("start_information"));
+    if (_info == nullptr) {
+        return false;
+    }
+
+    _info->addListener([=](const string& name, bool down) {
+        if (!down) {
+            _mode = constants::GameMode::Info;
         }
         });
 
@@ -53,6 +63,7 @@ bool StartScene::init(const shared_ptr<AssetManager>& assets) {
         _create->activate();
         _join->activate();
         _muteButton->activate();
+        _info->activate();
     }
 
     return true;
@@ -67,6 +78,7 @@ void StartScene::dispose() {
     _join = nullptr;
     _muteButton->clearListeners();
     _muteButton = nullptr;
+    _info = nullptr;
     GameMode::dispose();
 }
 
@@ -87,6 +99,9 @@ void StartScene::setActive(bool value) {
         if (!_muteButton->isActive()) {
             _muteButton->activate();
         }
+        if (!_info->isActive()) {
+            _info->activate();
+        }
     }
     else {
         if (_create->isActive()) {
@@ -97,6 +112,9 @@ void StartScene::setActive(bool value) {
         }
         if (_muteButton->isActive()) {
             _muteButton->deactivate();
+        }
+        if (_info->isActive()) {
+            _info->deactivate();
         }
     }
 }
