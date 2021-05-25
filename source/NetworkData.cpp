@@ -338,9 +338,10 @@ vector<uint8_t> NetworkData::convertMapData() {
             else roomsLit.push_back(room->getSlot()->activated());
         }
         encodeBoolList(roomsLit, result);
-    }
 
-    encodeInt(_mapData->map->getTeleCount(), result);
+        // teleporter battery count
+        encodeInt(_mapData->map->getTeleCount(), result);
+    }
 
     return result;
 }
@@ -414,15 +415,15 @@ void NetworkData::interpretMapData(const int id, const vector<uint8_t>& msg) {
                 room->getSlot()->setCharge();
             };
         }
-    }
 
-    vector<vector<uint8_t>> splitMsg = split(msg, { 4 });
-    if (splitMsg.empty()) return;
+        splitMsg = split(splitMsg[1], { 4 });
+        if (splitMsg.empty()) return;
 
-    int receivedTeleCount = decodeInt(splitMsg[0]);
-    int currentTeleCount = _mapData->map->getTeleCount();
-    if (currentTeleCount > receivedTeleCount) {
-        _mapData->map->setTeleCount(receivedTeleCount);
+        int receivedTeleCount = decodeInt(splitMsg[0]);
+        int currentTeleCount = _mapData->map->getTeleCount();
+        if (currentTeleCount > receivedTeleCount) {
+            _mapData->map->setTeleCount(receivedTeleCount);
+        }
     }
 }
 

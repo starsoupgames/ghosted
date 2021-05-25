@@ -162,6 +162,19 @@ public:
         }
         return false;
     }
+
+    void setTeleporter(int teleCount) {
+        auto numBatteries = 4 - teleCount;
+        if (numBatteries >= 0 && numBatteries <= 4) {
+            if (_node == nullptr) return;
+            for (int i = 0; i <= 4; i++) {
+                auto dimTeleporter = dimRoot->getChildByName("teleporter" + to_string(i) + "_dim");
+                if (dimTeleporter != nullptr) dimTeleporter->setVisible(i == numBatteries);
+                auto litTeleporter = _node->getChildByName("teleporter" + to_string(i));
+                if (litTeleporter != nullptr) litTeleporter->setVisible(i == numBatteries);
+            }
+        }
+    }
     
 };
 

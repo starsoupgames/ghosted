@@ -115,6 +115,7 @@ void GameMap::update(float timestep) {
      // Call GameRoom::update(timestep)
 
      // Check victory conditions
+    setTeleCount(_teleCount);
 }
 
 /** Method to update player velocity and players */

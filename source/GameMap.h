@@ -96,7 +96,7 @@ private:
 
 public:
 #pragma mark Constructors
-    GameMap() { }
+    GameMap() : _teleCount(4) { }
     
     ~GameMap() { dispose(); }
     
@@ -178,7 +178,14 @@ public:
     /** Returns the amount of batteries that need to be added to the teleporter for the pals to win */
     int getTeleCount() { return _teleCount; }
 
-    void setTeleCount(int num) { _teleCount = num; }
+    void setTeleCount(int num) { 
+        _teleCount = num; 
+        for (auto& room : _rooms) {
+            if (room->getWinRoom()) {
+                room->setTeleporter(_teleCount);
+            };
+        }
+    }
 
     /** Returns the ghost */
     shared_ptr<Player> getGhost() {

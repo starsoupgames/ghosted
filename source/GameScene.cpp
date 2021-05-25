@@ -213,8 +213,6 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
     hitboxNode->setColor(Color4f::BLUE);
     hitboxNode->setVisible(false);
 
-    
-
     auto ghostModel = Ghost::alloc(Vec2(560, 560)+(_gameMap->getEndRank()*constants::WALL_DIMENSIONS));
     ghostModel->setNode(ghostNode, ghostShadowNode);
     ghostModel->setHitbox(hitboxNode);
@@ -344,9 +342,7 @@ void GameScene::update(float timestep) {
     
     for (int batt = 1; batt <= 9; batt++) {
         string b = "game_bat" + to_string(batt);
-        if(_assets->get<scene2::SceneNode>(b)->isVisible()) {
-                _assets->get<scene2::SceneNode>(b)->setVisible(false);
-        }
+        _assets->get<scene2::SceneNode>(b)->setVisible(false);
     }
     
     // pal batteries UI
@@ -358,35 +354,22 @@ void GameScene::update(float timestep) {
             switch (i) {
                 case 1: { // doe
                     for (int j = 1; j <= pal->getBatteries(); j++) {
-                        string b = "game_bat" + to_string(j);
-                        if(!_assets->get<scene2::SceneNode>(b)->isVisible()) {
-                                _assets->get<scene2::SceneNode>(b)->setVisible(true);
-                        }
+                        auto b = _assets->get<scene2::SceneNode>("game_bat" + to_string(j));
+                        if (b != nullptr) b->setVisible(true);
                     };
-//                    // remove batteries backwards
-//                    for (int j = 0; j <= 3-pal->getBatteries(); j++) {
-//                        string b = "game_bat" + to_string(3-j);
-//                        if (_assets->get<scene2::SceneNode>(b)->isVisible()) {
-//                            _assets->get<scene2::SceneNode>(b)->setVisible(false);
-//                        }
-//                    };
                     break;
                 }
                 case 2: { // tanuki
                     for (int j = 1; j <= pal->getBatteries(); j++) {
-                        for (int j = 1; j <= pal->getBatteries(); j++) {
-                            string b = "game_bat" + to_string(j+3);
-                            _assets->get<scene2::SceneNode>(b)->setVisible(true);
-                        };
+                        auto b = _assets->get<scene2::SceneNode>("game_bat" + to_string(j+3));
+                        if (b != nullptr) b->setVisible(true);
                     };
                     break;
                 }
-                case 3: {// seal
+                case 3: { // seal
                     for (int j = 1; j <= pal->getBatteries(); j++) {
-                        for (int j = 1; j <= pal->getBatteries(); j++) {
-                            string b = "game_bat" + to_string(j+6);
-                            _assets->get<scene2::SceneNode>(b)->setVisible(true);
-                        };
+                        auto b = _assets->get<scene2::SceneNode>("game_bat" + to_string(j+6));
+                        if (b != nullptr) b->setVisible(true);
                     };
                     break;
                 }

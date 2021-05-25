@@ -117,6 +117,7 @@ void GameRoom::addObstacles() {
     }
     else if (_layout == -1) {
         path = "json/layouts/end.json";
+        _winRoom = true;
     }
     else {
         path = "json/layouts/" + to_string(_layout) + ".json";
@@ -152,6 +153,25 @@ void GameRoom::addObstacles() {
         obsDimNode->setPriority(constants::Priority::RoomEntity);
         // Add to scene graph
         node->addChild(obsDimNode);
+    }
+
+    if (_layout == -1) { // end room
+        for (int i = 0; i <= 4; i++) {
+            shared_ptr<Texture> obsTexture = _assets->get<Texture>("teleporter" + to_string(i));
+            shared_ptr<scene2::PolygonNode> obsNode = scene2::PolygonNode::allocWithTexture(obsTexture);
+            Vec2 position(6 * constants::TILE_SIZE + 80, 6 * constants::TILE_SIZE);
+            obsNode->setPosition(position);
+            obsNode->setPriority(constants::Priority::RoomEntity + 1);
+            obsNode->setVisible(false);
+            _node->addChildWithName(obsNode, "teleporter" + to_string(i));
+
+            shared_ptr<Texture> obsDimTexture = _assets->get<Texture>("teleporter" + to_string(i) + "_dim");
+            shared_ptr<scene2::PolygonNode> obsDimNode = scene2::PolygonNode::allocWithTexture(obsTexture);
+            obsDimNode->setPosition(_origin + position);
+            obsDimNode->setPriority(constants::Priority::RoomEntity + 1);
+            obsDimNode->setVisible(false);
+            dimRoot->addChildWithName(obsDimNode, "teleporter" + to_string(i) + "_dim");
+        }
     }
 
     addWalls();
