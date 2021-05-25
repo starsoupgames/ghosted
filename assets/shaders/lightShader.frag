@@ -153,7 +153,7 @@ float roomshade(vec3 light, vec2 pos) {
     if (rD <= roomRadius) {
         a = 1.0;
     } else {
-        a = smoothstep(roomOuterRadius, roomRadius, rD);
+        a = 0.0;
     }
     return a;
 }
@@ -172,13 +172,13 @@ float flashshade(vec4 pal, vec2 pos) {
     float palOuterRadius = 210.0;
     float d = dist(pal.xy, pos);
     //adjust 0.2 and 0.1 to make edge sharper
-    float inAngle = smoothstep(0.5, 0.4, sq(
+    float inAngle = smoothstep(0.5, 0.49, sq(
         dangle(pangle, mangle)
     ));
     if (d <= palRadius) {
         a = inAngle;
     } else {
-        a = inAngle*smoothstep(palOuterRadius, palRadius, d);
+        a = 0.0;
     }
     return a;
 
