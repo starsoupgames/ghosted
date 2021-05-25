@@ -183,9 +183,6 @@
     "books1_down": {
       "file": "textures/obstacles/books1/books1_down.png"
     },
-    "teleporter0": {
-      "file": "textures/obstacles/teleporter/teleporter0.png"
-    },
     "armchair1_up_dim": {
       "file": "textures/obstacles/armchair1/armchair1_up_dim.png"
     },
@@ -255,26 +252,14 @@
     "bench1_up_dim": {
       "file": "textures/obstacles/bench1/bench1_up_dim.png"
     },
-    "bench2_down": {
-      "file": "textures/obstacles/bench2/bench2_down.png"
-    },
     "bench2_down_dim": {
       "file": "textures/obstacles/bench2/bench2_down_dim.png"
-    },
-    "bench2_right": {
-      "file": "textures/obstacles/bench2/bench2_right.png"
     },
     "bench2_right_dim": {
       "file": "textures/obstacles/bench2/bench2_right_dim.png"
     },
-    "books1_right": {
-      "file": "textures/obstacles/books1/books1_right.png"
-    },
     "books1_right_dim": {
       "file": "textures/obstacles/books1/books1_right_dim.png"
-    },
-    "books1_down": {
-      "file": "textures/obstacles/books1/books1_down.png"
     },
     "books1_down_dim": {
       "file": "textures/obstacles/books1/books1_down_dim.png"
@@ -309,20 +294,11 @@
     "chair1_up_dim": {
       "file": "textures/obstacles/chair1/chair1_up_dim.png"
     },
-    "chair2_down": {
-      "file": "textures/obstacles/chair2/chair2_down.png"
-    },
     "chair2_down_dim": {
       "file": "textures/obstacles/chair2/chair2_down_dim.png"
     },
-    "chair2_right": {
-      "file": "textures/obstacles/chair2/chair2_right.png"
-    },
     "chair2_right_dim": {
       "file": "textures/obstacles/chair2/chair2_right_dim.png"
-    },
-    "chair2_up": {
-      "file": "textures/obstacles/chair2/chair2_up.png"
     },
     "chair2_up_dim": {
       "file": "textures/obstacles/chair2/chair2_up_dim.png"
@@ -344,9 +320,6 @@
     },
     "chair3_up_dim": {
       "file": "textures/obstacles/chair3/chair3_up_dim.png"
-    },
-    "clock1_down": {
-      "file": "textures/obstacles/clock1/clock1_down.png"
     },
     "clock1_down_dim": {
       "file": "textures/obstacles/clock1/clock1_down_dim.png"
@@ -375,20 +348,11 @@
     "coffeetable4_down_dim": {
       "file": "textures/obstacles/coffeetable4/coffeetable4_down_dim.png"
     },
-    "couch1_down": {
-      "file": "textures/obstacles/couch1/couch1_down.png"
-    },
     "couch1_down_dim": {
       "file": "textures/obstacles/couch1/couch1_down_dim.png"
     },
-    "couch1_right": {
-      "file": "textures/obstacles/couch1/couch1_right.png"
-    },
     "couch1_right_dim": {
       "file": "textures/obstacles/couch1/couch1_right_dim.png"
-    },
-    "couch1_up": {
-      "file": "textures/obstacles/couch1/couch1_up.png"
     },
     "couch1_up_dim": {
       "file": "textures/obstacles/couch1/couch1_up_dim.png"
@@ -489,9 +453,6 @@
     "lamp3_down_dim": {
       "file": "textures/obstacles/lamp3/lamp3_down_dim.png"
     },
-    "piano1_down": {
-      "file": "textures/obstacles/piano1/piano1_down.png"
-    },
     "piano1_down_dim": {
       "file": "textures/obstacles/piano1/piano1_down_dim.png"
     },
@@ -512,9 +473,6 @@
     },
     "stand1_down_dim": {
       "file": "textures/obstacles/stand1/stand1_down_dim.png"
-    },
-    "stool1_down": {
-      "file": "textures/obstacles/stool1/stool1_down.png"
     },
     "stool1_down_dim": {
       "file": "textures/obstacles/stool1/stool1_down_dim.png"
@@ -566,6 +524,24 @@
     },
     "teleporter1_dim": {
       "file": "textures/obstacles/teleporter/teleporter1_dim.png"
+    },
+    "teleporter2": {
+      "file": "textures/obstacles/teleporter/teleporter2.png"
+    },
+    "teleporter2_dim": {
+      "file": "textures/obstacles/teleporter/teleporter2_dim.png"
+    },
+    "teleporter3": {
+      "file": "textures/obstacles/teleporter/teleporter3.png"
+    },
+    "teleporter3_dim": {
+      "file": "textures/obstacles/teleporter/teleporter3_dim.png"
+    },
+    "teleporter4": {
+      "file": "textures/obstacles/teleporter/teleporter4.png"
+    },
+    "teleporter4_dim": {
+      "file": "textures/obstacles/teleporter/teleporter4_dim.png"
     }
   },
     "sounds": {

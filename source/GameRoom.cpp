@@ -90,8 +90,8 @@ void GameRoom::addObstacles() {
 
     shared_ptr<scene2::PolygonNode> floorNode = scene2::PolygonNode::allocWithTexture(floorTexture);
     floorNode->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
-    floorNode->setPosition(floorNode->getPosition() + Vec2(80, 0));
-    floorNode->setPriority(constants::Priority::Room);
+    floorNode->setPosition(floorNode->getPosition());
+    floorNode->setPriority(constants::Priority::Background);
     node->addChild(floorNode);
     node->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
     node->setPosition(getOrigin());
@@ -100,8 +100,8 @@ void GameRoom::addObstacles() {
     //scene graph for lit versions of entities, or entities only visible under light
     shared_ptr<scene2::PolygonNode> litFloorNode = scene2::PolygonNode::allocWithTexture(litFloorTexture);
     litFloorNode->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
-    litFloorNode->setPosition(litFloorNode->getPosition() + Vec2(80, 0));
-    litFloorNode->setPriority(constants::Priority::Room);
+    litFloorNode->setPosition(litFloorNode->getPosition());
+    litFloorNode->setPriority(constants::Priority::Background);
 
     shared_ptr<scene2::PolygonNode> litDoorNode = scene2::PolygonNode::allocWithTexture(doorTexture);
     litDoorNode->addChild(litFloorNode);
@@ -132,13 +132,13 @@ void GameRoom::addObstacles() {
             obsNode->setScale(Vec2(-1, 1));
         }
         // Get position, multiply by pixel size of each tile, and then add the offsets
-        Vec2 position = Vec2((obs.position.x * constants::TILE_SIZE), (obs.position.y * constants::TILE_SIZE));
+        Vec2 position = Vec2((obs.position.x * constants::TILE_SIZE + 80), (obs.position.y * constants::TILE_SIZE));
         obsNode->setPosition(position);
         obsNode->setPriority(constants::Priority::RoomEntity);
         // Do something with hitboxes
         Vec2 hitbox = obs.hitbox;
         // Add to scene graph
-        litFloorNode->addChild(obsNode);
+        _node->addChild(obsNode);
 
         // Now to the same for the dim version
         // Get texture with name
