@@ -45,9 +45,6 @@
 #include "WinScene.h"
 #include "InfoScene.h"
 
-
-
-
 /**
  * Class for the Ghosted application by Star Soup Games.
  */

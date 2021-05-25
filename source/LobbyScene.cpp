@@ -38,13 +38,17 @@ bool LobbyScene::init(const shared_ptr<AssetManager>& assets) {
         });
 
     _numPlayers = 0;
-    
+
+    _gameMap = GameMap::alloc(_assets);
+
     _host = _roomID == "";
     if (_host) {
         _network->connect();
+        _gameMap->generateRandomMap();
     }
     else {
         _network->connect(_roomID);
+        _gameMap->generateRandomMap();
 
         Size dimen = Application::get()->getDisplaySize();
         dimen *= constants::SCENE_WIDTH / dimen.width;
@@ -108,6 +112,7 @@ void LobbyScene::update(float timestep) {
             if (_network->isConnected() && networkData->getStatus() == constants::MatchStatus::InProgress) {
                 _mode = constants::GameMode::Game;
             }
+            networkData->setGameMap(_gameMap);
         }
 
         switch (_network->getStatus()) {
@@ -137,6 +142,8 @@ void LobbyScene::update(float timestep) {
  */
 void LobbyScene::dispose() {
     setActive(false);
+    _gameMap = nullptr;
+
     _network = nullptr;
     _start = nullptr;
     _escape = nullptr;

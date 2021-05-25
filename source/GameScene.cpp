@@ -151,12 +151,6 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
     _topRoot->setName("top_root");
 //    _root->addChild(_topRoot);
 
-    _gameMap = GameMap::alloc(_assets, _litRoot, _dimRoot, _topRoot);
-
-    // _gameMap->generateBasicMap(0);
-    _gameMap->generateRandomMap();
-    _collision->setGameMap(_gameMap);
-
 
     // Sets the textures of the room nodes and adds them to _root
     // Helper method that goes through all room objects, sets the textures of its nodes, and adds
@@ -228,10 +222,14 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
     _litRoot->addChild(ghostNode);
     _players.push_back(ghostModel);
 
-    _network->getData()->setPlayers(_players);
-    _players = _network->getData()->getPlayers();
+    auto networkData = _network->getData();
 
-    _network->getData()->setGameMap(_gameMap);
+    networkData->setPlayers(_players);
+    _players = networkData->getPlayers();
+
+    _gameMap = networkData->getGameMap();
+    _gameMap->setRoot(_litRoot, _dimRoot, _topRoot);
+    _gameMap->makeNodes();
 
     _gameMap->setPlayer(_network->getData()->getPlayer()->player);
     _gameMap->setPlayers(_network->getData()->getPlayers());
@@ -239,18 +237,6 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
     if (_network->getData()->getPlayer()->player->getType() == constants::PlayerType::Ghost) {
         _gameUI->setVisible(false);
     }
-    
-    vector<Vec2> coneShape;
-    Vec2 tl(-CONE_WIDTH, CONE_LENGTH);
-    Vec2 tr(CONE_WIDTH, CONE_LENGTH);
-    Vec2 bl(-CONE_WIDTH / 8, 0);
-    Vec2 br(CONE_WIDTH / 8, 0);
-
-
-    coneShape.push_back(br);
-    coneShape.push_back(bl);
-    coneShape.push_back(tl);
-    coneShape.push_back(tr);
 
     
     // Game UI

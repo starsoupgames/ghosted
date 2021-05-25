@@ -148,7 +148,7 @@ void GameRoom::addObstacles() {
         if (obs.flip) {
             obsDimNode->setScale(Vec2(-1, 1));
         }
-        obsDimNode->setPosition(Vec2(80, 0).add(position));
+        obsDimNode->setPosition(position);
         obsDimNode->setPriority(constants::Priority::RoomEntity);
         // Add to scene graph
         node->addChild(obsDimNode);

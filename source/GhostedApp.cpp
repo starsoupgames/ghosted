@@ -215,6 +215,7 @@ void GhostedApp::update(float timestep) {
             _join.dispose();
             break;
         case constants::GameMode::Lobby:
+            _gameplay.setGameMap(_lobby.getGameMap());
             _lobby.dispose();
             break;
         case constants::GameMode::Game:
@@ -318,14 +319,6 @@ void GhostedApp::update(float timestep) {
         _lobby.update(timestep);
         break;
     case constants::GameMode::Game:
-        if (_input->getReset()) {
-            _gameplay.dispose();
-            _gameplay.setNetwork(_network);
-            _gameplay.setInput(_input);
-            _gameplay.setCollision(_collision);
-            _gameplay.setAudio(_audio);
-            _gameplay.init(_assets);
-        }
         _network->update(timestep);
         _gameplay.update(timestep);
         break;

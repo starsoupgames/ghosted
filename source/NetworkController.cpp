@@ -83,7 +83,7 @@ void NetworkController::update(float timestep) {
 
     // handle dropped player
     if (_connection->getNumPlayers() < _connection->getTotalPlayers()) {
-        CULog("Player exited the game.");
+        // CULog("Player exited the game.");
     }
 
     // interpolate player data

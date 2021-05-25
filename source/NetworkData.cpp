@@ -77,6 +77,86 @@ void NetworkData::interpretLobbyData(const int id, const vector<uint8_t>& msg) {
     }
 }
 
+vector<uint8_t> NetworkData::convertMapLayoutData() {
+    vector<uint8_t> result;
+
+    if (_id < 0) {
+        CULog("ID is not defined.");
+        return result;
+    }
+
+    if (_id == _hostID) {
+        if (_mapData == nullptr || _mapData->map == nullptr) {
+            return result;
+        }
+
+        auto data = _mapData->map->makeNetworkMap();
+        encodeVector(data->startRank, result); // Vec2
+        encodeVector(data->endRank, result); // Vec2
+
+        /*
+        encodeVec2List(data->batteries, result); // vector<Vec2>
+
+        encodeInt((int)data->rooms.size(), result); // int
+        for (auto& roomData : data->rooms) {
+            encodeInt(roomData->layout, result); // int
+            encodeVector(roomData->rank, result); // Vec2
+            encodeBoolList(roomData->doors, result); // vector<bool>
+        }
+        */
+    }
+
+    return result;
+}
+
+void NetworkData::interpretMapLayoutData(const int id, const vector<uint8_t>& msg) {
+    if (msg.empty()) return;
+
+    if (_mapData == nullptr || _mapData->map == nullptr) return;
+
+    vector<vector<uint8_t>> splitMsg;
+    if (id == _hostID) {
+        /*
+        if (_mapData->generated) return;
+
+        splitMsg = split(msg, { 8, 8 });
+        auto startRank = decodeVector(splitMsg[0]);
+        auto endRank = decodeVector(splitMsg[1]);
+
+        splitMsg = split(splitMsg[2], { 4 });
+        unsigned batteriesLength = decodeInt(splitMsg[0]);
+        vector<Vec2> batteries;
+        if (batteriesLength > 0) {
+            splitMsg = split(splitMsg[1], { batteriesLength * 8 });
+            if (splitMsg.)
+            batteries = decodeVec2List(batteriesLength, splitMsg[0]);
+        }
+
+        splitMsg = split(splitMsg[1], { 4 });
+        unsigned roomsLength = decodeInt(splitMsg[0]);
+        vector<shared_ptr<RoomNetworkdata>> rooms;
+        for (unsigned i = 0; i < roomsLength; i++) {
+            splitMsg = split(splitMsg[1], { 4, 8 });
+            auto layout = decodeInt(splitMsg[0]);
+            auto rank = decodeVector(splitMsg[1]);
+
+            splitMsg = split(splitMsg[2], { 4 });
+            unsigned doorsLength = decodeInt(splitMsg[0]);
+            vector<bool> doors;
+            if (doorsLength > 0) {
+                splitMsg = split(splitMsg[1], { batteriesLength * 1 });
+                doors = decodeBoolList(doorsLength, splitMsg[0]);
+            }
+
+            rooms.push_back(make_shared<RoomNetworkdata>(doors, rank, layout));
+        }
+
+        auto data = make_shared<MapNetworkdata>(rooms, batteries, startRank, endRank);
+        _mapData->map->readNetworkMap(data);
+        */
+    }
+}
+
 vector<uint8_t> NetworkData::convertPlayerData() {
     vector<uint8_t> result;
     if (_id < 0) {
@@ -390,6 +470,9 @@ vector<uint8_t> NetworkData::serializeData() {
     case constants::MatchStatus::Waiting: {
         vector<uint8_t> lobbyData = convertLobbyData();
         result.insert(result.end(), lobbyData.begin(), lobbyData.end()); // 16
+
+        vector<uint8_t> mapLayoutData = convertMapLayoutData();
+        result.insert(result.end(), mapLayoutData.begin(), mapLayoutData.end()); // struct
         break;
     }
     case constants::MatchStatus::InProgress: {
@@ -427,7 +510,11 @@ void NetworkData::unserializeData(const vector<uint8_t>& msg) {
         break;
     case constants::MatchStatus::Waiting: {
         if (splitMsg.size() <= 1) break;
-        interpretLobbyData(metadata->id, splitMsg[1]);
+        splitMsg = split(splitMsg[1], { 16 });
+        if (splitMsg.empty()) break;
+        interpretLobbyData(metadata->id, splitMsg[0]);
+        if (splitMsg.size() < 2) break;
+        interpretMapLayoutData(metadata->id, splitMsg[1]);
         break;
     }
     case constants::MatchStatus::InProgress: {

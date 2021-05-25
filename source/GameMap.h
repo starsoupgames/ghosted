@@ -49,7 +49,6 @@ struct MapNetworkdata {
     }
 };
 
-
 /** Class modeling a game map. */
 class GameMap {
 private:
@@ -94,8 +93,6 @@ private:
     Vec2 _endRank;
 
     bool assertValidMap();
-    
-    void makeNodes();
 
 public:
 #pragma mark Constructors
@@ -103,7 +100,7 @@ public:
     
     ~GameMap() { dispose(); }
     
-    bool init(const shared_ptr<AssetManager>& assets, shared_ptr<scene2::OrderedNode>& lit, shared_ptr<scene2::OrderedNode>& dim, shared_ptr<scene2::OrderedNode>& top);
+    bool init(const shared_ptr<AssetManager>& assets);
     
     /**
      * Disposes of all (non-static) resources allocated to this mode.
@@ -126,18 +123,16 @@ public:
     /**
      * Allocates this model
      */
-    static shared_ptr<GameMap> alloc(shared_ptr<AssetManager>& assets, shared_ptr<scene2::OrderedNode>& lit, shared_ptr<scene2::OrderedNode>& dim, shared_ptr<scene2::OrderedNode>& top) {
+    static shared_ptr<GameMap> alloc(shared_ptr<AssetManager>& assets) {
         shared_ptr<GameMap> result = make_shared<GameMap>();
-        return (result->init(assets, lit, dim, top) ? result : nullptr);
+        return (result->init(assets) ? result : nullptr);
     }
-    
-    /**
-     * Allocates this model
-     */
-//    static shared_ptr<GameMap> alloc(shared_ptr<AssetManager>& assets, shared_ptr<scene2::OrderedNode>& node) {
-//        shared_ptr<GameMap> result = make_shared<GameMap>();
-//        return (result->init(assets, node) ? result : nullptr);
-//    }
+
+    void setRoot(shared_ptr<scene2::OrderedNode>& lit, shared_ptr<scene2::OrderedNode>& dim, shared_ptr<scene2::OrderedNode>& top) {
+        litRoot = lit;
+        dimRoot = dim;
+        topRoot = top;
+    }
 #pragma mark -
 #pragma mark State Access
     
@@ -212,8 +207,6 @@ public:
     Vec2 getEndRank() {
         return _endRank;
     }
-
-    Vec2 getWinRoomOrigin();
     
     /** Sets the player model */
     void setPlayer(shared_ptr<Player>& player) { _player = player; }
@@ -247,9 +240,8 @@ public:
     bool generateRandomMap();
 
     bool readNetworkMap(shared_ptr<MapNetworkdata> networkData);
-    
-#pragma mark -
-#pragma mark Networking
+
+    void makeNodes();
 
     /** Constructs metadata to send over the network for map generation */
     shared_ptr<MapNetworkdata> makeNetworkMap();

@@ -5,6 +5,7 @@
 #include <cugl/cugl.h>
 #include "GameMode.h"
 #include "NetworkController.h"
+#include "GameMap.h"
 
 using namespace std;
 using namespace cugl;
@@ -12,6 +13,8 @@ using namespace cugl;
 class LobbyScene : public GameMode {
 private:
     shared_ptr<NetworkController> _network;
+
+    shared_ptr<GameMap> _gameMap;
 
     bool _host;
     string _roomID;
@@ -74,6 +77,10 @@ public:
 
     void setRoomID(string roomID) {
         _roomID = roomID;
+    }
+
+    shared_ptr<GameMap> getGameMap() {
+        return _gameMap;
     }
 };
 

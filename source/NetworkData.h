@@ -62,9 +62,11 @@ struct PlayerData {
 /** Map data */
 struct MapData {
     shared_ptr<GameMap> map;
+    bool generated;
 
     MapData(shared_ptr<GameMap>& map) {
         this->map = map;
+        this->generated = false;
     }
     ~MapData() { map = nullptr; };
 };
@@ -112,6 +114,10 @@ private:
     /** Convert and interpret lobby data */
     vector<uint8_t> convertLobbyData();
     void interpretLobbyData(const int id, const vector<uint8_t>& lobbyData);
+
+    /** Convert and interpret map layout data */
+    vector<uint8_t> convertMapLayoutData();
+    void interpretMapLayoutData(const int id, const vector<uint8_t>& mapLayoutData);
 
     /** Convert and interpret player data */
     vector<uint8_t> convertPlayerData();
@@ -176,6 +182,12 @@ public:
                 }
             }
         }
+    }
+
+    /** Get game map */
+    shared_ptr<GameMap> getGameMap() {
+        if (_mapData == nullptr) return nullptr;
+        return _mapData->map;
     }
 
     /** Set game map */

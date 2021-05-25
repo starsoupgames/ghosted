@@ -171,6 +171,13 @@ public:
         _audio = audio;
     }
 
+    /**
+     * Sets the pointer to the game map
+     */
+    void setGameMap(shared_ptr<GameMap> map) {
+        _gameMap = map;
+    }
+
 #pragma mark -
 #pragma mark Gameplay Handling
     /**

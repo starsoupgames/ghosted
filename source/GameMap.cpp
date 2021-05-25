@@ -6,11 +6,8 @@ using namespace std;
 using namespace cugl;
 
 #pragma mark Constructors
-bool GameMap::init(const shared_ptr<AssetManager>& assets, shared_ptr<scene2::OrderedNode>& lit, shared_ptr<scene2::OrderedNode>& dim, shared_ptr<scene2::OrderedNode>& top) {
+bool GameMap::init(const shared_ptr<AssetManager>& assets) {
     _assets = assets;
-    litRoot = lit;
-    dimRoot = dim;
-    topRoot = top;
     _teleCount = 4;
     return true;
 }
@@ -179,6 +176,7 @@ void GameMap::handleInteract() {
         shared_ptr<BatterySlot> slot;
         minDistance = numeric_limits<float>::infinity();
         for (auto& room : _rooms) {
+            if (room->getWinRoom()) continue;
             auto s = room->getSlot();
             if (s == nullptr) continue;
             Vec2 distance = s->getLoc() - _player->getLoc();
@@ -280,7 +278,8 @@ bool GameMap::generateRandomMap() {
     reset();
 
     shared_ptr<RoomParser> parser = make_shared<RoomParser>();
-    _mapData = parser->getMapData(parser->pickMap());
+    //_mapData = parser->getMapData(parser->pickMap());
+    _mapData = parser->getMapData("json/maps/map3.json");
 
     _startRank = _mapData->start;
     _endRank = _mapData->end;
@@ -321,23 +320,8 @@ bool GameMap::generateRandomMap() {
         _batteriesSpawnable.pop_back();
     }
 
-    // DELETE THIS ONCE NETWORKING IS IMPLEMENTED
-    makeNodes();
-    return true;   
-    
+    return true;
 }
-
-
-Vec2 GameMap::getWinRoomOrigin() {
-    for (shared_ptr r : _rooms) {
-        if (r->getWinRoom()) {
-            return r->getOrigin();
-        }
-    }
-    // default
-    return _rooms[8]->getOrigin();
-}
-
 
 /** Constructs metadata to send over the network for map generation */
 shared_ptr<MapNetworkdata> GameMap::makeNetworkMap() {
@@ -367,5 +351,6 @@ bool GameMap::readNetworkMap(shared_ptr<MapNetworkdata> networkData) {
         auto batteryModel = Battery::alloc(coord);
         _batteries.push_back(batteryModel);
     }
+
     return true;;
 }
