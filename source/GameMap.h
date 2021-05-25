@@ -178,6 +178,8 @@ public:
     /** Returns the amount of batteries that need to be added to the teleporter for the pals to win */
     int getTeleCount() { return _teleCount; }
 
+    void setTeleCount(int num) { _teleCount = num; }
+
     /** Returns the ghost */
     shared_ptr<Player> getGhost() {
         for (auto& p : _players) {

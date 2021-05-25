@@ -340,6 +340,8 @@ vector<uint8_t> NetworkData::convertMapData() {
         encodeBoolList(roomsLit, result);
     }
 
+    encodeInt(_mapData->map->getTeleCount(), result);
+
     return result;
 }
 
@@ -412,6 +414,15 @@ void NetworkData::interpretMapData(const int id, const vector<uint8_t>& msg) {
                 room->getSlot()->setCharge();
             };
         }
+    }
+
+    vector<vector<uint8_t>> splitMsg = split(msg, { 4 });
+    if (splitMsg.empty()) return;
+
+    int receivedTeleCount = decodeInt(splitMsg[0]);
+    int currentTeleCount = _mapData->map->getTeleCount();
+    if (currentTeleCount > receivedTeleCount) {
+        _mapData->map->setTeleCount(receivedTeleCount);
     }
 }
 
