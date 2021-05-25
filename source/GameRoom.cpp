@@ -35,19 +35,19 @@ void GameRoom::setNode(const shared_ptr<scene2::OrderedNode>& value) {
     _node->setAnchor(Vec2::ANCHOR_BOTTOM_CENTER);
 
     auto slotNodeOn = scene2::PolygonNode::allocWithTexture(_assets->get<Texture>("slot_full"));
-    slotNodeOn->setPosition(Vec2(ROOM_DIMENSION / 2, ROOM_DIMENSION / 2));
+    slotNodeOn->setPosition(Vec2(ROOM_DIMENSION / 2 + 80, ROOM_DIMENSION / 2));
     slotNodeOn->setAnchor(Vec2::ANCHOR_CENTER);
     slotNodeOn->setPriority(constants::Priority::RoomEntity);
     slotNodeOn->setVisible(false);
     _node->addChild(slotNodeOn);
 
     auto slotNodeOff = scene2::PolygonNode::allocWithTexture(_assets->get<Texture>("slot_empty"));
-    slotNodeOff->setPosition(Vec2(ROOM_DIMENSION / 2, ROOM_DIMENSION / 2));
+    slotNodeOff->setPosition(Vec2(ROOM_DIMENSION / 2 + 80, ROOM_DIMENSION / 2));
     slotNodeOff->setAnchor(Vec2::ANCHOR_CENTER);
     slotNodeOff->setPriority(constants::Priority::RoomEntity);
     _node->addChild(slotNodeOff);
 
-    _slotModel->setLoc(_origin + Vec2(ROOM_DIMENSION / 2, ROOM_DIMENSION / 2));
+    _slotModel->setLoc(_origin + Vec2(ROOM_DIMENSION / 2 + 80, ROOM_DIMENSION / 2));
     _slotModel->setNode(slotNodeOn, slotNodeOff);
 };
 
