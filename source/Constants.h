@@ -29,8 +29,15 @@ namespace constants {
 
     const Size WALL_DIMENSIONS(1120, 1120);
 
+    const int WALL_LENGTH = 1120;
+
+    const Vec2 TELEPORTER_POS (480, 480);
+
     const int TILE_SIZE = 80;
+    
     const Size PLAYER_HITBOX_DIMENSIONS(39, 24);
+
+    const int MAX_BATTERIES = 3;
 
 
     // Make sure to change values in lightShader.frag if you change these here

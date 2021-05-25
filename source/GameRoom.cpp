@@ -3,17 +3,6 @@
 using namespace std;
 using namespace cugl;
 
-bool GameRoom::createSlotNode() {
-    auto slotNode = scene2::PolygonNode::allocWithTexture(_assets->get<Texture>("slot_empty"));
-    slotNode->setScale(0.05f);
-    slotNode->setPosition(Vec2(ROOM_DIMENSION / 2, ROOM_DIMENSION / 2));
-    slotNode->setPriority(constants::Priority::RoomEntity);
-    _node->addChild(slotNode);
-
-    _slotModel = BatterySlot::alloc(Vec2(ROOM_DIMENSION / 2, ROOM_DIMENSION / 2));
-    _slotModel->setNode(slotNode);
-    return true;
-}
 
 bool GameRoom::init(const shared_ptr<AssetManager>& assets, vector<bool> doors, Vec2 ranking, int layout) {
     init(assets, doors, ranking);
@@ -27,16 +16,18 @@ bool GameRoom::init(const shared_ptr<AssetManager>& assets, const shared_ptr<sce
     init(assets, doors, ranking);
 
     _node->setAnchor(Vec2::ANCHOR_BOTTOM_CENTER);
-    createSlotNode();
     return true;
-};
+}
+
 
 bool GameRoom::init(const shared_ptr<AssetManager>& assets, vector<bool> doors, Vec2 ranking) {
     _assets = assets;
     _doors = doors;
     _origin = ranking * constants::WALL_DIMENSIONS;
+    _winRoom = false;
     _ranking = ranking;
     _batterySpawns = vector<Vec2>();
+    _slotModel = BatterySlot::alloc(Vec2(ROOM_DIMENSION / 2, ROOM_DIMENSION / 2));
     return true;
 }
 
@@ -44,20 +35,45 @@ void GameRoom::setNode(const shared_ptr<scene2::OrderedNode>& value) {
     _node = value;
     _node->setPosition(getOrigin());
     _node->setAnchor(Vec2::ANCHOR_BOTTOM_CENTER);
-    auto slotNode = scene2::PolygonNode::allocWithTexture(_assets->get<Texture>("slot_empty"));
-    slotNode->setScale(0.05f);
-    slotNode->setPosition(Vec2(ROOM_DIMENSION / 2, ROOM_DIMENSION / 2));
-    slotNode->setPriority(constants::Priority::RoomEntity);
-    _node->addChild(slotNode);
-    _slotModel = BatterySlot::alloc(Vec2(ROOM_DIMENSION / 2, ROOM_DIMENSION / 2));
-    _slotModel->setNode(slotNode);
+    if (!_winRoom) {
+        auto slotNode = scene2::PolygonNode::allocWithTexture(_assets->get<Texture>("slot_empty"));
+        slotNode->setScale(0.05f);
+        slotNode->setPosition(Vec2(ROOM_DIMENSION / 2, ROOM_DIMENSION / 2));
+        slotNode->setPriority(constants::Priority::RoomEntity);
+        _node->addChild(slotNode);
+        _slotModel = BatterySlot::alloc(Vec2(ROOM_DIMENSION / 2, ROOM_DIMENSION / 2));
+        _slotModel->setNode(slotNode);
+    }
 };
 
 void GameRoom::setRoot(const shared_ptr<scene2::OrderedNode>& value) {
     _root = value;
 };
 
-void GameRoom::addObstacles(const shared_ptr<RoomParser>& parser, int end) {
+void GameRoom::pickLayout(const shared_ptr<RoomParser>& parser, int type) {
+    string roomCode = getDoorsStr();
+
+    string path;
+    if (type == 1) {
+        path = "json/layouts/end.json";
+        _layout = -1 * type;
+    }
+    else if (type == 2) {
+        path = "json/layouts/start.json";
+        _layout = -1 * type;
+    }
+    else {
+        vector<string> temp = parser->pickLayout(roomCode);
+        path = temp[1];
+        _layout = stoi(temp[0]);
+    }
+
+    shared_ptr<LayoutMetadata> roomData = parser->getLayoutData(path);
+    _batterySpawns = roomData->spawns;
+}
+
+
+void GameRoom::addObstacles() {
     auto litRoot = _root->getChildByName("lit_root");
     auto dimRoot = _root->getChildByName("dim_root");
     auto topRoot = _root->getChildByName("top_root");
@@ -90,20 +106,17 @@ void GameRoom::addObstacles(const shared_ptr<RoomParser>& parser, int end) {
     _node->addChild(litDoorNode);
     litDoorNode->setPriority(constants::Priority::Room);
 
-    // Draw furniture
+    shared_ptr<RoomParser> parser = make_shared<RoomParser>();
     string path;
-    if (end == 1) {
-        path = "json/layouts/end.json";
-        _layout = -1*end;
-    }
-    else if (end == 2) {
+    // Start room
+    if (_layout == -2) {
         path = "json/layouts/start.json";
-        _layout = -1 * end;
+    }
+    else if (_layout == -1) {
+        path = "json/layouts/end.json";
     }
     else {
-        vector<string> temp = parser->pickLayout(roomCode);
-        path = temp[1];
-        _layout = stoi(temp[0]);
+        path = "json/layouts/" + to_string(_layout) + ".json";
     }
 
     shared_ptr<LayoutMetadata> roomData = parser->getLayoutData(path);
@@ -138,8 +151,6 @@ void GameRoom::addObstacles(const shared_ptr<RoomParser>& parser, int end) {
         node->addChild(obsDimNode);
     }
 
-    // Add batteries
-    _batterySpawns = roomData->spawns;
     addWalls();
 };
 

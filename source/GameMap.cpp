@@ -9,6 +9,7 @@ using namespace cugl;
 bool GameMap::init(const shared_ptr<AssetManager>& assets, shared_ptr<scene2::OrderedNode>& node) {
     _assets = assets;
     _node = node;
+    _teleCount = 4;
     return true;
 }
 
@@ -82,9 +83,9 @@ void GameMap::update(float timestep) {
             for (auto& b : _batteries) {
                 Vec2 distance = b->getLoc() - p->getLoc();
                 float minDistance = distance.length();
-                if (minDistance < BATTERY_RADIUS && !b->isDestroyed()) {
+                auto pal = dynamic_pointer_cast<Pal>(p);
+                if (minDistance < BATTERY_RADIUS && !b->isDestroyed() && pal->getBatteries() < constants::MAX_BATTERIES) {
                     b->pickUp();
-                    auto pal = dynamic_pointer_cast<Pal>(p);
                     int numBatteries = pal->getBatteries() + 1;
                     pal->setBatteries(numBatteries);
                 }
@@ -156,13 +157,7 @@ void GameMap::handleInteract() {
     float range = 250.0f;
     // TODO use position, not node position
     if (_player->getType() == constants::PlayerType::Pal && !dynamic_pointer_cast<Pal>(_player)->getSpooked()) {
-        //  CODE FOR WHEN BATTERIES FULLY IMPLEMENTED
-        /**
-         * if (pal is close to the slot in their room):
-         *	slot->setCharge();
-         *	slot->getNode()->setColor(Color4f::GREEN);
-         *   _slots.push_back(slot);
-         */
+        
         shared_ptr<Pal> pal = nullptr;
         float minDistance = numeric_limits<float>::infinity();
         for (auto& p : _players) {
@@ -184,12 +179,16 @@ void GameMap::handleInteract() {
 
         shared_ptr<BatterySlot> slot = nullptr;
         
+        Vec2 playerPos = _player->getNode()->getPosition();
         // TODO fix this
+        int battCount = dynamic_pointer_cast<Pal>(_player)->getBatteries();
         for (auto room = _rooms.begin(); room != _rooms.end(); ++room) {
             Vec2 slotPos = (*room)->getOrigin() + (*room)->getSlot()->getLoc();
-            Vec2 distance = slotPos - _player->getNode()->getPosition();
-            if (distance.length() < range) {
+            Vec2 distance = slotPos - playerPos;
+            
+            if ((distance.length() < range) && ((*room)->getRanking() != _endRank) && (battCount > 0)) {
                 slot = (*room)->getSlot();
+                dynamic_pointer_cast<Pal>(_player)->setBatteries(battCount-1);
             }
         }
         if (slot != nullptr) {
@@ -197,6 +196,14 @@ void GameMap::handleInteract() {
                 slot->setCharge();
                 slot->getNode()->setColor(Color4f::GREEN);
             }
+        }
+
+        // Check if pal is in range of teleporter
+        Vec2 tpPos = _endRank * constants::WALL_LENGTH + constants::TELEPORTER_POS;
+        Vec2 distance = tpPos - playerPos;
+        if (distance.length() < range && (battCount > 0)) {
+            _teleCount -= 1;
+            dynamic_pointer_cast<Pal>(_player)->setBatteries(battCount - 1);
         }
 
     }
@@ -229,7 +236,7 @@ void GameMap::handleInteract() {
                 addTrap(_player->getLoc());
             }
         }
-
+        
     }
 }
 
@@ -248,51 +255,36 @@ bool GameMap::assertValidMap() {
     return true;
 };
 
-bool GameMap::generateBasicMap(int numBatteries) {
-    reset();
+void GameMap::makeNodes() {
     auto litRoot = _node->getChildByName("lit_root");
-    /**
-    * 1. Create hard coded model that represent what type of rooms need to be where, no obstacles
-    * 2. Assign each room an ostacle layout
-    * 3. Call makeRoom() on each room+obstacle combo and add to _rooms
-    */
-    
 
-    int spacing = 1120;
-    auto roomNode1 = scene2::PolygonNode::allocWithTexture(_assets->get<Texture>("battery_texture"));
-    /**
-    _rooms.push_back(GameRoom::alloc(_assets, _node, Vec2(0, 0), { true, true, false, false }));
-    _rooms.push_back(GameRoom::alloc(_assets, _node, Vec2(spacing, 0), { true, true, false, true }));
-    _rooms.push_back(GameRoom::alloc(_assets, _node, Vec2(spacing*2, 0), { true, false, false, true }));
-    _rooms.push_back(GameRoom::alloc(_assets, _node, Vec2(0, spacing), { true, true, true, false }));
-    _rooms.push_back(GameRoom::alloc(_assets, _node, Vec2(spacing, spacing), { true, true, true, true }));
-    _rooms.push_back(GameRoom::alloc(_assets, _node, Vec2(spacing*2, spacing), { true, false, true, true }));
-    _rooms.push_back(GameRoom::alloc(_assets, _node, Vec2(0, spacing*2), { false, true, true, false }));
-    _rooms.push_back(GameRoom::alloc(_assets, _node, Vec2(spacing, spacing * 2), { false, true, true, true }));
-    _rooms.push_back(GameRoom::alloc(_assets, _node, Vec2(spacing*2, spacing * 2), { false, false, true, true }));
-    */
-
-    for (auto& coor : _batteriesSpawnable) {
-        auto batteryNode = scene2::PolygonNode::allocWithTexture(_assets->get<Texture>("battery_texture"));
-        batteryNode->setPriority(constants::Priority::RoomEntity);
-        batteryNode->setPosition(coor);
-        litRoot->addChild(batteryNode);
-        auto batteryModel = Battery::alloc(coor);
-        batteryModel->setNode(batteryNode);
-        _batteries.push_back(batteryModel);
+    // Rooms
+    for (auto& room : _rooms) {
+        auto node = scene2::OrderedNode::allocWithOrder(scene2::OrderedNode::Order::ASCEND);
+        auto origin = room->getOrigin();
+        node->setContentSize(constants::ROOM_DIMENSIONS);
+        node->doLayout();
+        node->setName("room_" + to_string(room->getLayout()));
+        litRoot->addChild(node);
+        room->setNode(node);
+        room->setRoot(_node);
+        room->addObstacles();
     }
 
-    return true;
-};
-
-void makeConnection(shared_ptr<GameRoom> room1, shared_ptr<GameRoom> room2) {
+    // Batteries
+    for (auto& battery : _batteries) {
+        auto batteryNode = scene2::PolygonNode::allocWithTexture(_assets->get<Texture>("battery_texture"));
+        batteryNode->setAnchor(Vec2::ANCHOR_BOTTOM_CENTER);
+        batteryNode->setPriority(constants::RoomEntity);
+        Vec2 coord = battery->getLoc();
+        batteryNode->setPosition(coord);
+        litRoot->addChild(batteryNode);
+        battery->setNode(batteryNode);
+    }
 }
 
 bool GameMap::generateRandomMap() {
     reset();
-    auto litRoot = _node->getChildByName("lit_root");
-
-    int spacing = 1120;
 
     shared_ptr<RoomParser> parser = make_shared<RoomParser>();
     _mapData = parser->getMapData(parser->pickMap());
@@ -303,22 +295,15 @@ bool GameMap::generateRandomMap() {
     int i = 0;
     int type = 0;
     for (auto& room : _mapData->rooms) {
-        auto node = scene2::OrderedNode::allocWithOrder(scene2::OrderedNode::Order::ASCEND);
-        auto origin = Vec2(room.rank.x * spacing, room.rank.y * spacing);
-        node->setContentSize(constants::ROOM_DIMENSIONS);
-        node->doLayout();
-        node->setName("room_" + to_string(i));
-        litRoot->addChild(node);
-        auto r = GameRoom::alloc(_assets, room.doors, room.rank);
-        r->setNode(node);
-        r->setRoot(_node);
+        shared_ptr<GameRoom> r = GameRoom::alloc(_assets, room.doors, room.rank);
         if (room.rank == _endRank) {
+            r->setWinRoom(true);
             type = 1;
         }
         else if (room.rank == _startRank) {
             type = 2;
         }
-        r->addObstacles(parser, type);
+        r->pickLayout(parser, type);
 
         for (auto& coord : r->getBatterySpawns()) {
             // Adjust the coordinates of this room's battery spawns
@@ -337,18 +322,14 @@ bool GameMap::generateRandomMap() {
     shuffle(_batteriesSpawnable.begin(), _batteriesSpawnable.end(), rng);
     for (int i = 0; i < _mapData->numBatteries; i++) {
         // This node stuff should be moved to battery
-        auto batteryNode = scene2::PolygonNode::allocWithTexture(_assets->get<Texture>("battery_texture"));
-        batteryNode->setAnchor(Vec2::ANCHOR_BOTTOM_CENTER);
-        batteryNode->setPriority(constants::RoomEntity);
         Vec2 coord = _batteriesSpawnable.back();
-        batteryNode->setPosition(coord);
-        litRoot->addChild(batteryNode);
         auto batteryModel = Battery::alloc(coord);
-        batteryModel->setNode(batteryNode);
         _batteries.push_back(batteryModel);
         _batteriesSpawnable.pop_back();
     }
 
+    // DELETE THIS ONCE NETWORKING IS IMPLEMENTED
+    makeNodes();
     return true;   
     
 }
@@ -376,12 +357,15 @@ shared_ptr<MapNetworkdata> GameMap::makeNetworkMap() {
     for (auto& battery : _batteries) {
         batteries.push_back(battery->getLoc());
     }
-    return make_shared<MapNetworkdata>(rooms, batteries);
+    return make_shared<MapNetworkdata>(rooms, batteries, _startRank, _endRank);
 }
 
 /** Takes in the network metadata and updates the GameMap model */
 bool GameMap::readNetworkMap(shared_ptr<MapNetworkdata> networkData) {
     _rooms.clear();
+    _batteries.clear();
+    _startRank = networkData->startRank;
+    _endRank = networkData->endRank;
 
     for (auto& room : networkData->rooms) {
         _rooms.push_back(GameRoom::alloc(_assets, room->doors, room->rank, room->layout));

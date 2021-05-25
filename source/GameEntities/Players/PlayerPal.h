@@ -130,6 +130,7 @@ public:
         _unspookFlag = true;
     }
 
+
     /** Returns whether or not a Pal is helping */
     bool getHelping() const {
         return _helping > 0;

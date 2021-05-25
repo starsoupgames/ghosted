@@ -37,10 +37,14 @@ struct RoomNetworkdata {
 struct MapNetworkdata {
     vector<shared_ptr<RoomNetworkdata>> rooms;
     vector<Vec2> batteries;
+    Vec2 startRank;
+    Vec2 endRank;
 
-    MapNetworkdata(vector<shared_ptr<RoomNetworkdata>> rooms, vector<Vec2> batteries) {
+    MapNetworkdata(vector<shared_ptr<RoomNetworkdata>> rooms, vector<Vec2> batteries, Vec2 startRank, Vec2 endRank) {
         this->rooms = rooms;
         this->batteries = batteries;
+        this->startRank = startRank;
+        this->endRank = endRank;
     }
 };
 
@@ -61,8 +65,12 @@ private:
     
     /** The vector of trap pointers currently in the game */
     vector<shared_ptr<Trap>> _traps;
+    
     /** The vector of slot pointers currently in the game */
     vector<shared_ptr<BatterySlot>> _slots;
+
+    /** How many batteries the teleporter needs to be powered */
+    int _teleCount;
 
     /** The vector of battery spawnable coordinates */
     vector<Vec2> _batteriesSpawnable;
@@ -81,6 +89,7 @@ private:
 
     bool assertValidMap();
     
+    void makeNodes();
 
 public:
 #pragma mark Constructors
@@ -154,6 +163,9 @@ public:
     /** Returns the list of players */
     vector<shared_ptr<Player>> getPlayers() { return _players; }
 
+    /** Returns the amount of batteries that need to be added to the teleporter for the pals to win */
+    int getTeleCount() { return _teleCount; }
+
     /** Returns the ghost */
     shared_ptr<Player> getGhost() {
         for (auto& p : _players) {
@@ -213,9 +225,6 @@ public:
     
 #pragma mark -
 #pragma mark Map Gen
-    
-    /** Generates a basic map */
-    bool generateBasicMap(int numBatteries);
     
     /** Generates a random map */
     bool generateRandomMap();

@@ -370,14 +370,6 @@ void GameScene::update(float timestep) {
     }
     */
 
-    // Check collisions
-    // between players and bounds
-    // between pals and walls
-    // between ghost and vision cones
-    // between ghost and pal
-    // between trap and pal if trap is triggered
-    // between pal and battery
-
     // Sets priority of player nodes
     vector<shared_ptr<Player>> sortedPlayers;
     for (auto& p : _players) {
@@ -402,7 +394,9 @@ void GameScene::update(float timestep) {
 
 
     // Pal wins
-
+    if (_gameMap->getTeleCount() == 0) {
+        _network->getData()->setWinner(constants::PlayerType::Pal);
+    }
 
     // Ghost wins
     bool allPalsSpooked = true;

@@ -62,7 +62,6 @@ private:
     
     bool assertRoomIsAdjacent(const shared_ptr<GameRoom>& room);
 
-    bool createSlotNode();
     
 public:
     GameRoom() {}
@@ -136,13 +135,15 @@ public:
     
     bool getLight() { return _slotModel->getCharge() > 0;};
 
-    /** Populates the room with obstacles from the parser. If end is true,
-     *  uses end.json's layout for obstacles 
-     */
-    void addObstacles(const shared_ptr<RoomParser>& parser, int end);
+    /** Populates the room with obstacles */
+    void addObstacles();
+
+    /** Picks which layout should be used for this room */
+    void pickLayout(const shared_ptr<RoomParser>& parser, int type);
     
     /** Is this room the exit room? */
     void setWinRoom(bool exit) { _winRoom = exit; };
+
     bool getWinRoom() { return _winRoom; };
     
     /** Returns the layout of the room */
