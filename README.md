@@ -1,5 +1,12 @@
-# Cornell University Game Library (CUGL)
+# Ghosted by Star Soup Games
 
-This template provides a base for you to build off of.  You should add all of your files to sources and assets, as appropriate.  This will allow access to the Apple, Android, and Windows IDEs.
+Play as either the pals or the ghost in this 3v1 multiplayer game.
 
-You will need to make changes to the project to give it a different name and package identifier (to prevent your application from clashing with others).  See the course web page for instructions  
+In an abandoned manor, a group of friends only have themselves and some flashlights to find a way out. They must band together to find the exit and escape, before the ghost haunting the house seals them in for all eternity.
+
+Download here: https://starsoupgames.github.io/ghosted-releases/
+
+
+**Contributors:** Akane Edwards, Benjamin Shen, Catie Rencricca, Konstantin Kirovski, Michael Chang, SoYee Park, Will Gao, *Aidan Cuite*, *Jacob Nannapanenni*
+
+Built with Cornell University Game Library (CUGL) in C++
